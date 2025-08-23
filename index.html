@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+	<title>BizBio &ndash; Your Digital Business Card Solution</title>
+	<style type="text/css">body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1, h2 {
+            color: #007BFF;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li::before {
+            content: "✔️ ";
+            color: #28a745;
+        }
+        .cta {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .cta a {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .cta a:hover {
+            background: #0056b3;
+        }
+	</style>
+</head>
+<body>
+<div class="container">
+<h1>BizBio &ndash; Your Digital Business Card Solution</h1>
+
+<p><strong>A Smart, Affordable Way to Share Your Business</strong></p>
+
+<p>In today&rsquo;s digital age, having an online presence is essential. With <strong>BizBio</strong>, you get a simple yet powerful <strong>virtual business card</strong>&mdash;a professional, customized web page that showcases all your essential details, from contact information to banking details, location, and owner information.</p>
+<div class="cf-turnstile" data-sitekey="0x4AAAAAABs59xAok0XEAmb4"></div>
+<h2>Why Choose BizBio?</h2>
+
+<ul>
+	<li><strong>Professional &amp; Personalized</strong> &ndash; Each business card is tailored to reflect your brand and identity.</li>
+	<li><strong>Affordable &amp; Cost-Effective</strong> &ndash; Get a sleek online presence at a fraction of the cost of a full website.</li>
+	<li><strong>Easy to Share</strong> &ndash; Simply send your unique BizBio link via email, WhatsApp, or social media.</li>
+	<li><strong>Always Accessible</strong> &ndash; Unlike paper business cards, your details are available 24/7 online.</li>
+	<li><strong>Quick &amp; Hassle-Free Setup</strong> &ndash; No complex web development needed&mdash;just provide your details, and we handle the rest!</li>
+</ul>
+
+<h2>Perfect for:</h2>
+
+<ul>
+	<li>Small business owners</li>
+	<li>Freelancers &amp; entrepreneurs</li>
+	<li>Startups looking for quick online visibility</li>
+	<li>Professionals who want a simple digital presence</li>
+</ul>
+<form action="process_form.php" method="post">
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name"><br>
+    <input type="submit" value="Submit">
+</form>
+<div class="cta"><a href="#contact">Get Your BizBio Today!</a></div>
+Email: <span class="masked-data" data-full-email="john.doe@example.com">info@e***e.com</span>
+
+</div>
+  <div class="cf-turnstile"
+    data-sitekey="0x4AAAAAABs59xAok0XEAmb4"
+    data-callback="onSuccess"
+    data-error-callback="onError"
+    data-expired-callback="onExpired"
+    data-timeout-callback="onTimeout"></div>
+  <script>
+  function onSuccess(token) {
+  console.log('Challenge Success:', token);
+  }
+  function onError(errorCode) {
+  console.log('Challenge Error:', errorCode);
+  }
+  function onExpired() {
+  console.log('Token expired');
+  }
+  function onTimeout() {
+  console.log('Challenge timed out');
+  }
+  </script>
+<script>
+function unmaskData() {
+  const maskedElements = document.querySelectorAll('.masked-data');
+  maskedElements.forEach(element => {
+    const fullData = element.getAttribute('data-full-email') || element.getAttribute('data-full-phone');
+    if (fullData) {
+      element.textContent = fullData;
+    }
+  });
+}
+</script>
+</body>
+</html>
