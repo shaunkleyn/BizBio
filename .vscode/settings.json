@@ -1,5 +1,6 @@
 {
     "workbench.colorCustomizations": {
         "terminal.background": "#00000000"
-    }
+    },
+    "liveServer.settings.port": 5501
 }

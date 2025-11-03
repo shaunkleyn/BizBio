@@ -320,7 +320,7 @@ button i {
                       <small class="title">Managing Director</small>
                     </div>
                     <div class="row">
-                      <a href="mailto:Info@sixdoor.co.za" target="_newLink" class="">Megan Scrimgeour Ackerman</a>
+                      <a href="mailto:Info@sixdoor.co.za" target="_newLink" class=""><span data-card="firstname">Megan</span> <span data-card="surname">Scrimgeour Ackerman</span></a>
                     </div>
                   </div>
                   <div class="col-auto" style="align-content: space-around;">
@@ -357,6 +357,9 @@ button i {
 
 </body>
 <script src="mfb/mfb.js"></script>
+<script type="module">
+  import VCard from 'https://cdn.skypack.dev/vcard-creator'
+</script>
 <script>
 
   var panel = document.getElementById('panel'),
@@ -393,6 +396,15 @@ button i {
 
 </script>
 <script>
+
+  function createCard() {
+    var vCard = new VCard();
+    vCard.addName($('[data-card="surname"]').text(), $('[data-card="firstname"]').text(), '', '', '')
+    .addCompany($('[data-card="company"]').text())
+    .addCompany($('[data-card="company"]').text())
+    
+  }
+
   document.getElementById("shareContact").addEventListener("click", async () => {
     try {
       await navigator.share({
