@@ -8,10 +8,17 @@ namespace BizBio.API.Controllers;
 public class SubscriptionsController : ControllerBase
 {
     private readonly ISubscriptionTierRepository _tierRepo;
+    private readonly ILogger<SubscriptionsController> _logger;
+    private readonly ITelemetryService _telemetry;
 
-    public SubscriptionsController(ISubscriptionTierRepository tierRepo)
+    public SubscriptionsController(
+        ISubscriptionTierRepository tierRepo,
+        ILogger<SubscriptionsController> logger,
+        ITelemetryService telemetry)
     {
         _tierRepo = tierRepo;
+        _logger = logger;
+        _telemetry = telemetry;
     }
 
     /// <summary>
@@ -22,15 +29,29 @@ public class SubscriptionsController : ControllerBase
     [HttpGet("tiers")]
     public async Task<IActionResult> GetTiers([FromQuery] string? productLine = null)
     {
+        _logger.LogInformation("Fetching subscription tiers. ProductLine filter: {ProductLine}", productLine ?? "None");
+
         if (!ModelState.IsValid)
+        {
+            _logger.LogWarning("GetTiers failed - Invalid model state");
             return BadRequest(ModelState);
+        }
 
         var tiers = await _tierRepo.GetAllActiveAsync();
 
         if (!string.IsNullOrEmpty(productLine))
         {
             tiers = tiers.Where(t => t.ProductLine.ToString().Equals(productLine, StringComparison.OrdinalIgnoreCase)).ToList();
+            _logger.LogInformation("Filtered tiers by product line: {ProductLine}. Count: {Count}", productLine, tiers.Count());
         }
+
+        _logger.LogInformation("Successfully retrieved {Count} subscription tiers", tiers.Count());
+        _telemetry.TrackEvent("SubscriptionTiersViewed", new Dictionary<string, string>
+        {
+            { "ProductLineFilter", productLine ?? "None" },
+            { "TiersCount", tiers.Count().ToString() }
+        });
+        _telemetry.TrackMetric("SubscriptionTiersRetrieved", tiers.Count());
 
         return Ok(new
         {

@@ -9,10 +9,17 @@ namespace BizBio.API.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
+    private readonly ILogger<AuthController> _logger;
+    private readonly ITelemetryService _telemetry;
 
-    public AuthController(IAuthService authService)
+    public AuthController(
+        IAuthService authService,
+        ILogger<AuthController> logger,
+        ITelemetryService telemetry)
     {
         _authService = authService;
+        _logger = logger;
+        _telemetry = telemetry;
     }
 
     /// <summary>
@@ -21,13 +28,35 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
+        _logger.LogInformation("Registration attempt for email: {Email}", dto.Email);
+
         if (!ModelState.IsValid)
+        {
+            _logger.LogWarning("Registration failed - Invalid model state for email: {Email}", dto.Email);
             return BadRequest(ModelState);
+        }
 
         var result = await _authService.RegisterAsync(dto);
 
         if (!result.Success)
+        {
+            _logger.LogWarning("Registration failed for email: {Email}. Reason: {Reason}", dto.Email, result.Message);
+            _telemetry.TrackEvent("UserRegistrationFailed", new Dictionary<string, string>
+            {
+                { "Email", dto.Email },
+                { "Reason", result.Message ?? "Unknown" }
+            });
             return BadRequest(new { message = result.Message });
+        }
+
+        _logger.LogInformation("User registered successfully: {Email}", dto.Email);
+        _telemetry.TrackEvent("UserRegistered", new Dictionary<string, string>
+        {
+            { "Email", dto.Email },
+            { "FirstName", dto.FirstName },
+            { "LastName", dto.LastName }
+        });
+        _telemetry.TrackBusinessMetric("NewUserRegistrations", 1);
 
         return Ok(new
         {
@@ -42,13 +71,37 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
+        _logger.LogInformation("Login attempt for email: {Email}", dto.Email);
+
         if (!ModelState.IsValid)
+        {
+            _logger.LogWarning("Login failed - Invalid model state for email: {Email}", dto.Email);
             return BadRequest(ModelState);
+        }
 
         var result = await _authService.LoginAsync(dto);
 
         if (!result.Success)
+        {
+            _logger.LogWarning("Login failed for email: {Email}. Reason: {Reason}", dto.Email, result.Message);
+            _telemetry.TrackEvent("UserLoginFailed", new Dictionary<string, string>
+            {
+                { "Email", dto.Email },
+                { "Reason", result.Message ?? "Unknown" }
+            });
             return Unauthorized(new { message = result.Message });
+        }
+
+        _logger.LogInformation("User logged in successfully: {Email}", dto.Email);
+        _telemetry.TrackEvent("UserLoggedIn", new Dictionary<string, string>
+        {
+            { "UserId", result.User!.Id.ToString() },
+            { "Email", dto.Email }
+        });
+        _telemetry.TrackUserAction(result.User!.Id.ToString(), "Login", new Dictionary<string, string>
+        {
+            { "Email", dto.Email }
+        });
 
         return Ok(new
         {

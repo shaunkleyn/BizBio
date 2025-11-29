@@ -1,7 +1,9 @@
+using BizBio.API.Middleware;
 using BizBio.Core.Interfaces;
 using BizBio.Infrastructure.Data;
 using BizBio.Infrastructure.Repositories;
 using BizBio.Infrastructure.Services;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
@@ -77,6 +79,7 @@ builder.Services.AddScoped<IRestaurantTableRepository, RestaurantTableRepository
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPaymentService, PayFastService>();
+builder.Services.AddSingleton<ITelemetryService, TelemetryService>();
 
 // Session Configuration (for NFC scan tracking)
 builder.Services.AddMemoryCache();
@@ -136,9 +139,32 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-builder.Services.AddApplicationInsightsTelemetry();
+
+// Application Insights Configuration
+builder.Services.AddApplicationInsightsTelemetry(options =>
+{
+    options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+    options.EnableAdaptiveSampling = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableAdaptiveSampling");
+    options.EnablePerformanceCounterCollectionModule = builder.Configuration.GetValue<bool>("ApplicationInsights:EnablePerformanceCounterCollectionModule");
+    options.EnableQuickPulseMetricStream = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableQuickPulseMetricStream");
+    options.EnableDependencyTracking = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableDependencyTracking");
+    options.EnableEventCounterCollectionModule = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableEventCounterCollectionModule");
+});
+
+// Configure telemetry
+builder.Services.Configure<TelemetryConfiguration>(config =>
+{
+    config.TelemetryInitializers.Add(new Microsoft.ApplicationInsights.Extensibility.Implementation.TelemetryInitializer());
+});
 
 var app = builder.Build();
+
+// Add custom middleware - ORDER MATTERS!
+// Exception handling should be first to catch all errors
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+// Request logging should be early in the pipeline
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 // Configure the HTTP request pipeline
 //if (app.Environment.IsDevelopment())
