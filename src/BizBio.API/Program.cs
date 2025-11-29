@@ -46,26 +46,26 @@ builder.Services.AddAuthentication(options =>
 });
 
 // CORS Configuration
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowFrontend", policy =>
-//    {
-//        policy
-//        .WithOrigins(
-//            "http://localhost:3000",
-//            "http://localhost:5173",
-//            "http://localhost:5000",
-//            "https://localhost:5443",
-//            "https://bizbio.co.za",
-//            "https://www.bizbio.co.za",
-//            "https://api.bizbio.co.za",
-//            "https://ui.bizbio.co.za"
-//        )
-//        .AllowAnyMethod()
-//        .AllowAnyHeader()
-//        .AllowCredentials();
-//    });
-//});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+        .WithOrigins(
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://localhost:5000",
+            "https://localhost:5443",
+            "https://bizbio.co.za",
+            "https://www.bizbio.co.za",
+            "https://api.bizbio.co.za",
+            "https://ui.bizbio.co.za"
+        )
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
+    });
+});
 
 // Repository Registration
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -109,10 +109,10 @@ builder.Services.AddSwaggerGen(options =>
         
     });
 
-    //options.AddServer(new OpenApiServer
-    //{
-    //    Url = "https://api.bizbio.co.za"
-    //});
+    options.AddServer(new OpenApiServer
+    {
+        Url = "https://api.bizbio.co.za"
+    });
 
     // JWT Bearer Authentication in Swagger
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -147,14 +147,7 @@ builder.Services.AddApplicationInsightsTelemetry(options =>
     options.EnableAdaptiveSampling = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableAdaptiveSampling");
     options.EnablePerformanceCounterCollectionModule = builder.Configuration.GetValue<bool>("ApplicationInsights:EnablePerformanceCounterCollectionModule");
     options.EnableQuickPulseMetricStream = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableQuickPulseMetricStream");
-    options.EnableDependencyTracking = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableDependencyTracking");
     options.EnableEventCounterCollectionModule = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableEventCounterCollectionModule");
-});
-
-// Configure telemetry
-builder.Services.Configure<TelemetryConfiguration>(config =>
-{
-    config.TelemetryInitializers.Add(new Microsoft.ApplicationInsights.Extensibility.Implementation.TelemetryInitializer());
 });
 
 var app = builder.Build();
@@ -182,9 +175,9 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-//app.UseCors("AllowFrontend");
+app.UseCors("AllowFrontend");
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 
 app.UseAuthentication();
