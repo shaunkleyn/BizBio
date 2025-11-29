@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmet Grill House</title>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="209c010b-1a61-40f3-a6ec-e3dbff4e803d"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+<style>
+        /* --- General Reset and Typography --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            overflow: hidden;
+        }
+
+        /* --- Header and Details Height --- */
+        /* Define a fixed height for the background image and details area */
+        :root {
+            --header-height-static: 180px; /* Height of the restaurant details background */
+            --nav-height: 56px; /* Height of the red navigation bar */
+            --full-header-height: calc(var(--header-height-static) + var(--nav-height)); /* Total fixed header height */
+        }
+
+        /* --- Application Container --- */
+#menu-app {
+    position: relative;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    margin: 0 auto;
+    background-color: white;
+    overflow-y: scroll;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-x: hidden;
+    overflow: hidden;
+}
+
+        /* --- Fixed Header Area --- */
+        .header-section {
+            /* position: absolute; */
+            /* top: 0; */
+            width: 100%;
+            z-index: 100;
+        }
+
+        /* Background Image and Restaurant Info */
+        .restaurant-details {
+            height: var(--header-height-static);
+            background-image: url('banner.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 15px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+            height: 150px;
+        }
+
+        .restaurant-details::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+        }
+
+        .details-content {
+            position: relative;
+        }
+        .details-content h1 {
+            margin: 0 0 5px 0;
+            font-size: 1.8em;
+            line-height: 1.1;
+        }
+        .details-content p {
+            margin: 0;
+            font-size: 0.9em;
+        }
+        .details-content .rating {
+            font-size: 1.1em;
+            margin-top: 5px;
+            font-weight: bold;
+            color: #ffc107;
+        }
+
+        /* --- Navigation Bar (Menu Bar) --- */
+        .panel-header {
+            width: 100%;
+            max-width: 600px;
+            height: var(--nav-height);
+            background-color: #212015;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .panel-header h2 {
+            flex-grow: 1;
+            text-align: center;
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .back-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 0 10px;
+    position: absolute;
+}
+
+        /* --- Menu Panels (Main and Sub) --- */
+        .menu-panel {
+            position: absolute;
+            /* top: var(--full-header-height); */
+            height: calc(100vh - var(--full-header-height));
+            width: 100%;
+            transition: transform 0.3s ease-in-out;
+            background-color: white;
+            overflow-y: auto;
+        }
+
+        /* Sub-Menu specific positioning for its floating header */
+        #sub-menu {
+            transform: translateX(100%);
+            padding-top: var(--nav-height); /* Offset for the sub-menu's floating header */
+        }
+        #sub-menu .panel-header {
+            position: absolute;
+            top: 0; 
+        }
+
+        /* Sliding Logic */
+        #menu-app.sub-active #main-menu {
+            transform: translateX(-100%);
+        }
+        #menu-app.sub-active #sub-menu {
+            transform: translateX(0);
+        }
+
+        /* --- Content Styling --- */
+        .category-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid #c1c1c1;
+    cursor: pointer;
+    font-size: 1.1em;
+    display: flex
+;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+        .category-item:hover { background-color: #f0f0f0; }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        .menu-item:hover { background-color: #fcfcfc; }
+        .item-text { flex-grow: 1; }
+        .item-name { font-weight: bold; font-size: 1.1em; margin-bottom: 5px; }
+        .item-description { font-size: 0.9em; color: #666; margin-bottom: 5px; }
+        .item-price { font-weight: bold; color: #e51a21; }
+        .item-image { width: 70px; height: 70px; object-fit: cover; margin-left: 15px; border-radius: 4px; }
+
+        /* --- Modal Styling --- */
+        .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: flex-end;
+    justify-content: center;
+}
+
+/* .modal {
+    display: block;
+    bottom: 0;
+    position: absolute;
+    width: 100vw;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.5);
+} */
+        .modal-content {
+            background-color: #fff;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 16px 16px 0 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            max-height: 100vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2em;
+            font-weight: bold;
+            color: #666;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .close-button:hover { color: #000; }
+
+        .modal-image-wrapper {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            border-radius: 16px 16px 0 0;
+        }
+        .modal-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        .modal-title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .add-to-cart {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            background-color: #e51a21;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .add-to-cart:hover { background-color: #c71419; }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .quantity-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid #e51a21;
+            background-color: white;
+            color: #e51a21;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .quantity-btn:hover {
+            background-color: #e51a21;
+            color: white;
+        }
+
+        .quantity-display {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .remove-from-cart {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            background-color: #666;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .remove-from-cart:hover { background-color: #444; }
+
+        /* Cart Modal Styles */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .cart-modal-content {
+            background-color: #fff;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 16px 16px 0 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .cart-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background-color: white;
+            z-index: 10;
+        }
+
+        .cart-header h3 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .cart-items {
+            padding: 15px;
+        }
+
+        .cart-item {
+            display: flex;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            font-size: 1em;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background-color: white;
+            color: #333;
+            font-size: 1.2em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-quantity-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        .cart-quantity-display {
+            font-weight: bold;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .cart-footer {
+            padding: 20px;
+            border-top: 2px solid #eee;
+            position: sticky;
+            bottom: 0;
+            background-color: white;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .cart-total-amount {
+            color: #e51a21;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1em;
+            background-color: #e51a21;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .checkout-btn:hover {
+            background-color: #c71419;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-cart-icon {
+            font-size: 4em;
+            margin-bottom: 10px;
+        }
+
+        .category-item .icon img {
+            height: 35px;
+            width: 35px;
+        }
+
+        /* --- Floating Action Button Styles --- */
+        .fab-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .fab-main {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #e51a21;
+            color: white;
+            border: 3px solid #e51a21;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .fab-cart {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #212015;
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .fab-main:hover, .fab-cart:hover {
+            transform: scale(1.1);
+        }
+
+        .fab-main.active {
+            transform: rotate(45deg);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #e51a21;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            border: 2px solid white;
+        }
+
+        .cart-badge.hidden {
+            display: none;
+        }
+
+        .fab-options {
+    position: fixed;
+    top: 80%;
+    display: flex
+;
+    flex-direction: column;
+    height: calc(100% - 60px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s 
+ease, visibility 0.3s 
+ease;
+    flex-wrap: nowrap;
+    align-content: space-between;
+    justify-content: space-evenly;
+    align-items: stretch;
+    left: 50%;
+    padding: 20px;
+    width: 0%;
+    bottom: 70px;
+}
+
+div#fabOptions.show:before {
+    content: '';
+    background: #00000061;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    backdrop-filter: blur(3px);
+}
+
+        .fab-options.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .fab-option {
+    padding: 12px 20px;
+    background-color: #f7f7f7;
+    color: #333;
+    border: 1px solid #d1d1d1;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 2px 30px -2px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 500;
+    transition: transform 0.2s 
+ease, box-shadow 0.2s 
+ease;
+    height: 130px;
+}
+
+button#fabMain.active {
+    transform: translateX(calc(-50vw + 60px)) rotate(312deg);
+    border: 3px solid white;
+}
+
+.fab-options.show {
+    top: 0%;
+    transition: 0.5s 
+ease-in-out all;
+    width: 70%;
+    left: 10%;
+}
+
+        .fab-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            background-color: #f5f5f5;
+        }
+
+        /* --- Confirmation Modal Styles --- */
+        .confirm-modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confirm-modal-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            max-width: 90%;
+            width: 350px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .confirm-modal-content h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .confirm-modal-content .table-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #e51a21;
+            margin: 20px 0;
+        }
+
+        .table-input-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .table-label {
+            font-size: 1.2em;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .table-number-input {
+            font-size: 2em;
+            font-weight: bold;
+            color: #e51a21;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 10px 15px;
+            width: 100px;
+            text-align: center;
+            transition: border-color 0.2s ease;
+        }
+
+        .table-number-input:focus {
+            outline: none;
+            border-color: #e51a21;
+        }
+
+        .edit-hint {
+            font-size: 0.85em;
+            color: #999;
+            margin: 5px 0 15px 0;
+        }
+
+        .confirm-modal-content p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .confirm-btn, .cancel-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+
+        .confirm-btn {
+            background-color: #e51a21;
+            color: white;
+        }
+
+        .confirm-btn:hover {
+            background-color: #c71419;
+        }
+
+        .cancel-btn {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .cancel-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .swiper {
+  width: 600px;
+  height: 300px;
+}
+
+.swiper {
+    width: calc(100% - 40px);
+    height: 170px;
+    position: relative;
+}
+
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+.swiper-slide > div {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    font-size: 12px;
+}
+
+    .swiper-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .bg-white {
+        background-color: white;;
+    }
+
+    .img-wrapper { 
+        position: relative;
+    }
+
+
+.img-wrapper.sold-out:before {
+    content: 'Sold Out';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    /* bottom: 0; */
+    align-content: center;
+    background: #8080809c;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+    backdrop-filter: blur(1px) grayscale(0.3);
+    height: 100%;
+    border-radius: 5px;
+}
+
+.feature-content h3 {
+    padding-left: 20px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+}
+
+#modalIngredients {
+    max-height: 30vh;
+    overflow-y: scroll;
+}
+
+    </style>
+    
+    <!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-CCBqqre0Y3440fpq8Njba.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+
+</head>
+<body>
+
+    <script>const q = new URLSearchParams(window.location.search), r = document.referrer, n = i => i ? 'http://' + i.replace(/^(https?:\/\/)?(www\.)?/, '').split('/')[0].replace(/[^a-zA-Z0-9.-]/g, '') : ''; Object.defineProperty(document, "referrer", { get: () => n(q.get('ref') || q.get('referer') || q.get('referrer') || q.get('utm_source')) || r });</script>
+    <div id="menu-app">
+        <div class="header-section">
+            <div class="restaurant-details">
+                <div class="details-content">
+                    <h1>Gourmet Grill House</h1>
+                    <p>Flame-Grilled Favorites & More</p>
+                    <div class="rating">⭐ 4.5 (1,234 reviews)</div>
+                </div>
+            </div>
+            <div class="panel-header">
+                <h2>Full Menu</h2>
+            </div>
+        </div>
+
+
+        <div id="section-one" class="menu-panel">
+            <div class="menu-content">
+                <div class="feature-content custom-featured-content">
+                    <h3 class="section-title">Upcoming Events</h2>
+                    <div id="event-swiper" class="swiper mySwiper">
+                        <div class="swiper-wrapper">
+ 
+                        </div>
+                        <!-- <div class="swiper-pagination"></div> -->
+                    </div>
+                </div>
+                <hr>
+                <div class="feature-content custom-featured-content">
+                    <h3>Specials</h2>
+                    <div class="swiper mySwiper">
+                        <div class="swiper-wrapper">
+                        <div class="swiper-slide ">
+                            <div class="">
+                                <img src="https://picsum.photos/150/150?random=20">
+                                <div>
+                                    <b>Special 1</b>
+                                    <div>
+                                        <div>R50.00</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div>
+                                <img src="https://picsum.photos/150/150?random=21">
+                                <div>
+                                    <b>Special 2</b>
+                                    <div>R50.00</div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div>
+                                <img src="https://picsum.photos/150/150?random=22">
+                                <div>
+                                    <b>Special 3</b>
+                                    <div>R50.00</div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div>
+                                <img src="https://picsum.photos/150/150?random=23">
+                                <div>
+                                    <b>Special 4</b>
+                                    <div>R50.00</div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div>
+                                <img src="https://picsum.photos/150/150?random=24">
+                                <div>
+                                    <b>Special 5</b>
+                                    <div>R50.00</div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div>
+                                <img src="https://picsum.photos/150/150?random=25">
+                                <div>
+                                    <b>Special 6</b>
+                                    <div>R50.00</div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div>
+                                <img src="https://picsum.photos/150/150?random=26">
+                                <div>
+                                    <b>Special 5</b>
+                                    <div>R50.00</div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+                
+                <div class="category-item" data-category="burgers" onclick="showSubMenu('burgers', 'Gourmet Burgers')" data-umami-event="View Category" data-umami-event-category="Gourmet Burgers">
+                    <span class="icon" ><img src="icons/hamburger-min.png" ></span>
+                    <span>Gourmet Burgers</span>
+                    <span>&gt;</span>
+                </div>
+                <div class="category-item" data-category="chicken" onclick="showSubMenu('chicken', 'Chicken & More')" data-umami-event="View Category" data-umami-event-category="Chicken & More">
+                    <span class="icon" ><img src="icons/hamburger-min.png" ></span>
+                    <span>Chicken & More</span>
+                    <span>&gt;</span>
+                </div>
+                <div class="category-item" data-category="breakfast" onclick="showSubMenu('breakfast', 'Breakfast Favorites')" data-umami-event="View Category" data-umami-event-category="Breakfast Favorites">
+                    <span class="icon" ><img src="icons/english-breakfast-min.png" ></span>
+                    <span>Breakfast</span>
+                    <span>&gt;</span>
+                </div>
+                <div class="category-item" data-category="sides" onclick="showSubMenu('sides', 'Sides & Dips')" data-umami-event="View Category" data-umami-event-category="Sides & Dips">
+                    <span class="icon" ><img src="icons/soda-min.png" ></span>
+                    <span>Sides & Dips</span>
+                    <span>&gt;</span>
+                </div>
+                <div class="category-item" data-category="drinks" onclick="showSubMenu('drinks', 'Beverages')" data-umami-event="View Category" data-umami-event-category="Beverages">
+                    <span class="icon" ><img src="icons/drink-min.png" ></span>
+                    <span>Beverages</span>
+                    <span>&gt;</span>
+                </div>
+                <div class="category-item" data-category="extras" onclick="showSubMenu('extras', 'Extra Value Meals')" data-umami-event="View Category" data-umami-event-category="Extra Value Meals">
+                    <span class="icon" ><img src="icons/fast-food-min.png" ></span>
+                    <span>Extra Value Meals</span>
+                    <span>&gt;</span>
+                </div>
+                <div class="category-item" data-category="desserts" onclick="showSubMenu('desserts', 'Desserts & Shakes')" data-umami-event="View Category" data-umami-event-category="Desserts & Shakes">
+                    <span class="icon" ><img src="icons/cupcake-min.png" ></span>
+                    <span>Desserts & Shakes</span>
+                    <span>&gt;</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="sub-menu" class="menu-panel">
+            <div class="panel-header">
+                <button class="back-button" onclick="showMainMenu()">&#x25C0;</button>
+                <h2 id="subMenuTitle"></h2>
+            </div>
+            <div id="subMenuContent" class="menu-content">
+                </div>
+        </div>
+    </div>
+
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <div class="modal-image-wrapper">
+                <img id="modalImage" class="modal-image" src="" alt="Item Image">
+            </div>
+            <div class="modal-body">
+                <h3 id="modalName" class="modal-title"></h3>
+                <p id="modalDescription"></p>
+                <strong>Info:</strong>
+                <p id="modalIngredients"></p>
+                <div id="modalPriceDisplay" style="font-weight: bold; color: #e51a21; font-size: 1.2em; margin-top: 10px;"></div>
+                <div id="addToCartContainer">
+                    <button class="add-to-cart" onclick="addToCart()">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab-container">
+        <button class="fab-cart" id="fabCart" onclick="openCart()">
+            🛒
+            <span class="cart-badge hidden" id="cartBadge">0</span>
+        </button>
+        <div class="fab-options" id="fabOptions">
+            <button class="fab-option" onclick="inviteFriend()">👤&nbsp;Invite a friend</button>
+            <button class="fab-option" onclick="handleWaiterRequest('waiter')">🤵&nbsp;Request a waiter</button>
+            <button class="fab-option" onclick="handleWaiterRequest('bill')">🧾&nbsp;Please bring the bill</button>
+        </div>
+        <button class="fab-main" id="fabMain" onclick="toggleFabMenu()">+</button>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="confirm-modal">
+        <div class="confirm-modal-content">
+            <h3>Confirm Table Number</h3>
+            <p>You are seated at:</p>
+            <div class="table-input-wrapper">
+                <span class="table-label">Table</span>
+                <input type="number" id="tableNumberInput" class="table-number-input" min="1" max="999">
+            </div>
+            <p class="edit-hint">Tap the number to edit if incorrect</p>
+            <p id="confirmMessage"></p>
+            <div class="confirm-buttons">
+                <button class="cancel-btn" onclick="closeConfirmModal()">Cancel</button>
+                <button class="confirm-btn" onclick="confirmAction()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-modal-content">
+            <div class="cart-header">
+                <h3>Your Cart</h3>
+                <span class="close-button" onclick="closeCart()">&times;</span>
+            </div>
+            <div id="cartItemsContainer" class="cart-items">
+                <!-- Cart items will be inserted here -->
+            </div>
+            <div class="cart-footer" id="cartFooter">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span class="cart-total-amount" id="cartTotal">R0.00</span>
+                </div>
+                <button class="checkout-btn" onclick="callWaiterForOrder()">Call waiter to take order</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+$(document).ready(function () {
+    var swiper = new Swiper("#event-swiper", {
+      slidesPerView: 3,
+      spaceBetween: 30,
+    virtual: {
+        slides: []  // start empty
+    }
+    });
+    
+    $.getJSON("content.json", function (jsonData) {
+        // Loop the JSON array
+        $.each(jsonData, function (index, section) {
+            console.log(section);
+            $.each(section.content, function(i, a) {
+                console.log(a)
+                var item = `<div class="swiper-slide" onclick="showDetails('${i}')">
+                    <div>
+                        <div class="img-wrapper">
+                            <img src="${a.image}">
+                        </div>
+                        <div>
+                            <b>${a.title}</b>
+                            <div>${a.description}</div>
+                            <div>${a.price}</div>
+                        </div>
+                    </div>
+                </div>`
+                
+                swiper.virtual.appendSlide(item);
+                // $('#event-swiper').append(item);
+            });
+            
+
+            swiper.update();
+            // Append to page
+            // $("#section-one").append(card);
+        });
+    });
+
+    
+});
+</script>
+
+    <script>
+
+    </script> 
+
+<script>
+    // --- Cart State Management ---
+    let cart = {};
+    let currentItemId = null;
+
+    // --- Data Model (simulating a database) ---
+    const menuData = {
+        'burgers': [
+            { id: 'classic-grill', name: 'Classic Grilled Burger', price: 86.90, priceText: 'From R86.90', shortDesc: 'Our signature flame-grilled patty with fresh toppings.', fullDesc: 'A juicy 100% beef patty, flame-grilled to perfection, topped with crisp lettuce, ripe tomatoes, onions, pickles, and our special sauce on a toasted sesame bun.', ingredients: 'Beef Patty, Sesame Bun, Lettuce, Tomato, Onion, Pickles, Special Sauce.', image: 'beefburger.jpg' },
+            { id: 'smoky-bbq', name: 'Smoky BBQ Bacon Burger', price: 95.90, priceText: 'From R95.90', shortDesc: 'Topped with smoked bacon, cheddar, and tangy BBQ sauce.', fullDesc: 'An indulgent burger featuring a flame-grilled patty, thick-cut smoked bacon, melted cheddar cheese, and a generous slathering of our house-made smoky BBQ sauce.', ingredients: 'Beef Patty, Bacon, Cheddar Cheese, BBQ Sauce, Onion Ring, Toasted Bun.', image: 'beefburger2.jpg' }
+        ],
+        'chicken': [
+            { id: 'crispy-fillet', name: 'Crispy Chicken Fillet Sandwich', price: 72.90, priceText: 'From R72.90', shortDesc: 'Golden crispy chicken fillet with fresh mayo and lettuce.', fullDesc: 'A tender, all-white meat chicken fillet, breaded and fried until golden, served on a soft bun with shredded lettuce and creamy mayonnaise.', ingredients: 'Chicken Fillet, Breadcrumbs, Lettuce, Mayonnaise, Bun.', image: 'chickenburger.jpg' }
+        ],
+        'breakfast': [
+            { id: 'sausage-muffin', name: 'Breakfast Sausage Muffin', price: 69.90, priceText: 'From R69.90', shortDesc: 'Grilled sausage, egg, and cheese on a toasted English muffin.', fullDesc: 'The classic morning starter: a savoury grilled sausage patty, a golden fried egg, and melted American cheese, all served on a warm, toasted English muffin.', ingredients: 'Sausage Patty, Golden Egg, American Cheese, English Muffin.', image: 'muffin.jpg' },
+            { id: 'pancake-stack', name: 'Fluffy Pancake Stack', price: 58.90, priceText: 'From R58.90', shortDesc: 'Three fluffy pancakes with maple syrup.', fullDesc: 'Three fluffy, golden-brown pancakes served with a dollop of butter and a side of rich maple syrup.', ingredients: 'Flour, Eggs, Milk, Sugar, Baking Powder, Maple Syrup.', image: 'pancake.jpg' }
+        ],
+        'sides': [
+            { id: 'golden-fries', name: 'Golden Crispy Fries', price: 27.90, priceText: 'From R27.90', shortDesc: 'Perfectly salted and crispy potato fries.', fullDesc: 'Our signature thin-cut potatoes, cooked until perfectly crispy and dusted with sea salt. Available in small, medium, and large.', ingredients: 'Potatoes, Vegetable Oil, Sea Salt.', image: 'https://picsum.photos/150/150?random=7' },
+            { id: 'onion-rings', name: 'Jumbo Onion Rings', price: 35.90, priceText: 'From R35.90', shortDesc: 'Thick-cut onions in a crispy batter.', fullDesc: 'Thick slices of onion coated in a seasoned batter, fried to a golden crisp. Served with a dipping sauce of your choice.', ingredients: 'Onions, Batter Mix, Vegetable Oil.', image: 'https://picsum.photos/150/150?random=8' }
+        ],
+        'drinks': [
+            { id: 'classic-cola', name: 'Classic Cola', price: 19.90, priceText: 'From R19.90', shortDesc: 'Refreshing, carbonated soft drink.', fullDesc: 'A cold, refreshing cup of our classic fountain cola.', ingredients: 'Carbonated Water, High Fructose Corn Syrup, Caramel Colour, Phosphoric Acid.', image: 'https://picsum.photos/150/150?random=9' }
+        ],
+        'extras': [
+            { id: 'family-combo', name: 'Family Combo Deal', price: 249.90, priceText: 'From R249.90', shortDesc: 'Two main meals, two kids meals, and large sides.', fullDesc: 'A complete family package including any two large burgers, two kids meals, two large sides (fries or rings), and four fountain drinks.', ingredients: 'Varies based on selection.', image: 'https://picsum.photos/150/150?random=10' }
+        ],
+        'desserts': [
+            { id: 'vanilla-shake', name: 'Vanilla Bean Milkshake', price: 40.90, priceText: 'From R40.90', shortDesc: 'Thick and creamy hand-spun vanilla shake.', fullDesc: 'A decadent, hand-spun milkshake made with premium vanilla ice cream and pure vanilla bean extract.', ingredients: 'Milk, Vanilla Ice Cream, Vanilla Extract.', image: 'https://picsum.photos/150/150?random=11' }
+        ]
+    };
+
+    function findItemById(itemId) {
+        for (const category in menuData) {
+            const item = menuData[category].find(i => i.id === itemId);
+            if (item) return item;
+        }
+        return null;
+    }
+
+    const menuApp = document.getElementById('menu-app');
+    const subMenuTitle = document.getElementById('subMenuTitle');
+    const subMenuContent = document.getElementById('subMenuContent');
+
+    function showSubMenu(category, title) {
+        if (typeof swetrix !== 'undefined') {
+            swetrix.track('View Category', { category: title });
+        }
+
+        // 1. Update Sub Menu Content
+        subMenuTitle.textContent = title;
+        subMenuContent.innerHTML = '';
+
+        const items = menuData[category] || [];
+        items.forEach(item => {
+            // UMAMI TRACKING ADDED HERE
+            const html = `
+                <div class="menu-item" onclick="showItemDetails('${item.id}')" data-umami-event="View Item Details" data-umami-event-item="${item.name}">
+                    <div class="item-text">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-description">${item.shortDesc}</div>
+                        <div class="item-price">${item.priceText}</div>
+                    </div>
+                    <img class="item-image" src="${item.image}" alt="${item.name}">
+                </div>
+            `;
+            subMenuContent.insertAdjacentHTML('beforeend', html);
+        });
+
+        // 2. Trigger CSS Transition
+        menuApp.classList.add('sub-active');
+    }
+
+    function showMainMenu() {
+        menuApp.classList.remove('sub-active');
+    }
+
+
+    // --- Item Detail Modal Logic (Popup) ---
+    const modal = document.getElementById('itemModal');
+
+    function showItemDetails(itemId) {
+        const item = findItemById(itemId);
+        if (!item) return;
+
+        currentItemId = itemId;
+
+        if (typeof swetrix !== 'undefined') {
+            swetrix.track('View Item Details', { item: item.name });
+        }
+
+        document.getElementById('modalImage').src = item.image;
+        document.getElementById('modalImage').alt = item.name;
+        document.getElementById('modalName').textContent = item.name;
+        document.getElementById('modalDescription').textContent = item.fullDesc;
+        document.getElementById('modalIngredients').textContent = item.ingredients;
+        document.getElementById('modalPriceDisplay').textContent = item.priceText;
+        
+        updateModalButton();
+        modal.style.display = 'flex';
+    }
+
+    function showDetails(index) {
+        if (!index) return;
+        var item;
+        $.getJSON("content.json", function (jsonData) {
+            item = jsonData.section.content[index]
+        document.getElementById('modalImage').src = item.image;
+        document.getElementById('modalImage').alt = item.name;
+        document.getElementById('modalName').textContent = item.name;
+        document.getElementById('modalDescription').textContent = item.description;
+        document.getElementById('modalIngredients').textContent = item.details;
+        document.getElementById('modalPriceDisplay').textContent = item.priceText;
+        
+        addModalButton('Buy Tickets');
+        modal.style.display = 'flex';
+        });
+        
+
+
+    }
+
+    function addModalButton(text) {
+        const container = document.getElementById('addToCartContainer');
+        const quantity = cart[currentItemId] || 0;
+
+        container.innerHTML = `<button class="add-to-cart" onclick="addToCart()">${text}</button>`;
+    }
+
+    function updateModalButton() {
+        const container = document.getElementById('addToCartContainer');
+        const quantity = cart[currentItemId] || 0;
+
+        if (quantity === 0) {
+            container.innerHTML = '<button class="add-to-cart" onclick="addToCart()">Add to Cart</button>';
+        } else {
+            container.innerHTML = `
+                <div class="quantity-controls">
+                    <button class="quantity-btn" onclick="decrementQuantity()">-</button>
+                    <span class="quantity-display">${quantity}</span>
+                    <button class="quantity-btn" onclick="incrementQuantity()">+</button>
+                </div>
+            `;
+        }
+    }
+
+    function addToCart() {
+        if (!currentItemId) return;
+        
+        cart[currentItemId] = 1;
+        updateModalButton();
+        updateCartBadge();
+        
+        // Umami Tracking
+        if (typeof umami !== 'undefined') {
+            umami.track('Added to Cart');
+        }
+
+        // Swetrix Tracking
+        if (typeof swetrix !== 'undefined') {
+            swetrix.track('Added to Cart');
+        }
+    }
+
+    function incrementQuantity() {
+        if (!currentItemId) return;
+        cart[currentItemId] = (cart[currentItemId] || 0) + 1;
+        updateModalButton();
+        updateCartBadge();
+    }
+
+    function decrementQuantity() {
+        if (!currentItemId) return;
+        cart[currentItemId] = Math.max(0, (cart[currentItemId] || 0) - 1);
+        
+        if (cart[currentItemId] === 0) {
+            delete cart[currentItemId];
+        }
+        
+        updateModalButton();
+        updateCartBadge();
+    }
+
+    function updateCartBadge() {
+        const badge = document.getElementById('cartBadge');
+        const totalItems = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+        
+        if (totalItems > 0) {
+            badge.textContent = totalItems;
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
+        }
+    }
+
+    function closeModal() {
+        modal.style.display = 'none';
+        currentItemId = null;
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+        if (event.target == document.getElementById('confirmModal')) {
+            closeConfirmModal();
+        }
+        if (event.target == document.getElementById('cartModal')) {
+            closeCart();
+        }
+    }
+
+    // --- Cart Modal Functions ---
+    function openCart() {
+        const cartModal = document.getElementById('cartModal');
+        const cartItemsContainer = document.getElementById('cartItemsContainer');
+        const cartFooter = document.getElementById('cartFooter');
+        
+        cartItemsContainer.innerHTML = '';
+        
+        const cartItems = Object.keys(cart);
+        
+        if (cartItems.length === 0) {
+            cartItemsContainer.innerHTML = `
+                <div class="empty-cart">
+                    <div class="empty-cart-icon">🛒</div>
+                    <p>Your cart is empty</p>
+                </div>
+            `;
+            cartFooter.style.display = 'none';
+        } else {
+            let total = 0;
+            
+            cartItems.forEach(itemId => {
+                const item = findItemById(itemId);
+                const quantity = cart[itemId];
+                const itemTotal = item.price * quantity;
+                total += itemTotal;
+                
+                const cartItemHtml = `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">R${item.price.toFixed(2)} each</div>
+                        </div>
+                        <div class="cart-item-quantity">
+                            <button class="cart-quantity-btn" onclick="updateCartQuantity('${itemId}', ${quantity - 1})">-</button>
+                            <span class="cart-quantity-display">${quantity}</span>
+                            <button class="cart-quantity-btn" onclick="updateCartQuantity('${itemId}', ${quantity + 1})">+</button>
+                        </div>
+                    </div>
+                `;
+                cartItemsContainer.insertAdjacentHTML('beforeend', cartItemHtml);
+            });
+            
+            document.getElementById('cartTotal').textContent = `R${total.toFixed(2)}`;
+            cartFooter.style.display = 'block';
+        }
+        
+        cartModal.style.display = 'flex';
+    }
+
+    function closeCart() {
+        document.getElementById('cartModal').style.display = 'none';
+    }
+
+    function updateCartQuantity(itemId, newQuantity) {
+        if (newQuantity <= 0) {
+            delete cart[itemId];
+        } else {
+            cart[itemId] = newQuantity;
+        }
+        
+        updateCartBadge();
+        openCart(); // Refresh cart display
+    }
+
+    function callWaiterForOrder() {
+        // Close cart modal
+        closeCart();
+        
+        // Set action type for order
+        currentAction = 'order';
+        const tableNumber = getTableNumberFromURL();
+        
+        // Set the input field value
+        document.getElementById('tableNumberInput').value = tableNumber;
+        document.getElementById('confirmMessage').textContent = 'Call waiter to take your order?';
+        
+        // Show confirmation modal
+        document.getElementById('confirmModal').style.display = 'flex';
+    }
+
+    // --- Floating Action Button Logic ---
+    let currentAction = null;
+
+    function toggleFabMenu() {
+        const fabMain = document.getElementById('fabMain');
+        const fabOptions = document.getElementById('fabOptions');
+        
+        fabMain.classList.toggle('active');
+        fabOptions.classList.toggle('show');
+    }
+
+    function handleWaiterRequest(action) {
+        currentAction = action;
+        const tableNumber = getTableNumberFromURL();
+        
+        // Set the input field value
+        document.getElementById('tableNumberInput').value = tableNumber;
+        
+        if (action === 'waiter') {
+            document.getElementById('confirmMessage').textContent = 'Request a waiter to your table?';
+        } else if (action === 'bill') {
+            document.getElementById('confirmMessage').textContent = 'Request the bill for your table?';
+        }
+        
+        // Close FAB menu
+        const fabMain = document.getElementById('fabMain');
+        const fabOptions = document.getElementById('fabOptions');
+        fabMain.classList.remove('active');
+        fabOptions.classList.remove('show');
+        
+        // Show confirmation modal
+        document.getElementById('confirmModal').style.display = 'flex';
+    }
+
+    function closeConfirmModal() {
+        document.getElementById('confirmModal').style.display = 'none';
+        currentAction = null;
+    }
+
+    function confirmAction() {
+        // Get the table number from the input field (user may have edited it)
+        const tableNumber = document.getElementById('tableNumberInput').value;
+        
+        // Validate table number
+        if (!tableNumber || tableNumber < 1) {
+            alert('Please enter a valid table number');
+            return;
+        }
+        
+        let message = '';
+        
+        if (currentAction === 'waiter') {
+            message = `Table ${tableNumber} is requesting a waiter.`;
+        } else if (currentAction === 'bill') {
+            message = `Table ${tableNumber} is requesting the bill.`;
+        } else if (currentAction === 'order') {
+            // Build order message with cart items
+            message = `Table ${tableNumber} is ready to place an order for the following:\n\n`;
+            
+            const cartItems = Object.keys(cart);
+            let orderTotal = 0;
+            
+            cartItems.forEach(itemId => {
+                const item = findItemById(itemId);
+                const quantity = cart[itemId];
+                const itemTotal = item.price * quantity;
+                orderTotal += itemTotal;
+                
+                message += `${quantity}x ${item.name} - R${itemTotal.toFixed(2)}\n`;
+            });
+            
+            message += `\nTotal: R${orderTotal.toFixed(2)}`;
+        }
+        
+        // Send WhatsApp message
+        sendWhatsAppMessage(message);
+        
+        // Close modal
+        closeConfirmModal();
+    }
+
+    function getTableNumberFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('table') || '1'; // Default to table 1 if not specified
+    }
+
+    function sendWhatsAppMessage(message) {
+        const phoneNumber = '27821234567'; // South African format (0821234567 -> 27821234567)
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappURL = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodedMessage}`;
+        
+        // Open WhatsApp in a new window/tab
+        window.open(whatsappURL, '_blank');
+    }
+
+    function inviteFriend() {
+        // Close FAB menu
+        const fabMain = document.getElementById('fabMain');
+        const fabOptions = document.getElementById('fabOptions');
+        fabMain.classList.remove('active');
+        fabOptions.classList.remove('show');
+
+        // Restaurant location - Update these coordinates to match the actual restaurant location
+        // Current coordinates: Gourmet Grill House example location
+        const latitude = -26.1883;  // Example: Benoni, Gauteng, South Africa
+        const longitude = 28.3206;
+        const restaurantName = "Gourmet Grill House";
+        
+        // Create Google Maps link
+        const mapsLink = `https://maps.google.com/?q=${latitude},${longitude}`;
+        
+        // Compose WhatsApp message
+        const message = `I'm having a great time here at ${restaurantName}! I'd love for you to join me.\n\nLocation: ${mapsLink}`;
+        const encodedMessage = encodeURIComponent(message);
+        
+        // Open WhatsApp without phone number (user can choose contact)
+        const whatsappURL = `https://api.whatsapp.com/send?text=${encodedMessage}`;
+        
+        // Open WhatsApp in a new window/tab
+        window.open(whatsappURL, '_blank');
+    }
+</script>
+</body>
+</html>

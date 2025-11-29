@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - BizBio Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <link rel="stylesheet" href="site.css">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Comfortaa:wght@300..700&family=Gabarito:wght@400..900&family=Gantari:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 47.4% 11.2%;
+            --primary: 222.2 47.4% 11.2%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96.1%;
+            --secondary-foreground: 222.2 47.4% 11.2%;
+            --accent: 210 40% 96.1%;
+            --accent-foreground: 222.2 47.4% 11.2%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --border: 214.3 31.8% 91.4%;
+            --radius: 0.5rem;
+        }
+
+        .pricing-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .pricing-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0/0.1);
+        }
+
+        .featured-card {
+            border: 2px solid #2563eb;
+            position: relative;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2563eb;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="h-full bg-gray-50">
+ <!-- Header -->
+    <header id=global-header class="code-section sticky bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-28">
+
+            <a href="#" class="flex-shrink-0" style="display: flex;align-items: center;">
+                <img src="logo.png" alt="bizbio" class="h-20 py-2" data-logo="">
+            <span class="red-hat-display text-4xl font-bold text-[var(--dark-text-color)]">BiZBiO</span></a>
+
+            <nav class="hidden lg:flex items-center space-x-8">
+                <a href=products.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Products</a>
+                <a href=pricing.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Pricing</a>
+                <a href=search-businesses.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Businesses</a>
+                <a href=contact.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Contact</a>
+                <a href=claim-profile.html
+                    class="bg-[var(--primary-color)] text-[var(--primary-button-text-color)] px-6 py-3 rounded-[var(--button-rounded-radius)] hover:bg-[var(--primary-button-hover-bg-color)] transition-all duration-200 font-semibold font-[var(--font-family-body)]">Claim Your Profile</a>
+            </nav>
+
+            <button data-landingsite-mobile-menu-toggle
+                class="lg:hidden text-[var(--dark-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 sf-hidden">
+
+            </button>
+        </div>
+
+        <nav data-landingsite-mobile-menu class="hidden lg:hidden pb-4 sf-hidden">
+
+        </nav>
+    </div>
+</header>
+
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-br from-gray-50 to-white overflow-hidden py-16">
+        <div class="absolute top-20 right-10 w-72 h-72 bg-blue-600 rounded-full opacity-10 blur-3xl"></div>
+        <div class="absolute bottom-20 left-10 w-96 h-96 bg-purple-600 rounded-full opacity-10 blur-3xl"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+                Simple, Honest Pricing
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                No hidden fees. Cancel anytime. 14-day free trial on all paid plans.
+            </p>
+            <div class="flex justify-center gap-4 mb-8">
+                <span class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
+                    <i class="fas fa-check-circle mr-2"></i>No Contracts
+                </span>
+                <span class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
+                    <i class="fas fa-gift mr-2"></i>14-Day Free Trial
+                </span>
+                <span class="inline-flex items-center px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm font-semibold">
+                    <i class="fas fa-leaf mr-2"></i>Eco-Friendly
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- BizBio Professional Plans -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                    <i class="fas fa-id-card text-blue-600 mr-3"></i>BizBio Connect
+                </h2>
+                <p class="text-lg text-gray-600">Digital Business Cards for Professionals & Small Businesses</p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-8">
+                <!-- Free Plan -->
+                <div class="pricing-card bg-white border border-gray-200 rounded-lg p-8 shadow-md ">
+                        <div>
+<h3 class="text-2xl font-bold text-gray-900 mb-2">Free</h3>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-gray-900">R0</span>
+                        <span class="text-gray-600">/month</span>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">1 digital profile</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Basic customisation (3 templates)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">QR code generation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Social media links (up to 5)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Mobile responsive</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times text-red-400 mt-1 mr-3"></i>
+                            <span class="text-gray-400">No vCard download</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times text-red-400 mt-1 mr-3"></i>
+                            <span class="text-gray-400">No analytics</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times text-red-400 mt-1 mr-3"></i>
+                            <span class="text-gray-400">No custom branding</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times text-red-400 mt-1 mr-3"></i>
+                            <span class="text-gray-400">BizBio badge on profile</span>
+                        </li>
+                    </ul>
+                        </div>
+                    <div class="">
+
+                    
+                    <button class="w-full bg-gray-600 text-white py-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 font-semibold">
+                        Get Started Free
+                    </button>
+                    </div>
+                    
+                </div>
+
+                <!-- Solo Plan -->
+                <div class="pricing-card featured-card bg-white rounded-lg p-8 shadow-lg">
+                    <div class="featured-badge">Most Popular</div>
+                    <div class="flex-row">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Solo</h3>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-blue-600">R59</span>
+                        <span class="text-gray-600">/month</span>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">1 digital profile</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Custom branding (colors, fonts, logo)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Premium templates (15+ designs)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">QR code generation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Unlimited social media links</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Mobile responsive</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">vCard download</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Analytics dashboard</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Remove BizBio badge</span>
+                        </li>
+                    </ul>
+                </div>
+                <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
+                    Start 14-Day Trial
+                </button>
+                    
+                </div>
+
+                <!-- Pro Plan (Featured) -->
+                <div class="pricing-card bg-white border border-gray-200 rounded-lg p-8 shadow-md">
+                    
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Team</h3>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-gray-900">R99</span>
+                        <span class="text-gray-600">/month</span>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700"><strong>5 digital profiles</strong></span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Custom branding (colors, fonts, logo)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Premium templates (15+ designs)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">QR code generation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Unlimited social media links</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Mobile responsive</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">vCard download</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Analytics dashboard</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Remove BizBio badge</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-gray-700">* R20/profile beyond tier limit</span>
+                        </li>
+                    </ul>
+                </div>
+                <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
+                    Start 14-Day Trial
+                </button>
+                    
+                </div>
+
+                <!-- Business Plan -->
+                <div class="pricing-card bg-white border border-gray-200 rounded-lg p-8 shadow-md">
+                    <div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Business</h3>
+                    <div class="mb-6">
+                        <span class="text-4xl font-bold text-gray-900">R249</span>
+                        <span class="text-gray-600">/month</span>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700"><strong>20 digital profiles</strong></span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">All Pro features</span>
+                        </li>
+                       
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Team member management</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Organizational structure</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Advanced analytics</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span class="text-gray-700">Bulk team member import</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-gray-700">* R20/profile beyond tier limit</span>
+                        </li>
+                    </ul>
+                </div>
+                <button class="w-full bg-gray-900 text-white py-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-semibold">
+                    Start 14-Day Trial
+                </button>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BizBio Menu Plans -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                    <i class="fas fa-utensils text-blue-600 mr-3"></i>BizBio Menu
+                </h2>
+                <p class="text-lg text-gray-600">Digital Restaurant Menus - Save R5,000-R20,000/year on printing</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Starter Plan -->
+                <div class="pricing-card bg-white border border-gray-200 rounded-lg p-8 shadow-md">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Starter</h3>
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold text-gray-900">R149</span>
+                            <span class="text-gray-600">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">1 restaurant profile</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Up to 50 menu items</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">5 categories</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">1 image per item</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Basic item details</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Portion sizes/variants</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Mobile-optimised menu</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Featured section</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-times text-red-400 mt-1 mr-3"></i>
+                                <span class="text-gray-700">No allergen information</span>
+                            </li>
+                        
+                            <li class="flex items-start">
+                                <i class="fas fa-times text-red-400 mt-1 mr-3"></i>
+                                <span class="text-gray-700">No dietary tags</span>
+                            </li>
+                        
+                            <li class="flex items-start">
+                                <i class="fas fa-times text-red-400 mt-1 mr-3"></i>
+                                <span class="text-gray-700">No item add-ons</span>
+                            </li>
+                        
+                            <li class="flex items-start">
+                                <i class="fas fa-times text-red-400 mt-1 mr-3"></i>
+                                <span class="text-gray-700">No analytics</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-times text-red-400 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Not elligible for Menu Pro add-on</span>
+                            </li>
+                        
+                        </ul>
+                    </div>
+                    <button class="w-full bg-gray-600 text-white py-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 font-semibold">
+                        Start 14-Day Trial
+                    </button>
+                </div>
+
+                <!-- Restaurant Plan (Featured) -->
+                <div class="pricing-card featured-card bg-white rounded-lg p-8 shadow-lg">
+                    <div class="featured-badge">Most Popular</div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Entrée</h3>
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold text-blue-600">R299</span>
+                            <span class="text-gray-600">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">1 restaurant profile</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Up to 200 menu items</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">15 categories</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">5 images per item</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Portion sizes/variants</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Item add-ons / extras</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Additional featured section</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Allergen information</span>
+                            </li>
+                        
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Dietary tags</span>
+                            </li>
+                        
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Spice level indicators</span>
+                            </li>
+                        
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Custom branding</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Analytics dashboard</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Import menu items</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700"><strong>Elligible</strong> for Menu Pro add-on</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
+                        Start 14-Day Trial
+                    </button>
+                </div>
+
+                <!-- Multi-Location Plan -->
+                <div class="pricing-card bg-white border border-gray-200 rounded-lg p-8 shadow-md">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Banquet</h3>
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold text-gray-900">R599</span>
+                            <span class="text-gray-600">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700"><strong>Unlimited locations</strong></span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700"><strong>Multiple menus</strong></span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">150 menu items per location / menu</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Unlimited categories & images</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Location-specific menus</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Centralized menu management</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Account per location</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Nutritional information</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Portion sizes/variants</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Item add-ons / extras</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Allergen information</span>
+                            </li>
+                        
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Dietary tags</span>
+                            </li>
+                        
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Spice level indicators</span>
+                            </li>
+                        
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Custom branding</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Analytics dashboard</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Import menu items</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700"><strong>Elligible</strong> for Menu Pro add-on</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="w-full bg-gray-900 text-white py-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-semibold">
+                        Start 14-Day Trial
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                    <i class="fas fa-utensils text-blue-600 mr-3"></i>BizBio Menu Add-ons
+                </h2>
+                <p class="text-lg text-gray-600">Event planning, menu scheduling and more</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="pricing-card bg-white rounded-lg p-8 shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Waiter Call</h3>
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold text-gray-900">R49</span>
+                            <span class="text-gray-600">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Any menu plan</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">One-tap waiter calling</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">One-tap bill request</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Multi device support</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
+                        Start 14-Day Trial
+                    </button>
+                </div>
+                <div class="pricing-card bg-white rounded-lg p-8 shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Order Sending</h3>
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold text-gray-900">R79</span>
+                            <span class="text-gray-600">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Any menu plan</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Send complete orders via WhatsApp</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Reduces order errors</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Kitchen receives formatted orders</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Multi device support</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
+                        Start 14-Day Trial
+                    </button>
+                </div>
+                <!-- Restaurant Plan (Featured) -->
+                <div class="pricing-card bg-white rounded-lg p-8 shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Menu Pro</h3>
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold text-gray-900">R149</span>
+                            <span class="text-gray-600">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <span class="text-gray-700">Requires Menu Entrée or Menu Banquet Plan</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Event-specific menus</span>
+                            </li>
+                        
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Table personalities</span>
+                            </li>
+                        
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Advanced NFC management</span>
+                            </li>
+                        
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Menu versioning</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Menu scheduling</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Table analytics</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
+                        Start 14-Day Trial
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BizBio Retail Plans -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                    <i class="fas fa-store text-blue-600 mr-3"></i>BizBio Retail
+                </h2>
+                <p class="text-lg text-gray-600">Product Catalogs for Retailers & Boutiques</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Basic Plan -->
+                <div class="pricing-card bg-white border border-gray-200 rounded-lg p-8 shadow-md">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Basic</h3>
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold text-gray-900">R199</span>
+                            <span class="text-gray-600">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">1 product catalog</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Up to 100 products</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">10 categories</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">1 image per product</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Product variants</span>
+                            </li>
+                        
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Stock Status</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">QR Code</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Mobile-optimised</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Product search</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Contact/inquiry form</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Basic customisation</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-times text-red-400 mt-1 mr-3"></i>
+                                <span class="text-gray-400">No analytics</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-times text-red-400 mt-1 mr-3"></i>
+                                <span class="text-gray-400">No bulk operations</span>
+                            </li>
+                        
+                            <li class="flex items-start">
+                                <i class="fas fa-times text-red-400 mt-1 mr-3"></i>
+                                <span class="text-gray-400">BizBio branding</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="w-full bg-gray-600 text-white py-3 rounded-lg hover:bg-gray-700 transition-colors duration-200 font-semibold">
+                        Start 14-Day Trial
+                    </button>
+                </div>
+
+                <!-- Growth Plan (Featured) -->
+                <div class="pricing-card featured-card bg-white rounded-lg p-8 shadow-lg">
+                    <div class="featured-badge">Most Popular</div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Growth</h3>
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold text-blue-600">R399</span>
+                            <span class="text-gray-600">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700"><strong>3 product catalogs</strong></span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Up to 500 products</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Unlimited categories</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">5 images per product</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Product specifications</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Product tags (new, sale featured)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Compare at price (discounts)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Custom branding</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Remove BizBio badge</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Anallytics dashboard</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">CSV import/export</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Product collections</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
+                        Start 14-Day Trial
+                    </button>
+                </div>
+
+                <!-- Professional Plan -->
+                <div class="pricing-card bg-white border border-gray-200 rounded-lg p-8 shadow-md">
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Professional</h3>
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold text-gray-900">R799</span>
+                            <span class="text-gray-600">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700"><strong>10 product catalogs</strong></span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Up to 2,000 products</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Unlimited categories</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Unlimited images per product</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Product specifications</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Product tags (new, sale featured)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Compare at price (discounts)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Custom branding</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Remove BizBio badge</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Anallytics dashboard</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">CSV import/export</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Product collections</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Video support</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Enhanced product details</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Related products</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="w-full bg-gray-900 text-white py-3 rounded-lg hover:bg-gray-800 transition-colors duration-200 font-semibold">
+                        Start 14-Day Trial
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bundle Packages -->
+    <section class="py-16 bg-gradient-to-br from-blue-50 to-purple-50 hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                    <i class="fas fa-box-open text-blue-600 mr-3"></i>Bundle Packages
+                </h2>
+                <p class="text-lg text-gray-600">Save 20% when you combine plans</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Bundle 1 -->
+                <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow duration-200">
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Complete Starter</h3>
+                    <div class="mb-4">
+                        <div class="text-sm text-gray-500 line-through">R248/month</div>
+                        <div class="text-3xl font-bold text-blue-600">R199<span class="text-sm text-gray-600">/mo</span></div>
+                        <div class="text-sm text-green-600 font-semibold">Save R49 (20%)</div>
+                    </div>
+                    <div class="text-sm text-gray-600 mb-4">
+                        Professional Pro + Menu Starter
+                    </div>
+                    <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-semibold">
+                        Get Bundle
+                    </button>
+                </div>
+
+                <!-- Bundle 2 -->
+                <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow duration-200">
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Complete Business</h3>
+                    <div class="mb-4">
+                        <div class="text-sm text-gray-500 line-through">R548/month</div>
+                        <div class="text-3xl font-bold text-blue-600">R438<span class="text-sm text-gray-600">/mo</span></div>
+                        <div class="text-sm text-green-600 font-semibold">Save R110 (20%)</div>
+                    </div>
+                    <div class="text-sm text-gray-600 mb-4">
+                        Professional Business + Menu Restaurant
+                    </div>
+                    <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-semibold">
+                        Get Bundle
+                    </button>
+                </div>
+
+                <!-- Bundle 3 -->
+                <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow duration-200">
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Complete Professional</h3>
+                    <div class="mb-4">
+                        <div class="text-sm text-gray-500 line-through">R298/month</div>
+                        <div class="text-3xl font-bold text-blue-600">R238<span class="text-sm text-gray-600">/mo</span></div>
+                        <div class="text-sm text-green-600 font-semibold">Save R60 (20%)</div>
+                    </div>
+                    <div class="text-sm text-gray-600 mb-4">
+                        Professional Pro + Retail Basic
+                    </div>
+                    <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-semibold">
+                        Get Bundle
+                    </button>
+                </div>
+
+                <!-- Bundle 4 -->
+                <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow duration-200">
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Complete Growth</h3>
+                    <div class="mb-4">
+                        <div class="text-sm text-gray-500 line-through">R648/month</div>
+                        <div class="text-3xl font-bold text-blue-600">R518<span class="text-sm text-gray-600">/mo</span></div>
+                        <div class="text-sm text-green-600 font-semibold">Save R130 (20%)</div>
+                    </div>
+                    <div class="text-sm text-gray-600 mb-4">
+                        Professional Business + Retail Growth
+                    </div>
+                    <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-semibold">
+                        Get Bundle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+            </div>
+
+            <div class="space-y-6">
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Can I switch plans anytime?</h3>
+                    <p class="text-gray-700">Yes! Upgrade or downgrade at any time. Upgrades take effect immediately. Downgrades take effect at the end of your current billing cycle.</p>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">What payment methods do you accept?</h3>
+                    <p class="text-gray-700">We accept all major credit/debit cards and EFT through PayFast.</p>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Can I try before I buy?</h3>
+                    <p class="text-gray-700">Yes! All paid plans include a 14-day free trial. No credit card required to start.</p>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Do I need technical skills?</h3>
+                    <p class="text-gray-700">Not at all! BizBio is designed for non-technical users. If you can use WhatsApp, you can use BizBio.</p>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Is my data secure?</h3>
+                    <p class="text-gray-700">Yes! We use bank-grade encryption (SSL/TLS), regular backups, and comply with POPIA (South African privacy law).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-r from-blue-600 to-purple-600">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Ready to Go Digital?</h2>
+            <p class="text-xl text-blue-100 mb-8">Start your free trial today. No credit card required.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="bg-white text-blue-600 px-8 py-4 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-semibold text-lg">
+                    Start Free Trial
+                </button>
+                <button class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-blue-600 transition-all duration-200 font-semibold text-lg">
+                    Contact Sales
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-white text-lg font-bold mb-4">BizBio</h3>
+                    <p class="text-sm">Digital profiles, menus, and catalogs for modern businesses.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition-colors">Features</a></li>
+                        <li><a href="pricing.html" class="hover:text-white transition-colors">Pricing</a></li>
+                        <li><a href="products.html" class="hover:text-white transition-colors">Products</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition-colors">About</a></li>
+                        <li><a href="contact.html" class="hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
+                <p>&copy; 2025 BizBio. All rights reserved. Built for South African businesses.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

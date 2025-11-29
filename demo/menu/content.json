@@ -1,0 +1,39 @@
+{
+    "section" : {
+        "type" : "carousel",
+        "title" : "Upcoming Events",
+        "content" : [ {
+            "image" : "events/80s.jpeg",
+            "title" : "Mike and the Harmonics",
+            "description" : "29 Nov @ 20:30",
+            "price" : "From R175",
+            "available" : true,
+            "details": "That 80’s Show, live at Triggerfish Brewing!\n\nMike and the Harmonix – Hits of the 80s Show\n\nMike McCully from McCully Workshop has put together another hit show… Hits of the 80s.\n\nFeaturing Mike himself on drums and vocals, the show has all the elements of Mike's shows… audience participation, fun, amazing artists, and great music.\n\nSjanel Vosloo and Kea Brand on lead vocals bring back memories with songs like Flashdance, Sweet Dreams (Are Made of This), I Want to Break Free, Don't Stop Believing, and many more.\n\nAlso featuring fellow McCully member Gordon Mackay on lead vocals with songs by Bruce Springsteen, Billy Joel, Dire Straits, among others.\n\nLead guitarist Warren Lomberg and bassist Neil Peyten complete the lineup, which will have patrons dancing in the aisles to more hits by ABBA, Guns N’ Roses, AC/DC, Tina Turner, Fleetwood Mac, and more.\n\nFor an amazing night of fun, party, and excellent music… Mike and the Harmonix – Hits of the 80s is not to be missed.\n\nWhat the critics said…\n\n\"80s at its best!\" — The Argus\n\"What a jol! You gotta love the 80s!\" — Cape Times\n\"Mike and the Harmonix show once again why they are the top cover band in South Africa… mind blowing!\" — Internet Guru\n\n*Doors open at 18h00\n**Food orders will be taken until 19h45"
+            },{
+            "image" : "events/brewing.jpeg",
+            "title" : "Albert Frost Trio",
+            "description" : "5 Dec @ 20:30",
+            "price" : "From R180.00",
+            "available" : true
+            },{
+            "image" : "events/john-rock.webp",
+            "title" : "John Rock Prophet",
+            "description" : "12 Dec @ 20:30",
+            "price" : "From R160.00",
+            "available" : true
+            },{
+            "image" : "events/huf-puf.jpg",
+            "title" : "Huf Puf Palace 5th Birthday",
+            "description" : "20 Dec @ 18:00",
+            "price" : "From R100.00",
+            "available" : true
+            },{
+            "image" : "events/kalahari-orkes.png",
+            "title" : "Radio Kalahari Orkes",
+            "description" : "22 Dec @ 19:30",
+            "price" : "From R200.00",
+            "available" : true
+            }
+        ]
+    }
+}

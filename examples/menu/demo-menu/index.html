@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmet Grill House</title>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="209c010b-1a61-40f3-a6ec-e3dbff4e803d"></script>
+    <style>
+        /* --- General Reset and Typography --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            overflow: hidden;
+        }
+
+        /* --- Header and Details Height --- */
+        /* Define a fixed height for the background image and details area */
+        :root {
+            --header-height-static: 180px; /* Height of the restaurant details background */
+            --nav-height: 56px; /* Height of the red navigation bar */
+            --full-header-height: calc(var(--header-height-static) + var(--nav-height)); /* Total fixed header height */
+        }
+
+        /* --- Application Container --- */
+        #menu-app {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 100vh;
+            margin: 0 auto;
+            background-color: white;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- Fixed Header Area --- */
+        .header-section {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        /* Background Image and Restaurant Info */
+        .restaurant-details {
+            height: var(--header-height-static);
+            background-image: url('banner.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 15px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+            height: 150px;
+        }
+
+        .restaurant-details::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+        }
+
+        .details-content {
+            position: relative;
+        }
+        .details-content h1 {
+            margin: 0 0 5px 0;
+            font-size: 1.8em;
+            line-height: 1.1;
+        }
+        .details-content p {
+            margin: 0;
+            font-size: 0.9em;
+        }
+        .details-content .rating {
+            font-size: 1.1em;
+            margin-top: 5px;
+            font-weight: bold;
+            color: #ffc107;
+        }
+
+        /* --- Navigation Bar (Menu Bar) --- */
+        .panel-header {
+            width: 100%;
+            max-width: 600px;
+            height: var(--nav-height);
+            background-color: #212015;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .panel-header h2 {
+            flex-grow: 1;
+            text-align: center;
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .back-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 0 10px;
+    position: absolute;
+}
+
+        /* --- Menu Panels (Main and Sub) --- */
+        .menu-panel {
+            position: absolute;
+            top: var(--full-header-height);
+            height: calc(100vh - var(--full-header-height));
+            width: 100%;
+            transition: transform 0.3s ease-in-out;
+            background-color: white;
+            overflow-y: auto;
+        }
+
+        /* Sub-Menu specific positioning for its floating header */
+        #sub-menu {
+            transform: translateX(100%);
+            padding-top: var(--nav-height); /* Offset for the sub-menu's floating header */
+        }
+        #sub-menu .panel-header {
+            position: absolute;
+            top: 0; 
+        }
+
+        /* Sliding Logic */
+        #menu-app.sub-active #main-menu {
+            transform: translateX(-100%);
+        }
+        #menu-app.sub-active #sub-menu {
+            transform: translateX(0);
+        }
+
+        /* --- Content Styling --- */
+        .category-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid #c1c1c1;
+    cursor: pointer;
+    font-size: 1.1em;
+    display: flex
+;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+        .category-item:hover { background-color: #f0f0f0; }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        .menu-item:hover { background-color: #fcfcfc; }
+        .item-text { flex-grow: 1; }
+        .item-name { font-weight: bold; font-size: 1.1em; margin-bottom: 5px; }
+        .item-description { font-size: 0.9em; color: #666; margin-bottom: 5px; }
+        .item-price { font-weight: bold; color: #e51a21; }
+        .item-image { width: 70px; height: 70px; object-fit: cover; margin-left: 15px; border-radius: 4px; }
+
+
+        /* --- Modal/Popup Styling --- */
+        .modal {
+            position: fixed;
+            z-index: 200;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            animation: slideUp 0.3s;
+            overflow: hidden;
+            position: relative;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-body { padding: 20px; }
+        .modal-image-wrapper { width: 100%; height: 200px; overflow: hidden; }
+        .modal-image { width: 100%; height: 100%; object-fit: cover; }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 20px;
+            cursor: pointer;
+            z-index: 210;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+        }
+        .modal-title { margin-top: 0; font-size: 1.5em; color: #e51a21; }
+        .add-to-cart {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #f7a81c;
+            color: #333;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 1.1em;
+        }
+
+        .icon {
+            height:  40px;
+            width: 40px;
+        }
+
+        .icon img{
+            height:  32px;
+        }
+    </style>
+</head>
+<body>
+    <!-- <script src="https://swetrix.org/swetrix.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        swetrix.init('ayNPWToiVZhQ', {
+        apiURL: 'https://analyticsapi.bizbio.co.za/log',
+        })
+        swetrix.trackViews()
+    })
+    </script>
+
+    <noscript>
+    <img
+        src="https://analyticsapi.bizbio.co.za/log/noscript?pid=ayNPWToiVZhQ"
+        alt=""
+        referrerpolicy="no-referrer-when-downgrade"
+    />
+    </noscript> -->
+    <div id="menu-app">
+        <div class="header-section">
+            <div class="restaurant-details">
+                <div class="details-content">
+                    <h1>The Gourmet Grill House</h1>
+                    <p>Flame-Grilled Burgers, Wings, & Sides</p>
+                    <div class="rating">⭐ 4.6 (6000+ ratings)</div>
+                </div>
+            </div>
+            <div id="mainMenuHeader" class="panel-header">
+                <h2>Menu</h2>
+            </div>
+        </div>
+        <div id="main-menu" class="menu-panel">
+            <div class="menu-content">
+                <div class="category-item" data-category="burgers" onclick="showSubMenu('burgers', 'Beef Burgers')" data-umami-event="View Category" data-umami-event-category="Beef Burgers">
+                    <span class="icon" ><img src="icons/hamburger-min.png" ></span>
+                    <span>Beef Burgers</span>
+                    <span>&gt;</span>
+                </div>
+                <div class="category-item" data-category="chicken" onclick="showSubMenu('chicken', 'Chicken Burgers')" data-umami-event="View Category" data-umami-event-category="Chicken Burgers">
+                    <span class="icon" ><img src="icons/hamburger-min.png" ></span>
+                    <span>Chicken Burgers</span>
+                    <span>&gt;</span>
+                </div>
+                <div class="category-item" data-category="breakfast" onclick="showSubMenu('breakfast', 'Breakfast')" data-umami-event="View Category" data-umami-event-category="Breakfast">
+                    <span class="icon" ><img src="icons/english-breakfast-min.png" ></span>
+                    <span>Breakfast</span>
+                    <span>&gt;</span>
+                </div>
+                <div class="category-item" data-category="sides" onclick="showSubMenu('sides', 'Sides & Dips')" data-umami-event="View Category" data-umami-event-category="Sides & Dips">
+                    <span class="icon" ><img src="icons/soda-min.png" ></span>
+                    <span>Sides & Dips</span>
+                    <span>&gt;</span>
+                </div>
+                <div class="category-item" data-category="drinks" onclick="showSubMenu('drinks', 'Beverages')" data-umami-event="View Category" data-umami-event-category="Beverages">
+                    <span class="icon" ><img src="icons/drink-min.png" ></span>
+                    <span>Beverages</span>
+                    <span>&gt;</span>
+                </div>
+                <div class="category-item" data-category="extras" onclick="showSubMenu('extras', 'Extra Value Meals')" data-umami-event="View Category" data-umami-event-category="Extra Value Meals">
+                    <span class="icon" ><img src="icons/fast-food-min.png" ></span>
+                    <span>Extra Value Meals</span>
+                    <span>&gt;</span>
+                </div>
+                <div class="category-item" data-category="desserts" onclick="showSubMenu('desserts', 'Desserts & Shakes')" data-umami-event="View Category" data-umami-event-category="Desserts & Shakes">
+                    <span class="icon" ><img src="icons/cupcake-min.png" ></span>
+                    <span>Desserts & Shakes</span>
+                    <span>&gt;</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="sub-menu" class="menu-panel">
+            <div class="panel-header">
+                <button class="back-button" onclick="showMainMenu()">&#x25C0;</button>
+                <h2 id="subMenuTitle"></h2>
+            </div>
+            <div id="subMenuContent" class="menu-content">
+                </div>
+        </div>
+    </div>
+
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <div class="modal-image-wrapper">
+                <img id="modalImage" class="modal-image" src="" alt="Item Image">
+            </div>
+            <div class="modal-body">
+                <h3 id="modalName" class="modal-title"></h3>
+                <p id="modalDescription"></p>
+                <strong>Ingredients:</strong>
+                <p id="modalIngredients"></p>
+                <button class="add-to-cart" onclick="trackAddToCart()">Add to Cart (R86.90)</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // --- Data Model (simulating a database) ---
+    const menuData = {
+        'burgers': [
+            { id: 'classic-grill', name: 'Classic Grilled Burger', price: 'From R86.90', shortDesc: 'Our signature flame-grilled patty with fresh toppings.', fullDesc: 'A juicy 100% beef patty, flame-grilled to perfection, topped with crisp lettuce, ripe tomatoes, onions, pickles, and our special sauce on a toasted sesame bun.', ingredients: 'Beef Patty, Sesame Bun, Lettuce, Tomato, Onion, Pickles, Special Sauce.', image: 'beefburger.jpg' },
+            { id: 'smoky-bbq', name: 'Smoky BBQ Bacon Burger', price: 'From R95.90', shortDesc: 'Topped with smoked bacon, cheddar, and tangy BBQ sauce.', fullDesc: 'An indulgent burger featuring a flame-grilled patty, thick-cut smoked bacon, melted cheddar cheese, and a generous slathering of our house-made smoky BBQ sauce.', ingredients: 'Beef Patty, Bacon, Cheddar Cheese, BBQ Sauce, Onion Ring, Toasted Bun.', image: 'beefburger2.jpg' }
+        ],
+        'chicken': [
+            { id: 'crispy-fillet', name: 'Crispy Chicken Fillet Sandwich', price: 'From R72.90', shortDesc: 'Golden crispy chicken fillet with fresh mayo and lettuce.', fullDesc: 'A tender, all-white meat chicken fillet, breaded and fried until golden, served on a soft bun with shredded lettuce and creamy mayonnaise.', ingredients: 'Chicken Fillet, Breadcrumbs, Lettuce, Mayonnaise, Bun.', image: 'chickenburger.jpg' }
+        ],
+        'breakfast': [
+            { id: 'sausage-muffin', name: 'Breakfast Sausage Muffin', price: 'From R69.90', shortDesc: 'Grilled sausage, egg, and cheese on a toasted English muffin.', fullDesc: 'The classic morning starter: a savoury grilled sausage patty, a golden fried egg, and melted American cheese, all served on a warm, toasted English muffin.', ingredients: 'Sausage Patty, Golden Egg, American Cheese, English Muffin.', image: 'muffin.jpg' },
+            { id: 'pancake-stack', name: 'Fluffy Pancake Stack', price: 'From R58.90', shortDesc: 'Three fluffy pancakes with maple syrup.', fullDesc: 'Three fluffy, golden-brown pancakes served with a dollop of butter and a side of rich maple syrup.', ingredients: 'Flour, Eggs, Milk, Sugar, Baking Powder, Maple Syrup.', image: 'pancake.jpg' }
+        ],
+        'sides': [
+            { id: 'golden-fries', name: 'Golden Crispy Fries', price: 'From R27.90', shortDesc: 'Perfectly salted and crispy potato fries.', fullDesc: 'Our signature thin-cut potatoes, cooked until perfectly crispy and dusted with sea salt. Available in small, medium, and large.', ingredients: 'Potatoes, Vegetable Oil, Sea Salt.', image: 'https://picsum.photos/150/150?random=7' },
+            { id: 'onion-rings', name: 'Jumbo Onion Rings', price: 'From R35.90', shortDesc: 'Thick-cut onions in a crispy batter.', fullDesc: 'Thick slices of onion coated in a seasoned batter, fried to a golden crisp. Served with a dipping sauce of your choice.', ingredients: 'Onions, Batter Mix, Vegetable Oil.', image: 'https://picsum.photos/150/150?random=8' }
+        ],
+        'drinks': [
+            { id: 'classic-cola', name: 'Classic Cola', price: 'From R19.90', shortDesc: 'Refreshing, carbonated soft drink.', fullDesc: 'A cold, refreshing cup of our classic fountain cola.', ingredients: 'Carbonated Water, High Fructose Corn Syrup, Caramel Colour, Phosphoric Acid.', image: 'https://picsum.photos/150/150?random=9' }
+        ],
+        'extras': [
+            { id: 'family-combo', name: 'Family Combo Deal', price: 'From R249.90', shortDesc: 'Two main meals, two kids meals, and large sides.', fullDesc: 'A complete family package including any two large burgers, two kids meals, two large sides (fries or rings), and four fountain drinks.', ingredients: 'Varies based on selection.', image: 'https://picsum.photos/150/150?random=10' }
+        ],
+        'desserts': [
+            { id: 'vanilla-shake', name: 'Vanilla Bean Milkshake', price: 'From R40.90', shortDesc: 'Thick and creamy hand-spun vanilla shake.', fullDesc: 'A decadent, hand-spun milkshake made with premium vanilla ice cream and pure vanilla bean extract.', ingredients: 'Milk, Vanilla Ice Cream, Vanilla Extract.', image: 'https://picsum.photos/150/150?random=11' }
+        ]
+    };
+
+    function findItemById(itemId) {
+        for (const category in menuData) {
+            const item = menuData[category].find(i => i.id === itemId);
+            if (item) return item;
+        }
+        return null;
+    }
+
+    const menuApp = document.getElementById('menu-app');
+    const subMenuTitle = document.getElementById('subMenuTitle');
+    const subMenuContent = document.getElementById('subMenuContent');
+
+    function showSubMenu(category, title) {
+        if (typeof swetrix !== 'undefined') {
+            swetrix.track('View Category', { category: title });
+        }
+
+        // 1. Update Sub Menu Content
+        subMenuTitle.textContent = title;
+        subMenuContent.innerHTML = '';
+
+        const items = menuData[category] || [];
+        items.forEach(item => {
+            // UMAMI TRACKING ADDED HERE
+            const html = `
+                <div class="menu-item" onclick="showItemDetails('${item.id}')" data-umami-event="View Item Details" data-umami-event-item="${item.name}">
+                    <div class="item-text">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-description">${item.shortDesc}</div>
+                        <div class="item-price">${item.price}</div>
+                    </div>
+                    <img class="item-image" src="${item.image}" alt="${item.name}">
+                </div>
+            `;
+            subMenuContent.insertAdjacentHTML('beforeend', html);
+        });
+
+        // 2. Trigger CSS Transition
+        menuApp.classList.add('sub-active');
+    }
+
+    function showMainMenu() {
+        menuApp.classList.remove('sub-active');
+    }
+
+
+    // --- Item Detail Modal Logic (Popup) ---
+    const modal = document.getElementById('itemModal');
+
+    function showItemDetails(itemId) {
+        const item = findItemById(itemId);
+        if (!item) return;
+
+        if (typeof swetrix !== 'undefined') {
+            swetrix.track('View Item Details', { item: item.name });
+        }
+
+        document.getElementById('modalImage').src = item.image;
+        document.getElementById('modalImage').alt = item.name;
+        document.getElementById('modalName').textContent = item.name;
+        document.getElementById('modalDescription').textContent = item.fullDesc;
+        document.getElementById('modalIngredients').textContent = item.ingredients;
+        
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+
+    function trackAddToCart() {
+        // Umami Tracking (Using JS API)
+        if (typeof umami !== 'undefined') {
+            umami.track('Added to Cart');
+        }
+
+        // Swetrix Tracking
+        if (typeof swetrix !== 'undefined') {
+            swetrix.track('Added to Cart');
+        }
+
+        // Simple feedback
+        alert("Item added to cart!");
+    }
+</script>
+</body>
+</html>

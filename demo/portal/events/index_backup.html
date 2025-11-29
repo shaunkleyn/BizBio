@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BizBio Menu Portal - Events</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        .calendar-day {
+            min-height: 80px;
+        }
+        .calendar-day.has-event {
+            background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+        }
+        .modal-overlay {
+            z-index: 1000;
+        }
+        .nested-modal-overlay {
+            z-index: 1100;
+        }
+        .sticky-footer {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+        }
+        .recurring-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Mock data with portions and add-ons
+        const allMenuItems = [
+            { 
+                id: 1, 
+                name: 'Margherita Pizza', 
+                category: 'Pizzas', 
+                basePrice: 85,
+                portions: [
+                    { id: 'p1', name: 'Small (8")', price: 65 },
+                    { id: 'p2', name: 'Medium (12")', price: 85 },
+                    { id: 'p3', name: 'Large (16")', price: 105 }
+                ],
+                addons: [
+                    { id: 'a1', name: 'Extra Cheese', price: 15 },
+                    { id: 'a2', name: 'Extra Olives', price: 10 },
+                    { id: 'a3', name: 'Garlic Sauce', price: 8 }
+                ]
+            },
+            { 
+                id: 2, 
+                name: 'Pepperoni Pizza', 
+                category: 'Pizzas', 
+                basePrice: 95,
+                portions: [
+                    { id: 'p1', name: 'Small (8")', price: 75 },
+                    { id: 'p2', name: 'Medium (12")', price: 95 },
+                    { id: 'p3', name: 'Large (16")', price: 115 }
+                ],
+                addons: [
+                    { id: 'a1', name: 'Extra Cheese', price: 15 },
+                    { id: 'a2', name: 'Extra Olives', price: 10 },
+                    { id: 'a4', name: 'Chili Flakes', price: 5 }
+                ]
+            },
+            { 
+                id: 3, 
+                name: 'Caesar Salad', 
+                category: 'Salads', 
+                basePrice: 65,
+                portions: [
+                    { id: 'p4', name: 'Regular', price: 65 },
+                    { id: 'p5', name: 'Large', price: 85 }
+                ],
+                addons: [
+                    { id: 'a5', name: 'Greek Dressing', price: 0 },
+                    { id: 'a6', name: 'Italian Dressing', price: 0 },
+                    { id: 'a7', name: 'Honey Mustard', price: 0 },
+                    { id: 'a8', name: 'Blue Cheese Dressing', price: 5 },
+                    { id: 'a9', name: 'Grilled Chicken', price: 25 }
+                ]
+            },
+            { 
+                id: 4, 
+                name: 'Greek Salad', 
+                category: 'Salads', 
+                basePrice: 70,
+                portions: [
+                    { id: 'p4', name: 'Regular', price: 70 },
+                    { id: 'p5', name: 'Large', price: 90 }
+                ],
+                addons: [
+                    { id: 'a5', name: 'Greek Dressing', price: 0 },
+                    { id: 'a10', name: 'Feta Cheese', price: 15 }
+                ]
+            },
+            { 
+                id: 5, 
+                name: 'Beef Burger', 
+                category: 'Burgers', 
+                basePrice: 85,
+                portions: [
+                    { id: 'p6', name: 'Single Patty', price: 85 },
+                    { id: 'p7', name: 'Double Patty', price: 115 }
+                ],
+                addons: [
+                    { id: 'a1', name: 'Extra Cheese', price: 10 },
+                    { id: 'a11', name: 'Bacon', price: 15 },
+                    { id: 'a12', name: 'Fried Egg', price: 10 },
+                    { id: 'a13', name: 'Avocado', price: 20 }
+                ]
+            },
+            { 
+                id: 6, 
+                name: 'Chicken Burger', 
+                category: 'Burgers', 
+                basePrice: 80,
+                portions: [
+                    { id: 'p6', name: 'Single Patty', price: 80 },
+                    { id: 'p7', name: 'Double Patty', price: 110 }
+                ],
+                addons: [
+                    { id: 'a1', name: 'Extra Cheese', price: 10 },
+                    { id: 'a11', name: 'Bacon', price: 15 },
+                    { id: 'a14', name: 'BBQ Sauce', price: 5 }
+                ]
+            },
+            { 
+                id: 7, 
+                name: 'Tiramisu', 
+                category: 'Desserts', 
+                basePrice: 55,
+                portions: [],
+                addons: []
+            },
+            { 
+                id: 8, 
+                name: 'Cheesecake', 
+                category: 'Desserts', 
+                basePrice: 60,
+                portions: [],
+                addons: [
+                    { id: 'a15', name: 'Berry Sauce', price: 10 },
+                    { id: 'a16', name: 'Chocolate Drizzle', price: 8 }
+                ]
+            },
+            { 
+                id: 9, 
+                name: 'Mojito', 
+                category: 'Cocktails', 
+                basePrice: 65,
+                portions: [],
+                addons: [
+                    { id: 'a17', name: 'Extra Shot', price: 25 }
+                ]
+            },
+            { 
+                id: 10, 
+                name: 'Margarita', 
+                category: 'Cocktails', 
+                basePrice: 70,
+                portions: [],
+                addons: [
+                    { id: 'a17', name: 'Extra Shot', price: 25 }
+                ]
+            }
+        ];
+
+        const initialMenuVersions = [
+            {
+                id: 1,
+                name: 'Full Menu',
+                description: 'All items available',
+                items: allMenuItems.map(item => ({
+                    itemId: item.id,
+                    portions: item.portions.map(p => p.id),
+                    addons: item.addons.map(a => a.id)
+                }))
+            },
+            {
+                id: 2,
+                name: 'Wedding Package',
+                description: 'Elegant dining for special events',
+                items: [
+                    { itemId: 1, portions: ['p2'], addons: ['a1'] },
+                    { itemId: 2, portions: ['p2'], addons: ['a1'] },
+                    { itemId: 3, portions: ['p4', 'p5'], addons: ['a5', 'a6', 'a9'] },
+                    { itemId: 7, portions: [], addons: [] },
+                    { itemId: 8, portions: [], addons: ['a15'] }
+                ]
+            },
+            {
+                id: 3,
+                name: 'Health Special',
+                description: 'Light and healthy options',
+                items: [
+                    { itemId: 3, portions: ['p4', 'p5'], addons: ['a5', 'a6', 'a9'] },
+                    { itemId: 4, portions: ['p4', 'p5'], addons: ['a5', 'a10'] },
+                    { itemId: 6, portions: ['p6'], addons: ['a13', 'a14'] }
+                ]
+            },
+            {
+                id: 4,
+                name: 'Cocktail Weekend',
+                description: 'Focus on drinks and light bites',
+                items: [
+                    { itemId: 9, portions: [], addons: ['a17'] },
+                    { itemId: 10, portions: [], addons: ['a17'] },
+                    { itemId: 3, portions: ['p4'], addons: ['a5', 'a6'] },
+                    { itemId: 4, portions: ['p4'], addons: ['a5'] }
+                ]
+            },
+            {
+                id: 5,
+                name: 'Karaoke Night Snacks',
+                description: 'Small dishes and finger food',
+                items: [
+                    { itemId: 1, portions: ['p1'], addons: [] },
+                    { itemId: 2, portions: ['p1'], addons: [] },
+                    { itemId: 3, portions: ['p4'], addons: [] }
+                ]
+            },
+            {
+                id: 6,
+                name: 'Buffet Breakfast',
+                description: 'Sunday morning special',
+                items: [
+                    { itemId: 3, portions: ['p4'], addons: [] },
+                    { itemId: 4, portions: ['p4'], addons: [] },
+                    { itemId: 7, portions: [], addons: [] },
+                    { itemId: 8, portions: [], addons: [] }
+                ]
+            },
+            {
+                id: 7,
+                name: 'Sunday Lunch Special',
+                description: 'Traditional Sunday roast menu',
+                items: [
+                    { itemId: 1, portions: ['p2', 'p3'], addons: ['a1', 'a2', 'a3'] },
+                    { itemId: 5, portions: ['p6', 'p7'], addons: ['a1', 'a11', 'a13'] },
+                    { itemId: 3, portions: ['p5'], addons: ['a5', 'a6', 'a9'] }
+                ]
+            }
+        ];
+
+        const initialScheduledEvents = [
+            {
+                id: 1,
+                name: 'Smith Wedding',
+                menuVersionId: 2,
+                startDate: '2025-11-20',
+                endDate: '2025-11-20',
+                startTime: '18:00',
+                endTime: '23:00',
+                allDay: false,
+                status: 'scheduled',
+                notes: '120 guests, outdoor setup',
+                isRecurring: false
+            },
+            {
+                id: 2,
+                name: 'Corporate Lunch',
+                menuVersionId: 3,
+                startDate: '2025-11-22',
+                endDate: '2025-11-22',
+                startTime: '12:00',
+                endTime: '14:00',
+                allDay: false,
+                status: 'scheduled',
+                notes: 'Health-conscious group',
+                isRecurring: false
+            },
+            // Recurring: Sunday Buffet Breakfast (every Sunday 8-10)
+            {
+                id: 3,
+                name: 'Sunday Buffet Breakfast',
+                menuVersionId: 6,
+                startDate: '2025-11-02',
+                endDate: '2025-11-02',
+                startTime: '08:00',
+                endTime: '10:00',
+                allDay: false,
+                status: 'scheduled',
+                notes: 'Popular weekly breakfast',
+                isRecurring: true,
+                recurrence: {
+                    frequency: 'weekly',
+                    weeklyDays: [0], // Sunday
+                    endsType: 'never'
+                },
+                seriesId: 'series-1'
+            },
+            // Recurring: Sunday Lunch Special (every Sunday 11-13)
+            {
+                id: 4,
+                name: 'Sunday Lunch Special',
+                menuVersionId: 7,
+                startDate: '2025-11-02',
+                endDate: '2025-11-02',
+                startTime: '11:00',
+                endTime: '13:00',
+                allDay: false,
+                status: 'scheduled',
+                notes: 'Traditional roast menu',
+                isRecurring: true,
+                recurrence: {
+                    frequency: 'weekly',
+                    weeklyDays: [0], // Sunday
+                    endsType: 'never'
+                },
+                seriesId: 'series-2'
+            },
+            // Recurring: Karaoke Night (last Saturday of month)
+            {
+                id: 5,
+                name: 'Karaoke Night',
+                menuVersionId: 5,
+                startDate: '2025-11-29',
+                endDate: '2025-11-29',
+                startTime: '19:00',
+                endTime: '23:00',
+                allDay: false,
+                status: 'scheduled',
+                notes: 'Last Saturday of every month',
+                isRecurring: true,
+                recurrence: {
+                    frequency: 'monthly',
+                    monthlyType: 'last',
+                    monthlyDay: 6, // Saturday
+                    endsType: 'never'
+                },
+                seriesId: 'series-3'
+            },
+            // Recurring: Cocktail Weekend (first Fri-Sun of month, all day)
+            {
+                id: 6,
+                name: 'Cocktail Weekend',
+                menuVersionId: 4,
+                startDate: '2025-11-07',
+                endDate: '2025-11-09',
+                startTime: '',
+                endTime: '',
+                allDay: true,
+                status: 'scheduled',
+                notes: 'First weekend of every month',
+                isRecurring: true,
+                recurrence: {
+                    frequency: 'monthly',
+                    monthlyType: 'first',
+                    monthlyDay: 5, // Friday (start of weekend)
+                    endsType: 'never'
+                },
+                seriesId: 'series-4'
+            }
+        ];
+
+        function MenuSchedulingDashboard() {
+            const [currentScreen, setCurrentScreen] = useState('calendar');
+            const [currentMonth, setCurrentMonth] = useState(new Date(2025, 10, 1));
+            const [scheduledEvents, setScheduledEvents] = useState(initialScheduledEvents);
+            const [menuVersions, setMenuVersions] = useState(initialMenuVersions);
+            
+            // Modals
+            const [showEventModal, setShowEventModal] = useState(false);
+            const [showMenuEditorModal, setShowMenuEditorModal] = useState(false);
+            const [editingEvent, setEditingEvent] = useState(null);
+            const [editingMenuVersion, setEditingMenuVersion] = useState(null);
+            const [expandedItem, setExpandedItem] = useState(null);
+            const [isCreatingFromEvent, setIsCreatingFromEvent] = useState(false);
+            
+            // Forms
+            const [eventForm, setEventForm] = useState({
+                name: '', menuVersionId: '', startDate: '', endDate: '',
+                startTime: '', endTime: '', notes: '', allDay: false,
+                isRecurring: false,
+                recurrence: {
+                    frequency: 'weekly',
+                    weeklyDays: [],
+                    monthlyType: 'first',
+                    monthlyDay: 0,
+                    endsType: 'never',
+                    endsAfter: 10,
+                    endsOn: ''
+                }
+            });
+            
+            const [menuVersionForm, setMenuVersionForm] = useState({
+                name: '', description: '', items: []
+            });
+            
+            // Filters
+            const [selectedCategory, setSelectedCategory] = useState('All');
+            const [searchQuery, setSearchQuery] = useState('');
+
+            const categories = ['All', ...new Set(allMenuItems.map(item => item.category))];
+
+            // Helper: Get all occurrences of recurring events in current month
+            const getRecurringEventOccurrences = (event, year, month) => {
+                if (!event.isRecurring) return [event.startDate];
+                
+                const occurrences = [];
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                
+                if (event.recurrence.frequency === 'weekly') {
+                    for (let day = 1; day <= daysInMonth; day++) {
+                        const date = new Date(year, month, day);
+                        const dayOfWeek = date.getDay();
+                        
+                        if (event.recurrence.weeklyDays.includes(dayOfWeek)) {
+                            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                            occurrences.push(dateStr);
+                        }
+                    }
+                } else if (event.recurrence.frequency === 'monthly') {
+                    const { monthlyType, monthlyDay } = event.recurrence;
+                    
+                    if (monthlyType === 'last') {
+                        // Find last occurrence of day in month
+                        for (let day = daysInMonth; day >= 1; day--) {
+                            const date = new Date(year, month, day);
+                            if (date.getDay() === monthlyDay) {
+                                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                                occurrences.push(dateStr);
+                                break;
+                            }
+                        }
+                    } else {
+                        // Find first/second/third/fourth occurrence
+                        const weekMap = { first: 0, second: 1, third: 2, fourth: 3 };
+                        const weekNumber = weekMap[monthlyType];
+                        let count = 0;
+                        
+                        for (let day = 1; day <= daysInMonth; day++) {
+                            const date = new Date(year, month, day);
+                            if (date.getDay() === monthlyDay) {
+                                if (count === weekNumber) {
+                                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                                    occurrences.push(dateStr);
+                                    
+                                    // For multi-day events (like weekend)
+                                    if (event.endDate && event.endDate !== event.startDate) {
+                                        const startD = new Date(event.startDate);
+                                        const endD = new Date(event.endDate);
+                                        const daysDiff = Math.floor((endD - startD) / (1000 * 60 * 60 * 24));
+                                        
+                                        for (let i = 1; i <= daysDiff; i++) {
+                                            const nextDay = day + i;
+                                            if (nextDay <= daysInMonth) {
+                                                const nextDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(nextDay).padStart(2, '0')}`;
+                                                occurrences.push(nextDateStr);
+                                            }
+                                        }
+                                    }
+                                    break;
+                                }
+                                count++;
+                            }
+                        }
+                    }
+                }
+                
+                return occurrences;
+            };
+
+            const getDaysInMonth = (date) => {
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const daysInMonth = lastDay.getDate();
+                const startingDayOfWeek = firstDay.getDay();
+                
+                const days = [];
+                for (let i = 0; i < startingDayOfWeek; i++) {
+                    days.push({ date: null, isCurrentMonth: false });
+                }
+                
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                    
+                    // Get all events for this day (including recurring)
+                    const eventsOnDay = scheduledEvents.filter(e => {
+                        if (e.isRecurring) {
+                            const occurrences = getRecurringEventOccurrences(e, year, month);
+                            return occurrences.includes(dateStr);
+                        }
+                        return e.startDate === dateStr;
+                    });
+                    
+                    days.push({ 
+                        date: i, dateStr, isCurrentMonth: true, events: eventsOnDay,
+                        isToday: dateStr === new Date().toISOString().split('T')[0]
+                    });
+                }
+                return days;
+            };
+
+            const changeMonth = (direction) => {
+                const newMonth = new Date(currentMonth);
+                newMonth.setMonth(currentMonth.getMonth() + direction);
+                setCurrentMonth(newMonth);
+            };
+
+            const openNewEventModal = (date) => {
+                setEventForm({
+                    name: '', menuVersionId: menuVersions[0].id, startDate: date || '',
+                    endDate: date || '', startTime: '18:00', endTime: '23:00', notes: '',
+                    allDay: false, isRecurring: false,
+                    recurrence: {
+                        frequency: 'weekly',
+                        weeklyDays: [],
+                        monthlyType: 'first',
+                        monthlyDay: 0,
+                        endsType: 'never',
+                        endsAfter: 10,
+                        endsOn: ''
+                    }
+                });
+                setEditingEvent(null);
+                setShowEventModal(true);
+            };
+
+            const openEditEventModal = (event) => {
+                setEventForm({
+                    name: event.name, menuVersionId: event.menuVersionId,
+                    startDate: event.startDate, endDate: event.endDate,
+                    startTime: event.startTime || '', endTime: event.endTime || '', notes: event.notes,
+                    allDay: event.allDay || false,
+                    isRecurring: event.isRecurring || false,
+                    recurrence: event.recurrence || {
+                        frequency: 'weekly',
+                        weeklyDays: [],
+                        monthlyType: 'first',
+                        monthlyDay: 0,
+                        endsType: 'never',
+                        endsAfter: 10,
+                        endsOn: ''
+                    }
+                });
+                setEditingEvent(event);
+                setShowEventModal(true);
+            };
+
+            const handleSaveEvent = () => {
+                if (editingEvent) {
+                    setScheduledEvents(scheduledEvents.map(e => 
+                        e.id === editingEvent.id ? { 
+                            ...editingEvent, 
+                            ...eventForm,
+                            seriesId: editingEvent.seriesId || (eventForm.isRecurring ? `series-${Date.now()}` : undefined)
+                        } : e
+                    ));
+                } else {
+                    setScheduledEvents([...scheduledEvents, { 
+                        id: Date.now(), 
+                        ...eventForm, 
+                        status: 'scheduled',
+                        seriesId: eventForm.isRecurring ? `series-${Date.now()}` : undefined
+                    }]);
+                }
+                setShowEventModal(false);
+            };
+
+            const handleDeleteEvent = (eventId) => {
+                if (confirm('Delete this event?')) {
+                    setScheduledEvents(scheduledEvents.filter(e => e.id !== eventId));
+                    setShowEventModal(false);
+                }
+            };
+
+            const openNewMenuVersionFromEvent = () => {
+                const allItemsConfig = allMenuItems.map(item => ({
+                    itemId: item.id,
+                    portions: item.portions.map(p => p.id),
+                    addons: item.addons.map(a => a.id)
+                }));
+
+                setMenuVersionForm({
+                    name: '',
+                    description: '',
+                    items: allItemsConfig
+                });
+                setEditingMenuVersion(null);
+                setSearchQuery('');
+                setSelectedCategory('All');
+                setExpandedItem(null);
+                setIsCreatingFromEvent(true);
+                setShowMenuEditorModal(true);
+            };
+
+            const openEditMenuVersionStandalone = (version) => {
+                setMenuVersionForm({
+                    name: version.name,
+                    description: version.description,
+                    items: JSON.parse(JSON.stringify(version.items))
+                });
+                setEditingMenuVersion(version);
+                setSearchQuery('');
+                setSelectedCategory('All');
+                setExpandedItem(null);
+                setIsCreatingFromEvent(false);
+                setShowMenuEditorModal(true);
+            };
+
+            const handleSaveMenuVersion = () => {
+                if (editingMenuVersion) {
+                    setMenuVersions(menuVersions.map(v => 
+                        v.id === editingMenuVersion.id ? { ...editingMenuVersion, ...menuVersionForm } : v
+                    ));
+                } else {
+                    const newVersion = { id: Date.now(), ...menuVersionForm };
+                    setMenuVersions([...menuVersions, newVersion]);
+                    
+                    if (isCreatingFromEvent) {
+                        setEventForm({ ...eventForm, menuVersionId: newVersion.id });
+                    }
+                }
+                setShowMenuEditorModal(false);
+                setIsCreatingFromEvent(false);
+            };
+
+            const handleDeleteMenuVersion = (versionId) => {
+                if (versionId === 1) {
+                    alert('Cannot delete the default Full Menu');
+                    return;
+                }
+                
+                const hasEvents = scheduledEvents.some(e => e.menuVersionId === versionId);
+                if (hasEvents) {
+                    alert('Cannot delete this menu version as it is used in scheduled events');
+                    return;
+                }
+                
+                if (confirm('Delete this menu version?')) {
+                    setMenuVersions(menuVersions.filter(v => v.id !== versionId));
+                }
+            };
+
+            const toggleItemInMenuVersion = (itemId) => {
+                const exists = menuVersionForm.items.find(i => i.itemId === itemId);
+                const item = allMenuItems.find(i => i.id === itemId);
+                
+                if (exists) {
+                    setMenuVersionForm({
+                        ...menuVersionForm,
+                        items: menuVersionForm.items.filter(i => i.itemId !== itemId)
+                    });
+                } else {
+                    setMenuVersionForm({
+                        ...menuVersionForm,
+                        items: [...menuVersionForm.items, {
+                            itemId: itemId,
+                            portions: item.portions.map(p => p.id),
+                            addons: item.addons.map(a => a.id)
+                        }]
+                    });
+                }
+            };
+
+            const togglePortionInItem = (itemId, portionId) => {
+                const itemConfig = menuVersionForm.items.find(i => i.itemId === itemId);
+                if (!itemConfig) return;
+                
+                const hasPortion = itemConfig.portions.includes(portionId);
+                
+                setMenuVersionForm({
+                    ...menuVersionForm,
+                    items: menuVersionForm.items.map(i => {
+                        if (i.itemId === itemId) {
+                            return {
+                                ...i,
+                                portions: hasPortion 
+                                    ? i.portions.filter(p => p !== portionId)
+                                    : [...i.portions, portionId]
+                            };
+                        }
+                        return i;
+                    })
+                });
+            };
+
+            const toggleAddonInItem = (itemId, addonId) => {
+                const itemConfig = menuVersionForm.items.find(i => i.itemId === itemId);
+                if (!itemConfig) return;
+                
+                const hasAddon = itemConfig.addons.includes(addonId);
+                
+                setMenuVersionForm({
+                    ...menuVersionForm,
+                    items: menuVersionForm.items.map(i => {
+                        if (i.itemId === itemId) {
+                            return {
+                                ...i,
+                                addons: hasAddon 
+                                    ? i.addons.filter(a => a !== addonId)
+                                    : [...i.addons, addonId]
+                            };
+                        }
+                        return i;
+                    })
+                });
+            };
+
+            const filteredMenuItems = allMenuItems.filter(item => {
+                const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
+                const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            const selectedItemsCount = menuVersionForm.items.length;
+            const totalItemsCount = allMenuItems.length;
+
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                               'July', 'August', 'September', 'October', 'November', 'December'];
+
+            const getRecurrenceDescription = (event) => {
+                if (!event.isRecurring || !event.recurrence) return '';
+                
+                const { frequency, weeklyDays, monthlyType, monthlyDay } = event.recurrence;
+                
+                if (frequency === 'weekly') {
+                    const days = weeklyDays.map(d => dayNames[d]).join(', ');
+                    return `Every ${days}`;
+                } else if (frequency === 'monthly') {
+                    const dayName = dayNames[monthlyDay];
+                    return `${monthlyType.charAt(0).toUpperCase() + monthlyType.slice(1)} ${dayName} of month`;
+                }
+                
+                return '';
+            };
+
+            return (
+                <div className="min-h-screen bg-gray-50">
+                    {/* Header */}
+                    <div className="bg-white border-b border-gray-200">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="flex items-center justify-between py-6">
+                                <div>
+                                    <h1 className="text-2xl font-bold text-gray-900">Menu Scheduling</h1>
+                                    <p className="text-sm text-gray-600">Manage event menus and schedules</p>
+                                </div>
+                                <div className="flex items-center space-x-4">
+                                    <button className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                        Back to Dashboard
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            {/* Tabs */}
+                            <div className="flex space-x-8 border-t border-gray-200">
+                                <button
+                                    onClick={() => setCurrentScreen('calendar')}
+                                    className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                                        currentScreen === 'calendar'
+                                            ? 'border-indigo-500 text-indigo-600'
+                                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                    }`}
+                                >
+                                    📅 Events Calendar
+                                </button>
+                                <button
+                                    onClick={() => setCurrentScreen('menu-versions')}
+                                    className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                                        currentScreen === 'menu-versions'
+                                            ? 'border-indigo-500 text-indigo-600'
+                                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                    }`}
+                                >
+                                    📋 Menu Versions
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        {/* CALENDAR VIEW */}
+                        {currentScreen === 'calendar' && (
+                            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                                {/* Main Calendar */}
+                                <div className="lg:col-span-3">
+                                    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+                                        {/* Calendar Header */}
+                                        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                                            <h2 className="text-lg font-semibold text-gray-900">
+                                                {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+                                            </h2>
+                                            <div className="flex items-center space-x-2">
+                                                <button
+                                                    onClick={() => changeMonth(-1)}
+                                                    className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                                                >
+                                                    Previous
+                                                </button>
+                                                <button
+                                                    onClick={() => setCurrentMonth(new Date())}
+                                                    className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                                                >
+                                                    Today
+                                                </button>
+                                                <button
+                                                    onClick={() => changeMonth(1)}
+                                                    className="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                                                >
+                                                    Next
+                                                </button>
+                                                <button
+                                                    onClick={() => openNewEventModal('')}
+                                                    className="ml-4 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+                                                >
+                                                    Schedule Event
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Calendar Grid */}
+                                        <div className="p-6">
+                                            <div className="grid grid-cols-7 gap-px bg-gray-200">
+                                                {dayNames.map(day => (
+                                                    <div key={day} className="bg-gray-50 px-2 py-2 text-center text-xs font-semibold text-gray-700">
+                                                        {day}
+                                                    </div>
+                                                ))}
+                                                {getDaysInMonth(currentMonth).map((day, idx) => (
+                                                    <div
+                                                        key={idx}
+                                                        className={`calendar-day bg-white p-2 min-h-20 ${
+                                                            day.isToday ? 'ring-2 ring-indigo-500 ring-inset' : ''
+                                                        } ${day.events && day.events.length > 0 ? 'has-event' : ''} ${
+                                                            day.isCurrentMonth ? 'cursor-pointer hover:bg-gray-50' : 'bg-gray-50'
+                                                        }`}
+                                                        onClick={() => day.isCurrentMonth && openNewEventModal(day.dateStr)}
+                                                    >
+                                                        {day.date && (
+                                                            <>
+                                                                <div className="text-sm font-medium text-gray-900">{day.date}</div>
+                                                                <div className="mt-1 space-y-1">
+                                                                    {day.events && day.events.map(event => (
+                                                                        <div
+                                                                            key={event.id}
+                                                                            className="text-xs px-2 py-1 bg-indigo-100 text-indigo-800 rounded cursor-pointer hover:bg-indigo-200"
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                openEditEventModal(event);
+                                                                            }}
+                                                                        >
+                                                                            <div className="flex items-center gap-1">
+                                                                                {event.isRecurring && (
+                                                                                    <span className="text-indigo-600">🔄</span>
+                                                                                )}
+                                                                                {event.allDay && (
+                                                                                    <span className="text-indigo-600">📅</span>
+                                                                                )}
+                                                                                <span className="truncate">{event.name}</span>
+                                                                            </div>
+                                                                            {!event.allDay && (
+                                                                                <div className="text-indigo-600 text-xs">
+                                                                                    {event.startTime} - {event.endTime}
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Sidebar */}
+                                <div className="lg:col-span-1 space-y-6">
+                                    {/* Legend */}
+                                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                                        <h3 className="text-sm font-semibold text-gray-900 mb-3">Legend</h3>
+                                        <div className="space-y-2 text-xs">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-lg">🔄</span>
+                                                <span className="text-gray-600">Recurring Event</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-lg">📅</span>
+                                                <span className="text-gray-600">All-Day Event</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Upcoming Events */}
+                                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                                        <h3 className="text-sm font-semibold text-gray-900 mb-3">Upcoming Events</h3>
+                                        <div className="space-y-3">
+                                            {scheduledEvents.slice(0, 5).map(event => (
+                                                <div
+                                                    key={event.id}
+                                                    className="p-3 border border-gray-200 rounded-lg hover:border-indigo-300 cursor-pointer"
+                                                    onClick={() => openEditEventModal(event)}
+                                                >
+                                                    <div className="flex items-start justify-between">
+                                                        <div className="flex-1">
+                                                            <div className="flex items-center gap-1">
+                                                                {event.isRecurring && <span className="text-sm">🔄</span>}
+                                                                {event.allDay && <span className="text-sm">📅</span>}
+                                                                <div className="text-sm font-medium text-gray-900">{event.name}</div>
+                                                            </div>
+                                                            <div className="text-xs text-gray-600 mt-1">{event.startDate}</div>
+                                                            {event.isRecurring && (
+                                                                <div className="text-xs text-indigo-600 mt-1">
+                                                                    {getRecurrenceDescription(event)}
+                                                                </div>
+                                                            )}
+                                                            {!event.allDay && (
+                                                                <div className="text-xs text-gray-500 mt-1">
+                                                                    {event.startTime} - {event.endTime}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Quick Stats */}
+                                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                                        <h3 className="text-sm font-semibold text-gray-900 mb-3">Quick Stats</h3>
+                                        <div className="space-y-2 text-sm">
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-600">Total Events</span>
+                                                <span className="font-medium">{scheduledEvents.length}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-600">Recurring</span>
+                                                <span className="font-medium">{scheduledEvents.filter(e => e.isRecurring).length}</span>
+                                            </div>
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-600">Menu Versions</span>
+                                                <span className="font-medium">{menuVersions.length}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* MENU VERSIONS VIEW */}
+                        {currentScreen === 'menu-versions' && (
+                            <div className="space-y-6">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <h2 className="text-lg font-semibold text-gray-900">Menu Versions</h2>
+                                        <p className="text-sm text-gray-600">Create and manage menu configurations for events</p>
+                                    </div>
+                                    <button
+                                        onClick={() => openNewMenuVersionFromEvent()}
+                                        className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+                                    >
+                                        Create Menu Version
+                                    </button>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {menuVersions.map(version => {
+                                        const linkedEvents = scheduledEvents.filter(e => e.menuVersionId === version.id);
+                                        const itemCount = version.items.length;
+                                        
+                                        return (
+                                            <div key={version.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                                                <div className="flex items-start justify-between mb-4">
+                                                    <div className="flex-1">
+                                                        <h3 className="text-lg font-semibold text-gray-900">{version.name}</h3>
+                                                        {version.description && (
+                                                            <p className="text-sm text-gray-600 mt-1">{version.description}</p>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                <div className="space-y-2 mb-4">
+                                                    <div className="flex items-center justify-between text-sm">
+                                                        <span className="text-gray-600">Items</span>
+                                                        <span className="font-medium text-gray-900">{itemCount}</span>
+                                                    </div>
+                                                    <div className="flex items-center justify-between text-sm">
+                                                        <span className="text-gray-600">Linked Events</span>
+                                                        <span className="font-medium text-gray-900">{linkedEvents.length}</span>
+                                                    </div>
+                                                </div>
+
+                                                {linkedEvents.length > 0 && (
+                                                    <div className="mb-4">
+                                                        <div className="text-xs font-medium text-gray-700 mb-2">Used In:</div>
+                                                        <div className="space-y-1">
+                                                            {linkedEvents.slice(0, 3).map(event => (
+                                                                <div key={event.id} className="text-xs text-gray-600 flex items-center gap-1">
+                                                                    {event.isRecurring && <span>🔄</span>}
+                                                                    <span className="truncate">{event.name}</span>
+                                                                </div>
+                                                            ))}
+                                                            {linkedEvents.length > 3 && (
+                                                                <div className="text-xs text-gray-500">
+                                                                    +{linkedEvents.length - 3} more
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                <div className="flex items-center space-x-2">
+                                                    <button
+                                                        onClick={() => openEditMenuVersionStandalone(version)}
+                                                        className="flex-1 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    {version.id !== 1 && (
+                                                        <button
+                                                            onClick={() => handleDeleteMenuVersion(version.id)}
+                                                            className="px-3 py-2 text-sm font-medium text-red-600 bg-white border border-red-300 rounded-md hover:bg-red-50"
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* EVENT MODAL */}
+                    {showEventModal && (
+                        <div className="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+                            <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col">
+                                {/* Modal Header */}
+                                <div className="px-6 py-4 border-b border-gray-200">
+                                    <h3 className="text-lg font-semibold text-gray-900">
+                                        {editingEvent ? 'Edit Event' : 'Schedule New Event'}
+                                    </h3>
+                                </div>
+
+                                {/* Modal Body - Scrollable */}
+                                <div className="flex-1 overflow-y-auto px-6 py-4">
+                                    <div className="space-y-4">
+                                        {/* Event Name */}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Event Name *</label>
+                                            <input
+                                                type="text"
+                                                value={eventForm.name}
+                                                onChange={(e) => setEventForm({ ...eventForm, name: e.target.value })}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                placeholder="e.g., Smith Wedding"
+                                            />
+                                        </div>
+
+                                        {/* Menu Version */}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Menu Version *</label>
+                                            <div className="flex gap-2">
+                                                <select
+                                                    value={eventForm.menuVersionId}
+                                                    onChange={(e) => setEventForm({ ...eventForm, menuVersionId: parseInt(e.target.value) })}
+                                                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                >
+                                                    {menuVersions.map(version => (
+                                                        <option key={version.id} value={version.id}>{version.name}</option>
+                                                    ))}
+                                                </select>
+                                                <button
+                                                    onClick={openNewMenuVersionFromEvent}
+                                                    className="px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-md hover:bg-indigo-100"
+                                                >
+                                                    + New Menu
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* All Day Event */}
+                                        <div className="flex items-center">
+                                            <input
+                                                type="checkbox"
+                                                id="allDay"
+                                                checked={eventForm.allDay}
+                                                onChange={(e) => setEventForm({ ...eventForm, allDay: e.target.checked })}
+                                                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                            />
+                                            <label htmlFor="allDay" className="ml-2 block text-sm text-gray-700">
+                                                All-day event
+                                            </label>
+                                        </div>
+
+                                        {/* Date Range */}
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">Start Date *</label>
+                                                <input
+                                                    type="date"
+                                                    value={eventForm.startDate}
+                                                    onChange={(e) => setEventForm({ ...eventForm, startDate: e.target.value })}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">End Date *</label>
+                                                <input
+                                                    type="date"
+                                                    value={eventForm.endDate}
+                                                    onChange={(e) => setEventForm({ ...eventForm, endDate: e.target.value })}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Time Range - Only if not all day */}
+                                        {!eventForm.allDay && (
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Start Time *</label>
+                                                    <input
+                                                        type="time"
+                                                        value={eventForm.startTime}
+                                                        onChange={(e) => setEventForm({ ...eventForm, startTime: e.target.value })}
+                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">End Time *</label>
+                                                    <input
+                                                        type="time"
+                                                        value={eventForm.endTime}
+                                                        onChange={(e) => setEventForm({ ...eventForm, endTime: e.target.value })}
+                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Recurring Event Toggle */}
+                                        <div className="border-t border-gray-200 pt-4">
+                                            <div className="flex items-center mb-4">
+                                                <input
+                                                    type="checkbox"
+                                                    id="recurring"
+                                                    checked={eventForm.isRecurring}
+                                                    onChange={(e) => setEventForm({ ...eventForm, isRecurring: e.target.checked })}
+                                                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                                />
+                                                <label htmlFor="recurring" className="ml-2 block text-sm font-medium text-gray-700">
+                                                    Recurring Event
+                                                </label>
+                                            </div>
+
+                                            {/* Recurring Options */}
+                                            {eventForm.isRecurring && (
+                                                <div className="space-y-4 p-4 bg-indigo-50 rounded-lg">
+                                                    {/* Frequency */}
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-2">Repeats</label>
+                                                        <select
+                                                            value={eventForm.recurrence.frequency}
+                                                            onChange={(e) => setEventForm({
+                                                                ...eventForm,
+                                                                recurrence: { ...eventForm.recurrence, frequency: e.target.value }
+                                                            })}
+                                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                        >
+                                                            <option value="weekly">Weekly</option>
+                                                            <option value="monthly">Monthly</option>
+                                                        </select>
+                                                    </div>
+
+                                                    {/* Weekly Options */}
+                                                    {eventForm.recurrence.frequency === 'weekly' && (
+                                                        <div>
+                                                            <label className="block text-sm font-medium text-gray-700 mb-2">Repeat On</label>
+                                                            <div className="grid grid-cols-7 gap-2">
+                                                                {dayNames.map((day, index) => (
+                                                                    <button
+                                                                        key={day}
+                                                                        type="button"
+                                                                        onClick={() => {
+                                                                            const days = eventForm.recurrence.weeklyDays.includes(index)
+                                                                                ? eventForm.recurrence.weeklyDays.filter(d => d !== index)
+                                                                                : [...eventForm.recurrence.weeklyDays, index];
+                                                                            setEventForm({
+                                                                                ...eventForm,
+                                                                                recurrence: { ...eventForm.recurrence, weeklyDays: days }
+                                                                            });
+                                                                        }}
+                                                                        className={`px-2 py-2 text-xs font-medium rounded-md ${
+                                                                            eventForm.recurrence.weeklyDays.includes(index)
+                                                                                ? 'bg-indigo-600 text-white'
+                                                                                : 'bg-white text-gray-700 border border-gray-300'
+                                                                        }`}
+                                                                    >
+                                                                        {day}
+                                                                    </button>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Monthly Options */}
+                                                    {eventForm.recurrence.frequency === 'monthly' && (
+                                                        <div className="grid grid-cols-2 gap-4">
+                                                            <div>
+                                                                <label className="block text-sm font-medium text-gray-700 mb-2">Week</label>
+                                                                <select
+                                                                    value={eventForm.recurrence.monthlyType}
+                                                                    onChange={(e) => setEventForm({
+                                                                        ...eventForm,
+                                                                        recurrence: { ...eventForm.recurrence, monthlyType: e.target.value }
+                                                                    })}
+                                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                                >
+                                                                    <option value="first">First</option>
+                                                                    <option value="second">Second</option>
+                                                                    <option value="third">Third</option>
+                                                                    <option value="fourth">Fourth</option>
+                                                                    <option value="last">Last</option>
+                                                                </select>
+                                                            </div>
+                                                            <div>
+                                                                <label className="block text-sm font-medium text-gray-700 mb-2">Day</label>
+                                                                <select
+                                                                    value={eventForm.recurrence.monthlyDay}
+                                                                    onChange={(e) => setEventForm({
+                                                                        ...eventForm,
+                                                                        recurrence: { ...eventForm.recurrence, monthlyDay: parseInt(e.target.value) }
+                                                                    })}
+                                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                                >
+                                                                    {dayNames.map((day, index) => (
+                                                                        <option key={day} value={index}>{day}</option>
+                                                                    ))}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Ends */}
+                                                    <div>
+                                                        <label className="block text-sm font-medium text-gray-700 mb-2">Ends</label>
+                                                        <select
+                                                            value={eventForm.recurrence.endsType}
+                                                            onChange={(e) => setEventForm({
+                                                                ...eventForm,
+                                                                recurrence: { ...eventForm.recurrence, endsType: e.target.value }
+                                                            })}
+                                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 mb-3"
+                                                        >
+                                                            <option value="never">Never</option>
+                                                            <option value="on">On date</option>
+                                                            <option value="after">After occurrences</option>
+                                                        </select>
+
+                                                        {eventForm.recurrence.endsType === 'on' && (
+                                                            <input
+                                                                type="date"
+                                                                value={eventForm.recurrence.endsOn}
+                                                                onChange={(e) => setEventForm({
+                                                                    ...eventForm,
+                                                                    recurrence: { ...eventForm.recurrence, endsOn: e.target.value }
+                                                                })}
+                                                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                            />
+                                                        )}
+
+                                                        {eventForm.recurrence.endsType === 'after' && (
+                                                            <div className="flex items-center gap-2">
+                                                                <input
+                                                                    type="number"
+                                                                    min="1"
+                                                                    value={eventForm.recurrence.endsAfter}
+                                                                    onChange={(e) => setEventForm({
+                                                                        ...eventForm,
+                                                                        recurrence: { ...eventForm.recurrence, endsAfter: parseInt(e.target.value) }
+                                                                    })}
+                                                                    className="w-24 px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                                />
+                                                                <span className="text-sm text-gray-600">occurrences</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Notes */}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                                            <textarea
+                                                value={eventForm.notes}
+                                                onChange={(e) => setEventForm({ ...eventForm, notes: e.target.value })}
+                                                rows={3}
+                                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                placeholder="Guest count, special requirements, etc."
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Modal Footer - Sticky */}
+                                <div className="sticky-footer px-6 py-4">
+                                    <div className="flex items-center justify-between">
+                                        {editingEvent && (
+                                            <button
+                                                onClick={() => handleDeleteEvent(editingEvent.id)}
+                                                className="px-4 py-2 text-sm font-medium text-red-600 bg-white border border-red-300 rounded-md hover:bg-red-50"
+                                            >
+                                                Delete Event
+                                            </button>
+                                        )}
+                                        <div className={`flex items-center space-x-3 ${!editingEvent ? 'ml-auto' : ''}`}>
+                                            <button
+                                                onClick={() => setShowEventModal(false)}
+                                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                onClick={handleSaveEvent}
+                                                disabled={!eventForm.name || !eventForm.menuVersionId || !eventForm.startDate}
+                                                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 disabled:opacity-50"
+                                            >
+                                                {editingEvent ? 'Update Event' : 'Schedule Event'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MENU EDITOR MODAL */}
+                    {showMenuEditorModal && (
+                        <div className="nested-modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+                            <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] flex flex-col">
+                                {/* Modal Header */}
+                                <div className="px-6 py-4 border-b border-gray-200">
+                                    <h3 className="text-lg font-semibold text-gray-900">
+                                        {editingMenuVersion ? 'Edit Menu Version' : 'Create Menu Version'}
+                                    </h3>
+                                </div>
+
+                                {/* Modal Body - Scrollable */}
+                                <div className="flex-1 overflow-y-auto px-6 py-4">
+                                    <div className="space-y-4">
+                                        {/* Menu Version Details */}
+                                        <div className="grid grid-cols-1 gap-4">
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">Version Name *</label>
+                                                <input
+                                                    type="text"
+                                                    value={menuVersionForm.name}
+                                                    onChange={(e) => setMenuVersionForm({ ...menuVersionForm, name: e.target.value })}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                    placeholder="e.g., Wedding Package"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                                <input
+                                                    type="text"
+                                                    value={menuVersionForm.description}
+                                                    onChange={(e) => setMenuVersionForm({ ...menuVersionForm, description: e.target.value })}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                    placeholder="Brief description of this menu"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Item Counter */}
+                                        <div className="bg-indigo-50 rounded-lg p-4">
+                                            <div className="flex items-center justify-between mb-2">
+                                                <span className="text-sm font-medium text-gray-700">Items Selected</span>
+                                                <span className="text-lg font-bold text-indigo-600">{selectedItemsCount} / {totalItemsCount}</span>
+                                            </div>
+                                            <div className="w-full bg-gray-200 rounded-full h-2">
+                                                <div
+                                                    className="bg-indigo-600 h-2 rounded-full transition-all"
+                                                    style={{ width: `${(selectedItemsCount / totalItemsCount) * 100}%` }}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* Search and Filter */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <input
+                                                    type="text"
+                                                    value={searchQuery}
+                                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                                    placeholder="Search items..."
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <select
+                                                    value={selectedCategory}
+                                                    onChange={(e) => setSelectedCategory(e.target.value)}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                                                >
+                                                    {categories.map(cat => (
+                                                        <option key={cat} value={cat}>{cat}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        {/* Menu Items List */}
+                                        <div className="space-y-2">
+                                            {filteredMenuItems.map(item => {
+                                                const itemConfig = menuVersionForm.items.find(i => i.itemId === item.id);
+                                                const isSelected = !!itemConfig;
+                                                const isExpanded = expandedItem === item.id;
+                                                
+                                                return (
+                                                    <div key={item.id} className="border border-gray-200 rounded-lg">
+                                                        <div className={`p-4 ${isSelected ? 'bg-indigo-50' : 'bg-white'}`}>
+                                                            <div className="flex items-start">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={isSelected}
+                                                                    onChange={() => toggleItemInMenuVersion(item.id)}
+                                                                    className="mt-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                                                />
+                                                                <div className="ml-3 flex-1">
+                                                                    <div className="flex items-center justify-between">
+                                                                        <div className="flex-1">
+                                                                            <div className="flex items-center gap-2">
+                                                                                <span className="text-sm font-medium text-gray-900">{item.name}</span>
+                                                                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                                                                                    {item.category}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className="text-sm text-gray-600 mt-1">R{item.basePrice}</div>
+                                                                        </div>
+                                                                        {isSelected && (item.portions.length > 0 || item.addons.length > 0) && (
+                                                                            <button
+                                                                                onClick={() => setExpandedItem(isExpanded ? null : item.id)}
+                                                                                className="ml-2 px-3 py-1 text-xs font-medium text-indigo-600 bg-indigo-100 rounded-md hover:bg-indigo-200"
+                                                                            >
+                                                                                {isExpanded ? 'Hide' : 'Configure'}
+                                                                            </button>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            {/* Expanded Options */}
+                                                            {isSelected && isExpanded && (
+                                                                <div className="mt-4 pl-7 space-y-4">
+                                                                    {/* Portions */}
+                                                                    {item.portions.length > 0 && (
+                                                                        <div>
+                                                                            <div className="text-xs font-semibold text-gray-700 mb-2">Available Portions:</div>
+                                                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                                                                {item.portions.map(portion => (
+                                                                                    <label key={portion.id} className="flex items-center">
+                                                                                        <input
+                                                                                            type="checkbox"
+                                                                                            checked={itemConfig.portions.includes(portion.id)}
+                                                                                            onChange={() => togglePortionInItem(item.id, portion.id)}
+                                                                                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                                                                        />
+                                                                                        <span className="ml-2 text-xs text-gray-700">
+                                                                                            {portion.name} - R{portion.price}
+                                                                                        </span>
+                                                                                    </label>
+                                                                                ))}
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+
+                                                                    {/* Add-ons */}
+                                                                    {item.addons.length > 0 && (
+                                                                        <div>
+                                                                            <div className="text-xs font-semibold text-gray-700 mb-2">Available Add-ons:</div>
+                                                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                                                                {item.addons.map(addon => (
+                                                                                    <label key={addon.id} className="flex items-center">
+                                                                                        <input
+                                                                                            type="checkbox"
+                                                                                            checked={itemConfig.addons.includes(addon.id)}
+                                                                                            onChange={() => toggleAddonInItem(item.id, addon.id)}
+                                                                                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                                                                        />
+                                                                                        <span className="ml-2 text-xs text-gray-700">
+                                                                                            {addon.name} {addon.price > 0 && `+R${addon.price}`}
+                                                                                        </span>
+                                                                                    </label>
+                                                                                ))}
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Modal Footer - Sticky */}
+                                <div className="sticky-footer px-6 py-4">
+                                    <div className="flex items-center justify-end space-x-3">
+                                        <button
+                                            onClick={() => {
+                                                setShowMenuEditorModal(false);
+                                                setIsCreatingFromEvent(false);
+                                            }}
+                                            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            onClick={handleSaveMenuVersion}
+                                            disabled={!menuVersionForm.name || menuVersionForm.items.length === 0}
+                                            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 disabled:opacity-50"
+                                        >
+                                            {editingMenuVersion ? 'Update Version' : (isCreatingFromEvent ? 'Create & Use This Menu' : 'Create Version')}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        ReactDOM.render(<MenuSchedulingDashboard />, document.getElementById('root'));
+    </script>
+</body>
+</html>

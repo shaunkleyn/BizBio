@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Categories - BizBio Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <link rel="stylesheet" href="site.css">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Comfortaa:wght@300..700&family=Gabarito:wght@400..900&family=Gantari:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 47.4% 11.2%;
+            --primary: 222.2 47.4% 11.2%;
+            --radius: 0.5rem;
+        }
+
+        .category-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0/0.1);
+        }
+    </style>
+</head>
+<body class="h-full bg-gray-50">
+    <header id=global-header class="code-section sticky bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-28">
+
+            <a href="#" class="flex-shrink-0" style="display: flex;align-items: center;">
+                <img src="logo.png" alt="bizbio" class="h-20 py-2" data-logo="">
+            <span class="red-hat-display text-4xl font-bold text-[var(--dark-text-color)]">BiZBiO</span></a>
+
+            <nav class="hidden lg:flex items-center space-x-8">
+                <a href=products.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Products</a>
+                <a href=pricing.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Pricing</a>
+                <a href=search-businesses.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Businesses</a>
+                <a href=contact.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Contact</a>
+                <a href=claim-profile.html
+                    class="bg-[var(--primary-color)] text-[var(--primary-button-text-color)] px-6 py-3 rounded-[var(--button-rounded-radius)] hover:bg-[var(--primary-button-hover-bg-color)] transition-all duration-200 font-semibold font-[var(--font-family-body)]">Claim Your Profile</a>
+            </nav>
+
+            <button data-landingsite-mobile-menu-toggle
+                class="lg:hidden text-[var(--dark-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 sf-hidden">
+
+            </button>
+        </div>
+
+        <nav data-landingsite-mobile-menu class="hidden lg:hidden pb-4 sf-hidden">
+
+        </nav>
+    </div>
+</header>
+
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-br from-blue-50 to-purple-50 overflow-hidden py-16">
+        <div class="absolute top-20 right-10 w-72 h-72 bg-blue-600 rounded-full opacity-10 blur-3xl"></div>
+        <div class="absolute bottom-20 left-10 w-96 h-96 bg-purple-600 rounded-full opacity-10 blur-3xl"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+                Browse by Category
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                Find the perfect BizBio solution for your industry. We serve businesses across all sectors.
+            </p>
+            <div class="max-w-2xl mx-auto">
+                <div class="relative">
+                    <input
+                        type="text"
+                        placeholder="Search categories..."
+                        class="w-full px-6 py-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg"
+                    >
+                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Categories -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Popular Categories</h2>
+                <p class="text-lg text-gray-600">Most commonly used BizBio solutions</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Restaurants & Food -->
+                <a href="search-businesses.html?category=restaurants" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-md">
+                    <div class="bg-orange-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-utensils text-orange-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Restaurants & Food</h3>
+                    <p class="text-gray-600 text-sm mb-3">Digital menus, QR codes, allergen info</p>
+                    <span class="text-blue-600 text-sm font-semibold">234 businesses →</span>
+                </a>
+
+                <!-- Professional Services -->
+                <a href="search-businesses.html?category=professional" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-md">
+                    <div class="bg-blue-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-briefcase text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Professional Services</h3>
+                    <p class="text-gray-600 text-sm mb-3">Consultants, lawyers, accountants</p>
+                    <span class="text-blue-600 text-sm font-semibold">156 businesses →</span>
+                </a>
+
+                <!-- Retail & Shopping -->
+                <a href="search-businesses.html?category=retail" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-md">
+                    <div class="bg-purple-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-store text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Retail & Shopping</h3>
+                    <p class="text-gray-600 text-sm mb-3">Boutiques, stores, product catalogs</p>
+                    <span class="text-blue-600 text-sm font-semibold">189 businesses →</span>
+                </a>
+
+                <!-- Health & Wellness -->
+                <a href="search-businesses.html?category=health" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-md">
+                    <div class="bg-green-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-heartbeat text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Health & Wellness</h3>
+                    <p class="text-gray-600 text-sm mb-3">Spas, gyms, medical practices</p>
+                    <span class="text-blue-600 text-sm font-semibold">98 businesses →</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- All Categories -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">All Categories</h2>
+                <p class="text-lg text-gray-600">Explore all business categories on BizBio</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Real Estate -->
+                <a href="search-businesses.html?category=real-estate" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-indigo-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-home text-indigo-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Real Estate</h3>
+                            <p class="text-sm text-gray-600">67 businesses</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm">Agents, brokers, property listings</p>
+                </a>
+
+                <!-- Beauty & Hair -->
+                <a href="search-businesses.html?category=beauty" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-pink-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-cut text-pink-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Beauty & Hair</h3>
+                            <p class="text-sm text-gray-600">123 businesses</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm">Salons, barbers, beauty services</p>
+                </a>
+
+                <!-- Automotive -->
+                <a href="search-businesses.html?category=automotive" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-red-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-car text-red-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Automotive</h3>
+                            <p class="text-sm text-gray-600">45 businesses</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm">Mechanics, dealerships, detailing</p>
+                </a>
+
+                <!-- Education & Training -->
+                <a href="search-businesses.html?category=education" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-yellow-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-graduation-cap text-yellow-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Education & Training</h3>
+                            <p class="text-sm text-gray-600">78 businesses</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm">Tutors, schools, training centers</p>
+                </a>
+
+                <!-- Entertainment & Events -->
+                <a href="search-businesses.html?category=entertainment" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-music text-purple-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Entertainment & Events</h3>
+                            <p class="text-sm text-gray-600">54 businesses</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm">DJs, planners, venues, performers</p>
+                </a>
+
+                <!-- Home Services -->
+                <a href="search-businesses.html?category=home-services" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-teal-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-tools text-teal-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Home Services</h3>
+                            <p class="text-sm text-gray-600">91 businesses</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm">Plumbers, electricians, contractors</p>
+                </a>
+
+                <!-- Technology & IT -->
+                <a href="search-businesses.html?category=technology" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-laptop-code text-blue-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Technology & IT</h3>
+                            <p class="text-sm text-gray-600">112 businesses</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm">Developers, IT support, tech services</p>
+                </a>
+
+                <!-- Photography & Media -->
+                <a href="search-businesses.html?category=photography" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-orange-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-camera text-orange-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Photography & Media</h3>
+                            <p class="text-sm text-gray-600">86 businesses</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm">Photographers, videographers, studios</p>
+                </a>
+
+                <!-- Legal Services -->
+                <a href="search-businesses.html?category=legal" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-gray-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-gavel text-gray-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Legal Services</h3>
+                            <p class="text-sm text-gray-600">42 businesses</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm">Attorneys, law firms, notaries</p>
+                </a>
+
+                <!-- Financial Services -->
+                <a href="search-businesses.html?category=financial" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-green-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-dollar-sign text-green-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Financial Services</h3>
+                            <p class="text-sm text-gray-600">63 businesses</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm">Accountants, advisors, insurance</p>
+                </a>
+
+                <!-- Hospitality & Tourism -->
+                <a href="search-businesses.html?category=hospitality" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-cyan-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-hotel text-cyan-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Hospitality & Tourism</h3>
+                            <p class="text-sm text-gray-600">71 businesses</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm">Hotels, B&Bs, tour operators</p>
+                </a>
+
+                <!-- Pet Services -->
+                <a href="search-businesses.html?category=pets" class="category-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md">
+                    <div class="flex items-center mb-3">
+                        <div class="bg-amber-100 w-12 h-12 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-paw text-amber-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Pet Services</h3>
+                            <p class="text-sm text-gray-600">39 businesses</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm">Groomers, vets, pet stores</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-r from-blue-600 to-purple-600">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Don't See Your Category?</h2>
+            <p class="text-xl text-blue-100 mb-8">BizBio works for any business type. Start your free trial today.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="register.html" class="bg-white text-blue-600 px-8 py-4 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-semibold text-lg">
+                    Get Started Free
+                </a>
+                <a href="contact.html" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-blue-600 transition-all duration-200 font-semibold text-lg">
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-white text-lg font-bold mb-4">BizBio</h3>
+                    <p class="text-sm">Digital profiles, menus, and catalogs for modern businesses.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="products.html" class="hover:text-white transition-colors">Products</a></li>
+                        <li><a href="pricing.html" class="hover:text-white transition-colors">Pricing</a></li>
+                        <li><a href="business-categories.html" class="hover:text-white transition-colors">Categories</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="contact.html" class="hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="help-center.html" class="hover:text-white transition-colors">Help Center</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms-of-service.html" class="hover:text-white transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
+                <p>&copy; 2025 BizBio. All rights reserved. Built for South African businesses.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

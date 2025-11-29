@@ -1,0 +1,2032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BizBio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="../fonts/css/all.css">
+    <link rel="stylesheet" href="site.css">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Comfortaa:wght@300..700&family=Gabarito:wght@400..900&family=Gantari:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sf-img-151: url("data:image/avif;base64,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")
+        }
+    </style>
+    <style>
+        :root {
+            --accent-color: #C0392B;
+            --accent2-color: #A569BD;
+            --accent3-color: #3FB6A8;
+            --accent4-color: #F1C40F;
+            --primary-color: #4A90E2;
+            --primary-color: rgb(162, 117, 234);
+            --dark-text-color: #333333;
+            --gray-text-color: #777777;
+            --button-padding-x: 14px;
+            --button-padding-y: 8px;
+            --font-family-body: Open Sans;
+            --light-text-color: #FFFFFF;
+            --dark-border-color: #4A6DA8;
+            --light-border-color: #CCD5E9;
+            --font-family-heading: Montserrat;
+            --button-rounded-radius: 6px;
+            --dark-background-color: #1C2833;
+            --light-background-color: #F5FAFF;
+            --medium-background-color: #EAF2FB;
+            --primary-button-text-color: #FFFFFF;
+            --secondary-button-bg-color: #E2EFFA;
+            --secondary-button-text-color: #4A90E2;
+            --primary-button-hover-bg-color: #357ABD;
+            --primary-button-hover-text-color: #FFFFFF;
+            --secondary-button-hover-bg-color: #DAE8F4;
+            --secondary-button-hover-text-color: #357ABD
+        }
+    </style>
+    <style>
+        *,
+        ::before,
+        ::after {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246/0.5);
+            --tw-ring-offset-shadow: 0 0#0000;
+            --tw-ring-shadow: 0 0#0000;
+            --tw-shadow: 0 0#0000;
+            --tw-shadow-colored: 0 0#0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style:
+        }
+    
+        ::backdrop {
+            --tw-border-spacing-x: 0;
+            --tw-border-spacing-y: 0;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-rotate: 0;
+            --tw-skew-x: 0;
+            --tw-skew-y: 0;
+            --tw-scale-x: 1;
+            --tw-scale-y: 1;
+            --tw-pan-x: ;
+            --tw-pan-y: ;
+            --tw-pinch-zoom: ;
+            --tw-scroll-snap-strictness: proximity;
+            --tw-gradient-from-position: ;
+            --tw-gradient-via-position: ;
+            --tw-gradient-to-position: ;
+            --tw-ordinal: ;
+            --tw-slashed-zero: ;
+            --tw-numeric-figure: ;
+            --tw-numeric-spacing: ;
+            --tw-numeric-fraction: ;
+            --tw-ring-inset: ;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-color: rgb(59 130 246/0.5);
+            --tw-ring-offset-shadow: 0 0#0000;
+            --tw-ring-shadow: 0 0#0000;
+            --tw-shadow: 0 0#0000;
+            --tw-shadow-colored: 0 0#0000;
+            --tw-blur: ;
+            --tw-brightness: ;
+            --tw-contrast: ;
+            --tw-grayscale: ;
+            --tw-hue-rotate: ;
+            --tw-invert: ;
+            --tw-saturate: ;
+            --tw-sepia: ;
+            --tw-drop-shadow: ;
+            --tw-backdrop-blur: ;
+            --tw-backdrop-brightness: ;
+            --tw-backdrop-contrast: ;
+            --tw-backdrop-grayscale: ;
+            --tw-backdrop-hue-rotate: ;
+            --tw-backdrop-invert: ;
+            --tw-backdrop-opacity: ;
+            --tw-backdrop-saturate: ;
+            --tw-backdrop-sepia: ;
+            --tw-contain-size: ;
+            --tw-contain-layout: ;
+            --tw-contain-paint: ;
+            --tw-contain-style:
+        }
+    
+        *,
+        ::after,
+        ::before {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            border-color: #e5e7eb
+        }
+    
+        ::after,
+        ::before {
+            --tw-content: ""
+        }
+    
+        html {
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            -moz-tab-size: 4;
+            tab-size: 4;
+            font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-feature-settings: normal;
+            font-variation-settings: normal;
+            -webkit-tap-highlight-color: transparent
+        }
+    
+        body {
+            margin: 0;
+            line-height: inherit
+        }
+    
+        a {
+            color: inherit;
+            text-decoration: inherit
+        }
+    
+        button {
+            font-family: inherit;
+            font-feature-settings: inherit;
+            font-variation-settings: inherit;
+            font-size: 100%;
+            font-weight: inherit;
+            line-height: inherit;
+            letter-spacing: inherit;
+            margin: 0;
+            padding: 0
+        }
+    
+        button {
+            text-transform: none
+        }
+    
+        button {
+            -webkit-appearance: button;
+            background-color: transparent;
+            background-image: none
+        }
+    
+        ::-webkit-inner-spin-button,
+        ::-webkit-outer-spin-button {
+            height: auto
+        }
+    
+        ::-webkit-search-decoration {
+            -webkit-appearance: none
+        }
+    
+        ::-webkit-file-upload-button {
+            -webkit-appearance: button;
+            font: inherit
+        }
+    
+        h1,
+        h2,
+        h3,
+        p {
+            margin: 0
+        }
+    
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0
+        }
+    
+        input::placeholder,
+        textarea::placeholder {
+            opacity: 1;
+            color: #9ca3af
+        }
+    
+        button {
+            cursor: pointer
+        }
+    
+        img {
+            display: block;
+            vertical-align: middle
+        }
+    
+        img {
+            max-width: 100%
+        }
+    
+        .absolute {
+            position: absolute
+        }
+    
+        .relative {
+            position: relative
+        }
+    
+        .sticky {
+            position: sticky
+        }
+    
+        .inset-0 {
+            inset: 0px
+        }
+    
+        .bottom-0 {
+            bottom: 0px
+        }
+    
+        .bottom-20 {
+            bottom: 5rem
+        }
+    
+        .bottom-4 {
+            bottom: 1rem
+        }
+    
+        .bottom-6 {
+            bottom: 1.5rem
+        }
+    
+        .left-0 {
+            left: 0px
+        }
+    
+        .left-10 {
+            left: 2.5rem
+        }
+    
+        .left-4 {
+            left: 1rem
+        }
+    
+        .left-6 {
+            left: 1.5rem
+        }
+    
+        .right-0 {
+            right: 0px
+        }
+    
+        .right-10 {
+            right: 2.5rem
+        }
+    
+        .right-20 {
+            right: 5rem
+        }
+    
+        .right-4 {
+            right: 1rem
+        }
+    
+        .right-6 {
+            right: 1.5rem
+        }
+    
+        .top-0 {
+            top: 0px
+        }
+    
+        .top-20 {
+            top: 5rem
+        }
+    
+        .top-4 {
+            top: 1rem
+        }
+    
+        .top-6 {
+            top: 1.5rem
+        }
+    
+        .z-10 {
+            z-index: 10
+        }
+    
+        .z-50 {
+            z-index: 50
+        }
+    
+        .order-1 {
+            order: 1
+        }
+    
+        .order-2 {
+            order: 2
+        }
+    
+        .col-span-1 {
+            grid-column: span 1/span 1
+        }
+    
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto
+        }
+    
+        .mb-10 {
+            margin-bottom: 2.5rem
+        }
+    
+        .mb-12 {
+            margin-bottom: 3rem
+        }
+    
+        .mb-16 {
+            margin-bottom: 4rem
+        }
+    
+        .mb-2 {
+            margin-bottom: 0.5rem
+        }
+    
+        .mb-3 {
+            margin-bottom: 0.75rem
+        }
+    
+        .mb-4 {
+            margin-bottom: 1rem
+        }
+    
+        .mb-6 {
+            margin-bottom: 1.5rem
+        }
+    
+        .mb-8 {
+            margin-bottom: 2rem
+        }
+    
+        .mr-2 {
+            margin-right: 0.5rem
+        }
+    
+        .mr-3 {
+            margin-right: 0.75rem
+        }
+    
+        .inline-block {
+            display: inline-block
+        }
+    
+        .flex {
+            display: flex
+        }
+    
+        .inline-flex {
+            display: inline-flex
+        }
+    
+        .grid {
+            display: grid
+        }
+    
+        .hidden {
+            display: none
+        }
+    
+        .h-full {
+            height: 100%
+        }
+    
+        .h-10 {
+            height: 2.5rem
+        }
+    
+        .h-16 {
+            height: 4rem
+        }
+    
+        .h-20 {
+            height: 5rem
+        }
+    
+        .h-28 {
+            height: 7rem
+        }
+    
+        .h-72 {
+            height: 18rem
+        }
+    
+        .h-96 {
+            height: 24rem
+        }
+    
+        .h-auto {
+            height: auto
+        }
+    
+        .w-10 {
+            width: 2.5rem
+        }
+    
+        .w-16 {
+            width: 4rem
+        }
+    
+        .w-20 {
+            width: 5rem
+        }
+    
+        .w-72 {
+            width: 18rem
+        }
+    
+        .w-96 {
+            width: 24rem
+        }
+    
+        .w-full {
+            width: 100%
+        }
+    
+        .max-w-2xl {
+            max-width: 42rem
+        }
+    
+        .max-w-3xl {
+            max-width: 48rem
+        }
+    
+        .max-w-5xl {
+            max-width: 64rem
+        }
+    
+        .max-w-7xl {
+            max-width: 80rem
+        }
+    
+        .flex-shrink-0 {
+            flex-shrink: 0
+        }
+    
+        .rotate-12 {
+            --tw-rotate: 12deg
+        }
+    
+        .transform {
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+    
+        .flex-col {
+            flex-direction: column
+        }
+    
+        .flex-wrap {
+            flex-wrap: wrap
+        }
+    
+        .items-start {
+            align-items: flex-start
+        }
+    
+        .items-center {
+            align-items: center
+        }
+    
+        .justify-center {
+            justify-content: center
+        }
+    
+        .justify-between {
+            justify-content: space-between
+        }
+    
+        .gap-12 {
+            gap: 3rem
+        }
+    
+        .gap-2 {
+            gap: 0.5rem
+        }
+    
+        .gap-3 {
+            gap: 0.75rem
+        }
+    
+        .gap-4 {
+            gap: 1rem
+        }
+    
+        .gap-6 {
+            gap: 1.5rem
+        }
+    
+        .gap-8 {
+            gap: 2rem
+        }
+    
+        .space-x-8>:not([hidden])~:not([hidden]) {
+            --tw-space-x-reverse: 0;
+            margin-right: calc(2rem*var(--tw-space-x-reverse));
+            margin-left: calc(2rem*calc(1 - var(--tw-space-x-reverse)))
+        }
+    
+        .space-y-3>:not([hidden])~:not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(0.75rem*calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(0.75rem*var(--tw-space-y-reverse))
+        }
+    
+        .space-y-6>:not([hidden])~:not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(1.5rem*calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(1.5rem*var(--tw-space-y-reverse))
+        }
+    
+        .space-y-8>:not([hidden])~:not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(2rem*calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(2rem*var(--tw-space-y-reverse))
+        }
+    
+        .overflow-hidden {
+            overflow: hidden
+        }
+    
+        .rounded-2xl {
+            border-radius: 1rem
+        }
+    
+        .rounded-\[var\(--button-rounded-radius\)\] {
+            border-radius: var(--button-rounded-radius)
+        }
+    
+        .rounded-full {
+            border-radius: 9999px
+        }
+    
+        .rounded-lg {
+            border-radius: 0.5rem
+        }
+    
+        .rounded-xl {
+            border-radius: 0.75rem
+        }
+    
+        .border-2 {
+            border-width: 2px
+        }
+    
+        .border-4 {
+            border-width: 4px
+        }
+    
+        .border-t {
+            border-top-width: 1px
+        }
+    
+        .border-\[var\(--primary-color\)\] {
+            border-color: var(--primary-color)
+        }
+    
+        .border-gray-700 {
+            --tw-border-opacity: 1;
+            border-color: rgb(55 65 81/var(--tw-border-opacity, 1))
+        }
+    
+        .border-white {
+            --tw-border-opacity: 1;
+            border-color: rgb(255 255 255/var(--tw-border-opacity, 1))
+        }
+    
+        .bg-white {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255/var(--tw-bg-opacity, 1))
+        }
+    
+        .bg-\[var\(--accent2-color\)\] {
+            background-color: var(--accent2-color)
+        }
+    
+        .bg-\[var\(--accent3-color\)\] {
+            background-color: var(--accent3-color)
+        }
+    
+        .bg-\[var\(--dark-background-color\)\] {
+            background-color: var(--dark-background-color)
+        }
+    
+        .bg-\[var\(--light-background-color\)\] {
+            background-color: var(--light-background-color)
+        }
+    
+        .bg-\[var\(--primary-color\)\] {
+            background-color: var(--primary-color)
+        }
+    
+        .bg-\[var\(--secondary-button-bg-color\)\] {
+            background-color: var(--secondary-button-bg-color)
+        }
+    
+        .bg-transparent {
+            background-color: transparent
+        }
+    
+        .bg-opacity-10 {
+            --tw-bg-opacity: 0.1
+        }
+    
+        .bg-opacity-20 {
+            --tw-bg-opacity: 0.2
+        }
+    
+        .bg-opacity-95 {
+            --tw-bg-opacity: 0.95
+        }
+    
+        .bg-gradient-to-br {
+            background-image: linear-gradient(to bottom right, var(--tw-gradient-stops))
+        }
+    
+        .from-\[var\(--light-background-color\)\] {
+            --tw-gradient-from: var(--light-background-color) var(--tw-gradient-from-position);
+            --tw-gradient-to: rgb(255 255 255/0) var(--tw-gradient-to-position);
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to)
+        }
+    
+        .from-\[var\(--medium-background-color\)\] {
+            --tw-gradient-from: var(--medium-background-color) var(--tw-gradient-from-position);
+            --tw-gradient-to: rgb(255 255 255/0) var(--tw-gradient-to-position);
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to)
+        }
+    
+        .from-\[var\(--primary-color\)\] {
+            --tw-gradient-from: var(--primary-color) var(--tw-gradient-from-position);
+            --tw-gradient-to: rgb(255 255 255/0) var(--tw-gradient-to-position);
+            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to)
+        }
+    
+        .to-\[var\(--accent3-color\)\] {
+            --tw-gradient-to: var(--accent3-color) var(--tw-gradient-to-position)
+        }
+    
+        .to-\[var\(--light-background-color\)\] {
+            --tw-gradient-to: var(--light-background-color) var(--tw-gradient-to-position)
+        }
+    
+        .to-white {
+            --tw-gradient-to: #fff var(--tw-gradient-to-position)
+        }
+    
+        .p-3 {
+            padding: 0.75rem
+        }
+    
+        .p-4 {
+            padding: 1rem
+        }
+    
+        .p-6 {
+            padding: 1.5rem
+        }
+    
+        .p-8 {
+            padding: 2rem
+        }
+    
+        .px-10 {
+            padding-left: 2.5rem;
+            padding-right: 2.5rem
+        }
+    
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem
+        }
+    
+        .px-6 {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem
+        }
+    
+        .px-8 {
+            padding-left: 2rem;
+            padding-right: 2rem
+        }
+    
+        .py-12 {
+            padding-top: 3rem;
+            padding-bottom: 3rem
+        }
+    
+        .py-16 {
+            padding-top: 4rem;
+            padding-bottom: 4rem
+        }
+    
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem
+        }
+    
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem
+        }
+    
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem
+        }
+    
+        .py-5 {
+            padding-top: 1.25rem;
+            padding-bottom: 1.25rem
+        }
+    
+        .pb-4 {
+            padding-bottom: 1rem
+        }
+    
+        .pt-2 {
+            padding-top: 0.5rem
+        }
+    
+        .pt-4 {
+            padding-top: 1rem
+        }
+    
+        .pt-6 {
+            padding-top: 1.5rem
+        }
+    
+        .pt-8 {
+            padding-top: 2rem
+        }
+    
+        .text-center {
+            text-align: center
+        }
+    
+        .text-2xl {
+            font-size: 1.5rem;
+            line-height: 2rem
+        }
+    
+        .text-3xl {
+            font-size: 1.875rem;
+            line-height: 2.25rem
+        }
+    
+        .text-4xl {
+            font-size: 2.25rem
+        }
+    
+        .text-base {
+            font-size: 1rem;
+            line-height: 1.5rem
+        }
+    
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem
+        }
+    
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem
+        }
+    
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 1.75rem
+        }
+    
+        .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem
+        }
+    
+        .font-\[var\(--font-family-body\)\] {
+            font-weight: var(--font-family-body)
+        }
+    
+        .font-bold {
+            font-weight: 700
+        }
+    
+        .font-semibold {
+            font-weight: 600
+        }
+    
+        .leading-relaxed {
+            line-height: 1.625
+        }
+    
+        .leading-tight {
+            line-height: 1.25
+        }
+    
+        .text-\[var\(--accent-color\)\] {
+            color: var(--accent-color)
+        }
+    
+        .text-\[var\(--accent2-color\)\] {
+            color: var(--accent2-color)
+        }
+    
+        .text-\[var\(--accent3-color\)\] {
+            color: var(--accent3-color)
+        }
+    
+        .text-\[var\(--accent4-color\)\] {
+            color: var(--accent4-color)
+        }
+    
+        .text-\[var\(--dark-text-color\)\] {
+            color: var(--dark-text-color)
+        }
+    
+        .text-\[var\(--gray-text-color\)\] {
+            color: var(--gray-text-color)
+        }
+    
+        .text-\[var\(--primary-button-text-color\)\] {
+            color: var(--primary-button-text-color)
+        }
+    
+        .text-\[var\(--primary-color\)\] {
+            color: var(--primary-color)
+        }
+    
+        .text-\[var\(--secondary-button-text-color\)\] {
+            color: var(--secondary-button-text-color)
+        }
+    
+        .text-gray-400 {
+            --tw-text-opacity: 1;
+            color: rgb(156 163 175/var(--tw-text-opacity, 1))
+        }
+    
+        .text-white {
+            --tw-text-opacity: 1;
+            color: rgb(255 255 255/var(--tw-text-opacity, 1))
+        }
+    
+        .text-opacity-90 {
+            --tw-text-opacity: 0.9
+        }
+    
+        .text-opacity-95 {
+            --tw-text-opacity: 0.95
+        }
+    
+        .opacity-0 {
+            opacity: 0
+        }
+    
+        .opacity-10 {
+            opacity: 0.1
+        }
+    
+        .opacity-20 {
+            opacity: 0.2
+        }
+    
+        .opacity-5 {
+            opacity: 0.05
+        }
+    
+        .shadow-2xl {
+            --tw-shadow: 0 25px 50px -12px rgb(0 0 0/0.25);
+            --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0#0000), var(--tw-ring-shadow, 0 0#0000), var(--tw-shadow)
+        }
+    
+        .shadow-lg {
+            --tw-shadow: 0 10px 15px -3px rgb(0 0 0/0.1), 0 4px 6px -4px rgb(0 0 0/0.1);
+            --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0#0000), var(--tw-ring-shadow, 0 0#0000), var(--tw-shadow)
+        }
+    
+        .shadow-md {
+            --tw-shadow: 0 4px 6px -1px rgb(0 0 0/0.1), 0 2px 4px -2px rgb(0 0 0/0.1);
+            --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0#0000), var(--tw-ring-shadow, 0 0#0000), var(--tw-shadow)
+        }
+    
+        .shadow-xl {
+            --tw-shadow: 0 20px 25px -5px rgb(0 0 0/0.1), 0 8px 10px -6px rgb(0 0 0/0.1);
+            --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0#0000), var(--tw-ring-shadow, 0 0#0000), var(--tw-shadow)
+        }
+    
+        .blur-3xl {
+            --tw-blur: blur(64px);
+            filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
+        }
+    
+        .backdrop-blur-sm {
+            --tw-backdrop-blur: blur(4px);
+            -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+            backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)
+        }
+    
+        .transition-all {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+        }
+    
+        .transition-colors {
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+        }
+    
+        .transition-opacity {
+            transition-property: opacity;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+        }
+    
+        .transition-shadow {
+            transition-property: box-shadow;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+        }
+    
+        .transition-transform {
+            transition-property: transform;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
+        }
+    
+        .duration-200 {
+            transition-duration: 200ms
+        }
+    
+        .duration-300 {
+            transition-duration: 300ms
+        }
+    
+        .\[font-family\:var\(--font-family-body\)\] {
+            font-family: var(--font-family-body)
+        }
+    
+        .hover\:-translate-y-0\.5:hover {
+            --tw-translate-y: -0.125rem;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+    
+        .hover\:-translate-y-1:hover {
+            --tw-translate-y: -0.25rem;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+    
+        .hover\:-translate-y-2:hover {
+            --tw-translate-y: -0.5rem;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+    
+        .hover\:scale-105:hover {
+            --tw-scale-x: 1.05;
+            --tw-scale-y: 1.05;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+    
+        .hover\:bg-\[var\(--light-background-color\)\]:hover {
+            background-color: var(--light-background-color)
+        }
+    
+        .hover\:bg-\[var\(--primary-button-hover-bg-color\)\]:hover {
+            background-color: var(--primary-button-hover-bg-color)
+        }
+    
+        .hover\:bg-\[var\(--primary-color\)\]:hover {
+            background-color: var(--primary-color)
+        }
+    
+        .hover\:bg-\[var\(--secondary-button-hover-bg-color\)\]:hover {
+            background-color: var(--secondary-button-hover-bg-color)
+        }
+    
+        .hover\:bg-white:hover {
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255/var(--tw-bg-opacity, 1))
+        }
+    
+        .hover\:bg-opacity-90:hover {
+            --tw-bg-opacity: 0.9
+        }
+    
+        .hover\:text-\[var\(--primary-color\)\]:hover {
+            color: var(--primary-color)
+        }
+    
+        .hover\:text-\[var\(--secondary-button-hover-text-color\)\]:hover {
+            color: var(--secondary-button-hover-text-color)
+        }
+    
+        .hover\:shadow-2xl:hover {
+    
+            --tw-shadow: 0 25px 50px -12px rgb(0 0 0/0.25);
+            --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0#0000), var(--tw-ring-shadow, 0 0#0000), var(--tw-shadow)
+        }
+    
+        .hover\:shadow-lg:hover {
+            --tw-shadow: 0 10px 15px -3px rgb(0 0 0/0.1), 0 4px 6px -4px rgb(0 0 0/0.1);
+            --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0#0000), var(--tw-ring-shadow, 0 0#0000), var(--tw-shadow)
+        }
+    
+        .hover\:shadow-xl:hover {
+            --tw-shadow: 0 20px 25px -5px rgb(0 0 0/0.1), 0 8px 10px -6px rgb(0 0 0/0.1);
+            --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0#0000), var(--tw-ring-shadow, 0 0#0000), var(--tw-shadow)
+        }
+    
+        .group:hover .group-hover\:scale-110 {
+            --tw-scale-x: 1.1;
+            --tw-scale-y: 1.1;
+            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))
+        }
+    
+        .group:hover .group-hover\:opacity-10 {
+            opacity: 0.1
+        }
+    
+        .group:hover .group-hover\:shadow-xl {
+            --tw-shadow: 0 20px 25px -5px rgb(0 0 0/0.1), 0 8px 10px -6px rgb(0 0 0/0.1);
+            --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0#0000), var(--tw-ring-shadow, 0 0#0000), var(--tw-shadow)
+        }
+    
+        @media (min-width:640px) {
+            .sm\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+    
+            .sm\:flex-row {
+                flex-direction: row
+            }
+    
+            .sm\:px-6 {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem
+            }
+    
+            .sm\:py-16 {
+                padding-top: 4rem;
+                padding-bottom: 4rem
+            }
+    
+            .sm\:py-20 {
+                padding-top: 5rem;
+                padding-bottom: 5rem
+            }
+    
+            .sm\:text-left {
+                text-align: left
+            }
+    
+            .sm\:text-right {
+                text-align: right
+            }
+    
+            .sm\:text-2xl {
+                font-size: 1.5rem;
+                line-height: 2rem
+            }
+    
+            .sm\:text-4xl {
+                font-size: 2.25rem;
+                line-height: 2.5rem
+            }
+    
+            .sm\:text-5xl {
+                font-size: 3rem;
+                line-height: 1
+            }
+    
+            .sm\:text-lg {
+                font-size: 1.125rem;
+                line-height: 1.75rem
+            }
+    
+            .sm\:text-xl {
+                font-size: 1.25rem;
+                line-height: 1.75rem
+            }
+        }
+    
+        @media (min-width:1024px) {
+            .lg\:order-1 {
+                order: 1
+            }
+    
+            .lg\:order-2 {
+                order: 2
+            }
+    
+            .lg\:flex {
+                display: flex
+            }
+    
+            .lg\:hidden {
+                display: none
+            }
+    
+            .lg\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+    
+            .lg\:grid-cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr))
+            }
+    
+            .lg\:grid-cols-4 {
+                grid-template-columns: repeat(4, minmax(0, 1fr))
+            }
+    
+            .lg\:justify-start {
+                justify-content: flex-start
+            }
+    
+            .lg\:gap-10 {
+                gap: 2.5rem
+            }
+    
+            .lg\:gap-16 {
+                gap: 4rem
+            }
+    
+            .lg\:px-8 {
+                padding-left: 2rem;
+                padding-right: 2rem
+            }
+    
+            .lg\:py-24 {
+                padding-top: 6rem;
+                padding-bottom: 6rem
+            }
+    
+            .lg\:py-28 {
+                padding-top: 7rem;
+                padding-bottom: 7rem
+            }
+    
+            .lg\:text-left {
+                text-align: left
+            }
+    
+            .lg\:text-5xl {
+                font-size: 3rem;
+                line-height: 1
+            }
+    
+            .lg\:text-6xl {
+                font-size: 3.75rem;
+                line-height: 1
+            }
+        }
+    </style>
+    <meta name=referrer content=no-referrer>
+    <style>
+        .sf-hidden {
+            display: none !important
+        }
+    </style>
+</head>
+<body class="h-full bg-white">
+    <!-- Header -->
+<header id=global-header class="code-section sticky bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-28">
+
+            <a href="#" class="flex-shrink-0" style="display: flex;align-items: center;">
+                <img src="logo.png" alt="bizbio" class="h-20 py-2" data-logo="">
+            <span class="red-hat-display text-4xl font-bold text-[var(--dark-text-color)]">BiZBiO</span></a>
+
+            <nav class="hidden lg:flex items-center space-x-8">
+                <a href=products.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Products</a>
+                <a href=pricing.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Pricing</a>
+                <a href=search-businesses.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Businesses</a>
+                <a href=contact.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Contact</a>
+                <a href=claim-profile.html
+                    class="bg-[var(--primary-color)] text-[var(--primary-button-text-color)] px-6 py-3 rounded-[var(--button-rounded-radius)] hover:bg-[var(--primary-button-hover-bg-color)] transition-all duration-200 font-semibold font-[var(--font-family-body)]">Claim Your Profile</a>
+            </nav>
+
+            <button data-landingsite-mobile-menu-toggle
+                class="lg:hidden text-[var(--dark-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 sf-hidden">
+
+            </button>
+        </div>
+
+        <nav data-landingsite-mobile-menu class="hidden lg:hidden pb-4 sf-hidden">
+
+        </nav>
+    </div>
+</header>
+    <div class=[font-family:var(--font-family-body)]>
+                <div>
+                </div>
+                <div>
+                    <section
+                        class="code-section relative bg-gradient-to-br from-[var(--light-background-color)] to-white overflow-hidden"
+                        id=szvafv>
+
+                        <div
+                            class="absolute top-20 right-10 w-72 h-72 bg-[var(--primary-color)] rounded-full opacity-10 blur-3xl">
+                        </div>
+                        <div
+                            class="absolute bottom-20 left-10 w-96 h-96 bg-[var(--accent3-color)] rounded-full opacity-10 blur-3xl">
+                        </div>
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-28">
+                            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+                                <div class="text-center lg:text-left">
+                                    <h1
+                                        class="text-4xl sm:text-5xl lg:text-6xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] leading-tight mb-6">
+                                        Share Your Business Profile
+                                        <span class=text-[var(--primary-color)]>Without the Hassle</span>
+                                    </h1>
+                                    <p
+                                        class="text-lg sm:text-xl text-[var(--gray-text-color)] font-[var(--font-family-body)] mb-4 leading-relaxed">
+                                        Create stunning digital business cards and profiles in minutes. One
+                                        tap to share all your contact details, social links, and business
+                                        information with potential clients.
+                                    </p>
+                                    <p
+                                        class="text-base sm:text-lg text-[var(--gray-text-color)] font-[var(--font-family-body)] mb-8">
+                                        Perfect for professionals, freelancers, and businesses who want to
+                                        make a lasting impression.
+                                    </p>
+
+                                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-6">
+                                        <a href=register.html
+                                            class="inline-flex items-center justify-center bg-[var(--primary-color)] text-[var(--primary-button-text-color)] px-8 py-4 rounded-[var(--button-rounded-radius)] hover:bg-[var(--primary-button-hover-bg-color)] transition-all duration-200 font-semibold font-[var(--font-family-body)] text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                            <i class="fas fa-rocket mr-2" aria-hidden=true></i>
+                                            Get Started Free
+                                        </a>
+                                        <a href=pricing.html
+                                            class="inline-flex items-center justify-center bg-white text-[var(--primary-color)] border-2 border-[var(--primary-color)] px-8 py-4 rounded-[var(--button-rounded-radius)] hover:bg-[var(--light-background-color)] transition-all duration-200 font-semibold font-[var(--font-family-body)] text-lg shadow-md hover:shadow-lg">
+                                            <i class="fas fa-tags mr-2" aria-hidden=true></i>
+                                            View Pricing
+                                        </a>
+                                    </div>
+
+                                    <div
+                                        class="flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm text-[var(--gray-text-color)]">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-check-circle text-[var(--accent3-color)] mr-2"
+                                                aria-hidden=true></i>
+                                            <span>No credit card required</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-check-circle text-[var(--accent3-color)] mr-2"
+                                                aria-hidden=true></i>
+                                            <span>Setup in 5 minutes</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-check-circle text-[var(--accent3-color)] mr-2"
+                                                aria-hidden=true></i>
+                                            <span>Cancel anytime</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class=relative>
+                                    <div
+                                        class="relative rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                                        <img src="img1.jpg"
+                                            alt="Recruitment and candidate selection concept. Businessman interacts with digital interface with multiple candidate profiles on laptop. Represents online recruitment, HR technology, hiring process,"
+                                            class="w-full h-auto"
+                                            data-media='{"id":"2201230874","src":"iStock","type":"image"}'>
+
+                                        <div
+                                            class="absolute top-6 right-6 bg-white rounded-lg shadow-xl p-4 backdrop-blur-sm bg-opacity-95 animate-float">
+                                            <div class="flex items-center gap-3">
+                                                <div class="bg-[var(--accent3-color)] bg-opacity-20 rounded-full p-3">
+                                                    <i class="fas fa-users text-[var(--accent3-color)] text-xl"
+                                                        aria-hidden=true></i>
+                                                </div>
+                                                <div>
+                                                    <p
+                                                        class="text-2xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)]">
+                                                        10K+
+                                                    </p>
+                                                    <p class="text-xs text-[var(--gray-text-color)]">
+                                                        Active Profiles
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="absolute bottom-6 left-6 bg-white rounded-lg shadow-xl p-4 backdrop-blur-sm bg-opacity-95 animate-float"
+                                            style="animation-delay:0.5s">
+                                            <div class="flex items-center gap-3">
+                                                <div class="bg-[var(--primary-color)] bg-opacity-20 rounded-full p-3">
+                                                    <i class="fas fa-chart-line text-[var(--primary-color)] text-xl"
+                                                        aria-hidden=true></i>
+                                                </div>
+                                                <div>
+                                                    <p
+                                                        class="text-2xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)]">
+                                                        98%
+                                                    </p>
+                                                    <p class="text-xs text-[var(--gray-text-color)]">
+                                                        Satisfaction Rate
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <style class=sf-hidden>
+                            @keyframes float {
+
+                                0%,
+                                100% {
+                                    transform: translateY(0px)
+                                }
+
+                                50% {
+                                    transform: translateY(-10px)
+                                }
+                            }
+
+                            .animate-float {
+                                animation: float 3s ease-in-out infinite
+                            }
+                        </style>
+                    </section>
+                    <section class="code-section bg-white py-16 sm:py-20 lg:py-24" id=stsf9qc>
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                            <div class="text-center mb-16">
+                                <h2
+                                    class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-4">
+                                    Everything You Need in One Profile
+                                </h2>
+                                <p
+                                    class="text-lg sm:text-xl text-[var(--gray-text-color)] font-[var(--font-family-body)] max-w-3xl mx-auto">
+                                    Share your contact details, showcase your business, and make networking
+                                    effortless with our all-in-one digital profile solution.
+                                </p>
+                            </div>
+
+                            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+
+                                <div
+                                    class="group relative bg-[var(--light-background-color)] rounded-xl p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300">
+                                    </div>
+                                    <div class=relative>
+                                        <div
+                                            class="bg-white rounded-full w-16 h-16 flex items-center justify-center mb-6 shadow-md group-hover:shadow-xl transition-shadow duration-300">
+                                            <i class="fas fa-id-card text-[var(--primary-color)] text-3xl"
+                                                aria-hidden=true></i>
+                                        </div>
+                                        <h3
+                                            class="text-xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-3">
+                                            Digital Business Cards
+                                        </h3>
+                                        <p
+                                            class="text-[var(--gray-text-color)] font-[var(--font-family-body)] leading-relaxed">
+                                            Create professional digital business cards that can be shared
+                                            instantly via link, QR code, or NFC tap. No more paper waste.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="group relative bg-[var(--light-background-color)] rounded-xl p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300">
+                                    </div>
+                                    <div class=relative>
+                                        <div
+                                            class="bg-white rounded-full w-16 h-16 flex items-center justify-center mb-6 shadow-md group-hover:shadow-xl transition-shadow duration-300">
+                                            <i class="fas fa-palette text-[var(--accent2-color)] text-3xl"
+                                                aria-hidden=true></i>
+                                        </div>
+                                        <h3
+                                            class="text-xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-3">
+                                            Custom Branding
+                                        </h3>
+                                        <p
+                                            class="text-[var(--gray-text-color)] font-[var(--font-family-body)] leading-relaxed">
+                                            Choose your colors, fonts, logo, and icons to match your brand
+                                            identity. Make every profile uniquely yours.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="group relative bg-[var(--light-background-color)] rounded-xl p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300">
+                                    </div>
+                                    <div class=relative>
+                                        <div
+                                            class="bg-white rounded-full w-16 h-16 flex items-center justify-center mb-6 shadow-md group-hover:shadow-xl transition-shadow duration-300">
+                                            <i class="fas fa-mobile-alt text-[var(--accent3-color)] text-3xl"
+                                                aria-hidden=true></i>
+                                        </div>
+                                        <h3
+                                            class="text-xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-3">
+                                            NFC Technology
+                                        </h3>
+                                        <p
+                                            class="text-[var(--gray-text-color)] font-[var(--font-family-body)] leading-relaxed">
+                                            Get a physical NFC card or keyring that people can tap with their
+                                            phone to instantly view your profile. Future-ready networking.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="group relative bg-[var(--light-background-color)] rounded-xl p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300">
+                                    </div>
+                                    <div class=relative>
+                                        <div
+                                            class="bg-white rounded-full w-16 h-16 flex items-center justify-center mb-6 shadow-md group-hover:shadow-xl transition-shadow duration-300">
+                                            <i class="fas fa-chart-bar text-[var(--accent-color)] text-3xl"
+                                                aria-hidden=true></i>
+                                        </div>
+                                        <h3
+                                            class="text-xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-3">
+                                            Analytics Dashboard
+                                        </h3>
+                                        <p
+                                            class="text-[var(--gray-text-color)] font-[var(--font-family-body)] leading-relaxed">
+                                            Track profile visits, shares, and clicks. See who's viewing your
+                                            profile and measure your networking ROI.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="group relative bg-[var(--light-background-color)] rounded-xl p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300">
+                                    </div>
+                                    <div class=relative>
+                                        <div
+                                            class="bg-white rounded-full w-16 h-16 flex items-center justify-center mb-6 shadow-md group-hover:shadow-xl transition-shadow duration-300">
+                                            <i class="fas fa-download text-[var(--accent4-color)] text-3xl"
+                                                aria-hidden=true></i>
+                                        </div>
+                                        <h3
+                                            class="text-xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-3">
+                                            Easy Contact Saving
+                                        </h3>
+                                        <p
+                                            class="text-[var(--gray-text-color)] font-[var(--font-family-body)] leading-relaxed">
+                                            Let people save your contact details directly to their phone with
+                                            one click using VCF files. No manual typing required.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="group relative bg-[var(--light-background-color)] rounded-xl p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-xl opacity-0 group-hover:opacity-10 transition-opacity duration-300">
+                                    </div>
+                                    <div class=relative>
+                                        <div
+                                            class="bg-white rounded-full w-16 h-16 flex items-center justify-center mb-6 shadow-md group-hover:shadow-xl transition-shadow duration-300">
+                                            <i class="fas fa-layer-group text-[var(--primary-color)] text-3xl"
+                                                aria-hidden=true></i>
+                                        </div>
+                                        <h3
+                                            class="text-xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-3">
+                                            Multiple Profiles
+                                        </h3>
+                                        <p
+                                            class="text-[var(--gray-text-color)] font-[var(--font-family-body)] leading-relaxed">
+                                            Create separate profiles for your business, personal brand, or
+                                            resume. Switch between them effortlessly.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section
+                        class="code-section bg-gradient-to-br from-[var(--medium-background-color)] to-[var(--light-background-color)] py-16 sm:py-20 lg:py-24 relative overflow-hidden"
+                        id=s1zo38>
+
+                        <div
+                            class="absolute top-0 right-0 w-96 h-96 bg-[var(--accent3-color)] rounded-full opacity-5 blur-3xl">
+                        </div>
+                        <div
+                            class="absolute bottom-0 left-0 w-96 h-96 bg-[var(--primary-color)] rounded-full opacity-5 blur-3xl">
+                        </div>
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+                            <div class="text-center mb-16">
+                                <h2
+                                    class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-4">
+                                    Get Your Profile Live in 3 Simple Steps
+                                </h2>
+                                <p
+                                    class="text-lg sm:text-xl text-[var(--gray-text-color)] font-[var(--font-family-body)] max-w-3xl mx-auto">
+                                    No technical skills required. Set up your professional profile in
+                                    minutes.
+                                </p>
+                            </div>
+                            <div class="grid lg:grid-cols-2 gap-12 items-center mb-16">
+
+                                <div class="order-2 lg:order-1">
+                                    <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+                                        <img src="img2.jpg"
+                                            alt="Human resources and management concept. Employees must complete the online survey form, answer the test questions, and Mark the checklist on a clipboard. Online business concept."
+                                            class="w-full h-auto"
+                                            data-media='{"id":"1426070859","src":"iStock","type":"image"}'>
+                                    </div>
+                                </div>
+
+                                <div class="order-1 lg:order-2 space-y-8">
+
+                                    <div class="flex gap-6 group">
+                                        <div class=flex-shrink-0>
+                                            <div
+                                                class="w-16 h-16 bg-[var(--primary-color)] rounded-full flex items-center justify-center text-white font-bold text-2xl font-[var(--font-family-heading)] shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                                1
+                                            </div>
+                                        </div>
+                                        <div class=pt-2>
+                                            <h3
+                                                class="text-2xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-2">
+                                                Sign Up & Choose Template
+                                            </h3>
+                                            <p
+                                                class="text-[var(--gray-text-color)] font-[var(--font-family-body)] leading-relaxed">
+                                                Create your free account and select from our professionally
+                                                designed profile templates. Pick one that matches your style and
+                                                industry.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex gap-6 group">
+                                        <div class=flex-shrink-0>
+                                            <div
+                                                class="w-16 h-16 bg-[var(--accent3-color)] rounded-full flex items-center justify-center text-white font-bold text-2xl font-[var(--font-family-heading)] shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                                2
+                                            </div>
+                                        </div>
+                                        <div class=pt-2>
+                                            <h3
+                                                class="text-2xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-2">
+                                                Customize Your Profile
+                                            </h3>
+                                            <p
+                                                class="text-[var(--gray-text-color)] font-[var(--font-family-body)] leading-relaxed">
+                                                Add your logo, contact details, social links, business hours, and
+                                                location. Apply your brand colors and choose icons that represent
+                                                you.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex gap-6 group">
+                                        <div class=flex-shrink-0>
+                                            <div
+                                                class="w-16 h-16 bg-[var(--accent2-color)] rounded-full flex items-center justify-center text-white font-bold text-2xl font-[var(--font-family-heading)] shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                                3
+                                            </div>
+                                        </div>
+                                        <div class=pt-2>
+                                            <h3
+                                                class="text-2xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-2">
+                                                Share & Connect
+                                            </h3>
+                                            <p
+                                                class="text-[var(--gray-text-color)] font-[var(--font-family-body)] leading-relaxed">
+                                                Share your profile via link, QR code, or NFC card. Start
+                                                networking smarter and track your engagement in real-time.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class=pt-6>
+                                        <a href=register.html
+                                            class="inline-flex items-center justify-center bg-[var(--primary-color)] text-[var(--primary-button-text-color)] px-8 py-4 rounded-[var(--button-rounded-radius)] hover:bg-[var(--primary-button-hover-bg-color)] transition-all duration-200 font-semibold font-[var(--font-family-body)] text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                                            <i class="fas fa-arrow-right mr-2" aria-hidden=true></i>
+                                            Start Building Your Profile
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="code-section bg-white py-16 sm:py-20 lg:py-24" id=s2ibpr>
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                            <div class="text-center mb-16">
+                                <h2
+                                    class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-4">
+                                    Connect with Local Businesses
+                                </h2>
+                                <p
+                                    class="text-lg sm:text-xl text-[var(--gray-text-color)] font-[var(--font-family-body)] max-w-3xl mx-auto">
+                                    Browse businesses by category, check ratings, and view detailed
+                                    profiles. Find the perfect service provider for your needs.
+                                </p>
+                            </div>
+                            <div class="grid lg:grid-cols-2 gap-12 items-center">
+
+                                <div class=space-y-6>
+                                    <div
+                                        class="bg-[var(--light-background-color)] rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
+                                        <div class="flex items-start gap-4">
+                                            <div
+                                                class="bg-[var(--primary-color)] bg-opacity-10 rounded-lg p-3 flex-shrink-0">
+                                                <i class="fas fa-search text-[var(--primary-color)] text-2xl"
+                                                    aria-hidden=true></i>
+                                            </div>
+                                            <div>
+                                                <h3
+                                                    class="text-xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-2">
+                                                    Search by Category
+                                                </h3>
+                                                <p class="text-[var(--gray-text-color)] font-[var(--font-family-body)]">
+                                                    Find plumbers, electricians, consultants, designers, and
+                                                    hundreds of other business categories. Filter by location and
+                                                    ratings.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="bg-[var(--light-background-color)] rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
+                                        <div class="flex items-start gap-4">
+                                            <div
+                                                class="bg-[var(--accent3-color)] bg-opacity-10 rounded-lg p-3 flex-shrink-0">
+                                                <i class="fas fa-star text-[var(--accent3-color)] text-2xl"
+                                                    aria-hidden=true></i>
+                                            </div>
+                                            <div>
+                                                <h3
+                                                    class="text-xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-2">
+                                                    Ratings & Reviews
+                                                </h3>
+                                                <p class="text-[var(--gray-text-color)] font-[var(--font-family-body)]">
+                                                    See what others are saying. Connect to Google and Facebook
+                                                    reviews directly from business profiles.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="bg-[var(--light-background-color)] rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
+                                        <div class="flex items-start gap-4">
+                                            <div
+                                                class="bg-[var(--accent2-color)] bg-opacity-10 rounded-lg p-3 flex-shrink-0">
+                                                <i class="fas fa-map-marker-alt text-[var(--accent2-color)] text-2xl"
+                                                    aria-hidden=true></i>
+                                            </div>
+                                            <div>
+                                                <h3
+                                                    class="text-xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-2">
+                                                    Location & Hours
+                                                </h3>
+                                                <p class="text-[var(--gray-text-color)] font-[var(--font-family-body)]">
+                                                    View business locations on embedded maps, check operating hours,
+                                                    and get directions instantly.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class=pt-4>
+                                        <a href=business-categories.html
+                                            class="inline-flex items-center justify-center bg-[var(--secondary-button-bg-color)] text-[var(--secondary-button-text-color)] border-2 border-[var(--primary-color)] px-8 py-4 rounded-[var(--button-rounded-radius)] hover:bg-[var(--secondary-button-hover-bg-color)] hover:text-[var(--secondary-button-hover-text-color)] transition-all duration-200 font-semibold font-[var(--font-family-body)] text-lg shadow-md hover:shadow-lg">
+                                            <i class="fas fa-th-large mr-2" aria-hidden=true></i>
+                                            Browse All Categories
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class=relative>
+                                    <div
+                                        class="relative rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                                        <img src="img3.webp"
+                                            alt="Human resources analytics and recruitment concept with global network, digital icons, and data interface for modern workforce solutions. 3d Rendering"
+                                            class="w-full h-auto"
+                                            data-media='{"id":"2231038244","src":"iStock","type":"image"}'>
+                                    </div>
+
+                                    <div
+                                        class="absolute top-4 left-4 bg-white rounded-lg shadow-xl px-4 py-3 backdrop-blur-sm bg-opacity-95">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-wrench text-[var(--accent-color)] text-lg"
+                                                aria-hidden=true></i>
+                                            <span class="font-semibold text-[var(--dark-text-color)] text-sm">342
+                                                Plumbers</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="absolute top-20 right-4 bg-white rounded-lg shadow-xl px-4 py-3 backdrop-blur-sm bg-opacity-95">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-paint-roller text-[var(--primary-color)] text-lg"
+                                                aria-hidden=true></i>
+                                            <span class="font-semibold text-[var(--dark-text-color)] text-sm">218
+                                                Contractors</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="absolute bottom-20 left-4 bg-white rounded-lg shadow-xl px-4 py-3 backdrop-blur-sm bg-opacity-95">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-laptop-code text-[var(--accent3-color)] text-lg"
+                                                aria-hidden=true></i>
+                                            <span class="font-semibold text-[var(--dark-text-color)] text-sm">567
+                                                Designers</span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="absolute bottom-4 right-4 bg-white rounded-lg shadow-xl px-4 py-3 backdrop-blur-sm bg-opacity-95">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-briefcase text-[var(--accent2-color)] text-lg"
+                                                aria-hidden=true></i>
+                                            <span class="font-semibold text-[var(--dark-text-color)] text-sm">429
+                                                Consultants</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <section
+                        class="code-section relative bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] py-16 sm:py-20 lg:py-24 overflow-hidden"
+                        id=s7zuga>
+
+                        <div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full opacity-5 blur-3xl"></div>
+                        <div class="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full opacity-5 blur-3xl"></div>
+
+                        <div
+                            class="absolute top-20 left-10 w-20 h-20 border-4 border-white opacity-20 rounded-lg transform rotate-12 animate-spin-slow">
+                        </div>
+                        <div
+                            class="absolute bottom-20 right-20 w-16 h-16 border-4 border-white opacity-20 rounded-full animate-bounce-slow">
+                        </div>
+                        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                            <h2
+                                class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white font-[var(--font-family-heading)] mb-6">
+                                Ready to Modernize Your Networking?
+                            </h2>
+                            <p
+                                class="text-xl sm:text-2xl text-white text-opacity-95 font-[var(--font-family-body)] mb-4 max-w-3xl mx-auto leading-relaxed">
+                                Join thousands of professionals and businesses who are sharing their
+                                profiles smarter.
+                            </p>
+                            <p
+                                class="text-lg text-white text-opacity-90 font-[var(--font-family-body)] mb-10 max-w-2xl mx-auto">
+                                Create your free digital profile today and start making lasting
+                                impressions.
+                            </p>
+
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                                <a href=register.html
+                                    class="inline-flex items-center justify-center bg-white text-[var(--primary-color)] px-10 py-5 rounded-[var(--button-rounded-radius)] hover:bg-opacity-90 transition-all duration-200 font-bold font-[var(--font-family-body)] text-lg shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 hover:scale-105">
+                                    <i class="fas fa-user-plus mr-3 text-xl" aria-hidden=true></i>
+                                    Create Your Profile Now
+                                </a>
+                                <a href=products.html
+                                    class="inline-flex items-center justify-center bg-transparent text-white border-3 border-white px-10 py-5 rounded-[var(--button-rounded-radius)] hover:bg-white hover:text-[var(--primary-color)] transition-all duration-200 font-bold font-[var(--font-family-body)] text-lg shadow-lg">
+                                    <i class="fas fa-dollar-sign mr-3 text-xl" aria-hidden=true></i>
+                                    View Plans
+                                </a>
+                            </div>
+
+                            <div class="flex flex-wrap items-center justify-center gap-8 text-white text-opacity-90">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-shield-alt text-2xl" aria-hidden=true></i>
+                                    <span class=font-[var(--font-family-body)]>Secure & Private</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-clock text-2xl" aria-hidden=true></i>
+                                    <span class=font-[var(--font-family-body)]>5-Minute Setup</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-credit-card text-2xl" aria-hidden=true></i>
+                                    <span class=font-[var(--font-family-body)]>No Card Required</span>
+                                </div>
+                            </div>
+                        </div>
+                        <style class=sf-hidden>
+                            @keyframes spin-slow {
+                                from {
+                                    transform: rotate(12deg)
+                                }
+
+                                to {
+                                    transform: rotate(372deg)
+                                }
+                            }
+
+                            @keyframes bounce-slow {
+
+                                0%,
+                                100% {
+                                    transform: translateY(0)
+                                }
+
+                                50% {
+                                    transform: translateY(-20px)
+                                }
+                            }
+
+                            .animate-spin-slow {
+                                animation: spin-slow 20s linear infinite
+                            }
+
+                            .animate-bounce-slow {
+                                animation: bounce-slow 3s ease-in-out infinite
+                            }
+                        </style>
+                    </section>
+                </div>
+                <div>
+                    <footer id=global-footer
+                        class="code-section bg-[var(--dark-background-color)] text-white py-12 sm:py-16">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+
+                                <div class=col-span-1>
+                                    <a href=register.html class="inline-block mb-4">
+                                        
+                                    </a>
+                                    <p class="text-gray-400 font-[var(--font-family-body)] mb-6 leading-relaxed">
+                                        Create professional digital profiles and business cards. Share your
+                                        contact information effortlessly with NFC technology.
+                                    </p>
+
+                                    <div class="flex gap-4">
+                                        <a href=#
+                                            class="w-10 h-10 bg-white bg-opacity-10 rounded-full flex items-center justify-center hover:bg-[var(--primary-color)] transition-colors duration-200">
+                                            <i class="fab fa-facebook-f" aria-hidden=true></i>
+                                        </a>
+                                        <a href=#
+                                            class="w-10 h-10 bg-white bg-opacity-10 rounded-full flex items-center justify-center hover:bg-[var(--primary-color)] transition-colors duration-200">
+                                            <i class="fab fa-twitter" aria-hidden=true></i>
+                                        </a>
+                                        <a href=#
+                                            class="w-10 h-10 bg-white bg-opacity-10 rounded-full flex items-center justify-center hover:bg-[var(--primary-color)] transition-colors duration-200">
+                                            <i class="fab fa-linkedin-in" aria-hidden=true></i>
+                                        </a>
+                                        <a href=#
+                                            class="w-10 h-10 bg-white bg-opacity-10 rounded-full flex items-center justify-center hover:bg-[var(--primary-color)] transition-colors duration-200">
+                                            <i class="fab fa-instagram" aria-hidden=true></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h3 class="text-lg font-bold font-[var(--font-family-heading)] mb-4">
+                                        Quick Links
+                                    </h3>
+                                    <ul class="space-y-3 font-[var(--font-family-body)]">
+                                        <li>
+                                            <a href="index.html"
+                                                class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-200">Home</a>
+                                        </li>
+                                        <li>
+                                            <a href="business-categories.html"
+                                                class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-200">Business
+                                                Categories</a>
+                                        </li>
+                                        <li>
+                                            <a href="search-businesses.html"
+                                                class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-200">Search
+                                                Businesses</a>
+                                        </li>
+                                        <li>
+                                            <a href="pricing.html"
+                                                class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-200">Pricing</a>
+                                        </li>
+                                        <li>
+                                            <a href="help-center.html"
+                                                class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-200">Help
+                                                Center</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div>
+                                    <h3 class="text-lg font-bold font-[var(--font-family-heading)] mb-4">
+                                        Account
+                                    </h3>
+                                    <ul class="space-y-3 font-[var(--font-family-body)]">
+                                        <li>
+                                            <a href="register.html"
+                                                class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-200">Login</a>
+                                        </li>
+                                        <li>
+                                            <a href="register.html"
+                                                class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-200">Register</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"
+                                                class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-200">Dashboard</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"
+                                                class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-200">Business
+                                                Profile</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"
+                                                class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-200">Personal
+                                                Profile</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div>
+                                    <h3 class="text-lg font-bold font-[var(--font-family-heading)] mb-4">
+                                        Legal
+                                    </h3>
+                                    <ul class="space-y-3 font-[var(--font-family-body)]">
+                                        <li>
+                                            <a href="terms-of-service.html"
+                                                class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-200">Terms
+                                                of Service</a>
+                                        </li>
+                                        <li>
+                                            <a href="privacy-policy.html"
+                                                class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-200">Privacy
+                                                Policy</a>
+                                        </li>
+                                        <li>
+                                            <a href="contact-us.html"
+                                                class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-200">Contact
+                                                Us</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-gray-700 pt-8">
+                                <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                                    <p
+                                        class="text-gray-400 font-[var(--font-family-body)] text-sm text-center sm:text-left">
+                                        © 2025 busprofile. All rights reserved.
+                                    </p>
+                                    <p
+                                        class="text-gray-400 font-[var(--font-family-body)] text-sm text-center sm:text-right">
+                                        Made with <i class="fas fa-heart text-[var(--accent-color)]"
+                                            aria-hidden=true></i> for
+                                        better networking
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+</body>
+</html>

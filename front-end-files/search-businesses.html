@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Businesses - BizBio Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+        <link rel="stylesheet" href="site.css">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Comfortaa:wght@300..700&family=Gabarito:wght@400..900&family=Gantari:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 47.4% 11.2%;
+            --primary: 222.2 47.4% 11.2%;
+            --radius: 0.5rem;
+        }
+
+        .business-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .business-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0/0.1);
+        }
+    </style>
+</head>
+<body class="h-full bg-gray-50">
+    <header id=global-header class="code-section sticky bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-28">
+
+            <a href="#" class="flex-shrink-0" style="display: flex;align-items: center;">
+                <img src="logo.png" alt="bizbio" class="h-20 py-2" data-logo="">
+            <span class="red-hat-display text-4xl font-bold text-[var(--dark-text-color)]">BiZBiO</span></a>
+
+            <nav class="hidden lg:flex items-center space-x-8">
+                <a href=products.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Products</a>
+                <a href=pricing.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Pricing</a>
+                <a href=search-businesses.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Businesses</a>
+                <a href=contact.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Contact</a>
+                <a href=claim-profile.html
+                    class="bg-[var(--primary-color)] text-[var(--primary-button-text-color)] px-6 py-3 rounded-[var(--button-rounded-radius)] hover:bg-[var(--primary-button-hover-bg-color)] transition-all duration-200 font-semibold font-[var(--font-family-body)]">Claim Your Profile</a>
+            </nav>
+
+            <button data-landingsite-mobile-menu-toggle
+                class="lg:hidden text-[var(--dark-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 sf-hidden">
+
+            </button>
+        </div>
+
+        <nav data-landingsite-mobile-menu class="hidden lg:hidden pb-4 sf-hidden">
+
+        </nav>
+    </div>
+</header>
+
+    <!-- Search Section -->
+    <section class="bg-white border-b border-gray-200 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto">
+                <h1 class="text-3xl font-bold text-gray-900 mb-6">Search Businesses</h1>
+                <div class="relative">
+                    <input
+                        type="text"
+                        placeholder="Search by business name, category, or location..."
+                        class="w-full px-6 py-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg pr-24"
+                        value="Restaurants"
+                    >
+                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
+                        <i class="fas fa-search mr-2"></i>Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Filters Sidebar -->
+                <div class="lg:w-64 flex-shrink-0">
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-24">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Filters</h3>
+
+                        <!-- Category Filter -->
+                        <div class="mb-6">
+                            <h4 class="font-semibold text-gray-900 mb-3">Category</h4>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500" checked>
+                                    <span class="ml-2 text-sm text-gray-700">Restaurants (234)</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-700">Professional (156)</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-700">Retail (189)</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-700">Health (98)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Location Filter -->
+                        <div class="mb-6">
+                            <h4 class="font-semibold text-gray-900 mb-3">Location</h4>
+                            <select class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
+                                <option>All Locations</option>
+                                <option>Cape Town</option>
+                                <option>Johannesburg</option>
+                                <option>Durban</option>
+                                <option>Pretoria</option>
+                                <option>Port Elizabeth</option>
+                            </select>
+                        </div>
+
+                        <!-- Plan Type Filter -->
+                        <div class="mb-6">
+                            <h4 class="font-semibold text-gray-900 mb-3">Plan Type</h4>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-700">Professional</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-700">Menu</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-700">Retail</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-200 text-sm font-semibold">
+                            Clear All Filters
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results List -->
+                <div class="flex-1">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900">234 Results</h2>
+                            <p class="text-gray-600">Showing restaurants in all locations</p>
+                        </div>
+                        <select class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500">
+                            <option>Most Recent</option>
+                            <option>Most Popular</option>
+                            <option>A-Z</option>
+                            <option>Z-A</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Business Card 1 -->
+                        <div class="business-card bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <div class="md:w-32 md:h-32 bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-utensils text-orange-600 text-4xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-start justify-between mb-2">
+                                        <div>
+                                            <h3 class="text-xl font-bold text-gray-900 mb-1">The Garden Bistro</h3>
+                                            <p class="text-gray-600 text-sm mb-2">
+                                                <i class="fas fa-map-marker-alt text-gray-400 mr-1"></i>
+                                                Camps Bay, Cape Town
+                                            </p>
+                                        </div>
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">
+                                            BizBio Menu
+                                        </span>
+                                    </div>
+                                    <p class="text-gray-700 mb-4">
+                                        Farm-to-table restaurant featuring seasonal South African cuisine with stunning ocean views. Digital menu with allergen information and daily specials.
+                                    </p>
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                        <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full">Fine Dining</span>
+                                        <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full">Vegan Options</span>
+                                        <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full">Ocean View</span>
+                                    </div>
+                                    <div class="flex items-center gap-4">
+                                        <a href="#" class="text-blue-600 hover:text-blue-700 font-semibold text-sm">
+                                            <i class="fas fa-external-link-alt mr-1"></i>View Profile
+                                        </a>
+                                        <a href="#" class="text-gray-600 hover:text-gray-700 text-sm">
+                                            <i class="fas fa-qrcode mr-1"></i>View Menu
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Business Card 2 -->
+                        <div class="business-card bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <div class="md:w-32 md:h-32 bg-gradient-to-br from-red-100 to-red-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-pizza-slice text-red-600 text-4xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-start justify-between mb-2">
+                                        <div>
+                                            <h3 class="text-xl font-bold text-gray-900 mb-1">Napoli Pizza House</h3>
+                                            <p class="text-gray-600 text-sm mb-2">
+                                                <i class="fas fa-map-marker-alt text-gray-400 mr-1"></i>
+                                                Sandton, Johannesburg
+                                            </p>
+                                        </div>
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">
+                                            BizBio Menu
+                                        </span>
+                                    </div>
+                                    <p class="text-gray-700 mb-4">
+                                        Authentic Italian pizzeria with wood-fired oven. Browse our digital menu with nutritional information and gluten-free options.
+                                    </p>
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                        <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full">Italian</span>
+                                        <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full">Gluten-Free</span>
+                                        <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full">Family Friendly</span>
+                                    </div>
+                                    <div class="flex items-center gap-4">
+                                        <a href="#" class="text-blue-600 hover:text-blue-700 font-semibold text-sm">
+                                            <i class="fas fa-external-link-alt mr-1"></i>View Profile
+                                        </a>
+                                        <a href="#" class="text-gray-600 hover:text-gray-700 text-sm">
+                                            <i class="fas fa-qrcode mr-1"></i>View Menu
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Business Card 3 -->
+                        <div class="business-card bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <div class="md:w-32 md:h-32 bg-gradient-to-br from-green-100 to-green-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-leaf text-green-600 text-4xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-start justify-between mb-2">
+                                        <div>
+                                            <h3 class="text-xl font-bold text-gray-900 mb-1">Green Bowl Cafe</h3>
+                                            <p class="text-gray-600 text-sm mb-2">
+                                                <i class="fas fa-map-marker-alt text-gray-400 mr-1"></i>
+                                                Umhlanga, Durban
+                                            </p>
+                                        </div>
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">
+                                            BizBio Menu
+                                        </span>
+                                    </div>
+                                    <p class="text-gray-700 mb-4">
+                                        Plant-based cafe serving fresh, locally-sourced ingredients. Digital menu with full nutritional breakdown and allergen alerts.
+                                    </p>
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                        <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full">Vegan</span>
+                                        <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full">Organic</span>
+                                        <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full">Healthy</span>
+                                    </div>
+                                    <div class="flex items-center gap-4">
+                                        <a href="#" class="text-blue-600 hover:text-blue-700 font-semibold text-sm">
+                                            <i class="fas fa-external-link-alt mr-1"></i>View Profile
+                                        </a>
+                                        <a href="#" class="text-gray-600 hover:text-gray-700 text-sm">
+                                            <i class="fas fa-qrcode mr-1"></i>View Menu
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Business Card 4 -->
+                        <div class="business-card bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                            <div class="flex flex-col md:flex-row gap-6">
+                                <div class="md:w-32 md:h-32 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-coffee text-yellow-600 text-4xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-start justify-between mb-2">
+                                        <div>
+                                            <h3 class="text-xl font-bold text-gray-900 mb-1">Bean & Co Coffee Shop</h3>
+                                            <p class="text-gray-600 text-sm mb-2">
+                                                <i class="fas fa-map-marker-alt text-gray-400 mr-1"></i>
+                                                Hatfield, Pretoria
+                                            </p>
+                                        </div>
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">
+                                            BizBio Menu
+                                        </span>
+                                    </div>
+                                    <p class="text-gray-700 mb-4">
+                                        Artisan coffee shop with specialty brews and homemade pastries. Scan QR code to see our full menu and daily specials.
+                                    </p>
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                        <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full">Coffee</span>
+                                        <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full">Bakery</span>
+                                        <span class="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full">WiFi</span>
+                                    </div>
+                                    <div class="flex items-center gap-4">
+                                        <a href="#" class="text-blue-600 hover:text-blue-700 font-semibold text-sm">
+                                            <i class="fas fa-external-link-alt mr-1"></i>View Profile
+                                        </a>
+                                        <a href="#" class="text-gray-600 hover:text-gray-700 text-sm">
+                                            <i class="fas fa-qrcode mr-1"></i>View Menu
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="flex items-center justify-center gap-2 mt-8">
+                        <button class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold">1</button>
+                        <button class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200">2</button>
+                        <button class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200">3</button>
+                        <button class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200">4</button>
+                        <button class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-r from-blue-600 to-purple-600">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Want Your Business Listed?</h2>
+            <p class="text-xl text-blue-100 mb-8">Join hundreds of businesses on BizBio and get discovered by more customers.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="register.html" class="bg-white text-blue-600 px-8 py-4 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-semibold text-lg">
+                    Get Started Free
+                </a>
+                <a href="claim-profile.html" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg hover:bg-white hover:text-blue-600 transition-all duration-200 font-semibold text-lg">
+                    Claim Your Profile
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-white text-lg font-bold mb-4">BizBio</h3>
+                    <p class="text-sm">Digital profiles, menus, and catalogs for modern businesses.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="products.html" class="hover:text-white transition-colors">Products</a></li>
+                        <li><a href="pricing.html" class="hover:text-white transition-colors">Pricing</a></li>
+                        <li><a href="business-categories.html" class="hover:text-white transition-colors">Categories</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="contact.html" class="hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="help-center.html" class="hover:text-white transition-colors">Help Center</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="privacy-policy.html" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms-of-service.html" class="hover:text-white transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
+                <p>&copy; 2025 BizBio. All rights reserved. Built for South African businesses.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

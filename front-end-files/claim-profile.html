@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claim Your Profile - BizBio Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="site.css">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Comfortaa:wght@300..700&family=Gabarito:wght@400..900&family=Gantari:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+</head>
+<body class="h-full bg-gray-50">
+    <header id=global-header class="code-section sticky bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-28">
+
+            <a href="#" class="flex-shrink-0" style="display: flex;align-items: center;">
+                <img src="logo.png" alt="bizbio" class="h-20 py-2" data-logo="">
+            <span class="red-hat-display text-4xl font-bold text-[var(--dark-text-color)]">BiZBiO</span></a>
+
+            <nav class="hidden lg:flex items-center space-x-8">
+                <a href=products.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Products</a>
+                <a href=pricing.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Pricing</a>
+                <a href=search-businesses.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Businesses</a>
+                <a href=contact.html
+                    class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">Contact</a>
+                <a href=claim-profile.html
+                    class="bg-[var(--primary-color)] text-[var(--primary-button-text-color)] px-6 py-3 rounded-[var(--button-rounded-radius)] hover:bg-[var(--primary-button-hover-bg-color)] transition-all duration-200 font-semibold font-[var(--font-family-body)]">Claim Your Profile</a>
+            </nav>
+
+            <button data-landingsite-mobile-menu-toggle
+                class="lg:hidden text-[var(--dark-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 sf-hidden">
+
+            </button>
+        </div>
+
+        <nav data-landingsite-mobile-menu class="hidden lg:hidden pb-4 sf-hidden">
+
+        </nav>
+    </div>
+</header>
+
+    <section class="relative bg-gradient-to-br from-blue-50 to-purple-50 overflow-hidden py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">Claim Your Profile</h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Take control of your business listing on BizBio and start connecting with customers digitally
+            </p>
+        </div>
+    </section>
+
+    <section class="py-16 bg-white">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-lg shadow-md border border-gray-200 p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Claim Process</h2>
+                <div class="space-y-6 mb-8">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-blue-100 rounded-full w-10 h-10 flex items-center justify-center mr-4">
+                            <span class="font-bold text-blue-600">1</span>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900 mb-1">Search for your business</h3>
+                            <p class="text-gray-600 text-sm">Enter your business name to see if it's already listed on BizBio</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-blue-100 rounded-full w-10 h-10 flex items-center justify-center mr-4">
+                            <span class="font-bold text-blue-600">2</span>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900 mb-1">Verify ownership</h3>
+                            <p class="text-gray-600 text-sm">Provide documentation proving you own or manage the business</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 bg-blue-100 rounded-full w-10 h-10 flex items-center justify-center mr-4">
+                            <span class="font-bold text-blue-600">3</span>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900 mb-1">Get approved</h3>
+                            <p class="text-gray-600 text-sm">We'll review and approve your claim within 24-48 hours</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="space-y-6">
+                    <div>
+                        <label for="business-name" class="block text-sm font-semibold text-gray-900 mb-2">Business Name *</label>
+                        <input id="business-name" type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label for="business-type" class="block text-sm font-semibold text-gray-900 mb-2">Business Type *</label>
+                        <select id="business-type" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Select business type</option>
+                            <option>Restaurant</option>
+                            <option>Retail Store</option>
+                            <option>Professional Services</option>
+                            <option>Healthcare</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="registration-number" class="block text-sm font-semibold text-gray-900 mb-2">Business Registration Number</label>
+                        <input id="registration-number" type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label for="your-name" class="block text-sm font-semibold text-gray-900 mb-2">Your Full Name *</label>
+                        <input id="your-name" type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label for="your-email" class="block text-sm font-semibold text-gray-900 mb-2">Your Email *</label>
+                        <input id="your-email" type="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label for="your-phone" class="block text-sm font-semibold text-gray-900 mb-2">Your Phone Number *</label>
+                        <input id="your-phone" type="tel" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label for="role" class="block text-sm font-semibold text-gray-900 mb-2">Your Role *</label>
+                        <select id="role" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Select your role</option>
+                            <option>Owner</option>
+                            <option>Manager</option>
+                            <option>Authorized Representative</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="proof" class="block text-sm font-semibold text-gray-900 mb-2">Proof of Ownership *</label>
+                        <input id="proof" type="file" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <p class="mt-1 text-xs text-gray-500">Upload business registration, letterhead, or utility bill (PDF, JPG, PNG - max 5MB)</p>
+                    </div>
+
+                    <div>
+                        <label for="additional-info" class="block text-sm font-semibold text-gray-900 mb-2">Additional Information</label>
+                        <textarea id="additional-info" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-blue-600 text-white py-4 px-6 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold text-lg">
+                        <i class="fas fa-check-circle mr-2"></i>Submit Claim Request
+                    </button>
+                </form>
+            </div>
+
+            <div class="mt-8 bg-blue-50 rounded-lg p-6">
+                <h3 class="font-semibold text-gray-900 mb-2">Don't see your business listed?</h3>
+                <p class="text-gray-700 mb-4">Create a new profile instead and get started immediately.</p>
+                <a href="register.html" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
+                    Create New Profile
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div><h3 class="text-white text-lg font-bold mb-4">BizBio</h3><p class="text-sm">Digital profiles, menus, and catalogs for modern businesses.</p></div>
+                <div><h4 class="text-white font-semibold mb-4">Product</h4><ul class="space-y-2 text-sm"><li><a href="products.html" class="hover:text-white">Products</a></li><li><a href="pricing.html" class="hover:text-white">Pricing</a></li></ul></div>
+                <div><h4 class="text-white font-semibold mb-4">Company</h4><ul class="space-y-2 text-sm"><li><a href="contact.html" class="hover:text-white">Contact</a></li><li><a href="help-center.html" class="hover:text-white">Help Center</a></li></ul></div>
+                <div><h4 class="text-white font-semibold mb-4">Legal</h4><ul class="space-y-2 text-sm"><li><a href="privacy-policy.html" class="hover:text-white">Privacy Policy</a></li><li><a href="terms-of-service.html" class="hover:text-white">Terms of Service</a></li></ul></div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm"><p>&copy; 2025 BizBio. All rights reserved.</p></div>
+        </div>
+    </footer>
+</body>
+</html>
