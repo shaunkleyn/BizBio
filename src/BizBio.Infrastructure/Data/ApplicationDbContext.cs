@@ -20,9 +20,14 @@ public class ApplicationDbContext : DbContext
     public DbSet<CatalogItem> CatalogItems => Set<CatalogItem>();
     public DbSet<RestaurantTable> RestaurantTables => Set<RestaurantTable>();
     public DbSet<NFCScan> NFCScans => Set<NFCScan>();
+    public DbSet<Product> Products => Set<Product>();
+    public DbSet<ProductAddOn> ProductAddOns => Set<ProductAddOn>();
 
     // Lookup Tables
     public DbSet<ProductLineLookup> ProductLines => Set<ProductLineLookup>();
+    public DbSet<ProductTypeLookup> ProductTypes => Set<ProductTypeLookup>();
+    public DbSet<ProductCategoryLookup> ProductCategories => Set<ProductCategoryLookup>();
+    public DbSet<AddOnTypeLookup> AddOnTypes => Set<AddOnTypeLookup>();
     public DbSet<SubscriptionStatusLookup> SubscriptionStatuses => Set<SubscriptionStatusLookup>();
     public DbSet<BillingCycleLookup> BillingCycles => Set<BillingCycleLookup>();
     public DbSet<TableCategoryLookup> TableCategories => Set<TableCategoryLookup>();
@@ -263,8 +268,85 @@ public class ApplicationDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+        // Product Configuration
+        modelBuilder.Entity<Product>(entity =>
+        {
+            entity.ToTable("Products");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.SKU).IsUnique();
+            entity.HasIndex(e => e.ProductTypeId);
+            entity.HasIndex(e => e.ProductCategoryId);
+            entity.HasIndex(e => e.IsActive);
+            entity.HasIndex(e => e.IsFeatured);
+
+            entity.Property(e => e.Name).HasMaxLength(200).IsRequired();
+            entity.Property(e => e.SKU).HasMaxLength(100).IsRequired();
+            entity.Property(e => e.Price).HasPrecision(10, 2);
+            entity.Property(e => e.MonthlyPrice).HasPrecision(10, 2);
+            entity.Property(e => e.AnnualPrice).HasPrecision(10, 2);
+            entity.Property(e => e.AnnualDiscountPercent).HasPrecision(5, 2);
+            entity.Property(e => e.SalePrice).HasPrecision(10, 2);
+            entity.Property(e => e.CostPrice).HasPrecision(10, 2);
+
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
+            entity.HasOne(e => e.ProductType)
+                .WithMany(p => p.Products)
+                .HasForeignKey(e => e.ProductTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.ProductCategory)
+                .WithMany(p => p.Products)
+                .HasForeignKey(e => e.ProductCategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.ProductLine)
+                .WithMany()
+                .HasForeignKey(e => e.ProductLineId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Many-to-many relationship with ProductAddOns
+            entity.HasMany(e => e.CompatibleAddOns)
+                .WithMany(a => a.ApplicableProducts)
+                .UsingEntity(j => j.ToTable("ProductAddOnMappings"));
+        });
+
+        // ProductAddOn Configuration
+        modelBuilder.Entity<ProductAddOn>(entity =>
+        {
+            entity.ToTable("ProductAddOns");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.SKU).IsUnique();
+            entity.HasIndex(e => e.AddOnTypeId);
+            entity.HasIndex(e => e.ProductId);
+            entity.HasIndex(e => e.IsActive);
+
+            entity.Property(e => e.Name).HasMaxLength(100).IsRequired();
+            entity.Property(e => e.SKU).HasMaxLength(50).IsRequired();
+            entity.Property(e => e.Price).HasPrecision(10, 2);
+            entity.Property(e => e.MonthlyPrice).HasPrecision(10, 2);
+            entity.Property(e => e.AnnualPrice).HasPrecision(10, 2);
+
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
+            entity.HasOne(e => e.AddOnType)
+                .WithMany(a => a.AddOns)
+                .HasForeignKey(e => e.AddOnTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.Product)
+                .WithMany(p => p.AddOns)
+                .HasForeignKey(e => e.ProductId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
         // Lookup Table Configurations
         ConfigureLookupTable<ProductLineLookup>(modelBuilder, "ProductLines");
+        ConfigureLookupTable<ProductTypeLookup>(modelBuilder, "ProductTypes");
+        ConfigureLookupTable<ProductCategoryLookup>(modelBuilder, "ProductCategories");
+        ConfigureLookupTable<AddOnTypeLookup>(modelBuilder, "AddOnTypes");
         ConfigureLookupTable<SubscriptionStatusLookup>(modelBuilder, "SubscriptionStatuses");
         ConfigureLookupTable<BillingCycleLookup>(modelBuilder, "BillingCycles");
         ConfigureLookupTable<TableCategoryLookup>(modelBuilder, "TableCategories");

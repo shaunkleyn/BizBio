@@ -72,6 +72,8 @@ builder.Services.AddScoped<IUserSubscriptionRepository, UserSubscriptionReposito
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<ICatalogRepository, CatalogRepository>();
 builder.Services.AddScoped<IRestaurantTableRepository, RestaurantTableRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductAddOnRepository, ProductAddOnRepository>();
 
 // Service Registration
 builder.Services.AddScoped<IAuthService, AuthService>();
