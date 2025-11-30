@@ -1,16 +1,17 @@
 <template>
   <div class="min-h-screen flex flex-col">
     <!-- Global Header -->
-    <header id="global-header" class="bg-white shadow-md sticky top-0 z-50">
+    <header id="global-header" class="bg-white bg-opacity-70 bg-blur-[10px] dark:bg-[var(--dark-bg)] shadow-md sticky top-0 z-50  transparent-navbar">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-28">
+        <div class="flex justify-between items-center h-20">
           <!-- Logo -->
-          <NuxtLink to="/" class="flex-shrink-0">
+          <NuxtLink to="/" class="flex-shrink-0 justify-between items-center flex flex-row">
             <img
-              src="/151.avif"
+              src="/logo.png"
               alt="BizBio"
-              class="h-28 py-2"
+              class="h-20 py-4"
             />
+            <a class="text-4xl monterrat text-[var(--primary-color)]">BiZBiO</a>
           </NuxtLink>
 
           <!-- Desktop Navigation -->
@@ -23,21 +24,25 @@
                 Login
               </NuxtLink>
               <NuxtLink
-                to="/categories"
+                to="/products"
                 class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]"
               >
-                Business Categories
+                Products
+              </NuxtLink>
+              <NuxtLink
+                to="/pricing"
+                class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">
+                Pricing
               </NuxtLink>
               <NuxtLink
                 to="/search"
                 class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]"
               >
-                Search Businesses
+                Businesses
               </NuxtLink>
               <NuxtLink
                 to="/help"
-                class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]"
-              >
+                class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]">
                 Help Center
               </NuxtLink>
               <NuxtLink

@@ -27,6 +27,9 @@ export const useApi = () => {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`
         }
+
+        // Add start time for tracking
+        config.metadata = { startTime: Date.now() }
       }
       return config
     },
@@ -37,8 +40,76 @@ export const useApi = () => {
 
   // Add response interceptor for error handling
   apiClient.interceptors.response.use(
-    (response) => response,
+    (response) => {
+      // Track successful API calls
+      if (import.meta.client && response.config.metadata?.startTime) {
+        try {
+          const duration = Date.now() - response.config.metadata.startTime
+          const method = response.config.method?.toUpperCase() || 'GET'
+          const url = `${response.config.baseURL}${response.config.url}`
+
+          // Use window.$nuxt to avoid SSR issues
+          if (typeof window !== 'undefined' && (window as any).$nuxt?.$trackDependency) {
+            (window as any).$nuxt.$trackDependency(
+              `${method} ${response.config.url}`,
+              method,
+              url,
+              duration,
+              true,
+              response.status,
+              {
+                responseSize: JSON.stringify(response.data).length,
+                endpoint: response.config.url
+              }
+            )
+          }
+        } catch (err) {
+          // Fail silently if tracking fails
+          console.debug('Tracking error:', err)
+        }
+      }
+      return response
+    },
     (error) => {
+      // Track failed API calls
+      if (import.meta.client && error.config?.metadata?.startTime) {
+        try {
+          const duration = Date.now() - error.config.metadata.startTime
+          const method = error.config.method?.toUpperCase() || 'GET'
+          const url = `${error.config.baseURL}${error.config.url}`
+          const statusCode = error.response?.status || 0
+
+          // Use window.$nuxt to avoid SSR issues
+          if (typeof window !== 'undefined' && (window as any).$nuxt?.$trackDependency) {
+            (window as any).$nuxt.$trackDependency(
+              `${method} ${error.config.url}`,
+              method,
+              url,
+              duration,
+              false,
+              statusCode,
+              {
+                errorMessage: error.message,
+                endpoint: error.config.url
+              }
+            )
+          }
+
+          // Track as exception for 5xx errors
+          if (statusCode >= 500 && typeof window !== 'undefined' && (window as any).$nuxt?.$trackException) {
+            (window as any).$nuxt.$trackException(new Error(`API Error: ${method} ${error.config.url} - ${statusCode}`), {
+              endpoint: error.config.url,
+              statusCode,
+              duration,
+              errorMessage: error.response?.data?.message || error.message
+            })
+          }
+        } catch (err) {
+          // Fail silently if tracking fails
+          console.debug('Tracking error:', err)
+        }
+      }
+
       // Only redirect to login if:
       // 1. We got a 401 error
       // 2. It's NOT from the login endpoint

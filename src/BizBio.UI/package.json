@@ -8,16 +8,26 @@
     "build": "nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "start": "node .output/server/index.mjs",
+    "pm2:start": "pm2 start ecosystem.config.cjs --env production",
+    "pm2:stop": "pm2 stop bizbio-frontend",
+    "pm2:restart": "pm2 restart bizbio-frontend",
+    "pm2:delete": "pm2 delete bizbio-frontend",
+    "pm2:logs": "pm2 logs bizbio-frontend",
+    "pm2:monit": "pm2 monit",
+    "deploy": "npm run build && npm run pm2:restart"
   },
   "dependencies": {
     "@nuxt/image": "^1.8.1",
     "@pinia/nuxt": "^0.5.5",
+    "@microsoft/applicationinsights-web": "^3.0.7",
     "axios": "^1.7.9",
-    "nuxt": "^3.15.0",
+    "nuxt": "3.15.0",
     "pinia": "^2.2.8",
     "vue": "^3.5.13",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.4.5",
+    "vue-gtag": "^2.0.1"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.12.2",

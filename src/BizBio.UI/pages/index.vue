@@ -1,7 +1,22 @@
 <template>
   <div>
+
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-[var(--light-background-color)] to-white overflow-hidden py-16 sm:py-20 lg:py-24">
+      <div class="area">
+			<ul class="circles">
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+		</div>
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Decorative Background Blobs -->
         <div class="absolute top-20 right-10 w-72 h-72 bg-[var(--accent3-color)] rounded-full opacity-10 blur-3xl"></div>
@@ -58,7 +73,7 @@
           <!-- Right Column: Hero Image with Floating Stats -->
           <div class="relative group">
             <img
-              src="/152.avif"
+              src="/img_2.webp"
               alt="Business Profile Platform"
               class="w-full rounded-2xl shadow-2xl hover:scale-105 transition-transform duration-300"
             />
@@ -66,8 +81,8 @@
             <!-- Floating Stats Cards -->
             <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-xl animate-float">
               <div class="flex items-center gap-3">
-                <div class="bg-[var(--accent3-color)] bg-opacity-10 rounded-full p-3">
-                  <i class="fas fa-users text-[var(--accent3-color)] text-xl"></i>
+                <div class="bg-[var(--accent3-color)] bg-opacity-10 rounded-full p-3 size-12">
+                  <i class="fa fa-calendar-star text-white text-xl"></i>
                 </div>
                 <div>
                   <div class="text-2xl font-bold text-[var(--dark-text-color)]">10K+</div>
@@ -78,8 +93,8 @@
 
             <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-xl animate-float" style="animation-delay: 1s;">
               <div class="flex items-center gap-3">
-                <div class="bg-[var(--primary-color)] bg-opacity-10 rounded-full p-3">
-                  <i class="fas fa-chart-line text-[var(--primary-color)] text-xl"></i>
+                <div class="bg-[var(--primary-color)] bg-opacity-10 rounded-full p-3 size-12">
+                  <i class="fas fa-chart-line text-white text-xl"></i>
                 </div>
                 <div>
                   <div class="text-2xl font-bold text-[var(--dark-text-color)]">98%</div>
@@ -93,7 +108,7 @@
     </section>
 
     <!-- Features Section -->
-    <section class="bg-white py-16 sm:py-20 lg:py-24">
+    <section class="bg-mesh-1 py-16 sm:py-20 lg:py-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-4">
@@ -224,7 +239,7 @@
           <!-- Left: Image -->
           <div class="order-2 lg:order-1">
             <img
-              src="/153.avif"
+              src="/img_1.webp"
               alt="How It Works"
               class="w-full rounded-2xl shadow-2xl"
             />
@@ -317,7 +332,7 @@
             <div class="flex gap-6">
               <div class="flex-shrink-0">
                 <div class="bg-[var(--primary-color)] bg-opacity-10 rounded-full w-14 h-14 flex items-center justify-center">
-                  <i class="fas fa-search text-[var(--primary-color)] text-2xl"></i>
+                  <i class="fal fa-search text-white text-2xl"></i>
                 </div>
               </div>
               <div>
@@ -334,7 +349,7 @@
             <div class="flex gap-6">
               <div class="flex-shrink-0">
                 <div class="bg-[var(--accent3-color)] bg-opacity-10 rounded-full w-14 h-14 flex items-center justify-center">
-                  <i class="fas fa-star text-[var(--accent3-color)] text-2xl"></i>
+                  <i class="fal fa-star text-white text-2xl"></i>
                 </div>
               </div>
               <div>
@@ -351,7 +366,7 @@
             <div class="flex gap-6">
               <div class="flex-shrink-0">
                 <div class="bg-[var(--accent2-color)] bg-opacity-10 rounded-full w-14 h-14 flex items-center justify-center">
-                  <i class="fas fa-map-marker-alt text-[var(--accent2-color)] text-2xl"></i>
+                  <i class="fal fa-map-marker-alt text-white text-2xl"></i>
                 </div>
               </div>
               <div>

@@ -33,8 +33,11 @@ export default {
       },
       borderRadius: {
         'button': '6px'
-      }
+      },
+      
     },
+
   },
+  darkMode: 'class',
   plugins: [],
 }
