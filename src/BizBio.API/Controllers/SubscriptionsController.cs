@@ -41,7 +41,7 @@ public class SubscriptionsController : ControllerBase
 
         if (!string.IsNullOrEmpty(productLine))
         {
-            tiers = tiers.Where(t => t.ProductLine.ToString().Equals(productLine, StringComparison.OrdinalIgnoreCase)).ToList();
+            tiers = tiers.Where(t => t.ProductLine.Name.ToString().Equals(productLine, StringComparison.OrdinalIgnoreCase)).ToList();
             _logger.LogInformation("Filtered tiers by product line: {ProductLine}. Count: {Count}", productLine, tiers.Count());
         }
 

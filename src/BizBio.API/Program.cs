@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using BizBio.API.Middleware;
 using BizBio.Core.Interfaces;
 using BizBio.Infrastructure.Data;
@@ -92,6 +93,14 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// Rate Limiting Configuration
+builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
+builder.Services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+builder.Services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+builder.Services.AddInMemoryRateLimiting();
+
 // Swagger/OpenAPI Configuration
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -156,6 +165,12 @@ var app = builder.Build();
 // Exception handling should be first to catch all errors
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
+// Anti-bot protection should be early
+app.UseMiddleware<AntiBotMiddleware>();
+
+// Rate limiting should be early in the pipeline
+app.UseIpRateLimiting();
+
 // Request logging should be early in the pipeline
 app.UseMiddleware<RequestLoggingMiddleware>();
 
@@ -169,6 +184,9 @@ app.UseMiddleware<RequestLoggingMiddleware>();
         options.RoutePrefix = string.Empty; // Serve Swagger UI at root
     });
 //}
+
+// Serve static files (for robots.txt)
+app.UseStaticFiles();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
