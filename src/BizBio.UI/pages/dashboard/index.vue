@@ -112,15 +112,52 @@
             </div>
 
             <div v-else-if="profiles.length === 0" class="text-center py-12">
-              <i class="fas fa-folder-open text-6xl text-[var(--gray-text-color)] opacity-50 mb-4"></i>
-              <p class="text-[var(--gray-text-color)] mb-4">You don't have any profiles yet</p>
-              <NuxtLink
-                to="/dashboard/profile"
-                class="inline-flex items-center bg-[var(--primary-color)] text-white px-6 py-3 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors"
-              >
-                <i class="fas fa-plus mr-2"></i>
-                Create Your First Profile
-              </NuxtLink>
+              <i class="fas fa-folder-open text-6xl text-[var(--gray-text-color)] opacity-50 mb-6"></i>
+              <h3 class="text-xl font-bold text-[var(--dark-text-color)] mb-2">No Profiles Yet</h3>
+              <p class="text-[var(--gray-text-color)] mb-8">Create your first profile to get started</p>
+
+              <!-- Product Type Cards -->
+              <div class="grid sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+                <!-- Menu Profile Card -->
+                <NuxtLink
+                  to="/dashboard/menu/create"
+                  class="group border-2 border-[var(--light-border-color)] rounded-xl p-6 hover:border-[var(--primary-color)] hover:shadow-lg transition-all"
+                >
+                  <div class="bg-[var(--accent3-color)] bg-opacity-10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:bg-[var(--accent3-color)] transition-colors">
+                    <i class="fas fa-utensils text-[var(--accent3-color)] text-2xl group-hover:text-white transition-colors"></i>
+                  </div>
+                  <h4 class="font-bold text-[var(--dark-text-color)] mb-2">Digital Menu</h4>
+                  <p class="text-sm text-[var(--gray-text-color)] mb-3">Create a digital menu for your restaurant</p>
+                  <div class="inline-flex items-center text-xs bg-[var(--accent3-color)] bg-opacity-10 text-[var(--accent3-color)] px-3 py-1 rounded-full font-semibold">
+                    <i class="fas fa-gift mr-1"></i>
+                    14-day free trial
+                  </div>
+                </NuxtLink>
+
+                <!-- Connect Profile Card -->
+                <div class="border-2 border-[var(--light-border-color)] rounded-xl p-6 opacity-50 cursor-not-allowed">
+                  <div class="bg-[var(--primary-color)] bg-opacity-10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-id-card text-[var(--primary-color)] text-2xl"></i>
+                  </div>
+                  <h4 class="font-bold text-[var(--dark-text-color)] mb-2">Connect Card</h4>
+                  <p class="text-sm text-[var(--gray-text-color)] mb-3">Digital business card profile</p>
+                  <div class="inline-flex items-center text-xs bg-[var(--gray-text-color)] bg-opacity-10 text-[var(--gray-text-color)] px-3 py-1 rounded-full font-semibold">
+                    Coming Soon
+                  </div>
+                </div>
+
+                <!-- Retail Profile Card -->
+                <div class="border-2 border-[var(--light-border-color)] rounded-xl p-6 opacity-50 cursor-not-allowed">
+                  <div class="bg-[var(--accent2-color)] bg-opacity-10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-store text-[var(--accent2-color)] text-2xl"></i>
+                  </div>
+                  <h4 class="font-bold text-[var(--dark-text-color)] mb-2">Retail Store</h4>
+                  <p class="text-sm text-[var(--gray-text-color)] mb-3">Product catalog for retail</p>
+                  <div class="inline-flex items-center text-xs bg-[var(--gray-text-color)] bg-opacity-10 text-[var(--gray-text-color)] px-3 py-1 rounded-full font-semibold">
+                    Coming Soon
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div v-else class="space-y-4">
