@@ -205,6 +205,128 @@
           ></textarea>
         </div>
 
+        <!-- SEO Settings -->
+        <div class="mt-8 p-6 bg-gradient-to-r from-[var(--primary-color)] from-opacity-5 to-[var(--accent3-color)] to-opacity-5 rounded-xl border-2 border-[var(--primary-color)] border-opacity-20">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-lg font-bold text-[var(--dark-text-color)] flex items-center gap-2">
+                <i class="fas fa-search text-[var(--primary-color)]"></i>
+                Search Engine Optimization (SEO)
+              </h3>
+              <p class="text-sm text-[var(--gray-text-color)] mt-1">
+                Make your menu discoverable on Google and other search engines
+              </p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input
+                v-model="menuData.menuProfile.enableSEO"
+                type="checkbox"
+                class="sr-only peer"
+                @change="handleSEOToggle"
+              />
+              <div class="w-14 h-7 bg-[var(--light-border-color)] peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--primary-color)] peer-focus:ring-opacity-30 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[var(--primary-color)]"></div>
+            </label>
+          </div>
+
+          <!-- SEO Fields (shown when enabled) -->
+          <div v-show="menuData.menuProfile.enableSEO" class="space-y-4 mt-6 pt-6 border-t-2 border-[var(--primary-color)] border-opacity-20">
+            <!-- URL Slug -->
+            <div>
+              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+                Menu URL Slug
+                <span class="text-[var(--gray-text-color)] font-normal ml-2">(Auto-generated from menu name)</span>
+              </label>
+              <div class="flex items-center gap-2">
+                <span class="text-sm text-[var(--gray-text-color)]">yoursite.com/menu/</span>
+                <input
+                  v-model="menuData.menuProfile.slug"
+                  type="text"
+                  placeholder="summer-menu-2024"
+                  class="flex-1 px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors"
+                  @blur="validateSlug"
+                />
+              </div>
+              <p class="text-xs text-[var(--gray-text-color)] mt-1">
+                <i class="fas fa-info-circle mr-1"></i>
+                Use lowercase letters, numbers, and hyphens only
+              </p>
+            </div>
+
+            <!-- Meta Title -->
+            <div>
+              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+                SEO Title
+                <span class="text-[var(--gray-text-color)] font-normal ml-2">(Optional - defaults to menu name)</span>
+              </label>
+              <input
+                v-model="menuData.menuProfile.metaTitle"
+                type="text"
+                :placeholder="`${menuData.menuProfile.name || 'Your Menu'} - ${menuData.menuProfile.businessName || 'Your Business'}`"
+                maxlength="60"
+                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors"
+              />
+              <p class="text-xs text-[var(--gray-text-color)] mt-1">
+                {{ menuData.menuProfile.metaTitle.length }}/60 characters - This appears in search results
+              </p>
+            </div>
+
+            <!-- Meta Description -->
+            <div>
+              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+                SEO Description
+                <span class="text-[var(--gray-text-color)] font-normal ml-2">(Optional - defaults to menu description)</span>
+              </label>
+              <textarea
+                v-model="menuData.menuProfile.metaDescription"
+                rows="3"
+                :placeholder="`Discover our delicious ${menuData.menuProfile.cuisine || 'cuisine'} menu at ${menuData.menuProfile.businessName || 'our restaurant'}. View our full menu with prices and order online.`"
+                maxlength="160"
+                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors resize-none"
+              ></textarea>
+              <p class="text-xs text-[var(--gray-text-color)] mt-1">
+                {{ menuData.menuProfile.metaDescription.length }}/160 characters - This appears below your title in search results
+              </p>
+            </div>
+
+            <!-- Keywords -->
+            <div>
+              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+                Keywords
+                <span class="text-[var(--gray-text-color)] font-normal ml-2">(Optional - comma separated)</span>
+              </label>
+              <input
+                v-model="menuData.menuProfile.keywords"
+                type="text"
+                placeholder="restaurant menu, italian food, pizza, pasta, delivery"
+                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors"
+              />
+              <p class="text-xs text-[var(--gray-text-color)] mt-1">
+                <i class="fas fa-lightbulb mr-1"></i>
+                Add relevant keywords to help customers find your menu
+              </p>
+            </div>
+
+            <!-- SEO Preview -->
+            <div class="mt-6 p-4 bg-white rounded-lg border-2 border-[var(--light-border-color)]">
+              <div class="text-xs text-[var(--gray-text-color)] mb-2 uppercase font-semibold">
+                <i class="fas fa-eye mr-1"></i>
+                Google Search Preview
+              </div>
+              <div class="space-y-1">
+                <div class="text-blue-600 text-lg font-medium line-clamp-1">
+                  {{ menuData.menuProfile.metaTitle || `${menuData.menuProfile.name || 'Your Menu'} - ${menuData.menuProfile.businessName || 'Your Business'}` }}
+                </div>
+                <div class="text-green-700 text-sm">
+                  yoursite.com/menu/{{ menuData.menuProfile.slug || 'menu-slug' }}
+                </div>
+                <div class="text-sm text-[var(--gray-text-color)] line-clamp-2">
+                  {{ menuData.menuProfile.metaDescription || menuData.menuProfile.description || `Discover our delicious menu at ${menuData.menuProfile.businessName || 'our restaurant'}. View our full menu with prices.` }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Working Hours (Optional - collapsed by default) -->
         <div class="mt-6">
           <button
@@ -281,7 +403,8 @@
 
 <script setup>
 const emit = defineEmits(['next', 'previous'])
-const { menuData } = useMenuCreation()
+const { menuData, generateSlug } = useMenuCreation()
+const toast = useToast()
 
 const logoPreview = ref('')
 const showWorkingHours = ref(false)
@@ -292,18 +415,45 @@ const canProceed = computed(() => {
          menuData.value.menuProfile.cuisine
 })
 
-const handleLogoUpload = (event) => {
+const handleLogoUpload = async (event) => {
   const file = event.target.files[0]
   if (file) {
-    menuData.value.menuProfile.businessLogo = file
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      logoPreview.value = e.target.result
-      menuData.value.menuProfile.businessLogoUrl = e.target.result
+    try {
+      const { optimizeLogo } = useImageOptimization()
+      const { file: optimizedFile, previewUrl } = await optimizeLogo(file)
+
+      menuData.value.menuProfile.businessLogo = optimizedFile
+      logoPreview.value = previewUrl
+      menuData.value.menuProfile.businessLogoUrl = previewUrl
+    } catch (error) {
+      console.error('Failed to optimize logo:', error)
+      toast.error('Failed to process image. Please try another image.', 'Upload Error')
     }
-    reader.readAsDataURL(file)
   }
 }
+
+// Handle SEO toggle - auto-generate slug when enabled
+const handleSEOToggle = () => {
+  if (menuData.value.menuProfile.enableSEO && !menuData.value.menuProfile.slug) {
+    // Auto-generate slug from menu name and business name
+    const slugBase = menuData.value.menuProfile.name || menuData.value.menuProfile.businessName || 'menu'
+    menuData.value.menuProfile.slug = generateSlug(slugBase)
+  }
+}
+
+// Validate and clean up slug
+const validateSlug = () => {
+  if (menuData.value.menuProfile.slug) {
+    menuData.value.menuProfile.slug = generateSlug(menuData.value.menuProfile.slug)
+  }
+}
+
+// Watch menu name changes to update slug automatically
+watch(() => menuData.value.menuProfile.name, (newName) => {
+  if (menuData.value.menuProfile.enableSEO && newName && !menuData.value.menuProfile.slug) {
+    menuData.value.menuProfile.slug = generateSlug(newName)
+  }
+})
 
 const handleNext = () => {
   if (canProceed.value) {

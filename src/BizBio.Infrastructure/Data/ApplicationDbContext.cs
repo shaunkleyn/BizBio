@@ -17,6 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<UserSubscription> UserSubscriptions => Set<UserSubscription>();
     public DbSet<Profile> Profiles => Set<Profile>();
     public DbSet<Catalog> Catalogs => Set<Catalog>();
+    public DbSet<Category> Categories => Set<Category>();
     public DbSet<CatalogItem> CatalogItems => Set<CatalogItem>();
     public DbSet<RestaurantTable> RestaurantTables => Set<RestaurantTable>();
     public DbSet<NFCScan> NFCScans => Set<NFCScan>();
@@ -166,6 +167,28 @@ public class ApplicationDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        // Category Configuration
+        modelBuilder.Entity<Category>(entity =>
+        {
+            entity.ToTable("Categories");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.CatalogId);
+            entity.HasIndex(e => e.IsActive);
+            entity.HasIndex(e => new { e.CatalogId, e.SortOrder });
+
+            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+            entity.Property(e => e.Description).HasMaxLength(2000);
+            entity.Property(e => e.Icon).HasMaxLength(100);
+
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
+            entity.HasOne(e => e.Catalog)
+                .WithMany()
+                .HasForeignKey(e => e.CatalogId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
         // CatalogItem Configuration
         modelBuilder.Entity<CatalogItem>(entity =>
         {
@@ -187,6 +210,11 @@ public class ApplicationDbContext : DbContext
                 .WithMany(c => c.Items)
                 .HasForeignKey(e => e.CatalogId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne<Category>()
+                .WithMany(cat => cat.Items)
+                .HasForeignKey(e => e.CategoryId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         // RestaurantTable Configuration

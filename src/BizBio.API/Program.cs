@@ -44,26 +44,25 @@ builder.Services.AddAuthentication(options =>
 });
 
 // CORS Configuration
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowFrontend", policy =>
-//    {
-//        policy
-//        .WithOrigins(
-//            "http://localhost:3000",
-//            "http://localhost:5173",
-//            "http://localhost:5000",
-//            "https://localhost:5443",
-//            "https://bizbio.co.za",
-//            "https://www.bizbio.co.za",
-//            "https://api.bizbio.co.za",
-//            "https://ui.bizbio.co.za"
-//        )
-//        .AllowAnyMethod()
-//        .AllowAnyHeader()
-//        .AllowCredentials();
-//    });
-//});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+        .WithOrigins(
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://localhost:5000",
+            "https://localhost:5443",
+            "https://bizbio.co.za",
+            "https://www.bizbio.co.za",
+            "https://api.bizbio.co.za",
+            "https://ui.bizbio.co.za"
+        )
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
 
 // Repository Registration
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -77,6 +76,7 @@ builder.Services.AddScoped<IRestaurantTableRepository, RestaurantTableRepository
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPaymentService, PayFastService>();
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
 // Session Configuration (for NFC scan tracking)
 builder.Services.AddMemoryCache();
@@ -156,10 +156,17 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-//app.UseCors("AllowFrontend");
+app.UseCors("AllowFrontend");
 
 //app.UseHttpsRedirection();
 
+// Serve static files from the uploads directory
+var uploadPath = builder.Configuration["FileUpload:Path"] ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(uploadPath),
+    RequestPath = "/uploads"
+});
 
 app.UseAuthentication();
 app.UseAuthorization();

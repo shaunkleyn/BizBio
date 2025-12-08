@@ -91,12 +91,10 @@ export default defineNuxtConfig({
     '/contact': { prerender: true },
     '/terms': { prerender: true },
     '/privacy': { prerender: true },
-    
-    // API routes - never cached
-    '/api/**': { cors: true, headers: { 'cache-control': 'no-cache' } },
-    
+
     // Dashboard - SSR with short cache
-    '/dashboard/**': { ssr: true, cache: { maxAge: 60 * 5 } }, // 5 minutes
+    '/dashboard/**': { ssr: false }, // Client-side only for auth-protected pages
+    '/dashboard/menu/create': { ssr: false }, // Client-side only for menu creation
     
     // Auth pages - SSR only, no cache
     '/login': { ssr: true },

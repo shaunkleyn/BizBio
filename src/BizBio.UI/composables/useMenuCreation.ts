@@ -24,7 +24,13 @@ export const useMenuCreation = () => {
         friday: { open: '09:00', close: '17:00', closed: false },
         saturday: { open: '09:00', close: '17:00', closed: false },
         sunday: { open: '09:00', close: '17:00', closed: true },
-      }
+      },
+      // SEO fields
+      enableSEO: false,
+      slug: '',
+      metaTitle: '',
+      metaDescription: '',
+      keywords: ''
     },
 
     // Step 3: Categories
@@ -238,7 +244,12 @@ export const useMenuCreation = () => {
           friday: { open: '09:00', close: '17:00', closed: false },
           saturday: { open: '09:00', close: '17:00', closed: false },
           sunday: { open: '09:00', close: '17:00', closed: true },
-        }
+        },
+        enableSEO: false,
+        slug: '',
+        metaTitle: '',
+        metaDescription: '',
+        keywords: ''
       },
       categories: [],
       menuItems: [],
@@ -268,6 +279,16 @@ export const useMenuCreation = () => {
     }
   })
 
+  // Helper function to generate URL-friendly slug
+  const generateSlug = (text: string): string => {
+    return text
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '') // Remove special characters
+      .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with hyphens
+      .replace(/^-+|-+$/g, '') // Remove leading/trailing hyphens
+  }
+
   return {
     menuData,
     currentStep,
@@ -281,6 +302,7 @@ export const useMenuCreation = () => {
     previousStep,
     goToStep,
     resetMenuCreation,
-    canProceedToNextStep
+    canProceedToNextStep,
+    generateSlug
   }
 }
