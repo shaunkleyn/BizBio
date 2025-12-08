@@ -18,7 +18,8 @@ builder.Services.AddControllers();
 // AutoDetect works with both MySQL and MariaDB
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
+        mysqlOptions => mysqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
 // JWT Authentication Configuration
 var jwtSettings = builder.Configuration.GetSection("JWT");
