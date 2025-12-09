@@ -1,13 +1,19 @@
+using System.Diagnostics;
 using System.Net;
 using System.Net.Mail;
 using BizBio.Core.Interfaces;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace BizBio.Infrastructure.Services;
 
 public class EmailService : IEmailService
 {
     private readonly IConfiguration _configuration;
+    private readonly ILogger<EmailService> _logger;
+    private readonly TelemetryClient _telemetryClient;
     private readonly string _smtpHost;
     private readonly int _smtpPort;
     private readonly string _smtpUsername;
@@ -15,9 +21,14 @@ public class EmailService : IEmailService
     private readonly string _fromEmail;
     private readonly string _fromName;
 
-    public EmailService(IConfiguration configuration)
+    public EmailService(
+        IConfiguration configuration,
+        ILogger<EmailService> logger,
+        TelemetryClient telemetryClient)
     {
         _configuration = configuration;
+        _logger = logger;
+        _telemetryClient = telemetryClient;
         _smtpHost = configuration["Email:SmtpHost"] ?? "smtp.domains.co.za";
         _smtpPort = int.Parse(configuration["Email:SmtpPort"] ?? "587");
         _smtpUsername = configuration["Email:SmtpUsername"] ?? "";
@@ -28,12 +39,21 @@ public class EmailService : IEmailService
 
     public async Task SendEmailAsync(string toEmail, string subject, string htmlBody)
     {
+        var stopwatch = Stopwatch.StartNew();
+
         try
         {
-            Console.WriteLine($"[EmailService] Attempting to send email to: {toEmail}");
-            Console.WriteLine($"[EmailService] SMTP Host: {_smtpHost}:{_smtpPort}");
-            Console.WriteLine($"[EmailService] SMTP User: {_smtpUsername}");
-            Console.WriteLine($"[EmailService] From Email: {_fromEmail}");
+            _logger.LogInformation("Attempting to send email to {Email} with subject: {Subject}", toEmail, subject);
+            _logger.LogDebug("SMTP Host: {Host}:{Port}, User: {User}", _smtpHost, _smtpPort, _smtpUsername);
+
+            // Track dependency for SMTP call
+            var dependency = new DependencyTelemetry
+            {
+                Name = "SMTP Email Send",
+                Type = "SMTP",
+                Target = $"{_smtpHost}:{_smtpPort}",
+                Data = subject
+            };
 
             using var smtpClient = new SmtpClient(_smtpHost, _smtpPort)
             {
@@ -55,28 +75,54 @@ public class EmailService : IEmailService
             mailMessage.To.Add(toEmail);
 
             await smtpClient.SendMailAsync(mailMessage);
-            Console.WriteLine($"[EmailService] ✅ Email sent successfully to: {toEmail}");
+
+            _logger.LogInformation("Email sent successfully to {Email}", toEmail);
+
+            dependency.Success = true;
+            dependency.Duration = stopwatch.Elapsed;
+            _telemetryClient.TrackDependency(dependency);
+
+            _telemetryClient.TrackEvent("EmailSent", new Dictionary<string, string>
+            {
+                { "To", toEmail },
+                { "Subject", subject },
+                { "SmtpHost", _smtpHost }
+            });
         }
         catch (SmtpException smtpEx)
         {
-            Console.WriteLine($"[EmailService] ❌ SMTP Error: {smtpEx.Message}");
-            Console.WriteLine($"[EmailService] Status Code: {smtpEx.StatusCode}");
-            Console.WriteLine($"[EmailService] Stack Trace: {smtpEx.StackTrace}");
-            if (smtpEx.InnerException != null)
+            _logger.LogError(smtpEx, "SMTP error sending email to {Email}. Status: {Status}", toEmail, smtpEx.StatusCode);
+
+            var dependency = new DependencyTelemetry
             {
-                Console.WriteLine($"[EmailService] Inner Exception: {smtpEx.InnerException.Message}");
-            }
+                Name = "SMTP Email Send",
+                Type = "SMTP",
+                Target = $"{_smtpHost}:{_smtpPort}",
+                Data = subject,
+                Success = false,
+                Duration = stopwatch.Elapsed
+            };
+            _telemetryClient.TrackDependency(dependency);
+
+            _telemetryClient.TrackException(smtpEx, new Dictionary<string, string>
+            {
+                { "Operation", "SendEmail" },
+                { "To", toEmail },
+                { "Subject", subject },
+                { "SmtpStatusCode", smtpEx.StatusCode.ToString() }
+            });
             throw;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[EmailService] ❌ Email sending failed: {ex.Message}");
-            Console.WriteLine($"[EmailService] Exception Type: {ex.GetType().Name}");
-            Console.WriteLine($"[EmailService] Stack Trace: {ex.StackTrace}");
-            if (ex.InnerException != null)
+            _logger.LogError(ex, "Failed to send email to {Email}", toEmail);
+
+            _telemetryClient.TrackException(ex, new Dictionary<string, string>
             {
-                Console.WriteLine($"[EmailService] Inner Exception: {ex.InnerException.Message}");
-            }
+                { "Operation", "SendEmail" },
+                { "To", toEmail },
+                { "Subject", subject }
+            });
             throw;
         }
     }

@@ -1,7 +1,10 @@
+using BizBio.API.Filters;
+using BizBio.API.Telemetry;
 using BizBio.Core.Interfaces;
 using BizBio.Infrastructure.Data;
 using BizBio.Infrastructure.Repositories;
 using BizBio.Infrastructure.Services;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
@@ -11,8 +14,18 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Application Insights Logging Integration
+builder.Logging.AddApplicationInsights(
+    configureTelemetryConfiguration: (config) =>
+        config.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"],
+    configureApplicationInsightsLoggerOptions: (options) => { }
+);
+
 // Add services to the container
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ApplicationInsightsExceptionFilter>();
+});
 
 // Database Configuration
 // AutoDetect works with both MySQL and MariaDB
@@ -137,7 +150,22 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-builder.Services.AddApplicationInsightsTelemetry();
+
+// Configure Application Insights Telemetry
+builder.Services.AddApplicationInsightsTelemetry(options =>
+{
+    options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+    options.EnableAdaptiveSampling = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableAdaptiveSampling", true);
+    options.EnablePerformanceCounterCollectionModule = builder.Configuration.GetValue<bool>("ApplicationInsights:EnablePerformanceCounterCollectionModule", true);
+    options.EnableDependencyTrackingTelemetryModule = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableDependencyTrackingTelemetryModule", true);
+    options.EnableEventCounterCollectionModule = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableEventCounterCollectionModule", true);
+    options.EnableQuickPulseMetricStream = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableQuickPulseMetricStream", true);
+    options.EnableHeartbeat = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableHeartbeat", true);
+    options.AddAutoCollectedMetricExtractor = builder.Configuration.GetValue<bool>("ApplicationInsights:AddAutoCollectedMetricExtractor", true);
+});
+
+// Register custom telemetry initializer
+builder.Services.AddSingleton<ITelemetryInitializer, BizBioTelemetryInitializer>();
 
 var app = builder.Build();
 

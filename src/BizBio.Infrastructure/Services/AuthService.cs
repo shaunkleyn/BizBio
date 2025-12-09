@@ -6,7 +6,10 @@ using BCrypt.Net;
 using BizBio.Core.DTOs;
 using BizBio.Core.Entities;
 using BizBio.Core.Interfaces;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BizBio.Infrastructure.Services;
@@ -20,6 +23,8 @@ public class AuthService : IAuthService
     private readonly IUserRepository _userRepository;
     private readonly IConfiguration _configuration;
     private readonly IEmailService _emailService;
+    private readonly ILogger<AuthService> _logger;
+    private readonly TelemetryClient _telemetryClient;
 
     /// <summary>
     /// Initializes a new instance of the AuthService class.
@@ -27,11 +32,20 @@ public class AuthService : IAuthService
     /// <param name="userRepository">Repository for user data access</param>
     /// <param name="configuration">Application configuration</param>
     /// <param name="emailService">Email service for sending notifications</param>
-    public AuthService(IUserRepository userRepository, IConfiguration configuration, IEmailService emailService)
+    /// <param name="logger">Logger instance</param>
+    /// <param name="telemetryClient">Application Insights telemetry client</param>
+    public AuthService(
+        IUserRepository userRepository,
+        IConfiguration configuration,
+        IEmailService emailService,
+        ILogger<AuthService> logger,
+        TelemetryClient telemetryClient)
     {
         _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
     }
 
     /// <summary>
@@ -79,29 +93,41 @@ public class AuthService : IAuthService
             await _userRepository.SaveChangesAsync();
 
             // Send verification email
-            Console.WriteLine("[AuthService] About to send verification email...");
+            _logger.LogInformation("About to send verification email to {Email}", user.Email);
             try
             {
                 await _emailService.SendVerificationEmailAsync(user.Email, user.FullName, verificationToken);
-                Console.WriteLine("[AuthService] ✅ Verification email sent successfully");
+                _logger.LogInformation("Verification email sent successfully to {Email}", user.Email);
+
+                _telemetryClient.TrackEvent("UserRegistered", new Dictionary<string, string>
+                {
+                    { "Email", user.Email },
+                    { "UserId", user.Id.ToString() }
+                });
             }
             catch (Exception emailEx)
             {
                 // Log email error but don't fail registration
-                Console.WriteLine($"[AuthService] ❌ Failed to send verification email: {emailEx.Message}");
-                Console.WriteLine($"[AuthService] Exception Type: {emailEx.GetType().Name}");
-                Console.WriteLine($"[AuthService] Stack Trace: {emailEx.StackTrace}");
-                if (emailEx.InnerException != null)
+                _logger.LogError(emailEx, "Failed to send verification email to {Email}", user.Email);
+
+                _telemetryClient.TrackException(emailEx, new Dictionary<string, string>
                 {
-                    Console.WriteLine($"[AuthService] Inner Exception: {emailEx.InnerException.Message}");
-                    Console.WriteLine($"[AuthService] Inner Stack Trace: {emailEx.InnerException.StackTrace}");
-                }
+                    { "Operation", "SendVerificationEmail" },
+                    { "Email", user.Email },
+                    { "UserId", user.Id.ToString() }
+                });
             }
 
             return AuthResult.SuccessResult(user);
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Registration failed for {Email}", dto.Email);
+            _telemetryClient.TrackException(ex, new Dictionary<string, string>
+            {
+                { "Operation", "UserRegistration" },
+                { "Email", dto.Email }
+            });
             return AuthResult.FailureResult($"Registration failed: {ex.Message}");
         }
     }
@@ -172,10 +198,23 @@ public class AuthService : IAuthService
             // Generate JWT token
             var token = GenerateJwtToken(user);
 
+            _logger.LogInformation("User {Email} logged in successfully", user.Email);
+            _telemetryClient.TrackEvent("UserLogin", new Dictionary<string, string>
+            {
+                { "UserId", user.Id.ToString() },
+                { "Email", user.Email }
+            });
+
             return AuthResult.SuccessResult(user, token);
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Login failed for {Email}", dto.Email);
+            _telemetryClient.TrackException(ex, new Dictionary<string, string>
+            {
+                { "Operation", "UserLogin" },
+                { "Email", dto.Email }
+            });
             return AuthResult.FailureResult($"Login failed: {ex.Message}");
         }
     }
@@ -214,23 +253,21 @@ public class AuthService : IAuthService
             await _userRepository.SaveChangesAsync();
 
             // Send verification email
-            Console.WriteLine("[AuthService] About to resend verification email...");
+            _logger.LogInformation("About to resend verification email to {Email}", user.Email);
             try
             {
                 await _emailService.SendVerificationEmailAsync(user.Email, user.FullName, verificationToken);
-                Console.WriteLine("[AuthService] ✅ Verification email resent successfully");
+                _logger.LogInformation("Verification email resent successfully to {Email}", user.Email);
             }
             catch (Exception emailEx)
             {
                 // Log email error but don't fail the request
-                Console.WriteLine($"[AuthService] ❌ Failed to resend verification email: {emailEx.Message}");
-                Console.WriteLine($"[AuthService] Exception Type: {emailEx.GetType().Name}");
-                Console.WriteLine($"[AuthService] Stack Trace: {emailEx.StackTrace}");
-                if (emailEx.InnerException != null)
+                _logger.LogError(emailEx, "Failed to resend verification email to {Email}", user.Email);
+                _telemetryClient.TrackException(emailEx, new Dictionary<string, string>
                 {
-                    Console.WriteLine($"[AuthService] Inner Exception: {emailEx.InnerException.Message}");
-                    Console.WriteLine($"[AuthService] Inner Stack Trace: {emailEx.InnerException.StackTrace}");
-                }
+                    { "Operation", "ResendVerificationEmail" },
+                    { "Email", user.Email }
+                });
             }
 
             return AuthResult.SuccessResult(user);
@@ -272,24 +309,29 @@ public class AuthService : IAuthService
             await _userRepository.SaveChangesAsync();
 
             // Send welcome email
-            Console.WriteLine("[AuthService] About to send welcome email...");
+            _logger.LogInformation("About to send welcome email to {Email}", user.Email);
             try
             {
                 await _emailService.SendWelcomeEmailAsync(user.Email, user.FullName);
-                Console.WriteLine("[AuthService] ✅ Welcome email sent successfully");
+                _logger.LogInformation("Welcome email sent successfully to {Email}", user.Email);
             }
             catch (Exception emailEx)
             {
                 // Log email error but don't fail verification
-                Console.WriteLine($"[AuthService] ❌ Failed to send welcome email: {emailEx.Message}");
-                Console.WriteLine($"[AuthService] Exception Type: {emailEx.GetType().Name}");
-                Console.WriteLine($"[AuthService] Stack Trace: {emailEx.StackTrace}");
-                if (emailEx.InnerException != null)
+                _logger.LogError(emailEx, "Failed to send welcome email to {Email}", user.Email);
+                _telemetryClient.TrackException(emailEx, new Dictionary<string, string>
                 {
-                    Console.WriteLine($"[AuthService] Inner Exception: {emailEx.InnerException.Message}");
-                    Console.WriteLine($"[AuthService] Inner Stack Trace: {emailEx.InnerException.StackTrace}");
-                }
+                    { "Operation", "SendWelcomeEmail" },
+                    { "Email", user.Email },
+                    { "UserId", user.Id.ToString() }
+                });
             }
+
+            _telemetryClient.TrackEvent("EmailVerified", new Dictionary<string, string>
+            {
+                { "UserId", user.Id.ToString() },
+                { "Email", user.Email }
+            });
 
             return AuthResult.SuccessResult(user);
         }
@@ -329,23 +371,21 @@ public class AuthService : IAuthService
             await _userRepository.SaveChangesAsync();
 
             // Send password reset email
-            Console.WriteLine("[AuthService] About to send password reset email...");
+            _logger.LogInformation("About to send password reset email to {Email}", user.Email);
             try
             {
                 await _emailService.SendPasswordResetEmailAsync(user.Email, user.FullName, resetToken);
-                Console.WriteLine("[AuthService] ✅ Password reset email sent successfully");
+                _logger.LogInformation("Password reset email sent successfully to {Email}", user.Email);
             }
             catch (Exception emailEx)
             {
                 // Log email error but don't fail password reset request
-                Console.WriteLine($"[AuthService] ❌ Failed to send password reset email: {emailEx.Message}");
-                Console.WriteLine($"[AuthService] Exception Type: {emailEx.GetType().Name}");
-                Console.WriteLine($"[AuthService] Stack Trace: {emailEx.StackTrace}");
-                if (emailEx.InnerException != null)
+                _logger.LogError(emailEx, "Failed to send password reset email to {Email}", user.Email);
+                _telemetryClient.TrackException(emailEx, new Dictionary<string, string>
                 {
-                    Console.WriteLine($"[AuthService] Inner Exception: {emailEx.InnerException.Message}");
-                    Console.WriteLine($"[AuthService] Inner Stack Trace: {emailEx.InnerException.StackTrace}");
-                }
+                    { "Operation", "SendPasswordResetEmail" },
+                    { "Email", user.Email }
+                });
             }
 
             return AuthResult.SuccessResult(user);
