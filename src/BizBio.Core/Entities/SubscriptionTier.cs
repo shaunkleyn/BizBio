@@ -4,9 +4,9 @@ using BizBio.Core.Entities.Lookups;
 using BizBio.Core.Enums;
 using System.ComponentModel.DataAnnotations;
 
-public class SubscriptionTier
+public class SubscriptionTier : BaseEntity
 {
-    public int Id { get; set; }
+    //public int Id { get; set; }
 
     public int ProductLineId { get; set; }
 
@@ -105,16 +105,16 @@ public class SubscriptionTier
     // Display and metadata
     public int DisplayOrder { get; set; }
 
-    public bool IsActive { get; set; }
+    //public bool IsActive { get; set; }
 
     public bool IsPopular { get; set; }
 
     [MaxLength(500)]
     public string? RecommendedFor { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    //public DateTime CreatedAt { get; set; }
 
-    public DateTime UpdatedAt { get; set; }
+    //public DateTime UpdatedAt { get; set; }
 
     // Navigation properties
     public virtual ICollection<UserSubscription> Subscriptions { get; set; } = new List<UserSubscription>();

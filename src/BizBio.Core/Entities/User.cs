@@ -3,9 +3,9 @@ namespace BizBio.Core.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public class User
+public class User : BaseEntity
 {
-    public int Id { get; set; }
+    //public int Id { get; set; }
 
     [Required]
     [MaxLength(255)]
@@ -48,9 +48,9 @@ public class User
     [MaxLength(3)]
     public string Currency { get; set; } = "ZAR";
 
-    public DateTime CreatedAt { get; set; }
+    //public DateTime CreatedAt { get; set; }
 
-    public DateTime UpdatedAt { get; set; }
+    //public DateTime UpdatedAt { get; set; }
 
     [NotMapped]
     public string FullName => $"{FirstName} {LastName}";

@@ -3,9 +3,9 @@ namespace BizBio.Core.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-public class Profile
+public class Profile : BaseEntity
 {
-    public int Id { get; set; }
+    //public int Id { get; set; }
 
     public int UserId { get; set; }
 
@@ -46,11 +46,11 @@ public class Profile
 
     public bool HasMenuProAddon { get; set; } = false;
 
-    public bool IsActive { get; set; } = true;
+    //public bool IsActive { get; set; } = true;
 
-    public DateTime CreatedAt { get; set; }
+    //public DateTime CreatedAt { get; set; }
 
-    public DateTime UpdatedAt { get; set; }
+    //public DateTime UpdatedAt { get; set; }
 
     // Navigation properties
     [JsonIgnore]

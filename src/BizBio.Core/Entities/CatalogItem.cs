@@ -2,9 +2,9 @@ namespace BizBio.Core.Entities;
 
 using System.ComponentModel.DataAnnotations;
 
-public class CatalogItem
+public class CatalogItem : BaseEntity
 {
-    public int Id { get; set; }
+    //public int Id { get; set; }
 
     public int CatalogId { get; set; }
 
@@ -26,14 +26,20 @@ public class CatalogItem
 
     public bool EventModeOnly { get; set; } = false;
 
-    public bool IsActive { get; set; } = true;
+    //public bool IsActive { get; set; } = true;
 
     public int SortOrder { get; set; } = 0;
 
-    public DateTime CreatedAt { get; set; }
+    //public DateTime CreatedAt { get; set; }
 
-    public DateTime UpdatedAt { get; set; }
+    //public DateTime UpdatedAt { get; set; }
+    public ICollection<CatalogItemVariant> Variants { get; set; }
 
     // Navigation properties
     public virtual Catalog Catalog { get; set; } = null!;
+
+    public virtual CatalogItemInventory Inventory { get; set; } = null!;
+
+
+
 }

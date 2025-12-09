@@ -17,7 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<UserSubscription> UserSubscriptions => Set<UserSubscription>();
     public DbSet<Profile> Profiles => Set<Profile>();
     public DbSet<Catalog> Catalogs => Set<Catalog>();
-    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<CatalogCategory> Categories => Set<CatalogCategory>();
     public DbSet<CatalogItem> CatalogItems => Set<CatalogItem>();
     public DbSet<RestaurantTable> RestaurantTables => Set<RestaurantTable>();
     public DbSet<NFCScan> NFCScans => Set<NFCScan>();
@@ -168,7 +168,7 @@ public class ApplicationDbContext : DbContext
         });
 
         // Category Configuration
-        modelBuilder.Entity<Category>(entity =>
+        modelBuilder.Entity<CatalogCategory>(entity =>
         {
             entity.ToTable("Categories");
             entity.HasKey(e => e.Id);
@@ -211,7 +211,7 @@ public class ApplicationDbContext : DbContext
                 .HasForeignKey(e => e.CatalogId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne<Category>()
+            entity.HasOne<CatalogCategory>()
                 .WithMany(cat => cat.Items)
                 .HasForeignKey(e => e.CategoryId)
                 .OnDelete(DeleteBehavior.SetNull);

@@ -4,9 +4,9 @@ using BizBio.Core.Entities.Lookups;
 using BizBio.Core.Enums;
 using System.ComponentModel.DataAnnotations;
 
-public class RestaurantTable
+public class RestaurantTable : BaseEntity
 {
-    public int Id { get; set; }
+    //public int Id { get; set; }
 
     public int ProfileId { get; set; }
 
@@ -35,15 +35,15 @@ public class RestaurantTable
 
     public int NFCTagStatusId { get; set; }
 
-    public bool IsActive { get; set; } = true;
+    //public bool IsActive { get; set; } = true;
 
     public int SortOrder { get; set; } = 0;
 
-    public DateTime CreatedAt { get; set; }
+    //public DateTime CreatedAt { get; set; }
 
-    public DateTime UpdatedAt { get; set; }
+    //public DateTime UpdatedAt { get; set; }
 
-    public int? CreatedBy { get; set; }
+    //public int? CreatedBy { get; set; }
 
     // Navigation properties
     public virtual Profile Profile { get; set; } = null!;

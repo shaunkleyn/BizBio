@@ -1,10 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using BizBio.Core.Interfaces;
+using BizBio.Core.DTOs;
 using BizBio.Core.Entities;
 using BizBio.Core.Enums;
-using BizBio.Core.DTOs;
+using BizBio.Core.Interfaces;
 using BizBio.Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.IO;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -86,8 +87,18 @@ public class MenuController : ControllerBase
 
         // Get catalog and items
         var catalog = await _catalogRepo.GetByProfileIdAsync(profile.Id);
-
         var items = catalog?.Items.Where(i => i.IsActive).ToList() ?? new List<CatalogItem>();
+ 
+
+        var categories = new Dictionary<CatalogCategory, CatalogItem>();
+        foreach (var item in items)
+        {   if (item.CategoryId == null) continue;
+            var category = await _context.Categories.FindAsync(item.CategoryId);
+            if (category != null && !categories.ContainsKey(category))
+            {
+                categories.Add(category, item);
+            }
+        }
 
         // Filter by event mode if enabled
         if (profile.EventModeEnabled)
@@ -131,15 +142,25 @@ public class MenuController : ControllerBase
                 },
                 menu = new
                 {
+                    
                     items = items.Select(item => new
                     {
+                        item.CategoryId,
                         id = item.Id,
                         name = item.Name,
                         description = item.Description,
                         price = item.Price,
                         images = ParseJsonArray(item.Images)
                     }).ToList()
-                }
+                },
+                categories = categories.Keys.Select(cat => new
+                {
+                    id = cat.Id,
+                    name = cat.Name,
+                    description = cat.Description,
+                    items = items.Where(i => i.CategoryId == cat.Id).Select(i => i.Id).ToList(),
+                    icon = cat.Icon
+                }).ToList()
             }
         });
     }
@@ -245,7 +266,7 @@ public class MenuController : ControllerBase
 
             foreach (var categoryDto in dto.Categories.OrderBy(c => c.Order))
             {
-                var category = new Category
+                var category = new CatalogCategory
                 {
                     CatalogId = catalog.Id,
                     Name = categoryDto.Name,
@@ -388,4 +409,299 @@ public class MenuController : ControllerBase
 
         return text;
     }
+
+    /// <summary>
+    /// Get user's menus
+    /// </summary>
+    //[HttpGet]
+    //[Authorize]
+    //[Route("/api/v1/menus/test")]
+    //public async Task<IActionResult> GetTestMenu()
+    //{
+    //    try
+    //    {
+    //        var Categories = new List<CatalogCategory>
+    //{
+                   
+    //    new CatalogCategory
+    //    {
+    //        Id = 1,
+    //        Name = "Pizzas",
+    //        Description = "pizzas",
+    //        Items = new List<CatalogItem>
+    //        {
+    //            new CatalogItem
+    //            {
+    //                Id = 1,
+    //                Name = "Hawaiian Pizza",
+    //                Description = "Ham, pineapple, mozzarella, and tomato base.",
+                    
+    //                Inventory = new CatalogItemInventory
+    //                {
+    //                    Id = 1,
+    //                    QtyAvailable = 15,  // corrected property name
+    //                    QtyReserved = 5     // corrected property name
+    //                },
+
+    //                Variants = new List<CatalogItemVariant>
+    //                {
+    //                    new CatalogItemVariant
+    //                    {
+    //                        Id = 1,
+    //                        Title = "Small",
+                            
+    //                        Unit = new VariantUnit
+    //                        {
+    //                            Id = 1,
+    //                            UnitType = UnitType.Size,
+    //                            Label = "Small"
+    //                        },
+
+    //                        Prices = new List<CatalogItemVariantPrice>
+    //                        {
+    //                            new CatalogItemVariantPrice {
+    //                                Id = 1,
+    //                                Amount = 69.99,
+    //                                PriceType = PriceType.Standard
+    //                            }
+    //                        }
+    //                    },
+    //                    new ProductVariant
+    //                    {
+    //                        Id = 2,
+    //                        Title = "Medium",
+
+    //                        Unit = new VariantUnit
+    //                        {
+    //                            Id = 2,
+    //                            UnitType = UnitType.Size,
+    //                            Label = "Medium"
+    //                        },
+
+    //                        Prices = new List<CatalogItemVariantPrice>
+    //                        {
+    //                            new CatalogItemVariantPrice {
+    //                                Id = 2,
+    //                                Amount = 89.99,
+    //                                PriceType = PriceType.Standard
+    //                            }
+    //                        }
+    //                    },
+    //                    new ProductVariant
+    //                    {
+    //                        Id = 3,
+    //                        Title = "Large",
+
+    //                        Unit = new VariantUnit
+    //                        {
+    //                            Id = 3,
+    //                            UnitType = UnitType.Size,
+    //                            Label = "Large"
+    //                        },
+
+    //                        Prices = new List<CatalogItemVariantPrice>
+    //                        {
+    //                            new CatalogItemVariantPrice {
+    //                                Id = 3,
+    //                                Amount = 109.99,
+    //                                PriceType = PriceType.Standard
+    //                            }
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    },
+
+    //    new Category
+    //    {
+    //        Id = 2,
+    //        Name = "Drinks",
+    //        Slug = "drinks",
+    //        Products = new List<Product>
+    //        {
+    //            new Product
+    //            {
+    //                Id = 5,
+    //                Title = "Coca-Cola",
+    //                Description = "Ice cold Coke.",
+
+    //                Inventory = new Inventory
+    //                {
+    //                    Id = 10,
+    //                    StockOnHand = 50,
+    //                    ReorderLevel = 20
+    //                },
+
+    //                Variants = new List<ProductVariant>
+    //                {
+    //                    new ProductVariant
+    //                    {
+    //                        Id = 10,
+    //                        Title = "300ml",
+
+    //                        Unit = new VariantUnit
+    //                        {
+    //                            Id = 10,
+    //                            UnitType = UnitType.Volume,
+    //                            Value = 300,
+    //                            Label = "300ml"
+    //                        },
+
+    //                        Prices = new List<CatalogItemVariantPrice>
+    //                        {
+    //                            new CatalogItemVariantPrice
+    //                            {
+    //                                Id = 10,
+    //                                Amount = 18.99,
+    //                                PriceType = PriceType.Standard
+    //                            }
+    //                        }
+    //                    },
+    //                    new ProductVariant
+    //                    {
+    //                        Id = 11,
+    //                        Title = "500ml",
+
+    //                        Unit = new VariantUnit
+    //                        {
+    //                            Id = 11,
+    //                            UnitType = UnitType.Volume,
+    //                            Value = 500,
+    //                            Label = "500ml"
+    //                        },
+
+    //                        Prices = new List<CatalogItemVariantPrice>
+    //                        {
+    //                            new CatalogItemVariantPrice
+    //                            {
+    //                                Id = 11,
+    //                                Amount = 22.99,
+    //                                PriceType = PriceType.Standard
+    //                            }
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+    //        };
+
+
+    //        var menuData = new Catalog
+    //        {
+    //            Categories = new List<CatalogCategory>
+    //            {
+    //                new CatalogCategory
+    //                {
+    //                    Id = 1,
+    //                    Name = "Pizzas",
+    //                    Description = "pizzas",
+    //                    Items = new List<CatalogItem>
+    //                    {
+    //                        new CatalogItem
+    //                        {
+    //                            Id = 1,
+    //                            Name = "Hawaiian Pizza",
+    //                            Description = "Ham, pineapple, mozzarella, and tomato base.",
+    //                            Variants = new List<CatalogItemVariant>
+    //                            {
+    //                                new CatalogItemVariant { Id = 1, Title = "Small", Price = 69.99m, },
+    //                                new CatalogItemVariant { Id = 2, Title = "Medium", Price = 89.99m },
+    //                                new CatalogItemVariant { Id = 3, Title = "Large", Price = 109.99m }
+    //                            }
+    //                        },
+    //                        new CatalogItem
+    //                        {
+    //                            Id = 2,
+    //                            Name = "Pepperoni Pizza",
+    //                            Description = "Classic pepperoni and cheese.",
+    //                            Variants = new List<CatalogItemVariant>
+    //                            {
+    //                                new CatalogItemVariant { Id = 4, Title = "Medium", Price = 99.99m, },
+    //                                new CatalogItemVariant { Id = 5, Title = "Large", Price = 119.99m }
+    //                            }
+    //                        }
+    //                    }
+    //                },
+
+    //    new CatalogCategory
+    //    {
+    //        Id = 2,
+    //        Name = "Burgers",
+    //        Description = "burgers",
+    //        Items = new List<CatalogItem>
+    //        {
+    //            new CatalogItem
+    //            {
+    //                Id = 3,
+    //                Name = "Classic Beef Burger",
+    //                Description = "Juicy beef patty with cheese.",
+    //                Variants = new List<CatalogItemVariant>
+    //                {
+    //                    new CatalogItemVariant { Id = 6, Title = "Mild", Price = 79.99m },
+    //                    new CatalogItemVariant { Id = 7, Title = "Hot", Price = 79.99m }
+    //                }
+    //            },
+    //            new CatalogItem
+    //            {
+    //                Id = 4,
+    //                Name = "Spicy Chicken Burger",
+    //                Description = "Crispy hot chicken breast with mayo.",
+    //                Variants = new List<CatalogItemVariant>
+    //                {
+    //                    new CatalogItemVariant { Id = 8, Title = "Mild", Price = 84.99m },
+    //                    new CatalogItemVariant { Id = 9, Title = "Hot", Price = 84.99m }
+    //                }
+    //            }
+    //        }
+    //    },
+
+    //    new CatalogCategory
+    //    {
+    //        Id = 3,
+    //        Name = "Drinks",
+    //        Description = "drinks",
+    //        Items = new List<CatalogItem>
+    //        {
+    //            new CatalogItem
+    //            {
+    //                Id = 5,
+    //                Name = "Coca-Cola",
+    //                Description = "Ice cold Coke.",
+    //                Variants = new List<CatalogItemVariant>
+    //                {
+    //                    new CatalogItemVariant { Id = 10, Title = "300ml", Price = 18.99m },
+    //                    new CatalogItemVariant { Id = 11, Title = "500ml", Price = 22.99m }
+    //                }
+    //            },
+    //            new CatalogItem
+    //            {
+    //                Id = 6,
+    //                Name = "Orange Juice",
+    //                Description = "Freshly squeezed.",
+    //                Variants = new List<CatalogItemVariant>
+    //                {
+    //                    new CatalogItemVariant { Id = 12, Title = "300ml", Price = 24.99m },
+    //                    new CatalogItemVariant { Id = 13, Title = "500ml", Price = 29.99m }
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+    //        };
+
+    //        return Ok(new { success = true, data = menuData });
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return StatusCode(500, new
+    //        {
+    //            success = false,
+    //            error = "Failed to retrieve menus",
+    //            details = ex.Message
+    //        });
+    //    }
+    //}
 }
