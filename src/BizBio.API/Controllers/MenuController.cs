@@ -413,13 +413,96 @@ public class MenuController : ControllerBase
     /// <summary>
     /// Get user's menus
     /// </summary>
-    //[HttpGet]
-    //[Authorize]
-    //[Route("/api/v1/menus/test")]
-    //public async Task<IActionResult> GetTestMenu()
-    //{
-    //    try
-    //    {
+    [HttpGet]
+    [Authorize]
+    [Route("/api/v1/menus/test")]
+    public async Task<IActionResult> GetTestMenu()
+    {
+        try
+        {
+            MenuDto menu = new MenuDto
+            {
+                Categories = new List<MenuCategoryDto>
+               {
+                   new MenuCategoryDto
+                   {
+                          Name = "Pizzas",
+                          Description = "Delicious pizzas",
+                          Items = new List<MenuDishDto>
+                          {
+                              new MenuDishDto
+                              {
+                                  Name = "Hawaiian Pizza",
+                                  Description = "Ham, pineapple, mozzarella, and tomato base.",
+                                  Variants = new List<MenuItemVariantDto>
+                                  {
+                                      new MenuItemVariantDto
+                                      {
+                                          Title = "Small",
+                                          Unit = new MenuItemVariantUnitDto
+                                          {
+                                              UnitType = MenuItemUnitType.Size,
+                                              Label = "Small"
+                                          },
+                                          Prices = new List<MenuItemVariantPriceDto>
+                                          {
+                                              new MenuItemVariantPriceDto
+                                              {
+                                                  Amount = 69.99,
+                                                  PriceType = MenuItemPriceType.Standard,
+
+                                              }
+                                          }
+                                      },
+                                      new MenuItemVariantDto
+                                      {
+                                          Title = "Medium",
+                                          Unit = new MenuItemVariantUnitDto
+                                          {
+                                              UnitType = MenuItemUnitType.Size,
+                                              Label = "Medium"
+                                          },
+                                          Prices = new List<MenuItemVariantPriceDto>
+                                          {
+                                              new MenuItemVariantPriceDto
+                                              {
+                                                  Amount = 89.99,
+                                                  PriceType = MenuItemPriceType.Standard
+                                              }
+                                          }
+                                      }
+                                  },
+                                  MenuDishTags = new Dictionary<MenuItemTagCategoryDto, List<MenuItemTagDto>>
+                                  {
+                                      {
+                                          new MenuItemTagCategoryDto
+                                          {
+                                              Name = "Dietary",
+                                              Description = "Dietary preferences"
+                                          },
+                                            new List<MenuItemTagDto>
+                                            {
+                                                new MenuItemTagDto
+                                                {
+                                                    Name = "Gluten-Free",
+                                                    Description = "Suitable for gluten-free diets"
+                                                },
+                                                new MenuItemTagDto
+                                                {
+                                                    Name = "Vegan",
+                                                    Description = "Suitable for vegan diets"
+                                                }
+
+                                            }
+                                        }
+
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                };
     //        var Categories = new List<CatalogCategory>
     //{
                    
@@ -450,7 +533,7 @@ public class MenuController : ControllerBase
     //                        Id = 1,
     //                        Title = "Small",
                             
-    //                        Unit = new VariantUnit
+    //                        Unit = new MenuItemVariantUnit
     //                        {
     //                            Id = 1,
     //                            UnitType = UnitType.Size,
@@ -692,16 +775,16 @@ public class MenuController : ControllerBase
     //}
     //        };
 
-    //        return Ok(new { success = true, data = menuData });
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return StatusCode(500, new
-    //        {
-    //            success = false,
-    //            error = "Failed to retrieve menus",
-    //            details = ex.Message
-    //        });
-    //    }
-    //}
+            return Ok(new { success = true, data = menu });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new
+            {
+                success = false,
+                error = "Failed to retrieve menus",
+                details = ex.Message
+            });
+        }
+    }
 }

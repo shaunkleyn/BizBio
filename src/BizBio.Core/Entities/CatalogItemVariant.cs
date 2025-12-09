@@ -1,11 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BizBio.Core.Entities
 {
+//    A product can have:
+
+//Small/Medium/Large
+
+//300ml / 500ml
+
+//250g / 500g
+
+//Single patty / double patty
+
+//Pack of 100 / pack of 1000
+
+//Per meter / per roll / per unit
     public class CatalogItemVariant : BaseEntity
     {
         //public long Id { get; set; }
