@@ -1,6 +1,7 @@
 namespace BizBio.Core.Entities;
 
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 public class Profile
 {
@@ -52,9 +53,10 @@ public class Profile
     public DateTime UpdatedAt { get; set; }
 
     // Navigation properties
+    [JsonIgnore]
     public virtual User User { get; set; } = null!;
-
+    [JsonIgnore]
     public virtual ICollection<Catalog> Catalogs { get; set; } = new List<Catalog>();
-
+    [JsonIgnore]
     public virtual ICollection<RestaurantTable> RestaurantTables { get; set; } = new List<RestaurantTable>();
 }

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using BizBio.Core.Interfaces;
 using BizBio.Core.Entities;
 using System.Security.Claims;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace BizBio.API.Controllers;
 
@@ -45,8 +47,14 @@ public class ProfilesController : ControllerBase
             var profiles = await _profileRepo.GetByUserIdAsync(userId);
 
             _logger.LogInformation("Found {Count} profiles for user {UserId}", profiles.Count(), userId);
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.IgnoreCycles
+            };
 
-            return Ok(new { data = profiles });
+            var json = JsonSerializer.Serialize(profiles, options);
+
+            return Ok(new { data = json });
         }
         catch (Exception ex)
         {
