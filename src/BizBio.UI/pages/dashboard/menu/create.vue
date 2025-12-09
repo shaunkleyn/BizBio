@@ -73,12 +73,12 @@
             <!-- Trial Badge -->
             <div class="flex justify-center mb-4">
               <div :class="[
-                'inline-flex items-center px-4 py-2 rounded-full text-sm font-bold',
+                'inline-flex items-center px-4 py-2 rounded-full text-sm font-bold text-white',
                 plan.popular
                   ? 'bg-white bg-opacity-20 text-white'
                   : 'bg-[var(--accent3-color)] bg-opacity-10 text-[var(--accent3-color)]'
               ]">
-                <i class="fas fa-gift mr-2"></i>
+                <i class="fas fa-gift mr-2 text-white"></i>
                 {{ plan.trialDays }}-Day Free Trial
               </div>
             </div>
@@ -175,6 +175,7 @@
       <!-- Step 4: Menu Items Setup -->
       <MenuItemsSetup
         v-else-if="currentStep === 4"
+        :is-submitting="isSubmitting"
         @previous="previousStep"
         @complete="handleComplete"
       />
@@ -195,8 +196,13 @@ const {
   selectPlan,
   nextStep,
   previousStep,
-  canProceedToNextStep
+  canProceedToNextStep,
+  resetMenuCreation
 } = useMenuCreation()
+
+const menusApi = useMenusApi()
+const uploadsApi = useUploadsApi()
+const isSubmitting = ref(false)
 
 const getStepLabel = (step) => {
   const labels = {
@@ -213,9 +219,113 @@ const handlePlanSelect = (plan) => {
 }
 
 const handleComplete = async () => {
-  // Here you would save the menu to the API
-  // For now, we'll just navigate to the dashboard
-  router.push('/dashboard')
+  if (isSubmitting.value) return
+
+  isSubmitting.value = true
+
+  try {
+    const { $trackEvent } = useNuxtApp()
+
+    // Upload business logo if provided
+    let logoUrl = menuData.value.menuProfile.businessLogoUrl
+    if (menuData.value.menuProfile.businessLogo && menuData.value.menuProfile.businessLogo instanceof File) {
+      try {
+        const logoResponse = await uploadsApi.uploadLogo(menuData.value.menuProfile.businessLogo)
+        logoUrl = logoResponse.data.url
+      } catch (error) {
+        console.error('Failed to upload logo:', error)
+      }
+    }
+
+    // Upload menu item images
+    const itemsWithUploadedImages = await Promise.all(
+      menuData.value.menuItems.map(async (item) => {
+        if (item.image && item.image instanceof File) {
+          try {
+            const imageResponse = await uploadsApi.uploadMenuImage(item.image)
+            return {
+              ...item,
+              imageUrl: imageResponse.data.url,
+              image: undefined // Remove the File object
+            }
+          } catch (error) {
+            console.error(`Failed to upload image for ${item.name}:`, error)
+            return { ...item, image: undefined }
+          }
+        }
+        return { ...item, image: undefined }
+      })
+    )
+
+    // Prepare menu data for API
+    const menuPayload = {
+      name: menuData.value.menuProfile.name,
+      description: menuData.value.menuProfile.description,
+      businessName: menuData.value.menuProfile.businessName,
+      businessLogo: logoUrl,
+      cuisine: menuData.value.menuProfile.cuisine,
+      phoneNumber: menuData.value.menuProfile.phoneNumber,
+      email: menuData.value.menuProfile.email,
+      address: menuData.value.menuProfile.address,
+      city: menuData.value.menuProfile.city,
+      country: menuData.value.menuProfile.country,
+      workingHours: menuData.value.menuProfile.workingHours,
+      // SEO fields
+      enableSEO: menuData.value.menuProfile.enableSEO,
+      slug: menuData.value.menuProfile.slug,
+      metaTitle: menuData.value.menuProfile.metaTitle,
+      metaDescription: menuData.value.menuProfile.metaDescription,
+      keywords: menuData.value.menuProfile.keywords,
+      categories: menuData.value.categories.map(cat => ({
+        name: cat.name,
+        description: cat.description,
+        icon: cat.icon,
+        order: cat.order
+      })),
+      items: itemsWithUploadedImages.map(item => ({
+        categoryId: item.categoryId,
+        name: item.name,
+        description: item.description,
+        price: item.price,
+        imageUrl: item.imageUrl,
+        allergens: item.allergens,
+        dietary: item.dietary,
+        available: item.available,
+        featured: item.featured
+      })),
+      subscriptionPlan: {
+        planId: menuData.value.selectedPlan.id,
+        planName: menuData.value.selectedPlan.name,
+        price: menuData.value.selectedPlan.price
+      },
+      trial: menuData.value.trial
+    }
+
+    // Save menu to backend
+    const response = await menusApi.createMenu(menuPayload)
+
+    // Track successful menu creation
+    if ($trackEvent) {
+      $trackEvent('Menu Created', {
+        menuName: menuData.value.menuProfile.name,
+        categoriesCount: menuData.value.categories.length,
+        itemsCount: menuData.value.menuItems.length,
+        plan: menuData.value.selectedPlan.name
+      })
+    }
+
+    // Reset menu creation state
+    resetMenuCreation()
+
+    // Navigate to dashboard with success message
+    router.push('/dashboard?menuCreated=true')
+  } catch (error) {
+    console.error('Failed to create menu:', error)
+    const toast = useToast()
+    toast.error('Failed to create menu. Please try again.', 'Error')
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 useHead({

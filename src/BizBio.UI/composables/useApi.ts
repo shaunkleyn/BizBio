@@ -13,8 +13,7 @@ export const useApi = () => {
   apiClient = axios.create({
     baseURL: config.public.apiUrl as string,
     headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
+      'Content-Type': 'application/json'
     },
     withCredentials: false,
   })
@@ -166,6 +165,7 @@ export const useMenusApi = () => {
 
   return {
     getByProfileSlug: (profileSlug: string) => api.get(`/menus/${profileSlug}`),
+    getMenuBySlug: (slug: string) => api.get(`/menus/public/${slug}`),
     getItems: (menuId: string) => api.get(`/menus/${menuId}/items`),
     createItem: (menuId: string, data: any) => api.post(`/menus/${menuId}/items`, data),
     updateItem: (menuId: string, itemId: string, data: any) =>
@@ -173,7 +173,12 @@ export const useMenusApi = () => {
     deleteItem: (menuId: string, itemId: string) =>
       api.delete(`/menus/${menuId}/items/${itemId}`),
     getCategories: (menuId: string) => api.get(`/menus/${menuId}/categories`),
-    reorderItems: (menuId: string, data: any) => api.put(`/menus/${menuId}/reorder`, data)
+    reorderItems: (menuId: string, data: any) => api.put(`/menus/${menuId}/reorder`, data),
+    // Create complete menu with profile, categories, and items
+    createMenu: (data: any) => api.post('/menus', data),
+    getMyMenus: () => api.get('/menus/my'),
+    updateMenu: (menuId: string, data: any) => api.put(`/menus/${menuId}`, data),
+    deleteMenu: (menuId: string) => api.delete(`/menus/${menuId}`)
   }
 }
 

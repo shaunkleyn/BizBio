@@ -130,6 +130,57 @@ namespace BizBio.Infrastructure.Migrations
                     b.ToTable("CatalogItems", (string)null);
                 });
 
+            modelBuilder.Entity("BizBio.Core.Entities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CatalogId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("varchar(2000)");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CatalogId");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("CatalogId", "SortOrder");
+
+                    b.ToTable("Categories", (string)null);
+                });
+
             modelBuilder.Entity("BizBio.Core.Entities.Lookups.BillingCycleLookup", b =>
                 {
                     b.Property<int>("Id")
@@ -975,6 +1026,22 @@ namespace BizBio.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BizBio.Core.Entities.Category", null)
+                        .WithMany("Items")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Catalog");
+                });
+
+            modelBuilder.Entity("BizBio.Core.Entities.Category", b =>
+                {
+                    b.HasOne("BizBio.Core.Entities.Catalog", "Catalog")
+                        .WithMany()
+                        .HasForeignKey("CatalogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Catalog");
                 });
 
@@ -1097,6 +1164,11 @@ namespace BizBio.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("BizBio.Core.Entities.Catalog", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("BizBio.Core.Entities.Category", b =>
                 {
                     b.Navigation("Items");
                 });

@@ -1,7 +1,10 @@
+using BizBio.API.Filters;
+using BizBio.API.Telemetry;
 using BizBio.Core.Interfaces;
 using BizBio.Infrastructure.Data;
 using BizBio.Infrastructure.Repositories;
 using BizBio.Infrastructure.Services;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
@@ -11,14 +14,25 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Application Insights Logging Integration
+builder.Logging.AddApplicationInsights(
+    configureTelemetryConfiguration: (config) =>
+        config.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"],
+    configureApplicationInsightsLoggerOptions: (options) => { }
+);
+
 // Add services to the container
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ApplicationInsightsExceptionFilter>();
+});
 
 // Database Configuration
 // AutoDetect works with both MySQL and MariaDB
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
+        mysqlOptions => mysqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
 // JWT Authentication Configuration
 var jwtSettings = builder.Configuration.GetSection("JWT");
@@ -44,26 +58,25 @@ builder.Services.AddAuthentication(options =>
 });
 
 // CORS Configuration
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowFrontend", policy =>
-//    {
-//        policy
-//        .WithOrigins(
-//            "http://localhost:3000",
-//            "http://localhost:5173",
-//            "http://localhost:5000",
-//            "https://localhost:5443",
-//            "https://bizbio.co.za",
-//            "https://www.bizbio.co.za",
-//            "https://api.bizbio.co.za",
-//            "https://ui.bizbio.co.za"
-//        )
-//        .AllowAnyMethod()
-//        .AllowAnyHeader()
-//        .AllowCredentials();
-//    });
-//});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+        .WithOrigins(
+            "http://localhost:3000",
+            "http://localhost:5173",
+            "http://localhost:5000",
+            "https://localhost:5443",
+            "https://bizbio.co.za",
+            "https://www.bizbio.co.za",
+            "https://api.bizbio.co.za",
+            "https://ui.bizbio.co.za"
+        )
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
 
 // Repository Registration
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -77,6 +90,7 @@ builder.Services.AddScoped<IRestaurantTableRepository, RestaurantTableRepository
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPaymentService, PayFastService>();
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
 // Session Configuration (for NFC scan tracking)
 builder.Services.AddMemoryCache();
@@ -136,7 +150,22 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-builder.Services.AddApplicationInsightsTelemetry();
+
+// Configure Application Insights Telemetry
+builder.Services.AddApplicationInsightsTelemetry(options =>
+{
+    options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+    options.EnableAdaptiveSampling = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableAdaptiveSampling", true);
+    options.EnablePerformanceCounterCollectionModule = builder.Configuration.GetValue<bool>("ApplicationInsights:EnablePerformanceCounterCollectionModule", true);
+    options.EnableDependencyTrackingTelemetryModule = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableDependencyTrackingTelemetryModule", true);
+    options.EnableEventCounterCollectionModule = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableEventCounterCollectionModule", true);
+    options.EnableQuickPulseMetricStream = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableQuickPulseMetricStream", true);
+    options.EnableHeartbeat = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableHeartbeat", true);
+    options.AddAutoCollectedMetricExtractor = builder.Configuration.GetValue<bool>("ApplicationInsights:AddAutoCollectedMetricExtractor", true);
+});
+
+// Register custom telemetry initializer
+builder.Services.AddSingleton<ITelemetryInitializer, BizBioTelemetryInitializer>();
 
 var app = builder.Build();
 
@@ -156,10 +185,17 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-//app.UseCors("AllowFrontend");
+app.UseCors("AllowFrontend");
 
 //app.UseHttpsRedirection();
 
+// Serve static files from the uploads directory
+var uploadPath = builder.Configuration["FileUpload:Path"] ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(uploadPath),
+    RequestPath = "/uploads"
+});
 
 app.UseAuthentication();
 app.UseAuthorization();

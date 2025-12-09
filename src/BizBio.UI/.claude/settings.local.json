@@ -3,7 +3,13 @@
     "allow": [
       "Bash(npm run build:*)",
       "Bash(rm:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(cat:*)",
+      "Bash(dotnet ef migrations add:*)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet ef database update:*)",
+      "Bash(if exist .nuxt rmdir /s /q .nuxt)",
+      "Bash(if exist node_modules.vite rmdir /s /q node_modules.vite)"
     ],
     "deny": [],
     "ask": []

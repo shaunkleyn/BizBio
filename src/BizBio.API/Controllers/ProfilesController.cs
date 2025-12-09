@@ -1,3 +1,4 @@
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BizBio.Core.Interfaces;
@@ -13,11 +14,19 @@ public class ProfilesController : ControllerBase
 {
     private readonly IProfileRepository _profileRepo;
     private readonly ICatalogRepository _catalogRepo;
+    private readonly ILogger<ProfilesController> _logger;
+    private readonly TelemetryClient _telemetryClient;
 
-    public ProfilesController(IProfileRepository profileRepo, ICatalogRepository catalogRepo)
+    public ProfilesController(
+        IProfileRepository profileRepo,
+        ICatalogRepository catalogRepo,
+        ILogger<ProfilesController> logger,
+        TelemetryClient telemetryClient)
     {
         _profileRepo = profileRepo;
         _catalogRepo = catalogRepo;
+        _logger = logger;
+        _telemetryClient = telemetryClient;
     }
 
     private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
@@ -28,10 +37,27 @@ public class ProfilesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetMyProfiles()
     {
-        var userId = GetUserId();
-        var profiles = await _profileRepo.GetByUserIdAsync(userId);
+        try
+        {
+            var userId = GetUserId();
+            _logger.LogInformation("Fetching profiles for user {UserId}", userId);
 
-        return Ok(new { data = profiles });
+            var profiles = await _profileRepo.GetByUserIdAsync(userId);
+
+            _logger.LogInformation("Found {Count} profiles for user {UserId}", profiles.Count(), userId);
+
+            return Ok(new { data = profiles });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching profiles");
+            _telemetryClient.TrackException(ex, new Dictionary<string, string>
+            {
+                { "Controller", "ProfilesController" },
+                { "Action", "GetMyProfiles" }
+            });
+            return StatusCode(500, new { message = "An error occurred while fetching profiles" });
+        }
     }
 
     /// <summary>
@@ -40,13 +66,34 @@ public class ProfilesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProfile(int id)
     {
-        var userId = GetUserId();
-        var profile = await _profileRepo.GetByIdAsync(id);
+        try
+        {
+            var userId = GetUserId();
+            _logger.LogInformation("Fetching profile {ProfileId} for user {UserId}", id, userId);
 
-        if (profile == null || profile.UserId != userId)
-            return NotFound();
+            var profile = await _profileRepo.GetByIdAsync(id);
 
-        return Ok(new { data = profile });
+            if (profile == null || profile.UserId != userId)
+            {
+                _logger.LogWarning("Profile {ProfileId} not found or unauthorized for user {UserId}", id, userId);
+                return NotFound();
+            }
+
+            _logger.LogInformation("Successfully fetched profile {ProfileId}", id);
+
+            return Ok(new { data = profile });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching profile {ProfileId}", id);
+            _telemetryClient.TrackException(ex, new Dictionary<string, string>
+            {
+                { "Controller", "ProfilesController" },
+                { "Action", "GetProfile" },
+                { "ProfileId", id.ToString() }
+            });
+            return StatusCode(500, new { message = "An error occurred while fetching the profile" });
+        }
     }
 
     /// <summary>
@@ -55,49 +102,78 @@ public class ProfilesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateProfile([FromBody] CreateProfileDto dto)
     {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        var userId = GetUserId();
-
-        // Validate slug uniqueness
-        var existingProfile = await _profileRepo.GetBySlugAsync(dto.Slug);
-        if (existingProfile != null)
-            return BadRequest(new { message = "Profile slug already exists" });
-
-        var profile = new Profile
+        try
         {
-            UserId = userId,
-            Slug = dto.Slug,
-            Name = dto.Name,
-            Description = dto.Description ?? string.Empty,
-            ProfileType = dto.ProfileType,
-            ContactPhone = dto.ContactPhone,
-            ContactEmail = dto.ContactEmail,
-            Website = dto.Website,
-            IsActive = true,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Profile creation failed: Invalid model state");
+                return BadRequest(ModelState);
+            }
 
-        await _profileRepo.AddAsync(profile);
-        await _profileRepo.SaveChangesAsync();
+            var userId = GetUserId();
+            _logger.LogInformation("Creating profile with slug {Slug} for user {UserId}", dto.Slug, userId);
 
-        // Create default catalog
-        var catalog = new Catalog
+            // Validate slug uniqueness
+            var existingProfile = await _profileRepo.GetBySlugAsync(dto.Slug);
+            if (existingProfile != null)
+            {
+                _logger.LogWarning("Profile creation failed: Slug {Slug} already exists", dto.Slug);
+                return BadRequest(new { message = "Profile slug already exists" });
+            }
+
+            var profile = new Profile
+            {
+                UserId = userId,
+                Slug = dto.Slug,
+                Name = dto.Name,
+                Description = dto.Description ?? string.Empty,
+                ProfileType = dto.ProfileType,
+                ContactPhone = dto.ContactPhone,
+                ContactEmail = dto.ContactEmail,
+                Website = dto.Website,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            await _profileRepo.AddAsync(profile);
+            await _profileRepo.SaveChangesAsync();
+
+            // Create default catalog
+            var catalog = new Catalog
+            {
+                ProfileId = profile.Id,
+                Name = "Main Catalog",
+                Description = "Default catalog",
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            await _catalogRepo.AddAsync(catalog);
+            await _catalogRepo.SaveChangesAsync();
+
+            _logger.LogInformation("Profile {ProfileId} created successfully for user {UserId}", profile.Id, userId);
+            _telemetryClient.TrackEvent("ProfileCreated", new Dictionary<string, string>
+            {
+                { "ProfileId", profile.Id.ToString() },
+                { "UserId", userId.ToString() },
+                { "ProfileType", dto.ProfileType }
+            });
+
+            return CreatedAtAction(nameof(GetProfile), new { id = profile.Id }, new { data = profile });
+        }
+        catch (Exception ex)
         {
-            ProfileId = profile.Id,
-            Name = "Main Catalog",
-            Description = "Default catalog",
-            IsActive = true,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
-
-        await _catalogRepo.AddAsync(catalog);
-        await _catalogRepo.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetProfile), new { id = profile.Id }, new { data = profile });
+            _logger.LogError(ex, "Error creating profile");
+            _telemetryClient.TrackException(ex, new Dictionary<string, string>
+            {
+                { "Controller", "ProfilesController" },
+                { "Action", "CreateProfile" },
+                { "Slug", dto.Slug }
+            });
+            return StatusCode(500, new { message = "An error occurred while creating the profile" });
+        }
     }
 }
 

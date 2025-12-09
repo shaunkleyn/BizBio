@@ -110,17 +110,22 @@
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
       @click.self="closeModal"
     >
-      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-xl font-bold text-[var(--dark-text-color)]">
-            {{ editingCategory ? 'Edit Category' : 'Add New Category' }}
-          </h3>
-          <button @click="closeModal" class="text-[var(--gray-text-color)] hover:text-[var(--dark-text-color)]">
-            <i class="fas fa-times text-xl"></i>
-          </button>
+      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col">
+        <!-- Modal Header - Fixed -->
+        <div class="flex-shrink-0 p-6 border-b border-[var(--light-border-color)]">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl font-bold text-[var(--dark-text-color)]">
+              {{ editingCategory ? 'Edit Category' : 'Add New Category' }}
+            </h3>
+            <button @click="closeModal" type="button" class="text-[var(--gray-text-color)] hover:text-[var(--dark-text-color)]">
+              <i class="fas fa-times text-xl"></i>
+            </button>
+          </div>
         </div>
 
-        <form @submit.prevent="handleSaveCategory">
+        <!-- Modal Body - Scrollable -->
+        <div class="flex-1 overflow-y-auto p-6">
+          <form @submit.prevent="handleSaveCategory" id="categoryForm">
           <!-- Category Name -->
           <div class="mb-4">
             <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
@@ -170,8 +175,11 @@
               </button>
             </div>
           </div>
+          </form>
+        </div>
 
-          <!-- Buttons -->
+        <!-- Modal Footer - Fixed -->
+        <div class="flex-shrink-0 p-6 border-t border-[var(--light-border-color)]">
           <div class="flex gap-3">
             <button
               type="button"
@@ -182,24 +190,40 @@
             </button>
             <button
               type="submit"
+              form="categoryForm"
               class="flex-1 px-4 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
             >
               <i class="fas fa-check mr-2"></i>
               {{ editingCategory ? 'Update' : 'Add' }}
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
+
+    <!-- Confirmation Dialog -->
+    <ConfirmDialog
+      :is-open="showDeleteConfirm"
+      title="Delete Category"
+      message="Are you sure you want to delete this category? All items in this category will also be removed."
+      confirm-text="Delete"
+      cancel-text="Cancel"
+      variant="danger"
+      @confirm="confirmDeleteCategory"
+      @cancel="showDeleteConfirm = false"
+    />
   </div>
 </template>
 
 <script setup>
 const emit = defineEmits(['next', 'previous'])
 const { menuData, addCategory, removeCategory: removeCategoryFromStore } = useMenuCreation()
+const toast = useToast()
 
 const showAddCategoryModal = ref(false)
 const editingCategory = ref(null)
+const showDeleteConfirm = ref(false)
+const categoryToDelete = ref(null)
 const newCategory = ref({
   name: '',
   description: '',
@@ -232,9 +256,16 @@ const editCategory = (category) => {
 }
 
 const removeCategory = (categoryId) => {
-  if (confirm('Are you sure you want to delete this category? All items in this category will also be removed.')) {
-    removeCategoryFromStore(categoryId)
+  categoryToDelete.value = categoryId
+  showDeleteConfirm.value = true
+}
+
+const confirmDeleteCategory = () => {
+  if (categoryToDelete.value) {
+    removeCategoryFromStore(categoryToDelete.value)
+    categoryToDelete.value = null
   }
+  showDeleteConfirm.value = false
 }
 
 const handleSaveCategory = () => {
@@ -254,7 +285,7 @@ const handleSaveCategory = () => {
     }
     closeModal()
   } catch (error) {
-    alert(error.message)
+    toast.error(error.message, 'Error')
   }
 }
 
