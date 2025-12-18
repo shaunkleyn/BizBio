@@ -116,7 +116,7 @@ public class TablesController : ControllerBase
             NFCTagTypeId = (int)NFCTagType.Sticker,
             NFCTagStatusId = (int)NFCTagStatus.Active,
             IsActive = true,
-            CreatedBy = userId,
+            CreatedBy = userId.ToString(),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };

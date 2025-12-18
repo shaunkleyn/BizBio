@@ -5,6 +5,7 @@ using BizBio.Core.Interfaces;
 using BizBio.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.IO;
 using System.Security.Claims;
 using System.Text.Json;
@@ -384,6 +385,154 @@ public class MenuController : ControllerBase
                 details = ex.Message
             });
         }
+    }
+
+    /// <summary>
+    /// Get catalog item details with variants
+    /// Publicly accessible endpoint for viewing item details
+    /// </summary>
+    /// <param name="slug">Restaurant profile slug</param>
+    /// <param name="itemId">Catalog item ID</param>
+    [HttpGet("{slug}/items/{itemId}")]
+    public async Task<IActionResult> GetItemDetails(string slug, int itemId)
+    {
+        if (string.IsNullOrEmpty(slug))
+            return BadRequest(new { success = false, error = "Slug is required" });
+
+        var profile = await _profileRepo.GetBySlugAsync(slug);
+
+        if (profile == null || !profile.IsActive)
+            return NotFound(new { success = false, error = "Restaurant not found" });
+
+        var catalog = await _catalogRepo.GetByProfileIdAsync(profile.Id);
+        if (catalog == null)
+            return NotFound(new { success = false, error = "Menu not found" });
+
+        var item = await _context.CatalogItems
+            .Include(i => i.Variants)
+            .FirstOrDefaultAsync(i => i.Id == itemId && i.CatalogId == catalog.Id && i.IsActive);
+
+        if (item == null)
+            return NotFound(new { success = false, error = "Item not found" });
+
+        return Ok(new
+        {
+            success = true,
+            data = new
+            {
+                item = new
+                {
+                    id = item.Id,
+                    name = item.Name,
+                    description = item.Description,
+                    price = item.Price,
+                    images = ParseJsonArray(item.Images),
+                    itemType = (int)item.ItemType,
+                    variants = item.Variants
+                        .Where(v => v.IsActive)
+                        .Select(v => new
+                        {
+                            id = v.Id,
+                            title = v.Title,
+                            name = v.Title,
+                            price = v.Price,
+                            sizeValue = v.SizeValue,
+                            sizeUnit = v.SizeUnit,
+                            isDefault = v.IsDefault
+                        }).ToList()
+                }
+            }
+        });
+    }
+
+    /// <summary>
+    /// Get bundle details with steps and options
+    /// Publicly accessible endpoint for viewing bundle configuration
+    /// </summary>
+    /// <param name="slug">Restaurant profile slug</param>
+    /// <param name="bundleId">Bundle ID</param>
+    [HttpGet("{slug}/bundles/{bundleId}")]
+    public async Task<IActionResult> GetBundleDetails(string slug, int bundleId)
+    {
+        if (string.IsNullOrEmpty(slug))
+            return BadRequest(new { success = false, error = "Slug is required" });
+
+        var profile = await _profileRepo.GetBySlugAsync(slug);
+
+        if (profile == null || !profile.IsActive)
+            return NotFound(new { success = false, error = "Restaurant not found" });
+
+        var catalog = await _catalogRepo.GetByProfileIdAsync(profile.Id);
+        if (catalog == null)
+            return NotFound(new { success = false, error = "Menu not found" });
+
+        var bundle = await _context.CatalogBundles
+            .Include(b => b.Steps.OrderBy(s => s.StepNumber))
+                .ThenInclude(s => s.AllowedProducts)
+                    .ThenInclude(p => p.Product)
+            .Include(b => b.Steps)
+                .ThenInclude(s => s.OptionGroups)
+                    .ThenInclude(g => g.Options.Where(o => o.IsActive))
+            .FirstOrDefaultAsync(b => b.Id == bundleId && b.CatalogId == catalog.Id && b.IsActive);
+
+        if (bundle == null)
+            return NotFound(new { success = false, error = "Bundle not found" });
+
+        return Ok(new
+        {
+            success = true,
+            data = new
+            {
+                bundle = new
+                {
+                    id = bundle.Id,
+                    name = bundle.Name,
+                    description = bundle.Description,
+                    basePrice = bundle.BasePrice,
+                    images = ParseJsonArray(bundle.Images),
+                    steps = bundle.Steps
+                        .Where(s => s.IsActive)
+                        .OrderBy(s => s.StepNumber)
+                        .Select(s => new
+                        {
+                            id = s.Id,
+                            stepNumber = s.StepNumber,
+                            name = s.Name,
+                            minSelect = s.MinSelect,
+                            maxSelect = s.MaxSelect,
+                            products = s.AllowedProducts
+                                .Where(p => p.IsActive && p.Product.IsActive)
+                                .Select(p => new
+                                {
+                                    id = p.Product.Id,
+                                    name = p.Product.Name,
+                                    description = p.Product.Description,
+                                    priceModifier = 0m,
+                                    images = ParseJsonArray(p.Product.Images)
+                                }).ToList(),
+                            optionGroups = s.OptionGroups
+                                .Where(g => g.IsActive)
+                                .Select(g => new
+                                {
+                                    id = g.Id,
+                                    name = g.Name,
+                                    isRequired = g.IsRequired,
+                                    minSelect = g.MinSelect,
+                                    maxSelect = g.MaxSelect,
+                                    options = g.Options
+                                        .Where(o => o.IsActive)
+                                        .Select(o => new
+                                        {
+                                            id = o.Id,
+                                            name = o.Name,
+                                            priceModifier = o.PriceModifier,
+                                            isDefault = o.IsDefault
+                                        }).ToList()
+                                }).ToList()
+                        }).ToList()
+                }
+            }
+        });
     }
 
     /// <summary>

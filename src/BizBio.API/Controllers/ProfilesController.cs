@@ -16,17 +16,20 @@ public class ProfilesController : ControllerBase
 {
     private readonly IProfileRepository _profileRepo;
     private readonly ICatalogRepository _catalogRepo;
+    private readonly IUserSubscriptionRepository _subscriptionRepo;
     private readonly ILogger<ProfilesController> _logger;
     private readonly TelemetryClient _telemetryClient;
 
     public ProfilesController(
         IProfileRepository profileRepo,
         ICatalogRepository catalogRepo,
+        IUserSubscriptionRepository subscriptionRepo,
         ILogger<ProfilesController> logger,
         TelemetryClient telemetryClient)
     {
         _profileRepo = profileRepo;
         _catalogRepo = catalogRepo;
+        _subscriptionRepo = subscriptionRepo;
         _logger = logger;
         _telemetryClient = telemetryClient;
     }
@@ -34,7 +37,7 @@ public class ProfilesController : ControllerBase
     private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
     /// <summary>
-    /// Get all profiles for the authenticated user
+    /// Get all profiles for the authenticated user with subscription status
     /// </summary>
     [HttpGet]
     public async Task<IActionResult> GetMyProfiles()
@@ -45,16 +48,52 @@ public class ProfilesController : ControllerBase
             _logger.LogInformation("Fetching profiles for user {UserId}", userId);
 
             var profiles = await _profileRepo.GetByUserIdAsync(userId);
+            var subscriptions = await _subscriptionRepo.GetActiveSubscriptionsAsync(userId);
 
-            _logger.LogInformation("Found {Count} profiles for user {UserId}", profiles.Count(), userId);
-            var options = new JsonSerializerOptions
+            _logger.LogInformation("Found {Count} profiles and {SubCount} subscriptions for user {UserId}",
+                profiles.Count(), subscriptions.Count(), userId);
+
+            // Get the most recent active subscription (assuming one active subscription per user)
+            var activeSubscription = subscriptions.FirstOrDefault();
+
+            // Build response with subscription status
+            var profilesWithStatus = profiles.Select(profile => new
             {
-                ReferenceHandler = ReferenceHandler.IgnoreCycles
-            };
+                profile.Id,
+                profile.UserId,
+                profile.Slug,
+                profile.Name,
+                profile.Description,
+                profile.ProfileType,
+                profile.Logo,
+                profile.ContactPhone,
+                profile.ContactEmail,
+                profile.Website,
+                profile.IsActive,
+                profile.CreatedAt,
+                profile.UpdatedAt,
+                SubscriptionStatus = activeSubscription != null ? new
+                {
+                    IsInTrial = activeSubscription.StatusId == (int)Core.Enums.SubscriptionStatus.Trial,
+                    TrialEndsAt = activeSubscription.TrialEndsAt,
+                    TrialDaysRemaining = activeSubscription.TrialEndsAt.HasValue
+                        ? Math.Max(0, (int)(activeSubscription.TrialEndsAt.Value - DateTime.UtcNow).TotalDays)
+                        : (int?)null,
+                    Status = ((Core.Enums.SubscriptionStatus)activeSubscription.StatusId).ToString(),
+                    StatusId = activeSubscription.StatusId,
+                    NextBillingDate = activeSubscription.NextBillingDate,
+                    NeedsPayment = activeSubscription.StatusId == (int)Core.Enums.SubscriptionStatus.Expired ||
+                                   (activeSubscription.StatusId == (int)Core.Enums.SubscriptionStatus.Trial &&
+                                    activeSubscription.TrialEndsAt.HasValue &&
+                                    activeSubscription.TrialEndsAt.Value <= DateTime.UtcNow),
+                    TierName = activeSubscription.Tier?.DisplayName,
+                    MaxProfiles = activeSubscription.CustomMaxProfiles ?? activeSubscription.Tier?.MaxProfiles,
+                    MaxCatalogItems = activeSubscription.CustomMaxCatalogItems ?? activeSubscription.Tier?.MaxCatalogItems
+                } : null
+            }).ToList();
 
-            var json = JsonSerializer.Serialize(profiles, options);
-
-            return Ok(new { data = json });
+            // Return profiles with subscription status
+            return Ok(new { data = profilesWithStatus });
         }
         catch (Exception ex)
         {

@@ -4,6 +4,7 @@ using BizBio.Core.Interfaces;
 using BizBio.Infrastructure.Data;
 using BizBio.Infrastructure.Repositories;
 using BizBio.Infrastructure.Services;
+using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -65,6 +66,8 @@ builder.Services.AddCors(options =>
         policy
         .WithOrigins(
             "http://localhost:3000",
+            "http://154.66.198.20:3000",
+            "http://127.0.0.1:3000",
             "http://localhost:5173",
             "http://localhost:5000",
             "https://localhost:5443",
@@ -74,7 +77,8 @@ builder.Services.AddCors(options =>
             "https://ui.bizbio.co.za"
         )
         .AllowAnyMethod()
-        .AllowAnyHeader();
+        .AllowAnyHeader()
+        .AllowCredentials();
     });
 });
 
@@ -84,6 +88,7 @@ builder.Services.AddScoped<ISubscriptionTierRepository, SubscriptionTierReposito
 builder.Services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<ICatalogRepository, CatalogRepository>();
+builder.Services.AddScoped<ICatalogBundleRepository, CatalogBundleRepository>();
 builder.Services.AddScoped<IRestaurantTableRepository, RestaurantTableRepository>();
 
 // Service Registration
@@ -166,6 +171,9 @@ builder.Services.AddApplicationInsightsTelemetry(options =>
 
 // Register custom telemetry initializer
 builder.Services.AddSingleton<ITelemetryInitializer, BizBioTelemetryInitializer>();
+
+// Ensure TelemetryClient is registered (AddApplicationInsightsTelemetry should do this, but make it explicit)
+builder.Services.AddSingleton<TelemetryClient>();
 
 var app = builder.Build();
 
