@@ -165,7 +165,9 @@ export const useMenusApi = () => {
 
   return {
     getByProfileSlug: (profileSlug: string) => api.get(`/menus/${profileSlug}`),
-    getMenuBySlug: (slug: string) => api.get(`/menus/public/${slug}`),
+    getMenuBySlug: (slug: string) => api.get(`/c/${slug}`),
+    getItemDetails: (slug: string, itemId: number) => api.get(`/c/${slug}/items/${itemId}`),
+    getBundleDetails: (slug: string, bundleId: number) => api.get(`/c/${slug}/bundles/${bundleId}`),
     getItems: (menuId: string) => api.get(`/menus/${menuId}/items`),
     createItem: (menuId: string, data: any) => api.post(`/menus/${menuId}/items`, data),
     updateItem: (menuId: string, itemId: string, data: any) =>
@@ -214,6 +216,44 @@ export const useSubscriptionsApi = () => {
   }
 }
 
+// Bundles API
+export const useBundlesApi = () => {
+  const api = useApi()
+
+  return {
+    // Bundle operations
+    getBundles: (catalogId: string) => api.get(`/v1/dashboard/catalogs/${catalogId}/bundles`),
+    getBundle: (catalogId: string, bundleId: string) =>
+      api.get(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}`),
+    createBundle: (catalogId: string, data: any) =>
+      api.post(`/v1/dashboard/catalogs/${catalogId}/bundles`, data),
+    updateBundle: (catalogId: string, bundleId: string, data: any) =>
+      api.put(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}`, data),
+    deleteBundle: (catalogId: string, bundleId: string) =>
+      api.delete(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}`),
+
+    // Step operations
+    addStep: (catalogId: string, bundleId: string, data: any) =>
+      api.post(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}/steps`, data),
+
+    // Product assignment
+    addProductToStep: (catalogId: string, bundleId: string, stepId: string, data: any) =>
+      api.post(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}/steps/${stepId}/products`, data),
+
+    // Option groups
+    addOptionGroup: (catalogId: string, bundleId: string, stepId: string, data: any) =>
+      api.post(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}/steps/${stepId}/option-groups`, data),
+
+    // Options
+    addOption: (catalogId: string, bundleId: string, optionGroupId: string, data: any) =>
+      api.post(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}/option-groups/${optionGroupId}/options`, data),
+
+    // Add bundle to category
+    addToCategory: (catalogId: string, bundleId: string, data: any) =>
+      api.post(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}/add-to-category`, data)
+  }
+}
+
 // Uploads API
 export const useUploadsApi = () => {
   const api = useApi()
@@ -241,5 +281,38 @@ export const useUploadsApi = () => {
       })
     },
     deleteFile: (fileId: string) => api.delete(`/uploads/${fileId}`)
+  }
+}
+
+// Library Items API
+export const useLibraryItemsApi = () => {
+  const api = useApi()
+
+  return {
+    // Library items CRUD
+    getItems: (categoryId?: number) => {
+      const params = categoryId ? `?categoryId=${categoryId}` : ''
+      return api.get(`/library/items${params}`)
+    },
+    getItem: (id: number) => api.get(`/library/items/${id}`),
+    createItem: (data: any) => api.post('/library/items', data),
+    updateItem: (id: number, data: any) => api.put(`/library/items/${id}`, data),
+    deleteItem: (id: number) => api.delete(`/library/items/${id}`),
+    addToCatalog: (id: number, data: any) => api.post(`/library/items/${id}/add-to-catalog`, data)
+  }
+}
+
+// Library Categories API
+export const useLibraryCategoriesApi = () => {
+  const api = useApi()
+
+  return {
+    // Library categories CRUD
+    getCategories: () => api.get('/library/categories'),
+    getCategory: (id: number) => api.get(`/library/categories/${id}`),
+    createCategory: (data: any) => api.post('/library/categories', data),
+    updateCategory: (id: number, data: any) => api.put(`/library/categories/${id}`, data),
+    deleteCategory: (id: number) => api.delete(`/library/categories/${id}`),
+    addToCatalog: (id: number, data: any) => api.post(`/library/categories/${id}/add-to-catalog`, data)
   }
 }

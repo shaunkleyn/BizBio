@@ -11,9 +11,14 @@
         <!-- Header -->
         <div class="text-center mb-8">
           <div class="flex justify-center mb-6">
-            <div class="bg-[var(--primary-color)] bg-opacity-10 rounded-full p-4">
-              <i class="fal fa text-white text-5xl"></i>
-            </div>
+            <div class="bg-[var(--primary-color)] bg-opacity-10 rounded-full p-4" style="
+    position: relative;
+"><i class="fad fa-user size-14 w-14 h-14 text-white text-5xl"></i><i class="fat fa-user size-14 w-14 h-14 text-white text-5xl" style="
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+"></i></div>
           </div>
           <h1
             class="text-3xl sm:text-4xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-2">

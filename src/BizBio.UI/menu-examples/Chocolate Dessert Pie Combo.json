@@ -1,0 +1,168 @@
+{
+    "menuItemData": {
+        "id": "jkvticlznz",
+        "deploymentId": "ic7bp6u8b5",
+        "realMenuId": "b2ee69d1-2da0-4736-a966-86174a4904c6",
+        "realMenuItemId": "eb79f091-7064-46d3-916e-467cc963fe5c",
+        "title": "Chocolate Dessert Pie Combo",
+        "menuCode": "CDPC917",
+        "imageURL": "https://serveup-client-platform.ams3.digitaloceanspaces.com/uploads/1e1d29bb-0a69-4124-8f7c-1f3b48188333/images/eb79f091-7064-46d3-916e-467cc963fe5c",
+        "description": "Chocolate Dessert Pie Combo",
+        "order": 1668,
+        "itemType": "simple",
+        "options": [
+            {
+                "id": 485,
+                "extrameta": {
+                    "groupType": "STANDARD",
+                    "is_required": true,
+                    "max_permitted": 1,
+                    "min_permitted": 1
+                },
+                "mainDesc": "Chocolate Dessert Pie Combo",
+                "optDesc": null,
+                "order": 485,
+                "subOptions": [
+                    {
+                        "id": 538,
+                        "code": "DPC102",
+                        "uuid": "3806c2cc-9e5e-4dab-9317-dcc56d8e04f2",
+                        "mainDesc": "Dessert Pie Chocolate",
+                        "optDesc": "Dessert Pie Chocolate",
+                        "order": 538,
+                        "source": "menu_item",
+                        "extrameta": {
+                            "pricingStrategy": 1,
+                            "zero_price": true,
+                            "ref_uuid": "2oq7ysmszw"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": 351,
+                "extrameta": {
+                    "groupType": "STANDARD",
+                    "is_required": true,
+                    "max_permitted": 1,
+                    "min_permitted": 1
+                },
+                "mainDesc": "330ml Pepsi",
+                "optDesc": "330ml Pepsi",
+                "order": 351,
+                "subOptions": [
+                    {
+                        "id": 527,
+                        "code": "P316",
+                        "uuid": "4ddf4e3e-d454-4095-8d60-19698c37ab9d",
+                        "mainDesc": "Pepsi 330ml",
+                        "optDesc": "Pepsi 330ml",
+                        "order": 527,
+                        "source": "menu_item",
+                        "extrameta": {
+                            "pricingStrategy": 1,
+                            "zero_price": true,
+                            "ref_uuid": "5qd7zrzhju"
+                        }
+                    },
+                    {
+                        "id": 528,
+                        "code": "PM310",
+                        "uuid": "6d7423a3-af35-4052-aaf2-f4a87ace631f",
+                        "mainDesc": "Pepsi Max 330ml",
+                        "optDesc": "Pepsi Max 330ml",
+                        "order": 528,
+                        "source": "menu_item",
+                        "extrameta": {
+                            "pricingStrategy": 1,
+                            "zero_price": true,
+                            "ref_uuid": "8kbui7izfm"
+                        }
+                    },
+                    {
+                        "id": 529,
+                        "code": "7UF392",
+                        "uuid": "e8607fe8-71ca-410a-9466-3701fcd12e6f",
+                        "mainDesc": "7 Up Free 330ml",
+                        "optDesc": "7 Up Free 330ml",
+                        "order": 529,
+                        "source": "menu_item",
+                        "extrameta": {
+                            "pricingStrategy": 1,
+                            "zero_price": true,
+                            "ref_uuid": "969litl7n1"
+                        }
+                    },
+                    {
+                        "id": 530,
+                        "code": "M3513",
+                        "uuid": "3b841891-4067-4d22-928a-01ccbf623991",
+                        "mainDesc": "Mirinda 330ml",
+                        "optDesc": "Mirinda 330ml",
+                        "order": 530,
+                        "source": "menu_item",
+                        "extrameta": {
+                            "pricingStrategy": 1,
+                            "zero_price": true,
+                            "ref_uuid": "sm0v2p4ffy"
+                        }
+                    },
+                    {
+                        "id": 531,
+                        "code": "MD3600",
+                        "uuid": "ec408b69-3be5-4c4a-8e3e-fa8e984e1e2a",
+                        "mainDesc": "Mountain Dew 330ml",
+                        "optDesc": "Mountain Dew 330ml",
+                        "order": 531,
+                        "source": "menu_item",
+                        "extrameta": {
+                            "pricingStrategy": 1,
+                            "zero_price": true,
+                            "ref_uuid": "0ox4vq56ok"
+                        }
+                    }
+                ]
+            }
+        ],
+        "extrameta": {
+            "price_data": {
+                "TAKE_AWAY": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 352843,
+                    "is_discounted": false,
+                    "price": "33.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                },
+                "KERBSIDE_COLLEC": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 352844,
+                    "is_discounted": false,
+                    "price": "33.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                },
+                "DELIVERY": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 352845,
+                    "is_discounted": false,
+                    "price": "33.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                },
+                "DINE_IN": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 352846,
+                    "is_discounted": false,
+                    "price": "33.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                }
+            }
+        },
+        "clientUuid": "1e1d29bb-0a69-4124-8f7c-1f3b48188333",
+        "createdAt": "2025-12-13T07:33:38.000Z",
+        "updatedAt": "2025-12-13T07:33:38.000Z"
+    },
+    "rootVariants": []
+}

@@ -1,0 +1,1095 @@
+{
+	"menuItemData": {
+		"id": "oxtj6kbotg",
+		"deploymentId": "ic7bp6u8b5",
+		"realMenuId": "b2ee69d1-2da0-4736-a966-86174a4904c6",
+		"realMenuItemId": "959311ba-cf9e-48f8-844f-0cb11f28c890",
+		"title": "Family Meal Deal",
+		"menuCode": "FMD972",
+		"imageURL": "https://serveup-client-platform.ams3.digitaloceanspaces.com/uploads/1e1d29bb-0a69-4124-8f7c-1f3b48188333/images/959311ba-cf9e-48f8-844f-0cb11f28c890",
+		"description": "Gather round the table and make every meal a family feast with ANY 2 large pizzas and a 2L Pepsi to share.",
+		"order": 1850,
+		"itemType": "simple",
+		"options": [
+			{
+				"id": 500,
+				"extrameta": {
+					"groupType": "COMPLEX",
+					"is_required": true,
+					"max_permitted": 1,
+					"min_permitted": 1,
+					"variant_skip_list": {
+						"18": false,
+						"19": false,
+						"20": false,
+						"21": true,
+						"23": false
+					}
+				},
+				"mainDesc": "Pizza 1",
+				"optDesc": null,
+				"order": 500,
+				"subOptions": [
+					{
+						"id": 472,
+						"code": "BA&F283",
+						"uuid": "b9c37c98-32d9-43c5-ab0f-6c956325516e",
+						"mainDesc": "Bacon, Avo & Feta",
+						"optDesc": "Bacon, Avo & Feta",
+						"order": 472,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "m6a50lfgml",
+							"expand": true
+						}
+					},
+					{
+						"id": 473,
+						"code": "CC937",
+						"uuid": "188e7a15-a91b-4242-a30c-908c29b9d2fd",
+						"mainDesc": "Classic Cheese",
+						"optDesc": "Classic Cheese",
+						"order": 473,
+						"source": "menu_item",
+						"extrameta": {
+							"isVegetarian": true,
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "fxr29c7v6r",
+							"expand": true
+						}
+					},
+					{
+						"id": 484,
+						"code": "S451",
+						"uuid": "602e58f7-68fd-4898-a54d-7a87520df2e0",
+						"mainDesc": "Supreme",
+						"optDesc": "Supreme",
+						"order": 484,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "mnrupty11y",
+							"expand": true
+						}
+					},
+					{
+						"id": 485,
+						"code": "BSR&M951",
+						"uuid": "b81f227a-97f0-45f0-b542-3d416529cdbb",
+						"mainDesc": "BBQ Spare Rib & Mush",
+						"optDesc": "BBQ Spare Rib & Mush",
+						"order": 485,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "wkw94t4tus",
+							"expand": true
+						}
+					},
+					{
+						"id": 486,
+						"code": "BSR&P228",
+						"uuid": "3026d735-5d88-44be-9f26-30b23de8a480",
+						"mainDesc": "BBQ Spare Rib & Pine",
+						"optDesc": "BBQ Spare Rib & Pine",
+						"order": 486,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "p9cc2kznry",
+							"expand": true
+						}
+					},
+					{
+						"id": 487,
+						"code": "F858",
+						"uuid": "3216bd5c-f36c-475e-b7aa-4edecec370c9",
+						"mainDesc": "Fetaroni",
+						"optDesc": "Fetaroni",
+						"order": 487,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "3rrdyynad6",
+							"expand": true
+						}
+					},
+					{
+						"id": 488,
+						"code": "T548",
+						"uuid": "717861e0-b026-459a-90c0-ad20a3439536",
+						"mainDesc": "Tropical",
+						"optDesc": "Tropical",
+						"order": 488,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "3p8lgexdn8",
+							"expand": true
+						}
+					},
+					{
+						"id": 489,
+						"code": "B591",
+						"uuid": "a11db224-bbcb-4901-9f5e-f9c873d6a592",
+						"mainDesc": "Bolognaise",
+						"optDesc": "Bolognaise",
+						"order": 489,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "d1bdv2wt28",
+							"expand": true
+						}
+					},
+					{
+						"id": 490,
+						"code": "BS176",
+						"uuid": "a9eb7037-3f8f-4e60-9a26-5284543f1990",
+						"mainDesc": "Bacon Supreme",
+						"optDesc": "Bacon Supreme",
+						"order": 490,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "ff18t49veo",
+							"expand": true
+						}
+					},
+					{
+						"id": 491,
+						"code": "TR201",
+						"uuid": "8786cc60-638a-46e2-a245-d08087db5282",
+						"mainDesc": "Tangy Russian",
+						"optDesc": "Tangy Russian",
+						"order": 491,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "xce9a3rpc8",
+							"expand": true
+						}
+					},
+					{
+						"id": 492,
+						"code": "HO245",
+						"uuid": "c745baf5-894b-455a-b8b0-a4f63e771540",
+						"mainDesc": "New Hot One",
+						"optDesc": "New Hot One",
+						"order": 492,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "h3zaqniftl",
+							"expand": true
+						}
+					},
+					{
+						"id": 493,
+						"code": "PD829",
+						"uuid": "08e868b5-6812-471a-ab01-b741459250ca",
+						"mainDesc": "Pepperoni Deluxe",
+						"optDesc": "Pepperoni Deluxe",
+						"order": 493,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "1pw2l9c1sq",
+							"expand": true
+						}
+					},
+					{
+						"id": 494,
+						"code": "R896",
+						"uuid": "26b89ba4-de27-4553-9f1b-87c92d41f83d",
+						"mainDesc": "Regina",
+						"optDesc": "Regina",
+						"order": 494,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "r022khlmqn",
+							"expand": true
+						}
+					},
+					{
+						"id": 495,
+						"code": "H474",
+						"uuid": "e38f615c-e3e3-49c5-8eeb-2ddeb98d4e97",
+						"mainDesc": "Hawaiian",
+						"optDesc": "Hawaiian",
+						"order": 495,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "a9x4tihy30",
+							"expand": true
+						}
+					},
+					{
+						"id": 496,
+						"code": "SCC959",
+						"uuid": "18d04661-ef83-4471-8771-39208415d17b",
+						"mainDesc": "Sweet Chilli Chicken",
+						"optDesc": "Sweet Chilli Chicken",
+						"order": 496,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "hksce6k2eq",
+							"expand": true
+						}
+					},
+					{
+						"id": 497,
+						"code": "C'M(258",
+						"uuid": "9c763cfc-d1b5-4250-9abb-0a522ff278c3",
+						"mainDesc": "Chicken mayo (Bacon)",
+						"optDesc": "Chicken mayo (Bacon)",
+						"order": 497,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "6p5om1vyuz",
+							"expand": true
+						}
+					},
+					{
+						"id": 498,
+						"code": "C'M(18",
+						"uuid": "5615a46e-ef7c-4d2e-87ed-0183e285e989",
+						"mainDesc": "Chicken Mayo & Feta",
+						"optDesc": "Chicken Mayo & Feta",
+						"order": 498,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "s6tffrha1g",
+							"expand": true
+						}
+					},
+					{
+						"id": 499,
+						"code": "PC603",
+						"uuid": "b47deaf5-1a3a-460f-b22d-52ff30c2c706",
+						"mainDesc": "Peri-Peri Chicken",
+						"optDesc": "Peri-Peri Chicken",
+						"order": 499,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "igwjz1ku49",
+							"expand": true
+						}
+					},
+					{
+						"id": 500,
+						"code": "BCS134",
+						"uuid": "d814b5c4-d889-4618-9f6b-cfdd662d86af",
+						"mainDesc": "BBQ Chicken Supreme",
+						"optDesc": "BBQ Chicken Supreme",
+						"order": 500,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "zz599t4vn7",
+							"expand": true
+						}
+					},
+					{
+						"id": 501,
+						"code": "BC&M719",
+						"uuid": "162a380e-c2c7-4aa3-b003-53d1de36701d",
+						"mainDesc": "BBQ Chicken & Mushroom",
+						"optDesc": "BBQ Chicken & Mushroom",
+						"order": 501,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "51piewzp5q",
+							"expand": true
+						}
+					},
+					{
+						"id": 502,
+						"code": "BC&P375",
+						"uuid": "86451f28-799e-4f1a-85f6-1b04fb0e2115",
+						"mainDesc": "BBQ Chicken & Pine",
+						"optDesc": "BBQ Chicken & Pineapple",
+						"order": 502,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "4ahb845soq",
+							"expand": true
+						}
+					},
+					{
+						"id": 504,
+						"code": "TC195",
+						"uuid": "25875add-bd7e-4d70-ad90-bd2047d4de39",
+						"mainDesc": "Triple Cheese",
+						"optDesc": "Triple Cheese",
+						"order": 504,
+						"source": "menu_item",
+						"extrameta": {
+							"isVegetarian": true,
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "m7afchwu9l",
+							"expand": true
+						}
+					},
+					{
+						"id": 506,
+						"code": "M231",
+						"uuid": "adbf2792-21aa-4bc7-844f-74583a16cad3",
+						"mainDesc": "Margherita",
+						"optDesc": "Margherita",
+						"order": 506,
+						"source": "menu_item",
+						"extrameta": {
+							"isVegetarian": true,
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "8n3zfnwzjc",
+							"expand": true
+						}
+					},
+					{
+						"id": 507,
+						"code": "P(F622",
+						"uuid": "cb507e35-f296-48cf-ba20-44e0d03d1157",
+						"mainDesc": "Pepperoni (Sava Flava)",
+						"optDesc": "Pepperoni (Sava Flava)",
+						"order": 507,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "k965rb77xk",
+							"expand": true
+						}
+					},
+					{
+						"id": 508,
+						"code": "BC(F612",
+						"uuid": "4bc81c89-5b31-419a-a114-fc7b52772079",
+						"mainDesc": "BBQ Chicken (Sava Flava)",
+						"optDesc": "BBQ Chicken (Sava Flava)",
+						"order": 508,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "ubb905p1m4",
+							"expand": true
+						}
+					},
+					{
+						"id": 509,
+						"code": "SC(F833",
+						"uuid": "d5a0d464-7026-4ce4-843f-4580865314dd",
+						"mainDesc": "Sweetelicious Chicken (Sava Flava)",
+						"optDesc": "Sweetelicious Chicken (Sava Flava)",
+						"order": 509,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "ff0rbzdl6h",
+							"expand": true
+						}
+					},
+					{
+						"id": 510,
+						"code": "MM(F491",
+						"uuid": "8975680b-b6d7-4007-86b7-94f02b28f0ca",
+						"mainDesc": "Mushroom Margherita (Sava Flava)",
+						"optDesc": "Mushroom Margherita (Sava Flava)",
+						"order": 510,
+						"source": "menu_item",
+						"extrameta": {
+							"isVegetarian": true,
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "4utalmk71n",
+							"expand": true
+						}
+					},
+					{
+						"id": 512,
+						"code": "H(F32",
+						"uuid": "5868c2ec-41ad-42b3-886f-0c6a060a3050",
+						"mainDesc": "Ham (Sava Flava)",
+						"optDesc": "Ham (Sava Flava)",
+						"order": 512,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "ovziw20vr9",
+							"expand": true
+						}
+					},
+					{
+						"id": 576,
+						"code": "HC(F318",
+						"uuid": "1fd7ba31-a90d-4526-99e5-77ab6e935893",
+						"mainDesc": "Hot Chicken (Sava Flava)",
+						"optDesc": "Hot Chicken (Sava Flava)",
+						"order": 576,
+						"source": "menu_item",
+						"extrameta": {
+							"isHot": true,
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "mx797emlxi",
+							"expand": true
+						}
+					},
+					{
+						"id": 849,
+						"code": "FION972",
+						"uuid": "b4b18088-11c9-487b-b0b7-e77e3f09e79e",
+						"mainDesc": "Four In One New",
+						"optDesc": "Four In One New",
+						"order": 849,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "nph1p0vksd",
+							"expand": true
+						}
+					},
+					{
+						"id": 850,
+						"code": "BPN520",
+						"uuid": "11c1130f-01a4-4d1f-816c-245fc4d2dae7",
+						"mainDesc": "Beef Pizza New",
+						"optDesc": "Beef Pizza New",
+						"order": 850,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "l7udh5qkfl",
+							"expand": true
+						}
+					}
+				]
+			},
+			{
+				"id": 501,
+				"extrameta": {
+					"groupType": "COMPLEX",
+					"is_required": true,
+					"max_permitted": 1,
+					"min_permitted": 1,
+					"variant_skip_list": {
+						"18": false,
+						"19": false,
+						"20": false,
+						"21": true,
+						"23": false
+					}
+				},
+				"mainDesc": "Pizza 2",
+				"optDesc": null,
+				"order": 501,
+				"subOptions": [
+					{
+						"id": 472,
+						"code": "BA&F283",
+						"uuid": "b9c37c98-32d9-43c5-ab0f-6c956325516e",
+						"mainDesc": "Bacon, Avo & Feta",
+						"optDesc": "Bacon, Avo & Feta",
+						"order": 472,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "m6a50lfgml",
+							"expand": true
+						}
+					},
+					{
+						"id": 473,
+						"code": "CC937",
+						"uuid": "188e7a15-a91b-4242-a30c-908c29b9d2fd",
+						"mainDesc": "Classic Cheese",
+						"optDesc": "Classic Cheese",
+						"order": 473,
+						"source": "menu_item",
+						"extrameta": {
+							"isVegetarian": true,
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "fxr29c7v6r",
+							"expand": true
+						}
+					},
+					{
+						"id": 484,
+						"code": "S451",
+						"uuid": "602e58f7-68fd-4898-a54d-7a87520df2e0",
+						"mainDesc": "Supreme",
+						"optDesc": "Supreme",
+						"order": 484,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "mnrupty11y",
+							"expand": true
+						}
+					},
+					{
+						"id": 485,
+						"code": "BSR&M951",
+						"uuid": "b81f227a-97f0-45f0-b542-3d416529cdbb",
+						"mainDesc": "BBQ Spare Rib & Mush",
+						"optDesc": "BBQ Spare Rib & Mush",
+						"order": 485,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "wkw94t4tus",
+							"expand": true
+						}
+					},
+					{
+						"id": 486,
+						"code": "BSR&P228",
+						"uuid": "3026d735-5d88-44be-9f26-30b23de8a480",
+						"mainDesc": "BBQ Spare Rib & Pine",
+						"optDesc": "BBQ Spare Rib & Pine",
+						"order": 486,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "p9cc2kznry",
+							"expand": true
+						}
+					},
+					{
+						"id": 487,
+						"code": "F858",
+						"uuid": "3216bd5c-f36c-475e-b7aa-4edecec370c9",
+						"mainDesc": "Fetaroni",
+						"optDesc": "Fetaroni",
+						"order": 487,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "3rrdyynad6",
+							"expand": true
+						}
+					},
+					{
+						"id": 488,
+						"code": "T548",
+						"uuid": "717861e0-b026-459a-90c0-ad20a3439536",
+						"mainDesc": "Tropical",
+						"optDesc": "Tropical",
+						"order": 488,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "3p8lgexdn8",
+							"expand": true
+						}
+					},
+					{
+						"id": 489,
+						"code": "B591",
+						"uuid": "a11db224-bbcb-4901-9f5e-f9c873d6a592",
+						"mainDesc": "Bolognaise",
+						"optDesc": "Bolognaise",
+						"order": 489,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "d1bdv2wt28",
+							"expand": true
+						}
+					},
+					{
+						"id": 490,
+						"code": "BS176",
+						"uuid": "a9eb7037-3f8f-4e60-9a26-5284543f1990",
+						"mainDesc": "Bacon Supreme",
+						"optDesc": "Bacon Supreme",
+						"order": 490,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "ff18t49veo",
+							"expand": true
+						}
+					},
+					{
+						"id": 491,
+						"code": "TR201",
+						"uuid": "8786cc60-638a-46e2-a245-d08087db5282",
+						"mainDesc": "Tangy Russian",
+						"optDesc": "Tangy Russian",
+						"order": 491,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "xce9a3rpc8",
+							"expand": true
+						}
+					},
+					{
+						"id": 492,
+						"code": "HO245",
+						"uuid": "c745baf5-894b-455a-b8b0-a4f63e771540",
+						"mainDesc": "New Hot One",
+						"optDesc": "New Hot One",
+						"order": 492,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "h3zaqniftl",
+							"expand": true
+						}
+					},
+					{
+						"id": 493,
+						"code": "PD829",
+						"uuid": "08e868b5-6812-471a-ab01-b741459250ca",
+						"mainDesc": "Pepperoni Deluxe",
+						"optDesc": "Pepperoni Deluxe",
+						"order": 493,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "1pw2l9c1sq",
+							"expand": true
+						}
+					},
+					{
+						"id": 494,
+						"code": "R896",
+						"uuid": "26b89ba4-de27-4553-9f1b-87c92d41f83d",
+						"mainDesc": "Regina",
+						"optDesc": "Regina",
+						"order": 494,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "r022khlmqn",
+							"expand": true
+						}
+					},
+					{
+						"id": 495,
+						"code": "H474",
+						"uuid": "e38f615c-e3e3-49c5-8eeb-2ddeb98d4e97",
+						"mainDesc": "Hawaiian",
+						"optDesc": "Hawaiian",
+						"order": 495,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "a9x4tihy30",
+							"expand": true
+						}
+					},
+					{
+						"id": 496,
+						"code": "SCC959",
+						"uuid": "18d04661-ef83-4471-8771-39208415d17b",
+						"mainDesc": "Sweet Chilli Chicken",
+						"optDesc": "Sweet Chilli Chicken",
+						"order": 496,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "hksce6k2eq",
+							"expand": true
+						}
+					},
+					{
+						"id": 497,
+						"code": "C'M(258",
+						"uuid": "9c763cfc-d1b5-4250-9abb-0a522ff278c3",
+						"mainDesc": "Chicken mayo (Bacon)",
+						"optDesc": "Chicken mayo (Bacon)",
+						"order": 497,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "6p5om1vyuz",
+							"expand": true
+						}
+					},
+					{
+						"id": 498,
+						"code": "C'M(18",
+						"uuid": "5615a46e-ef7c-4d2e-87ed-0183e285e989",
+						"mainDesc": "Chicken Mayo & Feta",
+						"optDesc": "Chicken Mayo & Feta",
+						"order": 498,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "s6tffrha1g",
+							"expand": true
+						}
+					},
+					{
+						"id": 499,
+						"code": "PC603",
+						"uuid": "b47deaf5-1a3a-460f-b22d-52ff30c2c706",
+						"mainDesc": "Peri-Peri Chicken",
+						"optDesc": "Peri-Peri Chicken",
+						"order": 499,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "igwjz1ku49",
+							"expand": true
+						}
+					},
+					{
+						"id": 500,
+						"code": "BCS134",
+						"uuid": "d814b5c4-d889-4618-9f6b-cfdd662d86af",
+						"mainDesc": "BBQ Chicken Supreme",
+						"optDesc": "BBQ Chicken Supreme",
+						"order": 500,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "zz599t4vn7",
+							"expand": true
+						}
+					},
+					{
+						"id": 501,
+						"code": "BC&M719",
+						"uuid": "162a380e-c2c7-4aa3-b003-53d1de36701d",
+						"mainDesc": "BBQ Chicken & Mushroom",
+						"optDesc": "BBQ Chicken & Mushroom",
+						"order": 501,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "51piewzp5q",
+							"expand": true
+						}
+					},
+					{
+						"id": 502,
+						"code": "BC&P375",
+						"uuid": "86451f28-799e-4f1a-85f6-1b04fb0e2115",
+						"mainDesc": "BBQ Chicken & Pine",
+						"optDesc": "BBQ Chicken & Pineapple",
+						"order": 502,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "4ahb845soq",
+							"expand": true
+						}
+					},
+					{
+						"id": 504,
+						"code": "TC195",
+						"uuid": "25875add-bd7e-4d70-ad90-bd2047d4de39",
+						"mainDesc": "Triple Cheese",
+						"optDesc": "Triple Cheese",
+						"order": 504,
+						"source": "menu_item",
+						"extrameta": {
+							"isVegetarian": true,
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "m7afchwu9l",
+							"expand": true
+						}
+					},
+					{
+						"id": 506,
+						"code": "M231",
+						"uuid": "adbf2792-21aa-4bc7-844f-74583a16cad3",
+						"mainDesc": "Margherita",
+						"optDesc": "Margherita",
+						"order": 506,
+						"source": "menu_item",
+						"extrameta": {
+							"isVegetarian": true,
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "8n3zfnwzjc",
+							"expand": true
+						}
+					},
+					{
+						"id": 849,
+						"code": "FION972",
+						"uuid": "b4b18088-11c9-487b-b0b7-e77e3f09e79e",
+						"mainDesc": "Four In One New",
+						"optDesc": "Four In One New",
+						"order": 849,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "nph1p0vksd",
+							"expand": true
+						}
+					},
+					{
+						"id": 850,
+						"code": "BPN520",
+						"uuid": "11c1130f-01a4-4d1f-816c-245fc4d2dae7",
+						"mainDesc": "Beef Pizza New",
+						"optDesc": "Beef Pizza New",
+						"order": 850,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "l7udh5qkfl",
+							"expand": true
+						}
+					}
+				]
+			},
+			{
+				"id": 265,
+				"extrameta": {
+					"groupType": "STANDARD",
+					"is_required": true,
+					"max_permitted": 1,
+					"min_permitted": 1
+				},
+				"mainDesc": "2L Drink",
+				"optDesc": "Promo 2L Drink",
+				"order": 265,
+				"subOptions": [
+					{
+						"id": 532,
+						"code": "P2776",
+						"uuid": "66d500d9-61ed-442b-92d0-9f9dfdb93efb",
+						"mainDesc": "Pepsi 2L",
+						"optDesc": "Pepsi 2L",
+						"order": 532,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "ok795ma6ip"
+						}
+					},
+					{
+						"id": 533,
+						"code": "PM2754",
+						"uuid": "2e49f0db-4bea-4866-989f-2cf3f74447dc",
+						"mainDesc": "Pepsi Max 2L",
+						"optDesc": "Pepsi Max 2L",
+						"order": 533,
+						"source": "menu_item",
+						"extrameta": {
+							"allowCommissionOverride": true,
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "5sfcpi6o4t"
+						}
+					},
+					{
+						"id": 534,
+						"code": "7UF2135",
+						"uuid": "4b6916fd-2ac1-4ccd-9113-517ad52bf0ad",
+						"mainDesc": "7 Up Free 2L",
+						"optDesc": "7 Up Free 2L",
+						"order": 534,
+						"source": "menu_item",
+						"extrameta": {
+							"posBgColour": "#FA28FF",
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "jd4znw1fdl"
+						}
+					},
+					{
+						"id": 535,
+						"code": "M2638",
+						"uuid": "b6278321-6b2a-492a-80a7-63019326ccc2",
+						"mainDesc": "Mirinda 2L",
+						"optDesc": "Mirinda 2L",
+						"order": 535,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "h5k8hwjbbf"
+						}
+					},
+					{
+						"id": 536,
+						"code": "MD2949",
+						"uuid": "6062a801-8900-49a2-8b92-f853b9b20c4b",
+						"mainDesc": "Mountain Dew 2L",
+						"optDesc": "Mountain Dew 2L",
+						"order": 536,
+						"source": "menu_item",
+						"extrameta": {
+							"pricingStrategy": 1,
+							"zero_price": true,
+							"ref_uuid": "235mn7rk5c"
+						}
+					}
+				]
+			}
+		],
+		"extrameta": {
+			"price_data": {
+				"TAKE_AWAY": {
+					"price_list_id": 11,
+					"price_list_elem_id": 387110,
+					"is_discounted": false,
+					"price": "199.9",
+					"type": "Regular",
+					"price_source": "Standard Price List"
+				},
+				"KERBSIDE_COLLEC": {
+					"price_list_id": 11,
+					"price_list_elem_id": 387111,
+					"is_discounted": false,
+					"price": "199.9",
+					"type": "Regular",
+					"price_source": "Standard Price List"
+				},
+				"DELIVERY": {
+					"price_list_id": 11,
+					"price_list_elem_id": 387112,
+					"is_discounted": false,
+					"price": "199.9",
+					"type": "Regular",
+					"price_source": "Standard Price List"
+				},
+				"DINE_IN": {
+					"price_list_id": 11,
+					"price_list_elem_id": 387113,
+					"is_discounted": false,
+					"price": "199.9",
+					"type": "Regular",
+					"price_source": "Standard Price List"
+				}
+			},
+			"scheduleData": {
+				"weekData": [
+					{
+						"isChecked": true,
+						"is24Checked": true,
+						"day": "monday",
+						"daystart_start": "00:00",
+						"dayend_end": "23:59",
+						"isInvalid": false
+					},
+					{
+						"isChecked": true,
+						"day": "tuesday",
+						"is24Checked": true,
+						"daystart_start": "00:00",
+						"dayend_end": "23:59",
+						"isInvalid": false
+					},
+					{
+						"isChecked": true,
+						"day": "wednesday",
+						"is24Checked": true,
+						"daystart_start": "00:00",
+						"dayend_end": "23:59",
+						"isInvalid": false
+					},
+					{
+						"isChecked": true,
+						"day": "thursday",
+						"is24Checked": true,
+						"daystart_start": "00:00",
+						"dayend_end": "23:59",
+						"isInvalid": false
+					},
+					{
+						"isChecked": true,
+						"day": "friday",
+						"is24Checked": true,
+						"daystart_start": "00:00",
+						"dayend_end": "23:59",
+						"isInvalid": false
+					},
+					{
+						"isChecked": true,
+						"day": "saturday",
+						"is24Checked": true,
+						"daystart_start": "00:00",
+						"dayend_end": "23:59",
+						"isInvalid": false
+					},
+					{
+						"isChecked": true,
+						"day": "sunday",
+						"is24Checked": true,
+						"daystart_start": "00:00",
+						"dayend_end": "23:59",
+						"isInvalid": false
+					}
+				],
+				"startDate": "2025-11-13",
+				"endDate": "2026-01-15"
+			},
+			"enableScheduling": true
+		},
+		"clientUuid": "1e1d29bb-0a69-4124-8f7c-1f3b48188333",
+		"createdAt": "2025-12-13T07:33:38.000Z",
+		"updatedAt": "2025-12-13T07:33:38.000Z"
+	},
+	"rootVariants": []
+}

@@ -1,0 +1,75 @@
+{
+    "menuItemData": {
+        "id": "ubb905p1m4",
+        "deploymentId": "ic7bp6u8b5",
+        "realMenuId": "b2ee69d1-2da0-4736-a966-86174a4904c6",
+        "realMenuItemId": "4bc81c89-5b31-419a-a114-fc7b52772079",
+        "title": "BBQ Chicken (Sava Flava)",
+        "menuCode": "BC(F612",
+        "imageURL": "https://serveup-client-platform.ams3.digitaloceanspaces.com/uploads/1e1d29bb-0a69-4124-8f7c-1f3b48188333/images/4bc81c89-5b31-419a-a114-fc7b52772079",
+        "description": "BBQ base with BBQ chicken and mozzarella cheese",
+        "order": 508,
+        "itemType": "complex",
+        "options": [],
+        "extrameta": {
+            "price_data": {}
+        },
+        "clientUuid": "1e1d29bb-0a69-4124-8f7c-1f3b48188333",
+        "createdAt": "2025-12-13T07:33:38.000Z",
+        "updatedAt": "2025-12-13T07:33:38.000Z"
+    },
+    "rootVariants": [
+        {
+            "id": "kgqr2kgcrt",
+            "deploymentId": "ic7bp6u8b5",
+            "realMenuId": "b2ee69d1-2da0-4736-a966-86174a4904c6",
+            "realMenuItemId": "4bc81c89-5b31-419a-a114-fc7b52772079",
+            "realMenuVariantId": 562,
+            "deployedMenuItemId": "ubb905p1m4",
+            "title": "Size",
+            "description": "Select a size",
+            "order": 562,
+            "type": null,
+            "extrameta": {
+                "price_data": {}
+            },
+            "options": [],
+            "childrens": [
+                {
+                    "id": "uy8lh5854a",
+                    "title": "Large",
+                    "realMenuVariantId": 563,
+                    "realVariantId": 18,
+                    "price_data": {},
+                    "isLast": false,
+                    "hasOptions": false,
+                    "childBasePrices": {
+                        "KERBSIDE_COLLEC": 84.9,
+                        "DELIVERY": 84.9,
+                        "DINE_IN": 84.9,
+                        "TAKE_AWAY": 84.9
+                    }
+                },
+                {
+                    "id": "9ec1sgrowh",
+                    "title": "Small",
+                    "realMenuVariantId": 564,
+                    "realVariantId": 21,
+                    "price_data": {},
+                    "isLast": false,
+                    "hasOptions": false,
+                    "childBasePrices": {
+                        "TAKE_AWAY": 29.9,
+                        "KERBSIDE_COLLEC": 29.9,
+                        "DELIVERY": 29.9,
+                        "DINE_IN": 29.9
+                    }
+                }
+            ],
+            "parentId": null,
+            "clientUuid": "1e1d29bb-0a69-4124-8f7c-1f3b48188333",
+            "createdAt": "2025-12-13T07:33:38.000Z",
+            "updatedAt": "2025-12-13T07:33:38.000Z"
+        }
+    ]
+}

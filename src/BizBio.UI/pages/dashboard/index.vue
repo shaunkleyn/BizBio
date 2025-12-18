@@ -164,9 +164,34 @@
               <!-- Profile Card -->
               <div
                 v-for="profile in profiles"
-                :key="profile.id"
+                :key="profile.Id"
                 class="border-2 border-[var(--light-border-color)] rounded-lg p-4 hover:border-[var(--primary-color)] transition-colors"
               >
+                <!-- Subscription Warning Banner -->
+                <div v-if="profile.SubscriptionStatus?.NeedsPayment" class="mb-3 bg-red-50 border border-red-200 rounded-lg p-3">
+                  <div class="flex items-center gap-2 text-red-700">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span class="text-sm font-semibold">Payment Required</span>
+                  </div>
+                  <p class="text-xs text-red-600 mt-1">
+                    Your trial has ended. Upgrade to keep this profile active.
+                  </p>
+                </div>
+
+                <!-- Trial Warning Banner -->
+                <div v-else-if="profile.SubscriptionStatus?.IsInTrial && profile.SubscriptionStatus?.TrialDaysRemaining !== null && profile.SubscriptionStatus.TrialDaysRemaining <= 7"
+                     class="mb-3 bg-amber-50 border border-amber-200 rounded-lg p-3">
+                  <div class="flex items-center gap-2 text-amber-700">
+                    <i class="fas fa-clock"></i>
+                    <span class="text-sm font-semibold">
+                      {{ profile.SubscriptionStatus.TrialDaysRemaining }} day{{ profile.SubscriptionStatus.TrialDaysRemaining !== 1 ? 's' : '' }} remaining in trial
+                    </span>
+                  </div>
+                  <p class="text-xs text-amber-600 mt-1">
+                    Upgrade now to continue using all features.
+                  </p>
+                </div>
+
                 <div class="flex items-center justify-between mb-3">
                   <div class="flex items-center gap-4">
                     <div class="w-12 h-12 bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-full flex items-center justify-center text-white font-bold">
@@ -177,13 +202,24 @@
                         {{ profile.name || 'My Profile' }}
                       </h3>
                       <p class="text-sm text-[var(--gray-text-color)]">
-                        {{ profile.type || 'Business Profile' }}
+                        {{ profile.profileType || 'Business Profile' }}
+                      </p>
+                      <!-- Subscription Tier Badge -->
+                      <p v-if="profile.subscriptionStatus" class="text-xs text-[var(--gray-text-color)] mt-1">
+                        <span v-if="profile.subscriptionStatus.isInTrial" class="inline-flex items-center gap-1">
+                          <i class="fas fa-gift text-[var(--accent3-color)]"></i>
+                          Trial Period
+                        </span>
+                        <span v-else class="inline-flex items-center gap-1">
+                          <i class="fas fa-crown text-[var(--primary-color)]"></i>
+                          {{ profile.subscriptionStatus.tierName || 'Subscribed' }}
+                        </span>
                       </p>
                     </div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="bg-[var(--accent3-color)] bg-opacity-10 text-[var(--accent3-color)] px-3 py-1 rounded-full text-xs font-semibold">
-                      ACTIVE
+                    <span class="bg-[var(--accent3-color)] bg-opacity-10 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                      {{ profile.isActive ? 'ACTIVE' : 'INACTIVE' }}
                     </span>
                     <button class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] p-2">
                       <i class="fas fa-ellipsis-v"></i>
@@ -194,15 +230,15 @@
                 <!-- Profile Stats -->
                 <div class="grid grid-cols-3 gap-4 pt-3 border-t border-[var(--light-border-color)]">
                   <div class="text-center">
-                    <div class="text-lg font-bold text-[var(--dark-text-color)]">{{ profile.views || 0 }}</div>
+                    <div class="text-lg font-bold text-[var(--dark-text-color)]">0</div>
                     <div class="text-xs text-[var(--gray-text-color)]">Views</div>
                   </div>
                   <div class="text-center">
-                    <div class="text-lg font-bold text-[var(--dark-text-color)]">{{ profile.shares || 0 }}</div>
+                    <div class="text-lg font-bold text-[var(--dark-text-color)]">0</div>
                     <div class="text-xs text-[var(--gray-text-color)]">Shares</div>
                   </div>
                   <div class="text-center">
-                    <div class="text-lg font-bold text-[var(--dark-text-color)]">{{ profile.clicks || 0 }}</div>
+                    <div class="text-lg font-bold text-[var(--dark-text-color)]">0</div>
                     <div class="text-xs text-[var(--gray-text-color)]">Clicks</div>
                   </div>
                 </div>
@@ -210,14 +246,14 @@
                 <!-- Action Buttons -->
                 <div class="flex gap-2 mt-4">
                   <NuxtLink
-                    :to="`/${profile.slug}`"
+                    :to="`/menu/${profile.Slug}`"
                     class="flex-1 text-center bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors text-sm font-semibold"
                   >
                     <i class="fas fa-eye mr-1"></i>
                     View
                   </NuxtLink>
                   <NuxtLink
-                    :to="`/dashboard/profile?id=${profile.id}`"
+                    :to="`/dashboard/profile?id=${profile.Id}`"
                     class="flex-1 text-center border-2 border-[var(--primary-color)] text-[var(--primary-color)] px-4 py-2 rounded-lg hover:bg-[var(--primary-color)] hover:text-white transition-colors text-sm font-semibold"
                   >
                     <i class="fas fa-edit mr-1"></i>
@@ -256,17 +292,39 @@
           <div class="bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-xl shadow-lg p-6 text-white">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-lg font-bold">Current Plan</h3>
-              <i class="fas fa-crown text-2xl"></i>
+              <i :class="subscriptionInfo?.IsInTrial ? 'fas fa-gift' : 'fas fa-crown'" class="text-2xl"></i>
             </div>
             <div class="mb-4">
-              <div class="text-3xl font-bold mb-1">Free Plan</div>
-              <p class="text-white/80 text-sm">1 Profile • Basic Features</p>
+              <div class="text-3xl font-bold mb-1">
+                {{ subscriptionInfo?.TierName || 'Free Plan' }}
+              </div>
+              <p class="text-white/80 text-sm">
+                <template v-if="subscriptionInfo?.IsInTrial && subscriptionInfo?.TrialDaysRemaining !== null">
+                  Trial: {{ subscriptionInfo.TrialDaysRemaining }} day{{ subscriptionInfo.TrialDaysRemaining !== 1 ? 's' : '' }} remaining
+                </template>
+                <template v-else-if="subscriptionInfo">
+                  {{ subscriptionInfo.MaxProfiles }} Profile{{ subscriptionInfo.MaxProfiles !== 1 ? 's' : '' }} •
+                  {{ subscriptionInfo.MaxCatalogItems }} Items
+                </template>
+                <template v-else>
+                  1 Profile • Basic Features
+                </template>
+              </p>
             </div>
             <NuxtLink
               to="/dashboard/subscription"
-              class="block w-full bg-white text-[var(--primary-color)] text-center px-4 py-3 rounded-lg hover:bg-opacity-90 transition-all font-semibold"
+              :class="subscriptionInfo?.NeedsPayment ? 'bg-red-500 text-white animate-pulse' : 'bg-white text-[var(--primary-color)]'"
+              class="block w-full text-center px-4 py-3 rounded-lg hover:bg-opacity-90 transition-all font-semibold"
             >
-              Upgrade Plan
+              <template v-if="subscriptionInfo?.NeedsPayment">
+                Activate Plan
+              </template>
+              <template v-else-if="subscriptionInfo?.IsInTrial">
+                Upgrade Now
+              </template>
+              <template v-else>
+                Manage Plan
+              </template>
             </NuxtLink>
           </div>
 
@@ -340,10 +398,53 @@ const stats = ref({
   totalDownloads: 156
 })
 
+// Computed property to get subscription info from first profile (all profiles share same subscription)
+const subscriptionInfo = computed(() => {
+  if (profiles.value.length > 0 && profiles.value[0].SubscriptionStatus) {
+    return profiles.value[0].SubscriptionStatus
+  }
+  return null
+})
+
 onMounted(async () => {
   try {
+    console.log('=== DASHBOARD: Fetching profiles ===')
     const response = await profilesApi.getMyProfiles()
-    profiles.value = response.data || []
+
+    console.log('Full response object:', response)
+    console.log('response.data:', response.data)
+    console.log('response.data.data:', response.data?.data)
+    console.log('Type of response.data:', typeof response.data)
+    console.log('Is response.data an array?', Array.isArray(response.data))
+    console.log('Is response.data.data an array?', Array.isArray(response.data?.data))
+
+    // Handle different response structures
+    let data
+    if (response.data?.data) {
+      console.log('Using response.data.data')
+      data = response.data.data
+    } else if (response.data) {
+      console.log('Using response.data')
+      data = response.data
+    } else {
+      console.log('No data found, using empty array')
+      data = []
+    }
+
+    console.log('Extracted data:', data)
+    console.log('Is extracted data an array?', Array.isArray(data))
+
+    // Ensure it's an array
+    if (Array.isArray(data)) {
+      profiles.value = data
+    } else {
+      console.warn('Data is not an array, setting to empty array')
+      profiles.value = []
+    }
+
+    console.log('Final profiles.value:', profiles.value)
+    console.log('Profile count:', profiles.value.length)
+    console.log('=== END DASHBOARD LOGGING ===')
   } catch (error) {
     console.error('Failed to load profiles:', error)
   } finally {

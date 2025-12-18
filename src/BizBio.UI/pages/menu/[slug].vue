@@ -1,352 +1,300 @@
 <template>
-  <div class="min-h-screen bg-[var(--light-background-color)]">
+  <div class="min-h-screen bg-gray-50">
     <!-- Loading State -->
-    <div v-if="pending" class="flex items-center justify-center min-h-screen">
-      <div class="text-center">
-        <i class="fas fa-spinner fa-spin text-4xl text-[var(--primary-color)] mb-4"></i>
-        <p class="text-[var(--gray-text-color)]">Loading menu...</p>
-      </div>
+    <div v-if="loading" class="flex justify-center items-center h-screen">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--primary-color)]"></div>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="flex items-center justify-center min-h-screen px-4">
-      <div class="text-center max-w-md">
-        <i class="fas fa-exclamation-triangle text-6xl text-[var(--accent-color)] mb-4"></i>
-        <h1 class="text-3xl font-bold text-[var(--dark-text-color)] mb-2">Menu Not Found</h1>
-        <p class="text-[var(--gray-text-color)] mb-6">
-          Sorry, we couldn't find the menu you're looking for.
-        </p>
-        <NuxtLink
-          to="/"
-          class="inline-block px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors"
-        >
-          <i class="fas fa-home mr-2"></i>
-          Go to Homepage
-        </NuxtLink>
-      </div>
+    <div v-else-if="error" class="flex flex-col justify-center items-center h-screen px-4">
+      <i class="fas fa-exclamation-circle text-6xl text-red-500 mb-4"></i>
+      <h2 class="text-2xl font-bold text-gray-800 mb-2">Menu Not Found</h2>
+      <p class="text-gray-600 text-center">{{ error }}</p>
     </div>
 
     <!-- Menu Content -->
-    <div v-else-if="menu" class="max-w-6xl mx-auto px-4 py-8">
-      <!-- Menu Header -->
-      <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
-        <div class="flex flex-col md:flex-row gap-6 items-start md:items-center">
-          <!-- Business Logo -->
-          <div v-if="menu.businessLogo" class="w-32 h-32 rounded-xl overflow-hidden flex-shrink-0 border-2 border-[var(--light-border-color)]">
-            <img :src="menu.businessLogo" :alt="menu.businessName" class="w-full h-full object-cover" />
-          </div>
-
-          <!-- Business Info -->
-          <div class="flex-1">
-            <h1 class="text-4xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-2">
-              {{ menu.name }}
-            </h1>
-            <p class="text-xl text-[var(--primary-color)] font-semibold mb-3">
-              {{ menu.businessName }}
-            </p>
-            <p v-if="menu.description" class="text-[var(--gray-text-color)] mb-4">
-              {{ menu.description }}
-            </p>
-
-            <!-- Cuisine Badge -->
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="px-3 py-1 bg-[var(--primary-color)] bg-opacity-10 text-[var(--primary-color)] rounded-full text-sm font-semibold capitalize">
-                <i class="fas fa-utensils mr-1"></i>
-                {{ menu.cuisine }}
-              </span>
+    <div v-else>
+      <!-- Sticky Header -->
+      <div class="sticky top-0 z-40 bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <h1 class="text-xl font-bold text-gray-900">{{ menuData?.name || 'Menu' }}</h1>
+              <p v-if="menuData?.businessName" class="text-sm text-gray-600 truncate">{{ menuData.businessName }}</p>
             </div>
-
-            <!-- Contact Info -->
-            <div class="flex flex-wrap gap-4 text-sm text-[var(--gray-text-color)]">
-              <a
-                v-if="menu.phoneNumber"
-                :href="`tel:${menu.phoneNumber}`"
-                @click="handleContactAction('phone')"
-                class="hover:text-[var(--primary-color)] transition-colors"
+            <button
+              @click="cartStore.toggleCart()"
+              class="relative ml-4 p-3 bg-[var(--primary-color)] text-white rounded-full hover:bg-[var(--secondary-color)] transition-colors"
+            >
+              <i class="fas fa-shopping-cart"></i>
+              <span
+                v-if="cartStore.itemCount > 0"
+                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
               >
-                <i class="fas fa-phone mr-2"></i>{{ menu.phoneNumber }}
-              </a>
-              <a
-                v-if="menu.email"
-                :href="`mailto:${menu.email}`"
-                @click="handleContactAction('email')"
-                class="hover:text-[var(--primary-color)] transition-colors"
-              >
-                <i class="fas fa-envelope mr-2"></i>{{ menu.email }}
-              </a>
-              <span v-if="menu.address" @click="handleContactAction('address')" class="cursor-pointer hover:text-[var(--primary-color)] transition-colors">
-                <i class="fas fa-map-marker-alt mr-2"></i>{{ menu.address }}<span v-if="menu.city">, {{ menu.city }}</span>
+                {{ cartStore.itemCount }}
               </span>
-            </div>
+            </button>
           </div>
         </div>
 
-        <!-- Working Hours -->
-        <div v-if="menu.workingHours" class="mt-6 pt-6 border-t-2 border-[var(--light-border-color)]">
-          <h3 class="text-lg font-bold text-[var(--dark-text-color)] mb-3">
-            <i class="fas fa-clock mr-2 text-[var(--primary-color)]"></i>
-            Opening Hours
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-            <div
-              v-for="(hours, day) in menu.workingHours"
-              :key="day"
-              class="flex justify-between items-center text-sm"
+        <!-- Category Tabs -->
+        <div v-if="categories.length > 0" class="overflow-x-auto hide-scrollbar border-t border-gray-200">
+          <div class="flex space-x-2 px-4 py-2 min-w-max">
+            <button
+              v-for="category in categories"
+              :key="category.id"
+              @click="scrollToCategory(category.id)"
+              :class="[
+                'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors',
+                activeCategory === category.id
+                  ? 'bg-[var(--primary-color)] text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              ]"
             >
-              <span class="capitalize font-medium text-[var(--dark-text-color)]">{{ day }}:</span>
-              <span v-if="hours.closed" class="text-[var(--accent-color)]">Closed</span>
-              <span v-else class="text-[var(--gray-text-color)]">{{ hours.open }} - {{ hours.close }}</span>
-            </div>
+              {{ category.name }}
+            </button>
           </div>
         </div>
       </div>
 
-      <!-- Menu Categories and Items -->
-      <div v-if="menu.categories && menu.categories.length > 0" class="space-y-8">
+      <!-- Menu Items by Category -->
+      <div class="max-w-7xl mx-auto px-4 py-6 pb-24">
         <div
-          v-for="category in menu.categories"
+          v-for="category in categories"
           :key="category.id"
-          :data-category-id="category.id"
-          :data-category-name="category.name"
-          class="bg-white rounded-2xl shadow-xl p-6 category-section"
+          :id="`category-${category.id}`"
+          class="mb-8"
         >
-          <!-- Category Header -->
-          <div class="flex items-center gap-3 mb-6 pb-4 border-b-2 border-[var(--light-border-color)]">
-            <div class="w-12 h-12 bg-[var(--primary-color)] bg-opacity-10 rounded-lg flex items-center justify-center">
-              <i :class="[category.icon, 'text-[var(--primary-color)] text-xl']"></i>
-            </div>
-            <div>
-              <h2 class="text-2xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)]">
-                {{ category.name }}
-              </h2>
-              <p v-if="category.description" class="text-sm text-[var(--gray-text-color)]">
-                {{ category.description }}
-              </p>
-            </div>
-          </div>
+          <h2 class="text-2xl font-bold text-gray-900 mb-4 sticky top-32 bg-gray-50 py-2 z-10">
+            {{ category.name }}
+          </h2>
 
-          <!-- Category Items -->
-          <div class="grid md:grid-cols-2 gap-4">
+          <div class="space-y-4">
             <div
               v-for="item in getCategoryItems(category.id)"
               :key="item.id"
-              @click="handleItemClick(item)"
-              class="border-2 border-[var(--light-border-color)] rounded-xl p-4 hover:border-[var(--primary-color)] transition-all cursor-pointer"
+              @click="openItemDetail(item)"
+              class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer overflow-hidden"
             >
-              <div class="flex gap-4">
-                <!-- Item Image -->
-                <div v-if="item.imageUrl" class="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
-                  <img :src="item.imageUrl" :alt="item.name" class="w-full h-full object-cover" />
-                </div>
-
+              <div class="flex p-4">
                 <!-- Item Info -->
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-start justify-between gap-2 mb-1">
-                    <h3 class="font-bold text-[var(--dark-text-color)]">{{ item.name }}</h3>
-                    <span class="text-[var(--primary-color)] font-bold flex-shrink-0">R{{ item.price.toFixed(2) }}</span>
+                <div class="flex-1 min-w-0 pr-4">
+                  <div class="flex items-start gap-2 mb-1">
+                    <h3 class="text-lg font-semibold text-gray-900">{{ item.name }}</h3>
+                    <span
+                      v-if="item.itemType === 1"
+                      class="px-2 py-0.5 bg-orange-100 text-orange-800 text-xs font-semibold rounded"
+                    >
+                      BUNDLE
+                    </span>
                   </div>
-                  <p v-if="item.description" class="text-sm text-[var(--gray-text-color)] mb-2">
+                  <p v-if="item.description" class="text-sm text-gray-600 line-clamp-2 mb-2">
                     {{ item.description }}
                   </p>
-
-                  <!-- Dietary & Allergen Info -->
-                  <div class="flex flex-wrap gap-1">
-                    <span
-                      v-for="diet in item.dietary"
-                      :key="diet"
-                      class="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full"
-                    >
-                      {{ diet }}
+                  <div class="flex items-center justify-between">
+                    <span class="text-lg font-bold text-[var(--primary-color)]">
+                      R{{ item.price.toFixed(2) }}
                     </span>
-                    <span
-                      v-for="allergen in item.allergens"
-                      :key="allergen"
-                      class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded-full"
+                    <!-- Quick Add Button for simple items -->
+                    <button
+                      v-if="!item.hasVariants && !item.hasOptions && item.itemType !== 1"
+                      @click.stop="quickAddToCart(item)"
+                      class="px-4 py-2 bg-[var(--primary-color)] text-white text-sm font-medium rounded-lg hover:bg-[var(--secondary-color)] transition-colors"
                     >
-                      {{ allergen }}
-                    </span>
+                      <i class="fas fa-plus mr-1"></i>
+                      Add
+                    </button>
                   </div>
+                </div>
 
-                  <!-- Availability -->
-                  <div v-if="!item.available" class="mt-2">
-                    <span class="text-xs px-2 py-1 bg-gray-200 text-gray-600 rounded-full">
-                      Currently Unavailable
-                    </span>
+                <!-- Item Image -->
+                <div class="flex-shrink-0 w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg overflow-hidden">
+                  <img
+                    v-if="item.images"
+                    :src="item.images"
+                    :alt="item.name"
+                    class="w-full h-full object-cover"
+                  />
+                  <div v-else class="w-full h-full flex items-center justify-center">
+                    <i class="fas fa-utensils text-2xl text-gray-400"></i>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+          <!-- Empty Category -->
+          <div v-if="getCategoryItems(category.id).length === 0" class="text-center py-8 text-gray-500">
+            <i class="fas fa-box-open text-4xl mb-2"></i>
+            <p>No items in this category</p>
+          </div>
         </div>
       </div>
 
-      <!-- Footer -->
-      <div class="mt-12 text-center text-sm text-[var(--gray-text-color)]">
-        <p>Powered by <a href="/" class="text-[var(--primary-color)] hover:underline">BizBio</a></p>
+      <!-- Floating Cart Button (Mobile) -->
+      <div
+        v-if="cartStore.itemCount > 0"
+        @click="cartStore.openCart()"
+        class="fixed bottom-6 left-4 right-4 md:left-auto md:right-6 md:w-auto z-30 bg-[var(--primary-color)] text-white rounded-full shadow-lg px-6 py-4 cursor-pointer hover:bg-[var(--secondary-color)] transition-colors"
+      >
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <i class="fas fa-shopping-cart text-xl mr-3"></i>
+            <span class="font-semibold">{{ cartStore.itemCount }} {{ cartStore.itemCount === 1 ? 'item' : 'items' }}</span>
+          </div>
+          <div class="font-bold text-lg">R{{ cartStore.total.toFixed(2) }}</div>
+        </div>
       </div>
     </div>
+
+    <!-- Item Detail Modal -->
+    <ItemDetailModal
+      v-if="selectedItem"
+      :item="selectedItem"
+      :menu-slug="route.params.slug as string"
+      @close="selectedItem = null"
+    />
+
+    <!-- Cart Drawer -->
+    <CartDrawer />
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useMenusApi } from '~/composables/useApi'
+import { useCartStore } from '~/stores/cart'
+import { useToast } from '~/composables/useToast'
+
 const route = useRoute()
 const menusApi = useMenusApi()
-const analytics = useMenuAnalytics()
+const cartStore = useCartStore()
+const toast = useToast()
 
-// Fetch menu data by slug
-const { data: menu, pending, error } = await useAsyncData(
-  `menu-${route.params.slug}`,
-  () => menusApi.getMenuBySlug(route.params.slug)
-)
+const loading = ref(true)
+const error = ref<string | null>(null)
+const menuData = ref<any>(null)
+const items = ref<any[]>([])
+const selectedItem = ref<any>(null)
+const activeCategory = ref<number | null>(null)
 
-// Helper function to get items for a specific category
-const getCategoryItems = (categoryId) => {
-  if (!menu.value?.items) return []
-  return menu.value.items.filter(item => item.categoryId === categoryId)
-}
-
-// Analytics event handlers
-const handleItemClick = (item) => {
-  if (menu.value?.id) {
-    analytics.trackItemView(menu.value.id, item.id, item)
-  }
-}
-
-const handleContactAction = (actionType) => {
-  if (menu.value?.id) {
-    analytics.trackContactAction(menu.value.id, actionType)
-  }
-}
-
-// Setup analytics tracking on client side only
-onMounted(() => {
-  if (!menu.value) return
-
-  // Track initial page view
-  analytics.trackMenuView(menu.value.id, String(route.params.slug), menu.value)
-
-  // Setup category tracking with intersection observer
-  const categoryObserver = analytics.setupCategoryTracking(menu.value.id, menu.value.categories || [])
-  if (categoryObserver) {
-    nextTick(() => {
-      const categoryElements = document.querySelectorAll('.category-section')
-      categoryElements.forEach(el => categoryObserver.observe(el))
-    })
-  }
-
-  // Setup scroll depth tracking
-  const cleanupScroll = analytics.setupScrollTracking(menu.value.id)
-
-  // Setup time tracking
-  const cleanupTime = analytics.setupTimeTracking(menu.value.id)
-
-  // Cleanup on unmount
-  onUnmounted(() => {
-    if (categoryObserver) {
-      const categoryElements = document.querySelectorAll('.category-section')
-      categoryElements.forEach(el => categoryObserver.unobserve(el))
-    }
-    if (cleanupScroll) cleanupScroll()
-    if (cleanupTime) cleanupTime()
-  })
+const categories = computed(() => {
+  if (!menuData.value?.categories) return []
+  return menuData.value.categories.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
 })
 
-// SEO Meta Tags
-if (menu.value) {
-  const metaTitle = menu.value.metaTitle || `${menu.value.name} - ${menu.value.businessName}`
-  const metaDescription = menu.value.metaDescription || menu.value.description || `View the menu at ${menu.value.businessName}. ${menu.value.cuisine} cuisine with a variety of delicious options.`
-  const keywords = menu.value.keywords || `${menu.value.cuisine}, restaurant, menu, ${menu.value.businessName}, food`
+onMounted(async () => {
+  await loadMenu()
+  setupScrollSpy()
+})
 
-  useSeoMeta({
-    title: metaTitle,
-    description: metaDescription,
-    keywords: keywords,
+onUnmounted(() => {
+  cleanupScrollSpy()
+})
 
-    // OpenGraph tags for social media
-    ogTitle: metaTitle,
-    ogDescription: metaDescription,
-    ogImage: menu.value.businessLogo || '/default-menu-image.jpg',
-    ogType: 'website',
-    ogUrl: `https://yourdomain.com/menu/${route.params.slug}`,
+async function loadMenu() {
+  try {
+    loading.value = true
+    const slug = route.params.slug as string
+    const response = await menusApi.getMenuBySlug(slug)
+    menuData.value = response.data.data.menu
+    items.value = response.data.data.items || []
 
-    // Twitter Card tags
-    twitterCard: 'summary_large_image',
-    twitterTitle: metaTitle,
-    twitterDescription: metaDescription,
-    twitterImage: menu.value.businessLogo || '/default-menu-image.jpg',
+    // Set first category as active
+    if (categories.value.length > 0) {
+      activeCategory.value = categories.value[0].id
+    }
+  } catch (err: any) {
+    console.error('Error loading menu:', err)
+    error.value = err.response?.data?.error || 'Failed to load menu'
+  } finally {
+    loading.value = false
+  }
+}
 
-    // Additional meta tags
-    robots: menu.value.enableSEO ? 'index, follow' : 'noindex, nofollow',
-    author: menu.value.businessName,
+function getCategoryItems(categoryId: number) {
+  return items.value
+    .filter(item => item.categoryId === categoryId && item.isActive)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+}
 
-    // Canonical URL
-    canonical: `https://yourdomain.com/menu/${route.params.slug}`
-  })
+function scrollToCategory(categoryId: number) {
+  const element = document.getElementById(`category-${categoryId}`)
+  if (element) {
+    const offset = 140 // Header + tabs height
+    const elementPosition = element.getBoundingClientRect().top
+    const offsetPosition = elementPosition + window.pageYOffset - offset
 
-  // Schema.org Structured Data (JSON-LD)
-  useHead({
-    script: [
-      {
-        type: 'application/ld+json',
-        children: JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'Restaurant',
-          name: menu.value.businessName,
-          description: menu.value.description,
-          image: menu.value.businessLogo,
-          address: menu.value.address ? {
-            '@type': 'PostalAddress',
-            streetAddress: menu.value.address,
-            addressLocality: menu.value.city,
-            addressCountry: menu.value.country
-          } : undefined,
-          telephone: menu.value.phoneNumber,
-          email: menu.value.email,
-          servesCuisine: menu.value.cuisine,
-          priceRange: '$$',
-          openingHoursSpecification: menu.value.workingHours ? Object.entries(menu.value.workingHours)
-            .filter(([_, hours]) => !hours.closed)
-            .map(([day, hours]) => ({
-              '@type': 'OpeningHoursSpecification',
-              dayOfWeek: day.charAt(0).toUpperCase() + day.slice(1),
-              opens: hours.open,
-              closes: hours.close
-            })) : undefined,
-          hasMenu: {
-            '@type': 'Menu',
-            name: menu.value.name,
-            description: menu.value.description,
-            hasMenuSection: menu.value.categories?.map(category => ({
-              '@type': 'MenuSection',
-              name: category.name,
-              description: category.description,
-              hasMenuItem: getCategoryItems(category.id).map(item => ({
-                '@type': 'MenuItem',
-                name: item.name,
-                description: item.description,
-                image: item.imageUrl,
-                offers: {
-                  '@type': 'Offer',
-                  price: item.price,
-                  priceCurrency: 'ZAR',
-                  availability: item.available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
-                },
-                suitableForDiet: item.dietary?.map(diet => {
-                  const dietMap = {
-                    'Vegetarian': 'https://schema.org/VegetarianDiet',
-                    'Vegan': 'https://schema.org/VeganDiet',
-                    'Gluten-Free': 'https://schema.org/GlutenFreeDiet',
-                    'Halal': 'https://schema.org/HalalDiet',
-                    'Kosher': 'https://schema.org/KosherDiet'
-                  }
-                  return dietMap[diet]
-                }).filter(Boolean)
-              }))
-            }))
-          }
-        })
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    })
+  }
+}
+
+let scrollListener: (() => void) | null = null
+
+function setupScrollSpy() {
+  scrollListener = () => {
+    const categoryElements = categories.value.map(cat => ({
+      id: cat.id,
+      element: document.getElementById(`category-${cat.id}`)
+    }))
+
+    const scrollPosition = window.scrollY + 200
+
+    for (let i = categoryElements.length - 1; i >= 0; i--) {
+      const cat = categoryElements[i]
+      if (cat.element && cat.element.offsetTop <= scrollPosition) {
+        activeCategory.value = cat.id
+        break
       }
-    ]
+    }
+  }
+
+  window.addEventListener('scroll', scrollListener)
+}
+
+function cleanupScrollSpy() {
+  if (scrollListener) {
+    window.removeEventListener('scroll', scrollListener)
+  }
+}
+
+function openItemDetail(item: any) {
+  selectedItem.value = item
+}
+
+function quickAddToCart(item: any) {
+  cartStore.addItem({
+    catalogItemId: item.id,
+    name: item.name,
+    description: item.description,
+    basePrice: item.price,
+    quantity: 1,
+    options: [],
+    image: item.images,
+    isBundle: item.itemType === 1
   })
+  toast.success(`${item.name} added to cart`)
 }
 </script>
+
+<style scoped>
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>

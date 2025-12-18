@@ -1,0 +1,157 @@
+{
+    "id": "niyf0q2ejt",
+    "deploymentId": "ic7bp6u8b5",
+    "realMenuId": "b2ee69d1-2da0-4736-a966-86174a4904c6",
+    "realMenuItemId": "18d04661-ef83-4471-8771-39208415d17b",
+    "realMenuVariantId": 467,
+    "deployedMenuItemId": "hksce6k2eq",
+    "title": "Large",
+    "description": "Select a Base",
+    "order": 467,
+    "type": null,
+    "extrameta": {
+        "variant_id": 18,
+        "select_info": "Base",
+        "variant_uuid": "06cda84c-9914-4510-86f1-268274b51504",
+        "price_data": {}
+    },
+    "options": [],
+    "childrens": [
+        {
+            "id": "z6l50n63km",
+            "title": "Gluten Free",
+            "description": "Gluten Free Base",
+            "realMenuVariantId": 469,
+            "realVariantId": 23,
+            "price_data": {
+                "KERBSIDE_COLLEC": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 49542,
+                    "is_discounted": false,
+                    "price": "140.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                },
+                "DELIVERY": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 49543,
+                    "is_discounted": false,
+                    "price": "140.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                },
+                "DINE_IN": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 49544,
+                    "is_discounted": false,
+                    "price": "140.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                },
+                "TAKE_AWAY": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 49541,
+                    "is_discounted": false,
+                    "price": "140.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                }
+            },
+            "isLast": true,
+            "hasOptions": true,
+            "childBasePrices": {}
+        },
+        {
+            "id": "y1e3ibg3fw",
+            "title": "Traditional",
+            "description": "Thin Base",
+            "realMenuVariantId": 470,
+            "realVariantId": 19,
+            "price_data": {
+                "KERBSIDE_COLLEC": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 49602,
+                    "is_discounted": false,
+                    "price": "122.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                },
+                "DELIVERY": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 49603,
+                    "is_discounted": false,
+                    "price": "122.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                },
+                "DINE_IN": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 49604,
+                    "is_discounted": false,
+                    "price": "122.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                },
+                "TAKE_AWAY": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 49601,
+                    "is_discounted": false,
+                    "price": "122.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                }
+            },
+            "isLast": true,
+            "hasOptions": true,
+            "childBasePrices": {}
+        },
+        {
+            "id": "2p51mhrii8",
+            "title": "Pan",
+            "description": "Thick Base",
+            "realMenuVariantId": 471,
+            "realVariantId": 20,
+            "price_data": {
+                "KERBSIDE_COLLEC": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 49662,
+                    "is_discounted": false,
+                    "price": "122.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                },
+                "DELIVERY": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 49663,
+                    "is_discounted": false,
+                    "price": "122.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                },
+                "DINE_IN": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 49664,
+                    "is_discounted": false,
+                    "price": "122.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                },
+                "TAKE_AWAY": {
+                    "price_list_id": 11,
+                    "price_list_elem_id": 49661,
+                    "is_discounted": false,
+                    "price": "122.9",
+                    "type": "Regular",
+                    "price_source": "Standard Price List"
+                }
+            },
+            "isLast": true,
+            "hasOptions": true,
+            "childBasePrices": {}
+        }
+    ],
+    "parentId": "466",
+    "clientUuid": "1e1d29bb-0a69-4124-8f7c-1f3b48188333",
+    "createdAt": "2025-12-13T07:33:38.000Z",
+    "updatedAt": "2025-12-13T07:33:38.000Z"
+}

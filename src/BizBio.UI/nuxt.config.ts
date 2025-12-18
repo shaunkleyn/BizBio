@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-11-23',
 
-  devtools: { enabled: true },
+  devtools: { enabled: false },
 
   // SSR Configuration - enabled by default but explicit for clarity
   ssr: true,
@@ -43,7 +43,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:5000/api',
+      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'https://api.bizbio.co.za/api/v1',
       appInsightsConnectionString: process.env.NUXT_PUBLIC_APP_INSIGHTS_CONNECTION_STRING || '',
       googleAnalyticsId: process.env.NUXT_PUBLIC_GOOGLE_ANALYTICS_ID || 'G-XXXXXXXXXX',
       cookieDomain: process.env.NUXT_PUBLIC_COOKIE_DOMAIN || undefined

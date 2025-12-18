@@ -1,0 +1,75 @@
+{
+    "menuItemData": {
+        "id": "hksce6k2eq",
+        "deploymentId": "ic7bp6u8b5",
+        "realMenuId": "b2ee69d1-2da0-4736-a966-86174a4904c6",
+        "realMenuItemId": "18d04661-ef83-4471-8771-39208415d17b",
+        "title": "Sweet Chilli Chicken",
+        "menuCode": "SCC959",
+        "imageURL": "https://serveup-client-platform.ams3.digitaloceanspaces.com/uploads/1e1d29bb-0a69-4124-8f7c-1f3b48188333/images/18d04661-ef83-4471-8771-39208415d17b",
+        "description": "Sweet chilli base, chicken, piquanté peppers & feta cheese",
+        "order": 496,
+        "itemType": "complex",
+        "options": [],
+        "extrameta": {
+            "price_data": {}
+        },
+        "clientUuid": "1e1d29bb-0a69-4124-8f7c-1f3b48188333",
+        "createdAt": "2025-12-13T07:33:38.000Z",
+        "updatedAt": "2025-12-13T07:33:38.000Z"
+    },
+    "rootVariants": [
+        {
+            "id": "kgr47lmclf",
+            "deploymentId": "ic7bp6u8b5",
+            "realMenuId": "b2ee69d1-2da0-4736-a966-86174a4904c6",
+            "realMenuItemId": "18d04661-ef83-4471-8771-39208415d17b",
+            "realMenuVariantId": 466,
+            "deployedMenuItemId": "hksce6k2eq",
+            "title": "Size",
+            "description": "Select a size",
+            "order": 466,
+            "type": null,
+            "extrameta": {
+                "price_data": {}
+            },
+            "options": [],
+            "childrens": [
+                {
+                    "id": "niyf0q2ejt",
+                    "title": "Large",
+                    "realMenuVariantId": 467,
+                    "realVariantId": 18,
+                    "price_data": {},
+                    "isLast": false,
+                    "hasOptions": false,
+                    "childBasePrices": {
+                        "KERBSIDE_COLLEC": 122.9,
+                        "DELIVERY": 122.9,
+                        "DINE_IN": 122.9,
+                        "TAKE_AWAY": 122.9
+                    }
+                },
+                {
+                    "id": "yk1taakgzz",
+                    "title": "Small",
+                    "realMenuVariantId": 468,
+                    "realVariantId": 21,
+                    "price_data": {},
+                    "isLast": false,
+                    "hasOptions": false,
+                    "childBasePrices": {
+                        "TAKE_AWAY": 48.9,
+                        "KERBSIDE_COLLEC": 48.9,
+                        "DELIVERY": 48.9,
+                        "DINE_IN": 48.9
+                    }
+                }
+            ],
+            "parentId": null,
+            "clientUuid": "1e1d29bb-0a69-4124-8f7c-1f3b48188333",
+            "createdAt": "2025-12-13T07:33:38.000Z",
+            "updatedAt": "2025-12-13T07:33:38.000Z"
+        }
+    ]
+}

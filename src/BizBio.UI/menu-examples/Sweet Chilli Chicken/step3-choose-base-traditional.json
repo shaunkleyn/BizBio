@@ -1,0 +1,1390 @@
+{
+    "id": "y1e3ibg3fw",
+    "deploymentId": "ic7bp6u8b5",
+    "realMenuId": "b2ee69d1-2da0-4736-a966-86174a4904c6",
+    "realMenuItemId": "18d04661-ef83-4471-8771-39208415d17b",
+    "realMenuVariantId": 470,
+    "deployedMenuItemId": "hksce6k2eq",
+    "title": "Traditional",
+    "description": "Thin Base",
+    "order": 470,
+    "type": null,
+    "extrameta": {
+        "variant_id": 19,
+        "select_info": "Traditional",
+        "variant_uuid": "3f40125a-6b35-4e08-8159-ea1590eba3cd",
+        "price_data": {
+            "KERBSIDE_COLLEC": {
+                "price_list_id": 11,
+                "price_list_elem_id": 49602,
+                "is_discounted": false,
+                "price": "122.9",
+                "type": "Regular",
+                "price_source": "Standard Price List"
+            },
+            "DELIVERY": {
+                "price_list_id": 11,
+                "price_list_elem_id": 49603,
+                "is_discounted": false,
+                "price": "122.9",
+                "type": "Regular",
+                "price_source": "Standard Price List"
+            },
+            "DINE_IN": {
+                "price_list_id": 11,
+                "price_list_elem_id": 49604,
+                "is_discounted": false,
+                "price": "122.9",
+                "type": "Regular",
+                "price_source": "Standard Price List"
+            },
+            "TAKE_AWAY": {
+                "price_list_id": 11,
+                "price_list_elem_id": 49601,
+                "is_discounted": false,
+                "price": "122.9",
+                "type": "Regular",
+                "price_source": "Standard Price List"
+            }
+        }
+    },
+    "options": [
+        {
+            "id": 237,
+            "extrameta": {
+                "groupType": "EXTRA",
+                "max_permitted": 0,
+                "min_permitted": 0
+            },
+            "mainDesc": "Add Extra Cheese",
+            "optDesc": "Add Extra Cheese",
+            "order": 237,
+            "subOptions": [
+                {
+                    "id": 134,
+                    "code": "EFL011",
+                    "mainDesc": "Feta Cheese",
+                    "optDesc": null,
+                    "order": 134,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50381,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50382,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50383,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50384,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 135,
+                    "code": "ECL012",
+                    "mainDesc": "Cheddar Cheese",
+                    "optDesc": null,
+                    "order": 135,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50441,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50442,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50443,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50444,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 124,
+                    "code": "ELM020",
+                    "mainDesc": "Mozzarella Cheese",
+                    "optDesc": null,
+                    "order": 124,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49781,
+                                "is_discounted": false,
+                                "price": "20.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49782,
+                                "is_discounted": false,
+                                "price": "20.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49783,
+                                "is_discounted": false,
+                                "price": "20.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49784,
+                                "is_discounted": false,
+                                "price": "20.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": 239,
+            "extrameta": {
+                "groupType": "SWAP",
+                "max_permitted": 1,
+                "min_permitted": 0
+            },
+            "mainDesc": "Swap Base Sauce",
+            "optDesc": null,
+            "order": 239,
+            "subOptions": [
+                {
+                    "id": 180,
+                    "code": "SLBBQ001",
+                    "mainDesc": "BBQ Base",
+                    "optDesc": null,
+                    "order": 180,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {}
+                    }
+                },
+                {
+                    "id": 182,
+                    "code": "SLCH001",
+                    "mainDesc": "Chutney Base",
+                    "optDesc": null,
+                    "order": 182,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {}
+                    }
+                },
+                {
+                    "id": 186,
+                    "code": "SLMAY001",
+                    "mainDesc": "Mayo Base",
+                    "optDesc": null,
+                    "order": 186,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 53141,
+                                "is_discounted": false,
+                                "price": "6",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 53142,
+                                "is_discounted": false,
+                                "price": "6",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 53143,
+                                "is_discounted": false,
+                                "price": "6",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 53144,
+                                "is_discounted": false,
+                                "price": "6",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 188,
+                    "code": "SLPP001",
+                    "mainDesc": "Peri-Peri Base",
+                    "optDesc": null,
+                    "order": 188,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {}
+                    }
+                },
+                {
+                    "id": 190,
+                    "code": "SLSC001",
+                    "mainDesc": "Sweet Chilli Base",
+                    "optDesc": null,
+                    "order": 190,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {}
+                    }
+                },
+                {
+                    "id": 192,
+                    "code": "SLTOM001",
+                    "mainDesc": "Tomato Base",
+                    "optDesc": null,
+                    "order": 192,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {}
+                    }
+                },
+                {
+                    "id": 194,
+                    "code": "SLSBBQ001",
+                    "mainDesc": "Smokey BBQ Base",
+                    "optDesc": null,
+                    "order": 194,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {}
+                    }
+                }
+            ]
+        },
+        {
+            "id": 369,
+            "extrameta": {
+                "groupType": "EXTRA",
+                "max_permitted": 0,
+                "min_permitted": 0
+            },
+            "mainDesc": "Extra Meat Toppings",
+            "optDesc": "Extra Meat Toppings",
+            "order": 369,
+            "subOptions": [
+                {
+                    "id": 125,
+                    "code": "EMB020",
+                    "mainDesc": "Bacon",
+                    "optDesc": null,
+                    "order": 125,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49841,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49842,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49843,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49844,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 130,
+                    "code": "EML010",
+                    "mainDesc": "Chicken",
+                    "optDesc": null,
+                    "order": 130,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50141,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50142,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50143,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50144,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 126,
+                    "code": "EBL021",
+                    "mainDesc": "Pressed Beef",
+                    "optDesc": null,
+                    "order": 126,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49901,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49902,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49903,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49904,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 127,
+                    "code": "EHL010",
+                    "mainDesc": "Ham",
+                    "optDesc": null,
+                    "order": 127,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49961,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49962,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49963,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 49964,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 128,
+                    "code": "EPL010",
+                    "mainDesc": "Pepperoni",
+                    "optDesc": null,
+                    "order": 128,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50021,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50022,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50023,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50024,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 129,
+                    "code": "ERL010",
+                    "mainDesc": "Russian",
+                    "optDesc": null,
+                    "order": 129,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50081,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50082,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50083,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50084,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 131,
+                    "code": "EPL011",
+                    "mainDesc": "Peri-Peri Chicken",
+                    "optDesc": null,
+                    "order": 131,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50201,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50202,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50203,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50204,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 132,
+                    "code": "ERL012",
+                    "mainDesc": "Spare Ribs",
+                    "optDesc": null,
+                    "order": 132,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50261,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50262,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50263,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50264,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 137,
+                    "code": "ELMB025",
+                    "mainDesc": "Mince Bolognaise",
+                    "optDesc": null,
+                    "order": 137,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50561,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50562,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50563,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50564,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": 426,
+            "extrameta": {
+                "groupType": "EXTRA",
+                "max_permitted": 2,
+                "min_permitted": 0
+            },
+            "mainDesc": "Extra Veg Toppings",
+            "optDesc": "Extra Veg Toppings",
+            "order": 426,
+            "subOptions": [
+                {
+                    "id": 136,
+                    "code": "ECO013",
+                    "mainDesc": "Caramelized Onions",
+                    "optDesc": null,
+                    "order": 136,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50501,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50502,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50503,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 50504,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 156,
+                    "code": "ELAVO001",
+                    "mainDesc": "Avocado",
+                    "optDesc": null,
+                    "order": 156,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51701,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51702,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51703,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51704,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 157,
+                    "code": "ELTC001",
+                    "mainDesc": "Tomato Chunks",
+                    "optDesc": null,
+                    "order": 157,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51761,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51762,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51763,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51764,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 158,
+                    "code": "ELG001",
+                    "mainDesc": "Garlic",
+                    "optDesc": null,
+                    "order": 158,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51821,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51822,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51823,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51824,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 159,
+                    "code": "ELFGP001",
+                    "mainDesc": "Green Pepper",
+                    "optDesc": null,
+                    "order": 159,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51881,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51882,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51883,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51884,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 160,
+                    "code": "ELJ001",
+                    "mainDesc": "Jalapeños",
+                    "optDesc": null,
+                    "order": 160,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51941,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51942,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51943,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 51944,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 162,
+                    "code": "ELMUSH001",
+                    "mainDesc": "Mushrooms",
+                    "optDesc": null,
+                    "order": 162,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52061,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52062,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52063,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52064,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 164,
+                    "code": "ELONI001",
+                    "mainDesc": "Onion",
+                    "optDesc": null,
+                    "order": 164,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52181,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52182,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52183,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52184,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 165,
+                    "code": "ELPIN001",
+                    "mainDesc": "Pineapple",
+                    "optDesc": null,
+                    "order": 165,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52241,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52242,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52243,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52244,
+                                "is_discounted": false,
+                                "price": "14.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 166,
+                    "code": "ELPP001",
+                    "mainDesc": "Piquanté Peppers",
+                    "optDesc": null,
+                    "order": 166,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52301,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52302,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52303,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 52304,
+                                "is_discounted": false,
+                                "price": "22.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": 219,
+                    "code": "LFC050",
+                    "mainDesc": "Fresh Chilli",
+                    "optDesc": null,
+                    "order": 219,
+                    "source": "modifier",
+                    "extrameta": {
+                        "amount": 0,
+                        "max_limit_value": -1,
+                        "pricingStrategy": null,
+                        "price_data": {
+                            "TAKE_AWAY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 116973,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "KERBSIDE_COLLEC": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 116974,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DELIVERY": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 116975,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            },
+                            "DINE_IN": {
+                                "price_list_id": 11,
+                                "price_list_elem_id": 116976,
+                                "is_discounted": false,
+                                "price": "11.9",
+                                "type": "Regular",
+                                "price_source": "Standard Price List"
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": 241,
+            "extrameta": {
+                "groupType": "REMOVE",
+                "max_permitted": 0,
+                "min_permitted": 0
+            },
+            "mainDesc": "Remove Toppings",
+            "optDesc": "Remove Toppings",
+            "order": 241,
+            "subOptions": [
+                {
+                    "id": 3101,
+                    "code": "SSC003",
+                    "mainDesc": "Sweet Chilli Sauce",
+                    "optDesc": "Sweet Chilli Sauce",
+                    "order": 6,
+                    "source": "recepie",
+                    "extrameta": {
+                        "advanced_type": "SWAP_REMOVE"
+                    }
+                },
+                {
+                    "id": 3100,
+                    "code": "TSR001",
+                    "mainDesc": "Sliced Red Peppers",
+                    "optDesc": "Sliced Red Peppers",
+                    "order": 5,
+                    "source": "recepie",
+                    "extrameta": {
+                        "advanced_type": "REMOVE"
+                    }
+                },
+                {
+                    "id": 3102,
+                    "code": "CFC001",
+                    "mainDesc": "Feta",
+                    "optDesc": "Feta",
+                    "order": 0,
+                    "source": "recepie",
+                    "extrameta": {
+                        "advanced_type": "REMOVE"
+                    }
+                },
+                {
+                    "id": 3103,
+                    "code": "MMC003",
+                    "mainDesc": "Marinated Chicken",
+                    "optDesc": "Marinated Chicken",
+                    "order": 1,
+                    "source": "recepie",
+                    "extrameta": {
+                        "advanced_type": "REMOVE"
+                    }
+                },
+                {
+                    "id": 3104,
+                    "code": "DMM004",
+                    "mainDesc": "Mozzarella Cheese",
+                    "optDesc": "Mozzarella Underberg / Bandini Mix",
+                    "order": 2,
+                    "source": "recepie",
+                    "extrameta": {
+                        "advanced_type": "REMOVE"
+                    }
+                }
+            ]
+        }
+    ],
+    "childrens": [],
+    "parentId": "467",
+    "clientUuid": "1e1d29bb-0a69-4124-8f7c-1f3b48188333",
+    "createdAt": "2025-12-13T07:33:38.000Z",
+    "updatedAt": "2025-12-13T07:33:38.000Z"
+}

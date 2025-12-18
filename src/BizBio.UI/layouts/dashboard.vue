@@ -37,6 +37,13 @@
               Menu
             </NuxtLink>
             <NuxtLink
+              to="/dashboard/library/items"
+              class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]"
+            >
+              <i class="fas fa-book mr-2"></i>
+              Library
+            </NuxtLink>
+            <NuxtLink
               to="/dashboard/tables"
               class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]"
             >
@@ -94,6 +101,14 @@
             >
               <i class="fas fa-utensils mr-2"></i>
               Menu
+            </NuxtLink>
+            <NuxtLink
+              to="/dashboard/library/items"
+              class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 py-2"
+              @click="mobileMenuOpen = false"
+            >
+              <i class="fas fa-book mr-2"></i>
+              Library
             </NuxtLink>
             <NuxtLink
               to="/dashboard/tables"
