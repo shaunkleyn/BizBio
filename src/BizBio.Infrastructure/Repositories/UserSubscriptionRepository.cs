@@ -1,4 +1,6 @@
+using Microsoft.ApplicationInsights;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using BizBio.Core.Entities;
 using BizBio.Core.Enums;
 using BizBio.Core.Interfaces;
@@ -9,10 +11,17 @@ namespace BizBio.Infrastructure.Repositories;
 public class UserSubscriptionRepository : IUserSubscriptionRepository
 {
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<UserSubscriptionRepository> _logger;
+    private readonly TelemetryClient _telemetryClient;
 
-    public UserSubscriptionRepository(ApplicationDbContext context)
+    public UserSubscriptionRepository(
+        ApplicationDbContext context,
+        ILogger<UserSubscriptionRepository> logger,
+        TelemetryClient telemetryClient)
     {
         _context = context;
+        _logger = logger;
+        _telemetryClient = telemetryClient;
     }
 
     public async Task<UserSubscription?> GetByIdAsync(int id)
@@ -35,7 +44,7 @@ public class UserSubscriptionRepository : IUserSubscriptionRepository
     public async Task<IEnumerable<UserSubscription>> GetActiveSubscriptionsAsync(int userId)
     {
         return await _context.UserSubscriptions
-            .Where(s => s.UserId == userId && s.StatusId == (int)SubscriptionStatus.Active)
+            .Where(s => s.UserId == userId)// && s.StatusId == (int)SubscriptionStatus.Active)
             .Include(s => s.Tier)
             .Include(s => s.User)
             .ToListAsync();
