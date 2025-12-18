@@ -8,11 +8,11 @@ namespace BizBio.Core.Entities
 {
     public class CatalogItemVariantAttributeValue : BaseEntity
     {
-        public long VariantId { get; set; }
+        public int VariantId { get; set; }
         public CatalogItemVariant Variant { get; set; } = null!;
 
-        public long AttributeValueId { get; set; }
-        public AttributeValue AttributeValue { get; set; } = null!;
+        public int AttributeValueId { get; set; }
+        public CatalogItemAttributeValue AttributeValue { get; set; } = null!;
     }
 
 }

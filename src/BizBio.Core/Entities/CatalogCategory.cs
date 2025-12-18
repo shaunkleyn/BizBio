@@ -6,7 +6,11 @@ public class CatalogCategory : BaseEntity
 {
     //public int Id { get; set; }
 
-    public int CatalogId { get; set; }
+    // Nullable CatalogId - null means it's a user library category
+    public int? CatalogId { get; set; }
+
+    // UserId for library categories (categories owned by user but not in a specific catalog)
+    public int? UserId { get; set; }
 
     [Required]
     [MaxLength(255)]
@@ -30,7 +34,7 @@ public class CatalogCategory : BaseEntity
     //public DateTime UpdatedAt { get; set; }
 
     // Navigation properties
-    public virtual Catalog Catalog { get; set; } = null!;
+    public virtual Catalog? Catalog { get; set; }
 
     public virtual ICollection<CatalogItem> Items { get; set; } = new List<CatalogItem>();
 }

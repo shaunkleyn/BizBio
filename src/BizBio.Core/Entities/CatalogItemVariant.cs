@@ -23,7 +23,7 @@ namespace BizBio.Core.Entities
     public class CatalogItemVariant : BaseEntity
     {
         //public long Id { get; set; }
-        public long ProductId { get; set; }
+        public int CatalogItemId { get; set; }
         public CatalogItem CatalogItem { get; set; } = null!;
 
         public string? Sku { get; set; }

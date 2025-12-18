@@ -14,8 +14,8 @@ namespace BizBio.Core.Entities
 
         //public DateTime CreatedAt { get; set; }
 
-        public ICollection<AttributeValue> AttributeValues { get; set; }
-            = new List<AttributeValue>();
+        public ICollection<CatalogItemAttributeValue> AttributeValues { get; set; }
+            = new List<CatalogItemAttributeValue>();
     }
 
 }

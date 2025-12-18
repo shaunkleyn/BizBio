@@ -10,10 +10,10 @@ namespace BizBio.Core.Entities
     {
         //public long Id { get; set; }
 
-        public long VariantId { get; set; }
+        public int VariantId { get; set; }
         public CatalogItemVariant Variant { get; set; } = null!;
 
-        public long? LocationId { get; set; }
+        public int? LocationId { get; set; }
 
         public decimal QtyAvailable { get; set; }
         public decimal QtyReserved { get; set; }

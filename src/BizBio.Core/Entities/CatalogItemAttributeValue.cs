@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace BizBio.Core.Entities
 {
-    public class AttributeValue : BaseEntity
+    public class CatalogItemAttributeValue : BaseEntity
     {
         //public long Id { get; set; }
 
-        public long AttributeId { get; set; }
-        public Attribute Attribute { get; set; } = null!;
+        public int AttributeId { get; set; }
+        public CatalogItemAttribute Attribute { get; set; } = null!;
 
         public string Value { get; set; } = null!; // e.g. 'Small', 'Medium', '250g'
         public int SortOrder { get; set; }

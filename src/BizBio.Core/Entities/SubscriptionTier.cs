@@ -84,6 +84,8 @@ public class SubscriptionTier : BaseEntity
 
     public bool NutritionalInfo { get; set; }
 
+    public bool Bundles { get; set; }
+
     // Retail features
     public bool InventoryTracking { get; set; }
 

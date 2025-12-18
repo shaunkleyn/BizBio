@@ -12,11 +12,12 @@ namespace BizBio.Core.Entities
     {
         //public long Id { get; set; }
 
-        public long VariantId { get; set; }
+        public int VariantId { get; set; }
         public CatalogItemVariant Variant { get; set; } = null!;
 
         public decimal Price { get; set; }
 
+        public int? PriceTypeId { get; set; }
         public CatalogItemPriceType? PriceType { get; set; } // Normal, HappyHour, Special, Bulk, etc.
 
 
