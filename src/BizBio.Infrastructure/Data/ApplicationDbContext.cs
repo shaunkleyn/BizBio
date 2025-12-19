@@ -651,7 +651,7 @@ public class ApplicationDbContext : DbContext
             entity.HasIndex(e => e.VariantId);
 
             entity.HasOne(e => e.CatalogItem)
-                .WithMany()
+                .WithMany(c => c.ExtraGroupLinks)
                 .HasForeignKey(e => e.CatalogItemId)
                 .OnDelete(DeleteBehavior.Cascade);
 

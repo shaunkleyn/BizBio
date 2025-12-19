@@ -34,8 +34,7 @@ public class ExtrasController : ControllerBase
             var userId = GetUserId();
             var extras = await _context.CatalogItemExtras
                 .Where(e => e.UserId == userId && e.CatalogId == null && e.IsActive)
-                .OrderBy(e => e.DisplayOrder)
-                .ThenBy(e => e.Name)
+                .OrderBy(e => e.Id)
                 .ToListAsync();
 
             return Ok(new { success = true, data = extras });

@@ -67,7 +67,8 @@ export const useApi = () => {
           console.debug('Tracking error:', err)
         }
       }
-      return response
+      // Return only the data property instead of the full response
+      return response.data
     },
     (error) => {
       // Track failed API calls

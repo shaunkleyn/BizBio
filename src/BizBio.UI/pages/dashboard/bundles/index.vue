@@ -268,7 +268,14 @@ async function loadBundles() {
   try {
     loading.value = true
     const response = await bundlesApi.getBundles(catalogId.value)
-    bundles.value = response.data.data.bundles || []
+    // Ensure we always set an array
+    if (response.data && Array.isArray(response.data.bundles)) {
+      bundles.value = response.data.bundles
+    } else if (Array.isArray(response.data)) {
+      bundles.value = response.data
+    } else {
+      bundles.value = []
+    }
   } catch (error: any) {
     console.error('Error loading bundles:', error)
     if (error.response?.status === 400 && error.response?.data?.error?.includes('not available')) {

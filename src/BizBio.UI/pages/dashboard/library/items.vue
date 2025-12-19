@@ -1,21 +1,29 @@
 <template>
-  <div class="min-h-screen bg-gray-50 p-4 md:p-8">
-    <div class="max-w-7xl mx-auto">
-      <!-- Header -->
-      <div class="mb-8">
-        <div class="flex items-center justify-between mb-4">
-          <div>
-            <h1 class="text-3xl font-bold text-gray-900">Library Items</h1>
-            <p class="text-gray-600 mt-1">Manage your menu items and add them to any menu</p>
-          </div>
-          <button
-            @click="showItemModal = true"
-            class="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold"
-          >
-            <i class="fas fa-plus mr-2"></i>
-            Add Item
-          </button>
-        </div>
+  <LibraryLayout
+    :category-count="categories.length"
+    :stats="{
+      items: items.length,
+      categories: categories.length
+    }"
+    @show-category-modal="showCategoryModal = true"
+  >
+    <div class="p-4 md:p-8">
+      <div class="max-w-7xl mx-auto">
+          <!-- Header -->
+          <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h1 class="text-3xl font-bold text-gray-900">Library Items</h1>
+                <p class="text-gray-600 mt-1">Manage your menu items and add them to any menu</p>
+              </div>
+              <button
+                @click="showItemModal = true"
+                class="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold"
+              >
+                <i class="fas fa-plus mr-2"></i>
+                Add Item
+              </button>
+            </div>
 
         <!-- Filters & View Toggle -->
         <div class="flex flex-wrap gap-4">
@@ -36,13 +44,6 @@
               {{ category.name }}
             </option>
           </select>
-          <button
-            @click="showCategoryModal = true"
-            class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            <i class="fas fa-folder mr-2"></i>
-            Categories
-          </button>
           <!-- View Toggle -->
           <div class="flex border border-gray-300 rounded-lg overflow-hidden">
             <button
@@ -193,8 +194,8 @@
               <span class="text-xl font-bold text-[var(--primary-color)]">
                 R{{ item.price.toFixed(2) }}
               </span>
-              <span v-if="item.variantCount > 0" class="text-sm text-gray-600">
-                {{ item.variantCount }} variant{{ item.variantCount > 1 ? 's' : '' }}
+              <span v-if="item.variants.length > 0" class="text-sm text-gray-600">
+                {{ item.variants.length }} variant{{ item.variants.length > 1 ? 's' : '' }}
               </span>
             </div>
 
@@ -321,7 +322,7 @@
                 <span v-else class="text-sm text-gray-500">-</span>
               </td>
               <td class="px-6 py-4">
-                <span class="text-sm text-gray-900">{{ item.variantCount || 0 }}</span>
+                <span class="text-sm text-gray-900">{{ item.variants.length || 0 }}</span>
               </td>
               <td class="px-6 py-4 text-right">
                 <div class="flex justify-end gap-2">
@@ -344,6 +345,7 @@
             </tr>
           </tbody>
         </table>
+      </div>
       </div>
     </div>
 
@@ -369,7 +371,7 @@
       @close="showBulkTagModal = false"
       @apply="applyBulkTags"
     />
-  </div>
+  </LibraryLayout>
 </template>
 
 <script setup lang="ts">
@@ -424,10 +426,19 @@ async function loadItems() {
   try {
     loading.value = true
     const response = await libraryItemsApi.getItems()
-    items.value = response.data.data.items
+    console.log(response);
+    // Ensure we always set an array
+    if (response.data && Array.isArray(response.data.items)) {
+      items.value = response.data.items
+    } else if (Array.isArray(response.data)) {
+      items.value = response.data
+    } else {
+      items.value = []
+    }
   } catch (error) {
     console.error('Error loading items:', error)
     toast.error('Failed to load items')
+    items.value = []
   } finally {
     loading.value = false
   }
@@ -436,9 +447,17 @@ async function loadItems() {
 async function loadCategories() {
   try {
     const response = await categoriesApi.getCategories()
-    categories.value = response.data.data.categories
+    // Ensure we always set an array
+    if (response.data && Array.isArray(response.data.categories)) {
+      categories.value = response.data.categories
+    } else if (Array.isArray(response.data)) {
+      categories.value = response.data
+    } else {
+      categories.value = []
+    }
   } catch (error) {
     console.error('Error loading categories:', error)
+    categories.value = []
   }
 }
 

@@ -49,9 +49,9 @@ export const useAuthStore = defineStore('auth', {
       try {
         const authApi = useAuthApi()
         const response = await authApi.register(userData)
-        return { success: true, data: response.data }
+        return { success: true, data: response }
       } catch (error: any) {
-        this.error = error.response?.data?.message || 'Registration failed'
+        this.error = error.response?.data?.message || error.message || 'Registration failed'
         return { success: false, error: this.error }
       } finally {
         this.loading = false
@@ -65,7 +65,30 @@ export const useAuthStore = defineStore('auth', {
       try {
         const authApi = useAuthApi()
         const response = await authApi.login(credentials)
-        const { user, token } = response.data
+
+        // Check if response has success property
+        if (response.success === false) {
+          this.error = response.message || response.error || 'Login failed'
+          return { success: false, error: this.error }
+        }
+
+        // Handle different response structures
+        // Could be { success: true, data: { user, token } } or { success: true, user, token }
+        let user, token
+        if (response.data) {
+          // Structure: { success: true, data: { user, token } }
+          user = response.data.user
+          token = response.data.token
+        } else {
+          // Structure: { success: true, user, token }
+          user = response.user
+          token = response.token
+        }
+
+        if (!user || !token) {
+          this.error = 'Invalid response from server'
+          return { success: false, error: this.error }
+        }
 
         this.user = user
         this.token = token
@@ -75,9 +98,9 @@ export const useAuthStore = defineStore('auth', {
           localStorage.setItem('token', token)
         }
 
-        return { success: true, data: response.data }
+        return { success: true, data: { user, token } }
       } catch (error: any) {
-        this.error = error.response?.data?.message || 'Login failed'
+        this.error = error.response?.data?.message || error.message || 'Login failed'
         return { success: false, error: this.error }
       } finally {
         this.loading = false
@@ -91,9 +114,9 @@ export const useAuthStore = defineStore('auth', {
       try {
         const authApi = useAuthApi()
         const response = await authApi.verifyEmail(token)
-        return { success: true, data: response.data }
+        return { success: true, data: response }
       } catch (error: any) {
-        this.error = error.response?.data?.message || 'Email verification failed'
+        this.error = error.response?.data?.message || error.message || 'Email verification failed'
         return { success: false, error: this.error }
       } finally {
         this.loading = false
@@ -107,9 +130,9 @@ export const useAuthStore = defineStore('auth', {
       try {
         const authApi = useAuthApi()
         const response = await authApi.resendVerification(email)
-        return { success: true, data: response.data }
+        return { success: true, data: response }
       } catch (error: any) {
-        this.error = error.response?.data?.message || 'Failed to resend verification email'
+        this.error = error.response?.data?.message || error.message || 'Failed to resend verification email'
         return { success: false, error: this.error }
       } finally {
         this.loading = false
@@ -123,9 +146,9 @@ export const useAuthStore = defineStore('auth', {
       try {
         const authApi = useAuthApi()
         const response = await authApi.forgotPassword(email)
-        return { success: true, data: response.data }
+        return { success: true, data: response }
       } catch (error: any) {
-        this.error = error.response?.data?.message || 'Password reset request failed'
+        this.error = error.response?.data?.message || error.message || 'Password reset request failed'
         return { success: false, error: this.error }
       } finally {
         this.loading = false
@@ -139,9 +162,9 @@ export const useAuthStore = defineStore('auth', {
       try {
         const authApi = useAuthApi()
         const response = await authApi.resetPassword(token, newPassword)
-        return { success: true, data: response.data }
+        return { success: true, data: response }
       } catch (error: any) {
-        this.error = error.response?.data?.message || 'Password reset failed'
+        this.error = error.response?.data?.message || error.message || 'Password reset failed'
         return { success: false, error: this.error }
       } finally {
         this.loading = false

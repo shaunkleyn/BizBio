@@ -26,6 +26,11 @@ builder.Logging.AddApplicationInsights(
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ApplicationInsightsExceptionFilter>();
+})
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 });
 
 // Database Configuration

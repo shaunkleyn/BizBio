@@ -308,22 +308,22 @@
           <div v-else class="space-y-2 max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-4">
             <div
               v-for="group in availableExtraGroups"
-              :key="group.Id"
+              :key="group.id"
               class="flex items-start py-2 hover:bg-gray-50 rounded px-2"
             >
               <input
                 type="checkbox"
-                :id="`extra-group-${group.Id}`"
-                :value="group.Id"
+                :id="`extra-group-${group.id}`"
+                :value="Number(group.id)"
                 v-model="form.extraGroupIds"
                 class="mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               />
-              <label :for="`extra-group-${group.Id}`" class="ml-3 flex-1 cursor-pointer">
-                <div class="text-sm font-medium text-gray-800">{{ group.Name }}</div>
+              <label :for="`extra-group-${group.id}`" class="ml-3 flex-1 cursor-pointer">
+                <div class="text-sm font-medium text-gray-800">{{ group.name }}</div>
                 <div class="text-xs text-gray-500">
-                  {{ group.Description }}
-                  <span v-if="group.Extras && group.Extras.length > 0" class="ml-1">
-                    ({{ group.Extras.length }} extras)
+                  {{ group.description }}
+                  <span v-if="group.extras && group.extras.length > 0" class="ml-1">
+                    ({{ group.extras.length }} extras)
                   </span>
                 </div>
               </label>
@@ -418,7 +418,11 @@ onMounted(async () => {
     form.images = props.item.images || []
     form.tags = props.item.tags || []
     form.variants = props.item.variants?.map((v: any) => ({ ...v })) || []
-    form.extraGroupIds = props.item.extraGroups?.map((g: any) => g.ExtraGroupId) || []
+    form.extraGroupIds = props.item.extraGroups?.map((g: any) => {
+      // Handle both camelCase and PascalCase, ensure it's a number
+      const id = g.extraGroupId || g.ExtraGroupId
+      return typeof id === 'number' ? id : parseInt(id)
+    }).filter((id: any) => !isNaN(id)) || []
   }
 
   // Fetch available extra groups
@@ -430,11 +434,20 @@ async function fetchExtraGroups() {
   try {
     const api = useApi()
     const response = await api.get('/library/extra-groups')
+    console.log('Extra groups response:', response)
     if (response.success) {
-      availableExtraGroups.value = response.data
+      // Ensure we always set an array
+      if (Array.isArray(response.data)) {
+        availableExtraGroups.value = response.data
+      } else if (response.data && Array.isArray(response.data.extraGroups)) {
+        availableExtraGroups.value = response.data.extraGroups
+      } else {
+        availableExtraGroups.value = []
+      }
     }
   } catch (error) {
     console.error('Error fetching extra groups:', error)
+    availableExtraGroups.value = []
   } finally {
     loadingExtras.value = false
   }
@@ -493,7 +506,7 @@ async function handleImageUpload(event: Event) {
   try {
     uploading.value = true
     const response = await uploadsApi.uploadMenuImage(file)
-    const imageUrl = response.data.data.url || response.data.url
+    const imageUrl = response.data.url || response.url
     form.images.push(imageUrl)
     toast.success('Image uploaded successfully')
   } catch (error) {
@@ -552,10 +565,21 @@ async function saveItem() {
       variants: form.variants.length > 0 ? form.variants.map(v => ({
         title: v.title,
         price: v.price,
-        isDefault: v.isDefault || false
-      })) : null,
-      extraGroupIds: form.extraGroupIds.length > 0 ? form.extraGroupIds : null
+        cost: v.cost || null,
+        sizeValue: v.sizeValue || null,
+        sizeUnit: v.sizeUnit || null,
+        unitOfMeasure: v.unitOfMeasure || null,
+        sku: v.sku || null,
+        barcode: v.barcode || null,
+        isDefault: v.isDefault || false,
+        weightG: v.weightG || null
+      })) : [],
+      extraGroupIds: form.extraGroupIds.length > 0
+        ? form.extraGroupIds.map(id => Number(id)).filter(id => !isNaN(id))
+        : []
     }
+
+    console.log('Saving item with data:', data)
 
     if (props.item) {
       await libraryItemsApi.updateItem(props.item.id, data)
@@ -566,9 +590,10 @@ async function saveItem() {
     }
 
     emit('saved')
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error saving item:', error)
-    toast.error('Failed to save item')
+    console.error('Error response:', error.response?.data)
+    toast.error(error.response?.data?.title || error.message || 'Failed to save item')
   } finally {
     saving.value = false
   }

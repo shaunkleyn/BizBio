@@ -34,11 +34,6 @@ public class LibraryItemsController : ControllerBase
         var userId = GetUserId();
 
         var query = _context.CatalogItems
-            .Include(i => i.Variants.Where(v => v.IsActive))
-            .Include(i => i.ExtraGroupLinks.Where(l => l.IsActive))
-                .ThenInclude(l => l.ExtraGroup)
-                    .ThenInclude(g => g.GroupItems.Where(gi => gi.IsActive))
-                        .ThenInclude(gi => gi.Extra)
             .Where(i => i.UserId == userId && i.CatalogId == null && i.IsActive);
 
         if (categoryId.HasValue)
@@ -47,8 +42,7 @@ public class LibraryItemsController : ControllerBase
         }
 
         var items = await query
-            .OrderBy(i => i.SortOrder)
-            .ThenBy(i => i.Name)
+            .OrderBy(i => i.Id)
             .Select(i => new
             {
                 i.Id,
@@ -61,17 +55,19 @@ public class LibraryItemsController : ControllerBase
                 images = ParseJsonArray(i.Images),
                 tags = ParseJsonArray(i.Tags),
                 i.SortOrder,
-                variantCount = i.Variants.Count,
-                variants = i.Variants.Select(v => new
-                {
-                    v.Id,
-                    v.Title,
-                    v.Price,
-                    v.SizeValue,
-                    v.SizeUnit,
-                    v.IsDefault
-                }).ToList(),
+                variants = i.Variants
+                    .Where(v => v.IsActive)
+                    .Select(v => new
+                    {
+                        v.Id,
+                        v.Title,
+                        v.Price,
+                        v.SizeValue,
+                        v.SizeUnit,
+                        v.IsDefault
+                    }).ToList(),
                 extraGroups = i.ExtraGroupLinks
+                    .Where(l => l.IsActive)
                     .OrderBy(l => l.DisplayOrder)
                     .Select(l => new
                     {
@@ -82,6 +78,7 @@ public class LibraryItemsController : ControllerBase
                         l.ExtraGroup.MaxAllowed,
                         l.ExtraGroup.AllowMultipleQuantities,
                         Extras = l.ExtraGroup.GroupItems
+                            .Where(gi => gi.IsActive)
                             .OrderBy(gi => gi.DisplayOrder)
                             .Select(gi => new
                             {
@@ -307,6 +304,41 @@ public class LibraryItemsController : ControllerBase
         item.UpdatedAt = DateTime.UtcNow;
         item.UpdatedBy = userId.ToString();
 
+        // Update variants if provided
+        if (dto.Variants != null)
+        {
+            // Remove existing variants
+            var existingVariants = await _context.CatalogItemVariants
+                .Where(v => v.CatalogItemId == item.Id)
+                .ToListAsync();
+            _context.CatalogItemVariants.RemoveRange(existingVariants);
+
+            // Add new variants
+            foreach (var variantDto in dto.Variants)
+            {
+                var variant = new CatalogItemVariant
+                {
+                    CatalogItemId = item.Id,
+                    Title = variantDto.Title,
+                    Price = variantDto.Price,
+                    Cost = variantDto.Cost,
+                    SizeValue = variantDto.SizeValue,
+                    SizeUnit = variantDto.SizeUnit,
+                    UnitOfMeasure = variantDto.UnitOfMeasure,
+                    Sku = variantDto.Sku,
+                    Barcode = variantDto.Barcode,
+                    IsDefault = variantDto.IsDefault,
+                    WeightG = variantDto.WeightG,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    CreatedBy = userId.ToString(),
+                    UpdatedBy = userId.ToString()
+                };
+                _context.CatalogItemVariants.Add(variant);
+            }
+        }
+
         // Update extra group links if provided
         if (dto.ExtraGroupIds != null)
         {
@@ -516,6 +548,7 @@ public class UpdateLibraryItemDto
     public int? SortOrder { get; set; }
     public bool? AvailableInEventMode { get; set; }
     public bool? EventModeOnly { get; set; }
+    public List<CreateVariantDto>? Variants { get; set; }
     public List<int>? ExtraGroupIds { get; set; }
 }
 

@@ -92,83 +92,88 @@
         </div>
       </div>
 
-      <!-- Edit Category Modal -->
+    </div>
+
+    <!-- Edit Category Modal (Nested Modal) -->
+    <div
+      v-if="editingCategory"
+      class="fixed inset-0 bg-black bg-opacity-50 z-[60] flex items-center justify-center p-4"
+      @click="editingCategory = null"
+    >
       <div
-        v-if="editingCategory"
-        class="absolute inset-0 bg-white z-10 p-6"
+        class="bg-white rounded-lg w-full max-w-lg p-6"
+        @click.stop
       >
-        <div class="mb-6">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xl font-bold text-gray-900">Edit Category</h3>
-            <button
-              @click="editingCategory = null"
-              class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full"
-            >
-              <i class="fas fa-times"></i>
-            </button>
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-bold text-gray-900">Edit Category</h3>
+          <button
+            @click="editingCategory = null"
+            class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <form @submit.prevent="updateCategory" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Category Name <span class="text-red-500">*</span>
+            </label>
+            <input
+              v-model="editForm.name"
+              type="text"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+            />
           </div>
 
-          <form @submit.prevent="updateCategory" class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
-                Category Name <span class="text-red-500">*</span>
-              </label>
-              <input
-                v-model="editForm.name"
-                type="text"
-                required
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
-              />
-            </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Description
+            </label>
+            <textarea
+              v-model="editForm.description"
+              rows="3"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] resize-none"
+            ></textarea>
+          </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
-                Description
-              </label>
-              <textarea
-                v-model="editForm.description"
-                rows="3"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] resize-none"
-              ></textarea>
-            </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Icon (Font Awesome class)
+            </label>
+            <input
+              v-model="editForm.icon"
+              type="text"
+              placeholder="e.g., fa-pizza-slice"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+            />
+            <p class="text-xs text-gray-500 mt-1">
+              Find icons at <a href="https://fontawesome.com/icons" target="_blank" class="text-blue-600 hover:underline">fontawesome.com</a>
+            </p>
+          </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
-                Icon (Font Awesome class)
-              </label>
-              <input
-                v-model="editForm.icon"
-                type="text"
-                placeholder="e.g., fa-pizza-slice"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
-              />
-              <p class="text-xs text-gray-500 mt-1">
-                Find icons at <a href="https://fontawesome.com/icons" target="_blank" class="text-blue-600 hover:underline">fontawesome.com</a>
-              </p>
-            </div>
-
-            <div class="flex gap-3 pt-4">
-              <button
-                type="button"
-                @click="editingCategory = null"
-                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                :disabled="saving"
-                class="flex-1 px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] disabled:opacity-50"
-              >
-                <span v-if="saving">
-                  <i class="fas fa-spinner fa-spin mr-2"></i>
-                  Saving...
-                </span>
-                <span v-else>Update</span>
-              </button>
-            </div>
-          </form>
-        </div>
+          <div class="flex gap-3 pt-4">
+            <button
+              type="button"
+              @click="editingCategory = null"
+              class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              :disabled="saving"
+              class="flex-1 px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] disabled:opacity-50"
+            >
+              <span v-if="saving">
+                <i class="fas fa-spinner fa-spin mr-2"></i>
+                Saving...
+              </span>
+              <span v-else>Update</span>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -215,10 +220,18 @@ async function loadCategories() {
   try {
     loading.value = true
     const response = await categoriesApi.getCategories()
-    categories.value = response.data.data.categories
+    // Ensure we always set an array
+    if (response.data && Array.isArray(response.data.categories)) {
+      categories.value = response.data.categories
+    } else if (Array.isArray(response.data)) {
+      categories.value = response.data
+    } else {
+      categories.value = []
+    }
   } catch (error) {
     console.error('Error loading categories:', error)
     toast.error('Failed to load categories')
+    categories.value = []
   } finally {
     loading.value = false
   }

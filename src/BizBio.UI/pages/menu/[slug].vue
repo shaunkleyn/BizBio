@@ -198,8 +198,8 @@ async function loadMenu() {
     loading.value = true
     const slug = route.params.slug as string
     const response = await menusApi.getMenuBySlug(slug)
-    menuData.value = response.data.data.menu
-    items.value = response.data.data.items || []
+    menuData.value = response.data.menu
+    items.value = response.data.items || []
 
     // Set first category as active
     if (categories.value.length > 0) {

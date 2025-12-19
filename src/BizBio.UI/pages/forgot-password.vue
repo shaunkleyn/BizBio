@@ -58,6 +58,8 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '~/stores/auth'
+
 const authStore = useAuthStore()
 const email = ref('')
 const loading = ref(false)

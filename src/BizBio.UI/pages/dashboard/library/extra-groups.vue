@@ -1,5 +1,11 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
+  <LibraryLayout
+    :stats="{
+      extraGroups: extraGroups.length
+    }"
+    @show-category-modal="() => {}"
+  >
+    <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
       <div>
         <h1 class="text-3xl font-bold text-gray-800">Extra Groups Library</h1>
@@ -30,7 +36,7 @@
     <div v-else-if="extraGroups.length > 0" class="grid gap-6">
       <div
         v-for="group in extraGroups"
-        :key="group.Id"
+        :key="group.id"
         class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
       >
         <div class="flex justify-between items-start mb-4">
@@ -60,12 +66,12 @@
         </div>
 
         <!-- Extras in Group -->
-        <div v-if="group.Extras && group.Extras.length > 0" class="mt-4">
+        <div v-if="group.extras && group.extras.length > 0" class="mt-4">
           <h4 class="text-sm font-semibold text-gray-700 mb-2">Extras in this group:</h4>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
             <div
-              v-for="item in group.Extras"
-              :key="item.Id"
+              v-for="item in group.extras"
+              :key="item.id"
               class="flex justify-between items-center bg-gray-50 rounded-lg p-3"
             >
               <div>
@@ -195,17 +201,17 @@
               <div v-if="availableExtras.length > 0" class="border border-gray-300 rounded-lg p-4 max-h-60 overflow-y-auto">
                 <div
                   v-for="extra in availableExtras"
-                  :key="extra.Id"
+                  :key="extra.id"
                   class="flex items-center py-2 hover:bg-gray-50 rounded px-2"
                 >
                   <input
                     type="checkbox"
-                    :id="`extra-${extra.Id}`"
-                    :value="extra.Id"
+                    :id="`extra-${extra.id}`"
+                    :value="extra.id"
                     v-model="formData.ExtraIds"
                     class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <label :for="`extra-${extra.Id}`" class="ml-3 flex-1 flex justify-between items-center cursor-pointer">
+                  <label :for="`extra-${extra.id}`" class="ml-3 flex-1 flex justify-between items-center cursor-pointer">
                     <span class="text-sm text-gray-800">{{ extra.name }}</span>
                     <span class="text-sm text-gray-500">R{{ extra.basePrice.toFixed(2) }}</span>
                   </label>
@@ -236,7 +242,8 @@
         </div>
       </div>
     </div>
-  </div>
+    </div>
+  </LibraryLayout>
 </template>
 
 <script setup lang="ts">
@@ -268,14 +275,24 @@ const fetchExtraGroups = async () => {
   error.value = ''
   try {
     const response = await api.get('/library/extra-groups')
-    console.log(response);
-    if (response.status === 200) {
-      extraGroups.value = response.data.data
+    console.log('Extra groups response:', response);
+    if (response.success) {
+      // Ensure we always set an array
+      if (Array.isArray(response.data)) {
+        extraGroups.value = response.data
+      } else if (response.data && Array.isArray(response.data.extraGroups)) {
+        extraGroups.value = response.data.extraGroups
+      } else {
+        console.warn('Unexpected response structure:', response.data)
+        extraGroups.value = []
+      }
     } else {
       error.value = 'Failed to load extra groups'
+      extraGroups.value = []
     }
   } catch (err: any) {
     error.value = err.message || 'An error occurred'
+    extraGroups.value = []
   } finally {
     loading.value = false
   }
@@ -285,10 +302,18 @@ const fetchAvailableExtras = async () => {
   try {
     const response = await api.get('/library/extras')
     if (response.success) {
-      availableExtras.value = response.data
+      // Ensure we always set an array
+      if (Array.isArray(response.data)) {
+        availableExtras.value = response.data
+      } else if (response.data && Array.isArray(response.data.extras)) {
+        availableExtras.value = response.data.extras
+      } else {
+        availableExtras.value = []
+      }
     }
   } catch (err) {
     console.error('Failed to fetch extras', err)
+    availableExtras.value = []
   }
 }
 
@@ -296,7 +321,7 @@ const saveGroup = async () => {
   saving.value = true
   try {
     if (editingGroup.value) {
-      const response = await api.put(`/library/extra-groups/${editingGroup.value.Id}`, formData.value)
+      const response = await api.put(`/library/extra-groups/${editingGroup.value.id}`, formData.value)
       if (response.success) {
         await fetchExtraGroups()
         closeModal()
@@ -322,13 +347,13 @@ const saveGroup = async () => {
 const editGroup = (group: any) => {
   editingGroup.value = group
   formData.value = {
-    Name: group.Name,
-    Description: group.Description || '',
-    MinRequired: group.MinRequired,
-    MaxAllowed: group.MaxAllowed,
-    AllowMultipleQuantities: group.AllowMultipleQuantities,
-    DisplayOrder: group.DisplayOrder,
-    ExtraIds: group.Extras ? group.Extras.map((item: any) => item.ExtraId) : []
+    Name: group.name,
+    Description: group.description || '',
+    MinRequired: group.minRequired,
+    MaxAllowed: group.maxAllowed,
+    AllowMultipleQuantities: group.allowMultipleQuantities,
+    DisplayOrder: group.displayOrder,
+    ExtraIds: group.extras ? group.extras.map((item: any) => item.extraId) : []
   }
 }
 
