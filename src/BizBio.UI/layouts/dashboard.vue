@@ -153,11 +153,6 @@ const mobileMenuOpen = ref(false)
 const handleLogout = () => {
   authStore.logout()
   router.push('/login')
-  mobileMenuOpen = false
+  mobileMenuOpen.value = false
 }
-
-// Ensure user is authenticated
-definePageMeta({
-  middleware: 'auth'
-})
 </script>

@@ -246,7 +246,7 @@
                 <!-- Action Buttons -->
                 <div class="flex gap-2 mt-4">
                   <NuxtLink
-                    :to="`/menu/${profile.Slug}`"
+                    :to="`/menu/${profile.slug}`"
                     class="flex-1 text-center bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors text-sm font-semibold"
                   >
                     <i class="fas fa-eye mr-1"></i>
@@ -413,23 +413,11 @@ onMounted(async () => {
 
     console.log('Full response object:', response)
     console.log('response.data:', response.data)
-    console.log('response.data.data:', response.data?.data)
     console.log('Type of response.data:', typeof response.data)
     console.log('Is response.data an array?', Array.isArray(response.data))
-    console.log('Is response.data.data an array?', Array.isArray(response.data?.data))
 
     // Handle different response structures
-    let data
-    if (response.data?.data) {
-      console.log('Using response.data.data')
-      data = response.data.data
-    } else if (response.data) {
-      console.log('Using response.data')
-      data = response.data
-    } else {
-      console.log('No data found, using empty array')
-      data = []
-    }
+    let data = response.data || []
 
     console.log('Extracted data:', data)
     console.log('Is extracted data an array?', Array.isArray(data))

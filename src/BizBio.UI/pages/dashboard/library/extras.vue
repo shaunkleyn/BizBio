@@ -1,5 +1,11 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
+  <LibraryLayout
+    :stats="{
+      extras: extras.length
+    }"
+    @show-category-modal="() => {}"
+  >
+    <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-6">
       <div>
         <h1 class="text-3xl font-bold text-gray-800">Extras Library</h1>
@@ -39,18 +45,18 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="extra in extras" :key="extra.Id" class="hover:bg-gray-50 transition-colors">
+          <tr v-for="extra in extras" :key="extra.id" class="hover:bg-gray-50 transition-colors">
             <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm font-medium text-gray-900">{{ extra.Name }}</div>
+              <div class="text-sm font-medium text-gray-900">{{ extra.name }}</div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm text-gray-500">{{ extra.Code || '-' }}</div>
+              <div class="text-sm text-gray-500">{{ extra.code || '-' }}</div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm text-gray-900">R{{ extra.BasePrice.toFixed(2) }}</div>
+              <div class="text-sm text-gray-900">R{{ extra.basePrice.toFixed(2) }}</div>
             </td>
             <td class="px-6 py-4">
-              <div class="text-sm text-gray-500 truncate max-w-md">{{ extra.Description || '-' }}</div>
+              <div class="text-sm text-gray-500 truncate max-w-md">{{ extra.description || '-' }}</div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
               <button
@@ -60,7 +66,7 @@
                 Edit
               </button>
               <button
-                @click="deleteExtra(extra.Id)"
+                @click="deleteExtra(extra.id)"
                 class="text-red-600 hover:text-red-900"
               >
                 Delete
@@ -111,7 +117,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
               <input
-                v-model="formData.Name"
+                v-model="formData.name"
                 type="text"
                 required
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -122,7 +128,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Code/SKU</label>
               <input
-                v-model="formData.Code"
+                v-model="formData.code"
                 type="text"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., EXT-CHEESE"
@@ -132,7 +138,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Base Price *</label>
               <input
-                v-model.number="formData.BasePrice"
+                v-model.number="formData.basePrice"
                 type="number"
                 step="0.01"
                 min="0"
@@ -145,7 +151,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
               <textarea
-                v-model="formData.Description"
+                v-model="formData.description"
                 rows="3"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Optional description"
@@ -155,7 +161,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
               <input
-                v-model="formData.ImageUrl"
+                v-model="formData.imageUrl"
                 type="url"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="https://example.com/image.jpg"
@@ -165,7 +171,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-2">Display Order</label>
               <input
-                v-model.number="formData.DisplayOrder"
+                v-model.number="formData.displayOrder"
                 type="number"
                 min="0"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -193,7 +199,8 @@
         </div>
       </div>
     </div>
-  </div>
+    </div>
+  </LibraryLayout>
 </template>
 
 <script setup lang="ts">
@@ -210,12 +217,12 @@ const editingExtra = ref<any>(null)
 const saving = ref(false)
 
 const formData = ref({
-  Name: '',
-  Code: '',
-  BasePrice: 0,
-  Description: '',
-  ImageUrl: '',
-  DisplayOrder: 0
+  name: '',
+  code: '',
+  basePrice: 0,
+  description: '',
+  imageUrl: '',
+  displayOrder: 0
 })
 
 const fetchExtras = async () => {
@@ -224,12 +231,22 @@ const fetchExtras = async () => {
   try {
     const response = await api.get('/library/extras')
     if (response.success) {
-      extras.value = response.data
+      // Ensure we always set an array
+      if (Array.isArray(response.data)) {
+        extras.value = response.data
+      } else if (response.data && Array.isArray(response.data.extras)) {
+        extras.value = response.data.extras
+      } else {
+        console.warn('Unexpected response structure:', response.data)
+        extras.value = []
+      }
     } else {
       error.value = 'Failed to load extras'
+      extras.value = []
     }
   } catch (err: any) {
     error.value = err.message || 'An error occurred'
+    extras.value = []
   } finally {
     loading.value = false
   }
@@ -239,7 +256,7 @@ const saveExtra = async () => {
   saving.value = true
   try {
     if (editingExtra.value) {
-      const response = await api.put(`/library/extras/${editingExtra.value.Id}`, formData.value)
+      const response = await api.put(`/library/extras/${editingExtra.value.id}`, formData.value)
       if (response.success) {
         await fetchExtras()
         closeModal()
@@ -265,12 +282,12 @@ const saveExtra = async () => {
 const editExtra = (extra: any) => {
   editingExtra.value = extra
   formData.value = {
-    Name: extra.Name,
-    Code: extra.Code || '',
-    BasePrice: extra.BasePrice,
-    Description: extra.Description || '',
-    ImageUrl: extra.ImageUrl || '',
-    DisplayOrder: extra.DisplayOrder
+    name: extra.name,
+    code: extra.code || '',
+    basePrice: extra.basePrice,
+    description: extra.description || '',
+    imageUrl: extra.imageUrl || '',
+    displayOrder: extra.displayOrder
   }
 }
 
@@ -293,12 +310,12 @@ const closeModal = () => {
   showCreateModal.value = false
   editingExtra.value = null
   formData.value = {
-    Name: '',
-    Code: '',
-    BasePrice: 0,
-    Description: '',
-    ImageUrl: '',
-    DisplayOrder: 0
+    name: '',
+    code: '',
+    basePrice: 0,
+    description: '',
+    imageUrl: '',
+    displayOrder: 0
   }
 }
 

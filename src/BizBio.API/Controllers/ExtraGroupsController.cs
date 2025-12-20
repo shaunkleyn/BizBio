@@ -36,8 +36,7 @@ public class ExtraGroupsController : ControllerBase
                 .Where(g => g.UserId == userId && g.CatalogId == null && g.IsActive)
                 .Include(g => g.GroupItems)
                     .ThenInclude(gi => gi.Extra)
-                .OrderBy(g => g.DisplayOrder)
-                .ThenBy(g => g.Name)
+                .OrderBy(g => g.Id)
                 .Select(g => new
                 {
                     g.Id,

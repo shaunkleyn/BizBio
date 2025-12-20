@@ -274,7 +274,7 @@ async function loadBundleSteps() {
 
     if (props.item.bundleId) {
       const response = await menusApi.getBundleDetails(props.menuSlug, props.item.bundleId)
-      const bundle = response.data.data.bundle
+      const bundle = response.data.bundle
       bundleSteps.value = bundle.steps || []
     }
   } catch (error) {
@@ -290,7 +290,7 @@ async function loadVariantsAndOptions() {
     loading.value = true
 
     const response = await menusApi.getItemDetails(props.menuSlug, props.item.id)
-    const itemData = response.data.data.item
+    const itemData = response.data.item
 
     variants.value = itemData.variants || []
 

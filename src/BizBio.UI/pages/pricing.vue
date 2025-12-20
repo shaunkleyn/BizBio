@@ -664,8 +664,14 @@ const loadPricingTiers = async () => {
     const response = await subscriptionsApi.getTiers()
     console.log(response);
     console.log(response.data);
-    console.log(response.data.data);
-    pricingTiers.value = response.data.data.tiers || []
+    // Ensure we always set an array
+    if (response.data && Array.isArray(response.data.tiers)) {
+      pricingTiers.value = response.data.tiers
+    } else if (Array.isArray(response.data)) {
+      pricingTiers.value = response.data
+    } else {
+      pricingTiers.value = []
+    }
   } catch (err) {
     console.error('Failed to load pricing tiers:', err)
 

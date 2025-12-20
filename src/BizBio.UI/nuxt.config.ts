@@ -43,7 +43,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'https://api.bizbio.co.za/api/v1',
+      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'https://localhost:5001/api/v1',
       appInsightsConnectionString: process.env.NUXT_PUBLIC_APP_INSIGHTS_CONNECTION_STRING || '',
       googleAnalyticsId: process.env.NUXT_PUBLIC_GOOGLE_ANALYTICS_ID || 'G-XXXXXXXXXX',
       cookieDomain: process.env.NUXT_PUBLIC_COOKIE_DOMAIN || undefined
@@ -92,20 +92,19 @@ export default defineNuxtConfig({
     '/terms': { prerender: true },
     '/privacy': { prerender: true },
 
-    // Dashboard - SSR with short cache
-    '/dashboard/**': { ssr: false }, // Client-side only for auth-protected pages
-    '/dashboard/menu/create': { ssr: false }, // Client-side only for menu creation
-    
-    // Auth pages - SSR only, no cache
+    // Dashboard - client-side only for auth-protected pages
+    '/dashboard/**': { ssr: false },
+
+    // Auth pages - SSR only
     '/login': { ssr: true },
     '/register': { ssr: true },
     '/forgot-password': { ssr: true },
     '/reset-password': { ssr: true },
     '/verify-email': { ssr: true },
-    
+
     // Search and products - SSR with cache
-    '/search': { ssr: true, cache: { maxAge: 60 * 10 } }, // 10 minutes
-    '/products': { ssr: true, cache: { maxAge: 60 * 15 } }, // 15 minutes
+    '/search': { ssr: true, cache: { maxAge: 60 * 10 } },
+    '/products': { ssr: true, cache: { maxAge: 60 * 15 } },
   },
   
   darkMode: 'class',

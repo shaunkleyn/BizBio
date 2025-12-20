@@ -48,6 +48,8 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '~/stores/auth'
+
 const authStore = useAuthStore()
 const route = useRoute()
 const router = useRouter()
