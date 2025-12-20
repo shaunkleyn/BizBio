@@ -280,7 +280,7 @@
               <p class="text-sm text-gray-600 mt-1">Select which extras are available for this item</p>
             </div>
             <NuxtLink
-              to="/dashboard/library/extra-groups"
+              to="/menu/library/extra-groups"
               target="_blank"
               class="text-sm text-blue-600 hover:text-blue-800"
             >
@@ -297,7 +297,7 @@
             <i class="fas fa-plus-circle text-3xl text-gray-300 mb-2"></i>
             <p class="text-gray-600 mb-2">No extra groups available</p>
             <NuxtLink
-              to="/dashboard/library/extra-groups"
+              to="/menu/library/extra-groups"
               target="_blank"
               class="text-sm text-blue-600 hover:text-blue-800"
             >

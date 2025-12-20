@@ -1,26 +1,6 @@
 <template>
-  <LibraryLayout
-    :stats="{
-      extraGroups: extraGroups.length
-    }"
-    @show-category-modal="() => {}"
-  >
+  <div class="p-4 md:p-8">
     <div class="container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-800">Extra Groups Library</h1>
-        <p class="text-gray-600 mt-2">Group related extras together (e.g., "Choose Toppings", "Add Extra Cheese")</p>
-      </div>
-      <button
-        @click="showCreateModal = true"
-        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-        Add Extra Group
-      </button>
-    </div>
 
     <!-- Loading State -->
     <div v-if="loading" class="flex justify-center items-center py-12">
@@ -243,12 +223,14 @@
       </div>
     </div>
     </div>
-  </LibraryLayout>
+  </div>
 </template>
 
 <script setup lang="ts">
+import { h } from 'vue'
+
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'menu'
 })
 
 const api = useApi()
@@ -269,6 +251,28 @@ const formData = ref({
   DisplayOrder: 0,
   ExtraIds: [] as number[]
 })
+
+// Stats for sidebar
+const stats = ref({
+  menus: 0,
+  items: 0,
+  categories: 0
+})
+provide('menuStats', stats)
+
+// Provide page metadata
+provide('pageHeader', {
+  title: 'Extra Groups Library',
+  description: 'Group related extras together (e.g., "Choose Toppings", "Add Extra Cheese")'
+})
+
+provide('pageActions', () => h('button', {
+  onClick: () => showCreateModal.value = true,
+  class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
+}, [
+  h('i', { class: 'fas fa-plus mr-2' }),
+  'Add Extra Group'
+]))
 
 const fetchExtraGroups = async () => {
   loading.value = true
@@ -392,7 +396,28 @@ watch([showCreateModal, editingGroup], () => {
   }
 })
 
+const loadStats = async () => {
+  try {
+    const libraryItemsApi = useLibraryItemsApi()
+    const categoriesApi = useLibraryCategoriesApi()
+
+    const [itemsResponse, categoriesResponse] = await Promise.all([
+      libraryItemsApi.getItems(),
+      categoriesApi.getCategories()
+    ])
+
+    const items = Array.isArray(itemsResponse) ? itemsResponse : (itemsResponse?.data || [])
+    const categories = Array.isArray(categoriesResponse) ? categoriesResponse : (categoriesResponse?.data || [])
+
+    stats.value.items = items.length
+    stats.value.categories = categories.length
+  } catch (err) {
+    console.error('Error loading stats:', err)
+  }
+}
+
 onMounted(() => {
   fetchExtraGroups()
+  loadStats()
 })
 </script>

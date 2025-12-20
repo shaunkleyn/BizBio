@@ -9,7 +9,9 @@
       "Bash(dotnet build:*)",
       "Bash(dotnet ef database update:*)",
       "Bash(if exist .nuxt rmdir /s /q .nuxt)",
-      "Bash(if exist node_modules.vite rmdir /s /q node_modules.vite)"
+      "Bash(if exist node_modules.vite rmdir /s /q node_modules.vite)",
+      "Bash(npm run build:dev:*)",
+      "Bash(npm run:*)"
     ],
     "deny": [],
     "ask": []

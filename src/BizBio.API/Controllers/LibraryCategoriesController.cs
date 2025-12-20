@@ -49,7 +49,7 @@ public class LibraryCategoriesController : ControllerBase
             })
             .ToListAsync();
 
-        return Ok(new { success = true, data = new { categories } });
+        return Ok(new { success = true, data = categories });
     }
 
     /// <summary>

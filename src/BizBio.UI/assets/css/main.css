@@ -10,7 +10,7 @@
   --accent3-color: #3FB6A8;
   --accent4-color: #F1C40F;
   --accent5-color: #A569BD;
-  --primary-color: #7864db;/* #b964db;*/
+  --primary-color: #7864db;
   --dark-text-color: #333333;
   --gray-text-color: #777777;
   --light-text-color: #FFFFFF;
@@ -35,8 +35,38 @@
   --navbar-border-color: rgba(255, 255, 255, 0.8);
 }
 
+/* Dark mode variables */
+.dark1 {
+  --accent-color: #E74C3C;
+  --accent2-color: #5DADE2;
+  --accent3-color: #48C9B0;
+  --accent4-color: #F4D03F;
+  --accent5-color: #BB8FCE;
+  --primary-color: #9B8CE8;
+  --dark-text-color: #E8E8E8;
+  --gray-text-color: #B0B0B0;
+  --light-text-color: #FFFFFF;
+  --dark-border-color: #5A7FA8;
+  --light-border-color: #3A4A5E;
+  --dark-background-color: #0D1117;
+  --light-background-color: #161B22;
+  --medium-background-color: #1C2128;
+  --primary-button-text-color: #FFFFFF;
+  --secondary-button-bg-color: #2D3748;
+  --secondary-button-text-color: #5DADE2;
+  --primary-button-hover-bg-color: #7B6FD8;
+  --primary-button-hover-text-color: #FFFFFF;
+  --secondary-button-hover-bg-color: #3A4A5E;
+  --secondary-button-hover-text-color: #7BB3E0;
+  --navbar-bg: rgba(22, 27, 34, 0.8);
+  --navbar-border-color: rgba(58, 74, 94, 0.8);
+}
+
 body {
   font-family: var(--font-family-body);
+  background-color: var(--light-background-color);
+  color: var(--dark-text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, h4, h5, h6 {

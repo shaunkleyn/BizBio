@@ -1,31 +1,8 @@
 <template>
-  <LibraryLayout
-    :category-count="categories.length"
-    :stats="{
-      items: items.length,
-      categories: categories.length
-    }"
-    @show-category-modal="showCategoryModal = true"
-  >
-    <div class="p-4 md:p-8">
-      <div class="max-w-7xl mx-auto">
-          <!-- Header -->
-          <div class="mb-8">
-            <div class="flex items-center justify-between mb-4">
-              <div>
-                <h1 class="text-3xl font-bold text-gray-900">Library Items</h1>
-                <p class="text-gray-600 mt-1">Manage your menu items and add them to any menu</p>
-              </div>
-              <button
-                @click="showItemModal = true"
-                class="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold"
-              >
-                <i class="fas fa-plus mr-2"></i>
-                Add Item
-              </button>
-            </div>
-
-        <!-- Filters & View Toggle -->
+  <div class="p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+      <!-- Filters & View Toggle -->
+      <div class="mb-8">
         <div class="flex flex-wrap gap-4">
           <div class="flex-1 min-w-64">
             <input
@@ -371,13 +348,16 @@
       @close="showBulkTagModal = false"
       @apply="applyBulkTags"
     />
-  </LibraryLayout>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, h } from 'vue'
 import { useLibraryItemsApi, useLibraryCategoriesApi } from '~/composables/useApi'
 import { useToast } from '~/composables/useToast'
+
+definePageMeta({
+  layout: 'menu'
+})
 
 const libraryItemsApi = useLibraryItemsApi()
 const categoriesApi = useLibraryCategoriesApi()
@@ -395,6 +375,28 @@ const editingItem = ref<any>(null)
 const viewMode = ref<'grid' | 'list'>('grid')
 const selectedItems = ref<number[]>([])
 const bulkCategory = ref<number | null>(null)
+
+// Stats for sidebar
+const stats = ref({
+  menus: 0,
+  items: 0,
+  categories: 0
+})
+provide('menuStats', stats)
+
+// Provide page metadata
+provide('pageHeader', {
+  title: 'Library Items',
+  description: 'Manage your menu items and add them to any menu'
+})
+
+provide('pageActions', () => h('button', {
+  onClick: () => showItemModal.value = true,
+  class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
+}, [
+  h('i', { class: 'fas fa-plus mr-2' }),
+  'Add Item'
+]))
 
 const filteredItems = computed(() => {
   let filtered = items.value
@@ -435,6 +437,8 @@ async function loadItems() {
     } else {
       items.value = []
     }
+    // Update stats
+    stats.value.items = items.value.length
   } catch (error) {
     console.error('Error loading items:', error)
     toast.error('Failed to load items')
@@ -455,6 +459,8 @@ async function loadCategories() {
     } else {
       categories.value = []
     }
+    // Update stats
+    stats.value.categories = categories.value.length
   } catch (error) {
     console.error('Error loading categories:', error)
     categories.value = []

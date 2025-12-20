@@ -2,324 +2,98 @@
   <NuxtLayout name="dashboard">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Welcome Header -->
-      <div class="mb-8">
+      <div class="mb-12">
         <h1 class="text-3xl sm:text-4xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-2">
           Welcome back{{ authStore.currentUser ? ', ' + authStore.currentUser.firstName : '' }}!
         </h1>
         <p class="text-[var(--gray-text-color)] font-[var(--font-family-body)]">
-          Here's what's happening with your profiles today
+          Choose a product to get started
         </p>
       </div>
 
-      <!-- Stats Cards -->
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <!-- Stat Card 1 - Profile Views -->
-        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-          <div class="flex items-center justify-between mb-4">
-            <div class="bg-[var(--primary-color)] bg-opacity-10 rounded-full p-3 size-12 text-center">
-              <i class="fad fa-eye text-white text-2xl"></i>
-            </div>
-            <span class="text-[var(--accent3-color)] text-sm font-semibold">
-              <i class="fad fa-arrow-up mr-1"></i>12%
+      <!-- Product Cards -->
+      <div class="grid md:grid-cols-3 gap-8 mb-12">
+        <!-- Menu Product -->
+        <NuxtLink
+          to="/menu"
+          class="group bg-white rounded-xl shadow-lg p-8 hover:shadow-2xl transition-all transform hover:-translate-y-1"
+        >
+          <div class="bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+            <i class="fas fa-utensils text-white text-3xl"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-[var(--dark-text-color)] text-center mb-3">Digital Menu</h2>
+          <p class="text-[var(--gray-text-color)] text-center mb-6">
+            Create and manage digital menus for your restaurant or cafe
+          </p>
+          <div class="flex items-center justify-center gap-2 text-[var(--primary-color)] font-semibold">
+            <span>Get Started</span>
+            <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+          </div>
+        </NuxtLink>
+
+        <!-- Cards Product (Coming Soon) -->
+        <div class="bg-white rounded-xl shadow-lg p-8 opacity-60 cursor-not-allowed">
+          <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-id-card text-white text-3xl"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-[var(--dark-text-color)] text-center mb-3">Business Cards</h2>
+          <p class="text-[var(--gray-text-color)] text-center mb-6">
+            Create digital business cards and contact profiles
+          </p>
+          <div class="flex items-center justify-center">
+            <span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-sm font-semibold">
+              Coming Soon
             </span>
           </div>
-          <h3 class="text-3xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-1">
-            {{ stats.totalViews.toLocaleString() }}
-          </h3>
-          <p class="text-[var(--gray-text-color)] font-[var(--font-family-body)] text-sm">
-            Total Profile Views
-          </p>
         </div>
 
-        <!-- Stat Card 2 - Profile Shares -->
-        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-          <div class="flex items-center justify-between mb-4">
-            <div class="bg-[var(--accent3-color)] bg-opacity-10 rounded-full p-3 size-12 text-center">
-              <i class="fad fa-share-alt text-white text-2xl"></i>
-            </div>
-            <span class="text-[var(--accent3-color)] text-sm font-semibold">
-              <i class="fad fa-arrow-up mr-1"></i>8%
+        <!-- Catalog Product (Coming Soon) -->
+        <div class="bg-white rounded-xl shadow-lg p-8 opacity-60 cursor-not-allowed">
+          <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-book text-white text-3xl"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-[var(--dark-text-color)] text-center mb-3">Product Catalog</h2>
+          <p class="text-[var(--gray-text-color)] text-center mb-6">
+            Showcase products and services with a digital catalog
+          </p>
+          <div class="flex items-center justify-center">
+            <span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-sm font-semibold">
+              Coming Soon
             </span>
           </div>
-          <h3 class="text-3xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-1">
-            {{ stats.totalShares.toLocaleString() }}
-          </h3>
-          <p class="text-[var(--gray-text-color)] font-[var(--font-family-body)] text-sm">
-            Profile Shares
-          </p>
-        </div>
-
-        <!-- Stat Card 3 - Contact Clicks -->
-        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-          <div class="flex items-center justify-between mb-4">
-            <div class="bg-[var(--accent2-color)] bg-opacity-10 rounded-full p-3 size-12 text-center">
-              <i class="fad fa-mouse-pointer  text-white text-2xl"></i>
-            </div>
-            <span class="text-[var(--accent3-color)] text-sm font-semibold">
-              <i class="fad fa-arrow-up mr-1"></i>24%
-            </span>
-          </div>
-          <h3 class="text-3xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-1">
-            {{ stats.totalClicks.toLocaleString() }}
-          </h3>
-          <p class="text-[var(--gray-text-color)] font-[var(--font-family-body)] text-sm">
-            Contact Clicks
-          </p>
-        </div>
-
-        <!-- Stat Card 4 - VCF Downloads -->
-        <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-          <div class="flex items-center justify-between mb-4">
-            <div class="bg-[var(--accent4-color)] bg-opacity-10 rounded-full p-3 size-12 text-center">
-              <i class="fad fa-download text-white text-2xl"></i>
-            </div>
-            <span class="text-[var(--accent3-color)] text-sm font-semibold">
-              <i class="fad fa-arrow-up mr-1"></i>15%
-            </span>
-          </div>
-          <h3 class="text-3xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-1">
-            {{ stats.totalDownloads.toLocaleString() }}
-          </h3>
-          <p class="text-[var(--gray-text-color)] font-[var(--font-family-body)] text-sm">
-            VCF Downloads
-          </p>
         </div>
       </div>
 
-      <!-- Main Content Grid -->
-      <div class="grid lg:grid-cols-3 gap-8">
-        <!-- Left Column - My Profiles -->
-        <div class="lg:col-span-2 space-y-8">
-          <!-- My Profiles Section -->
-          <div class="bg-white rounded-xl shadow-lg p-6">
-            <div class="flex items-center justify-between mb-6">
-              <h2 class="text-2xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)]">
-                My Profiles
-              </h2>
-              <NuxtLink
-                to="/dashboard/profile"
-                class="inline-flex items-center text-[var(--primary-color)] hover:text-[var(--primary-button-hover-bg-color)] font-semibold transition-colors"
-              >
-                <i class="fas fa-plus-circle mr-2"></i>
-                Create New
-              </NuxtLink>
-            </div>
-
-            <!-- Profile Cards -->
-            <div v-if="loading" class="text-center py-8">
-              <i class="fas fa-spinner fa-spin text-4xl text-[var(--primary-color)]"></i>
-              <p class="text-[var(--gray-text-color)] mt-4">Loading profiles...</p>
-            </div>
-
-            <div v-else-if="profiles.length === 0" class="text-center py-12">
-              <i class="fas fa-folder-open text-6xl text-[var(--gray-text-color)] opacity-50 mb-6"></i>
-              <h3 class="text-xl font-bold text-[var(--dark-text-color)] mb-2">No Profiles Yet</h3>
-              <p class="text-[var(--gray-text-color)] mb-8">Create your first profile to get started</p>
-
-              <!-- Product Type Cards -->
-              <div class="grid sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-                <!-- Menu Profile Card -->
-                <NuxtLink
-                  to="/dashboard/menu/create"
-                  class="group border-2 border-[var(--light-border-color)] rounded-xl p-6 hover:border-[var(--primary-color)] hover:shadow-lg transition-all"
-                >
-                  <div class="bg-[var(--accent3-color)] bg-opacity-10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:bg-[var(--accent3-color)] transition-colors">
-                    <i class="fas fa-utensils text-[var(--accent3-color)] text-2xl group-hover:text-white transition-colors"></i>
-                  </div>
-                  <h4 class="font-bold text-[var(--dark-text-color)] mb-2">Digital Menu</h4>
-                  <p class="text-sm text-[var(--gray-text-color)] mb-3">Create a digital menu for your restaurant</p>
-                  <div class="inline-flex items-center text-xs bg-[var(--accent3-color)] bg-opacity-10 text-[var(--accent3-color)] px-3 py-1 rounded-full font-semibold">
-                    <i class="fas fa-gift mr-1"></i>
-                    14-day free trial
-                  </div>
-                </NuxtLink>
-
-                <!-- Connect Profile Card -->
-                <div class="border-2 border-[var(--light-border-color)] rounded-xl p-6 opacity-50 cursor-not-allowed">
-                  <div class="bg-[var(--primary-color)] bg-opacity-10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-id-card text-[var(--primary-color)] text-2xl"></i>
-                  </div>
-                  <h4 class="font-bold text-[var(--dark-text-color)] mb-2">Connect Card</h4>
-                  <p class="text-sm text-[var(--gray-text-color)] mb-3">Digital business card profile</p>
-                  <div class="inline-flex items-center text-xs bg-[var(--gray-text-color)] bg-opacity-10 text-[var(--gray-text-color)] px-3 py-1 rounded-full font-semibold">
-                    Coming Soon
-                  </div>
-                </div>
-
-                <!-- Retail Profile Card -->
-                <div class="border-2 border-[var(--light-border-color)] rounded-xl p-6 opacity-50 cursor-not-allowed">
-                  <div class="bg-[var(--accent2-color)] bg-opacity-10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-store text-[var(--accent2-color)] text-2xl"></i>
-                  </div>
-                  <h4 class="font-bold text-[var(--dark-text-color)] mb-2">Retail Store</h4>
-                  <p class="text-sm text-[var(--gray-text-color)] mb-3">Product catalog for retail</p>
-                  <div class="inline-flex items-center text-xs bg-[var(--gray-text-color)] bg-opacity-10 text-[var(--gray-text-color)] px-3 py-1 rounded-full font-semibold">
-                    Coming Soon
-                  </div>
-                </div>
+      <!-- Subscription Info Banner -->
+      <div v-if="subscriptionInfo" class="mb-8">
+        <div class="bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-xl shadow-lg p-6 text-white">
+          <div class="flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-4">
+              <div class="bg-white/20 rounded-full p-3">
+                <i :class="subscriptionInfo.IsInTrial ? 'fas fa-gift' : 'fas fa-crown'" class="text-2xl"></i>
               </div>
-            </div>
-
-            <div v-else class="space-y-4">
-              <!-- Profile Card -->
-              <div
-                v-for="profile in profiles"
-                :key="profile.Id"
-                class="border-2 border-[var(--light-border-color)] rounded-lg p-4 hover:border-[var(--primary-color)] transition-colors"
-              >
-                <!-- Subscription Warning Banner -->
-                <div v-if="profile.SubscriptionStatus?.NeedsPayment" class="mb-3 bg-red-50 border border-red-200 rounded-lg p-3">
-                  <div class="flex items-center gap-2 text-red-700">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <span class="text-sm font-semibold">Payment Required</span>
-                  </div>
-                  <p class="text-xs text-red-600 mt-1">
-                    Your trial has ended. Upgrade to keep this profile active.
-                  </p>
-                </div>
-
-                <!-- Trial Warning Banner -->
-                <div v-else-if="profile.SubscriptionStatus?.IsInTrial && profile.SubscriptionStatus?.TrialDaysRemaining !== null && profile.SubscriptionStatus.TrialDaysRemaining <= 7"
-                     class="mb-3 bg-amber-50 border border-amber-200 rounded-lg p-3">
-                  <div class="flex items-center gap-2 text-amber-700">
-                    <i class="fas fa-clock"></i>
-                    <span class="text-sm font-semibold">
-                      {{ profile.SubscriptionStatus.TrialDaysRemaining }} day{{ profile.SubscriptionStatus.TrialDaysRemaining !== 1 ? 's' : '' }} remaining in trial
-                    </span>
-                  </div>
-                  <p class="text-xs text-amber-600 mt-1">
-                    Upgrade now to continue using all features.
-                  </p>
-                </div>
-
-                <div class="flex items-center justify-between mb-3">
-                  <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-full flex items-center justify-center text-white font-bold">
-                      <i class="fas fa-briefcase"></i>
-                    </div>
-                    <div>
-                      <h3 class="font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)]">
-                        {{ profile.name || 'My Profile' }}
-                      </h3>
-                      <p class="text-sm text-[var(--gray-text-color)]">
-                        {{ profile.profileType || 'Business Profile' }}
-                      </p>
-                      <!-- Subscription Tier Badge -->
-                      <p v-if="profile.subscriptionStatus" class="text-xs text-[var(--gray-text-color)] mt-1">
-                        <span v-if="profile.subscriptionStatus.isInTrial" class="inline-flex items-center gap-1">
-                          <i class="fas fa-gift text-[var(--accent3-color)]"></i>
-                          Trial Period
-                        </span>
-                        <span v-else class="inline-flex items-center gap-1">
-                          <i class="fas fa-crown text-[var(--primary-color)]"></i>
-                          {{ profile.subscriptionStatus.tierName || 'Subscribed' }}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <span class="bg-[var(--accent3-color)] bg-opacity-10 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                      {{ profile.isActive ? 'ACTIVE' : 'INACTIVE' }}
-                    </span>
-                    <button class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] p-2">
-                      <i class="fas fa-ellipsis-v"></i>
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Profile Stats -->
-                <div class="grid grid-cols-3 gap-4 pt-3 border-t border-[var(--light-border-color)]">
-                  <div class="text-center">
-                    <div class="text-lg font-bold text-[var(--dark-text-color)]">0</div>
-                    <div class="text-xs text-[var(--gray-text-color)]">Views</div>
-                  </div>
-                  <div class="text-center">
-                    <div class="text-lg font-bold text-[var(--dark-text-color)]">0</div>
-                    <div class="text-xs text-[var(--gray-text-color)]">Shares</div>
-                  </div>
-                  <div class="text-center">
-                    <div class="text-lg font-bold text-[var(--dark-text-color)]">0</div>
-                    <div class="text-xs text-[var(--gray-text-color)]">Clicks</div>
-                  </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex gap-2 mt-4">
-                  <NuxtLink
-                    :to="`/menu/${profile.slug}`"
-                    class="flex-1 text-center bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors text-sm font-semibold"
-                  >
-                    <i class="fas fa-eye mr-1"></i>
-                    View
-                  </NuxtLink>
-                  <NuxtLink
-                    :to="`/dashboard/profile?id=${profile.Id}`"
-                    class="flex-1 text-center border-2 border-[var(--primary-color)] text-[var(--primary-color)] px-4 py-2 rounded-lg hover:bg-[var(--primary-color)] hover:text-white transition-colors text-sm font-semibold"
-                  >
-                    <i class="fas fa-edit mr-1"></i>
-                    Edit
-                  </NuxtLink>
-                </div>
+              <div>
+                <h3 class="text-lg font-bold mb-1">{{ subscriptionInfo.TierName || 'Free Plan' }}</h3>
+                <p class="text-white/80 text-sm">
+                  <template v-if="subscriptionInfo.IsInTrial && subscriptionInfo.TrialDaysRemaining !== null">
+                    Trial: {{ subscriptionInfo.TrialDaysRemaining }} day{{ subscriptionInfo.TrialDaysRemaining !== 1 ? 's' : '' }} remaining
+                  </template>
+                  <template v-else>
+                    {{ subscriptionInfo.MaxProfiles }} Profile{{ subscriptionInfo.MaxProfiles !== 1 ? 's' : '' }} •
+                    {{ subscriptionInfo.MaxCatalogItems }} Items
+                  </template>
+                </p>
               </div>
-            </div>
-          </div>
-
-          <!-- Recent Activity Section -->
-          <div class="bg-white rounded-xl shadow-lg p-6">
-            <h2 class="text-2xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-6">
-              Recent Activity
-            </h2>
-            <div class="space-y-4">
-              <div v-for="i in 5" :key="i" class="flex items-center gap-4 pb-4 border-b border-[var(--light-border-color)] last:border-0">
-                <div class="bg-[var(--accent3-color)] bg-opacity-10 rounded-full p-3">
-                  <i class="fas fa-eye text-[var(--accent3-color)]"></i>
-                </div>
-                <div class="flex-1">
-                  <p class="text-[var(--dark-text-color)] font-semibold">Profile viewed</p>
-                  <p class="text-sm text-[var(--gray-text-color)]">Someone viewed your profile</p>
-                </div>
-                <div class="text-sm text-[var(--gray-text-color)]">
-                  2h ago
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Column - Quick Actions & Plan Info -->
-        <div class="space-y-8">
-          <!-- Current Plan Card -->
-          <div class="bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-xl shadow-lg p-6 text-white">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-bold">Current Plan</h3>
-              <i :class="subscriptionInfo?.IsInTrial ? 'fas fa-gift' : 'fas fa-crown'" class="text-2xl"></i>
-            </div>
-            <div class="mb-4">
-              <div class="text-3xl font-bold mb-1">
-                {{ subscriptionInfo?.TierName || 'Free Plan' }}
-              </div>
-              <p class="text-white/80 text-sm">
-                <template v-if="subscriptionInfo?.IsInTrial && subscriptionInfo?.TrialDaysRemaining !== null">
-                  Trial: {{ subscriptionInfo.TrialDaysRemaining }} day{{ subscriptionInfo.TrialDaysRemaining !== 1 ? 's' : '' }} remaining
-                </template>
-                <template v-else-if="subscriptionInfo">
-                  {{ subscriptionInfo.MaxProfiles }} Profile{{ subscriptionInfo.MaxProfiles !== 1 ? 's' : '' }} •
-                  {{ subscriptionInfo.MaxCatalogItems }} Items
-                </template>
-                <template v-else>
-                  1 Profile • Basic Features
-                </template>
-              </p>
             </div>
             <NuxtLink
               to="/dashboard/subscription"
-              :class="subscriptionInfo?.NeedsPayment ? 'bg-red-500 text-white animate-pulse' : 'bg-white text-[var(--primary-color)]'"
-              class="block w-full text-center px-4 py-3 rounded-lg hover:bg-opacity-90 transition-all font-semibold"
+              :class="subscriptionInfo.NeedsPayment ? 'bg-red-500 text-white animate-pulse' : 'bg-white text-[var(--primary-color)]'"
+              class="px-6 py-3 rounded-lg hover:bg-opacity-90 transition-all font-semibold"
             >
-              <template v-if="subscriptionInfo?.NeedsPayment">
+              <template v-if="subscriptionInfo.NeedsPayment">
                 Activate Plan
               </template>
-              <template v-else-if="subscriptionInfo?.IsInTrial">
+              <template v-else-if="subscriptionInfo.IsInTrial">
                 Upgrade Now
               </template>
               <template v-else>
@@ -327,54 +101,50 @@
               </template>
             </NuxtLink>
           </div>
+        </div>
+      </div>
 
-          <!-- Quick Actions -->
-          <div class="bg-white rounded-xl shadow-lg p-6">
-            <h3 class="text-lg font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-4">
-              Quick Actions
-            </h3>
-            <div class="space-y-3">
-              <NuxtLink
-                to="/dashboard/profile"
-                class="flex items-center gap-3 p-3 rounded-lg hover:bg-[var(--light-background-color)] transition-colors"
-              >
-                <div class="bg-[var(--primary-color)] bg-opacity-10 rounded-lg p-2">
-                  <i class="fas fa-plus text-[var(--primary-color)]"></i>
-                </div>
-                <span class="text-[var(--dark-text-color)] font-semibold">Create Profile</span>
-              </NuxtLink>
-              <NuxtLink
-                to="/dashboard/menu"
-                class="flex items-center gap-3 p-3 rounded-lg hover:bg-[var(--light-background-color)] transition-colors"
-              >
-                <div class="bg-[var(--accent3-color)] bg-opacity-10 rounded-lg p-2">
-                  <i class="fas fa-utensils text-[var(--accent3-color)]"></i>
-                </div>
-                <span class="text-[var(--dark-text-color)] font-semibold">Manage Menu</span>
-              </NuxtLink>
-              <NuxtLink
-                to="/dashboard/tables"
-                class="flex items-center gap-3 p-3 rounded-lg hover:bg-[var(--light-background-color)] transition-colors"
-              >
-                <div class="bg-[var(--accent2-color)] bg-opacity-10 rounded-lg p-2">
-                  <i class="fas fa-qrcode text-[var(--accent2-color)]"></i>
-                </div>
-                <span class="text-[var(--dark-text-color)] font-semibold">NFC Tables</span>
-              </NuxtLink>
+      <!-- Quick Info Cards -->
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[var(--primary-color)]">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="bg-[var(--primary-color)] bg-opacity-10 rounded-lg p-3">
+              <i class="fas fa-utensils text-[var(--primary-color)] text-xl"></i>
             </div>
+            <h3 class="font-bold text-[var(--dark-text-color)]">Digital Menu</h3>
           </div>
+          <p class="text-sm text-[var(--gray-text-color)] mb-4">
+            Perfect for restaurants, cafes, and food businesses. Create beautiful digital menus with QR codes.
+          </p>
+          <NuxtLink to="/menu" class="text-sm text-[var(--primary-color)] font-semibold hover:underline">
+            Explore Menu <i class="fas fa-arrow-right ml-1"></i>
+          </NuxtLink>
+        </div>
 
-          <!-- NFC Product Promo -->
-          <div class="bg-gradient-to-br from-[var(--accent2-color)] to-[var(--accent-color)] rounded-xl shadow-lg p-6 text-white">
-            <i class="fas fa-wifi text-4xl mb-4"></i>
-            <h3 class="text-xl font-bold mb-2">Get NFC Cards</h3>
-            <p class="text-white/90 text-sm mb-4">
-              Tap to share your profile instantly with NFC-enabled cards and keychains.
-            </p>
-            <button class="w-full bg-white text-[var(--accent2-color)] px-4 py-3 rounded-lg hover:bg-opacity-90 transition-all font-semibold">
-              Shop Now
-            </button>
+        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500 opacity-60">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="bg-blue-500 bg-opacity-10 rounded-lg p-3">
+              <i class="fas fa-id-card text-blue-500 text-xl"></i>
+            </div>
+            <h3 class="font-bold text-[var(--dark-text-color)]">Business Cards</h3>
           </div>
+          <p class="text-sm text-[var(--gray-text-color)] mb-4">
+            Share your contact information instantly with digital business cards and NFC technology.
+          </p>
+          <span class="text-sm text-gray-500 font-semibold">Coming Soon</span>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500 opacity-60">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="bg-orange-500 bg-opacity-10 rounded-lg p-3">
+              <i class="fas fa-book text-orange-500 text-xl"></i>
+            </div>
+            <h3 class="font-bold text-[var(--dark-text-color)]">Product Catalog</h3>
+          </div>
+          <p class="text-sm text-[var(--gray-text-color)] mb-4">
+            Showcase your products and services with a professional digital catalog for retail businesses.
+          </p>
+          <span class="text-sm text-gray-500 font-semibold">Coming Soon</span>
         </div>
       </div>
     </div>
@@ -389,54 +159,19 @@ definePageMeta({
 const authStore = useAuthStore()
 const profilesApi = useProfilesApi()
 
-const loading = ref(true)
-const profiles = ref([])
-const stats = ref({
-  totalViews: 1284,
-  totalShares: 342,
-  totalClicks: 678,
-  totalDownloads: 156
-})
-
-// Computed property to get subscription info from first profile (all profiles share same subscription)
-const subscriptionInfo = computed(() => {
-  if (profiles.value.length > 0 && profiles.value[0].SubscriptionStatus) {
-    return profiles.value[0].SubscriptionStatus
-  }
-  return null
-})
+const subscriptionInfo = ref(null)
 
 onMounted(async () => {
   try {
-    console.log('=== DASHBOARD: Fetching profiles ===')
     const response = await profilesApi.getMyProfiles()
+    const profiles = response.data || []
 
-    console.log('Full response object:', response)
-    console.log('response.data:', response.data)
-    console.log('Type of response.data:', typeof response.data)
-    console.log('Is response.data an array?', Array.isArray(response.data))
-
-    // Handle different response structures
-    let data = response.data || []
-
-    console.log('Extracted data:', data)
-    console.log('Is extracted data an array?', Array.isArray(data))
-
-    // Ensure it's an array
-    if (Array.isArray(data)) {
-      profiles.value = data
-    } else {
-      console.warn('Data is not an array, setting to empty array')
-      profiles.value = []
+    // Get subscription info from first profile (all profiles share same subscription)
+    if (profiles.length > 0 && profiles[0].SubscriptionStatus) {
+      subscriptionInfo.value = profiles[0].SubscriptionStatus
     }
-
-    console.log('Final profiles.value:', profiles.value)
-    console.log('Profile count:', profiles.value.length)
-    console.log('=== END DASHBOARD LOGGING ===')
   } catch (error) {
-    console.error('Failed to load profiles:', error)
-  } finally {
-    loading.value = false
+    console.error('Failed to load subscription info:', error)
   }
 })
 
