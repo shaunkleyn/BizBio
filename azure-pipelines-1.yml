@@ -16,14 +16,14 @@ steps:
     displayName: 'Install Node.js'
 
   - script: |
-      npm install
-      npm run build
-    displayName: 'npm install and build'
-
-  - script: |
       cd src/BizBio.UI
       npm ci
     displayName: 'Install Dependencies'
+
+  - script: |
+      cd src/BizBio.UI
+      npm run build
+    displayName: 'Build Nuxt Application'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifacts'
