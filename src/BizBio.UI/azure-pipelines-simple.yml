@@ -1,0 +1,34 @@
+# Simple Azure Pipelines configuration for BizBio.UI (Nuxt 3)
+# This is a basic build-only pipeline without deployment
+
+trigger:
+  - main
+  - develop
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  nodeVersion: '18.x'
+
+steps:
+  - task: NodeTool@0
+    displayName: 'Install Node.js'
+    inputs:
+      versionSpec: $(nodeVersion)
+
+  - script: |
+      cd src/BizBio.UI
+      npm ci
+    displayName: 'Install Dependencies'
+
+  - script: |
+      cd src/BizBio.UI
+      npm run build
+    displayName: 'Build Nuxt Application'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifacts'
+    inputs:
+      PathtoPublish: 'src/BizBio.UI/.output'
+      ArtifactName: 'ui-build'

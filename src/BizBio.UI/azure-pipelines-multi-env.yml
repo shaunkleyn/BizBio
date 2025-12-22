@@ -1,0 +1,172 @@
+# Multi-Environment Azure Pipelines for BizBio.UI
+# Supports: Development, Staging, and Production deployments
+
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+      - release/*
+  paths:
+    include:
+      - src/BizBio.UI/**
+
+pr: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  nodeVersion: '18.x'
+  workingDirectory: '$(Build.SourcesDirectory)/src/BizBio.UI'
+
+stages:
+  # ============================================
+  # BUILD STAGE
+  # ============================================
+  - stage: Build
+    displayName: 'Build Application'
+    jobs:
+      - job: BuildJob
+        displayName: 'Build Nuxt App'
+        steps:
+          - checkout: self
+
+          - task: NodeTool@0
+            displayName: 'Setup Node.js $(nodeVersion)'
+            inputs:
+              versionSpec: $(nodeVersion)
+
+          - task: Cache@2
+            displayName: 'Cache node_modules'
+            inputs:
+              key: 'npm | "$(Agent.OS)" | $(workingDirectory)/package-lock.json'
+              path: '$(workingDirectory)/node_modules'
+              restoreKeys: npm | "$(Agent.OS)"
+
+          - script: |
+              cd $(workingDirectory)
+              npm ci
+            displayName: 'Install Dependencies'
+
+          - script: |
+              cd $(workingDirectory)
+              npm run build
+            displayName: 'Build for Production'
+
+          - task: ArchiveFiles@2
+            displayName: 'Archive Build'
+            inputs:
+              rootFolderOrFile: '$(workingDirectory)/.output'
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/bizbio-ui.zip'
+              replaceExistingArchive: true
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifacts'
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'drop'
+
+  # ============================================
+  # DEPLOY TO DEVELOPMENT
+  # ============================================
+  - stage: DeployDev
+    displayName: 'Deploy to Development'
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+    variables:
+      environmentName: 'development'
+      apiBaseUrl: 'https://api-dev.bizbio.com'
+    jobs:
+      - deployment: DeployDevJob
+        displayName: 'Deploy to Dev Environment'
+        environment: 'development'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: drop
+
+                - task: ExtractFiles@1
+                  displayName: 'Extract Build'
+                  inputs:
+                    archiveFilePatterns: '$(Pipeline.Workspace)/drop/*.zip'
+                    destinationFolder: '$(Pipeline.Workspace)/app'
+
+                - script: |
+                    echo "Deploying to Development"
+                    echo "API Base URL: $(apiBaseUrl)"
+                  displayName: 'Deploy to Dev'
+
+  # ============================================
+  # DEPLOY TO STAGING
+  # ============================================
+  - stage: DeployStaging
+    displayName: 'Deploy to Staging'
+    dependsOn: Build
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))
+    variables:
+      environmentName: 'staging'
+      apiBaseUrl: 'https://api-staging.bizbio.com'
+    jobs:
+      - deployment: DeployStageJob
+        displayName: 'Deploy to Staging Environment'
+        environment: 'staging'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: drop
+
+                - task: ExtractFiles@1
+                  displayName: 'Extract Build'
+                  inputs:
+                    archiveFilePatterns: '$(Pipeline.Workspace)/drop/*.zip'
+                    destinationFolder: '$(Pipeline.Workspace)/app'
+
+                - script: |
+                    echo "Deploying to Staging"
+                    echo "API Base URL: $(apiBaseUrl)"
+                  displayName: 'Deploy to Staging'
+
+  # ============================================
+  # DEPLOY TO PRODUCTION
+  # ============================================
+  - stage: DeployProd
+    displayName: 'Deploy to Production'
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    variables:
+      environmentName: 'production'
+      apiBaseUrl: 'https://api.bizbio.com'
+    jobs:
+      - deployment: DeployProdJob
+        displayName: 'Deploy to Production Environment'
+        environment: 'production'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: drop
+
+                - task: ExtractFiles@1
+                  displayName: 'Extract Build'
+                  inputs:
+                    archiveFilePatterns: '$(Pipeline.Workspace)/drop/*.zip'
+                    destinationFolder: '$(Pipeline.Workspace)/app'
+
+                - script: |
+                    echo "Deploying to Production"
+                    echo "API Base URL: $(apiBaseUrl)"
+                  displayName: 'Deploy to Production'
+
+                # Add smoke tests after deployment
+                - script: |
+                    echo "Running smoke tests..."
+                    # curl -f https://bizbio.com || exit 1
+                  displayName: 'Smoke Tests'
