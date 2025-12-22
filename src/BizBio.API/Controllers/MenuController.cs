@@ -124,7 +124,17 @@ public class MenuController : ControllerBase
                         phone = profile.ContactPhone,
                         email = profile.ContactEmail,
                         website = profile.Website
-                    }
+                    },
+                    categories = categories.Keys.Select(cat => new
+                    {
+                        id = cat.Id,
+                        name = cat.Name,
+                        description = cat.Description,
+                        items = items.Where(i => i.CategoryId == cat.Id).Select(i => i.Id).ToList(),
+                        icon = cat.Icon,
+                        isActive = cat.IsActive,
+                        sortOrder = cat.SortOrder
+                    }).ToList()
                 },
                 table = table != null ? new
                 {
@@ -141,26 +151,26 @@ public class MenuController : ControllerBase
                     eventName = profile.EventModeName,
                     description = profile.EventModeDescription
                 },
-                menu = new
-                {
-                    
-                    items = items.Select(item => new
+                menu =  items.Select(item => new
                     {
                         item.CategoryId,
                         id = item.Id,
                         name = item.Name,
                         description = item.Description,
                         price = item.Price,
-                        images = ParseJsonArray(item.Images)
-                    }).ToList()
-                },
+                        images = ParseJsonArray(item.Images),
+                        isActive = item.IsActive,
+                        sortOrder = item.SortOrder
+                }),
                 categories = categories.Keys.Select(cat => new
                 {
                     id = cat.Id,
                     name = cat.Name,
                     description = cat.Description,
                     items = items.Where(i => i.CategoryId == cat.Id).Select(i => i.Id).ToList(),
-                    icon = cat.Icon
+                    icon = cat.Icon,
+                    isActive = cat.IsActive,
+                    sortOrder = cat.SortOrder
                 }).ToList()
             }
         });
@@ -359,22 +369,94 @@ public class MenuController : ControllerBase
             if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
                 return Unauthorized(new { success = false, error = "User not authenticated" });
 
-            var profiles = _context.Profiles
+            // Get profiles with their catalogs
+            var profiles = await _context.Profiles
                 .Where(p => p.UserId == userId && p.ProfileType == "Menu")
                 .OrderByDescending(p => p.CreatedAt)
-                .Select(p => new
-                {
-                    id = p.Id,
-                    name = p.Name,
-                    slug = p.Slug,
-                    description = p.Description,
-                    logo = p.Logo,
-                    createdAt = p.CreatedAt,
-                    isActive = p.IsActive
-                })
-                .ToList();
+                .ToListAsync();
 
-            return Ok(new { success = true, data = profiles });
+            var result = new List<object>();
+
+            foreach (var profile in profiles)
+            {
+                // Get catalog with related data
+                var catalog = await _context.Catalogs
+                    .Where(c => c.ProfileId == profile.Id)
+                    .Select(c => new
+                    {
+                        CatalogId = c.Id,
+                        CatalogUpdatedAt = c.UpdatedAt
+                    })
+                    .FirstOrDefaultAsync();
+
+                int categoryCount = 0;
+                int itemCount = 0;
+                DateTime lastUpdated = profile.CreatedAt;
+
+                if (catalog != null)
+                {
+                    // Get category count and max updated date
+                    var categoryStats = await _context.Categories
+                        .Where(cat => cat.CatalogId == catalog.CatalogId && cat.IsActive)
+                        .GroupBy(cat => 1)
+                        .Select(g => new
+                        {
+                            Count = g.Count(),
+                            MaxUpdated = g.Max(cat => cat.UpdatedAt)
+                        })
+                        .FirstOrDefaultAsync();
+
+                    categoryCount = categoryStats?.Count ?? 0;
+
+                    // Get item count and max updated date
+                    var itemStats = await _context.CatalogItems
+                        .Where(i => i.CatalogId == catalog.CatalogId && i.IsActive)
+                        .GroupBy(i => 1)
+                        .Select(g => new
+                        {
+                            Count = g.Count(),
+                            MaxUpdated = g.Max(i => i.UpdatedAt)
+                        })
+                        .FirstOrDefaultAsync();
+
+                    itemCount = itemStats?.Count ?? 0;
+
+                    // Get extras max updated date
+                    var extraMaxUpdated = await _context.CatalogItemExtras
+                        .Where(e => e.CatalogId == catalog.CatalogId && e.IsActive)
+                        .MaxAsync(e => (DateTime?)e.UpdatedAt);
+
+                    // Calculate the most recent update
+                    var dates = new List<DateTime> { catalog.CatalogUpdatedAt };
+
+                    if (categoryStats != null)
+                        dates.Add(categoryStats.MaxUpdated);
+
+                    if (itemStats != null)
+                        dates.Add(itemStats.MaxUpdated);
+
+                    if (extraMaxUpdated.HasValue)
+                        dates.Add(extraMaxUpdated.Value);
+
+                    lastUpdated = dates.Max();
+                }
+
+                result.Add(new
+                {
+                    id = profile.Id,
+                    name = profile.Name,
+                    slug = profile.Slug,
+                    description = profile.Description,
+                    logo = profile.Logo,
+                    createdAt = profile.CreatedAt,
+                    isActive = profile.IsActive,
+                    categoryCount,
+                    itemCount,
+                    lastUpdated
+                });
+            }
+
+            return Ok(new { success = true, data = result });
         }
         catch (Exception ex)
         {

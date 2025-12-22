@@ -7,11 +7,10 @@
           <!-- Logo -->
           <NuxtLink to="/" class="flex-shrink-0 justify-between items-center flex flex-row">
             <img
-              src="/logo.png"
+              src="/logo.svg"
               alt="BizBio"
               class="h-20 py-4"
             />
-            <a class="text-4xl monterrat text-[var(--primary-color)]">BiZBiO</a>
           </NuxtLink>
 
           <!-- Desktop Navigation -->

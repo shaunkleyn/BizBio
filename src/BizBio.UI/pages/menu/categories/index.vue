@@ -79,21 +79,24 @@ const stats = ref({
 // Provide stats to the layout
 provide('menuStats', stats)
 
-// Provide page metadata
-provide('pageHeader', {
-  title: 'Categories',
-  description: 'Organize your menu items into categories'
-})
-
-provide('pageActions', () => h('button', {
-  onClick: () => showCreateModal.value = true,
-  class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
-}, [
-  h('i', { class: 'fas fa-plus mr-2' }),
-  'Create Category'
-]))
+// Use page metadata composable
+const { setPageHeader, setPageActions } = usePageMeta()
 
 onMounted(async () => {
+  // Set page metadata
+  setPageHeader({
+    title: 'Categories',
+    description: 'Organize your menu items into categories'
+  })
+
+  setPageActions(() => h('button', {
+    onClick: () => showCreateModal.value = true,
+    class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
+  }, [
+    h('i', { class: 'fas fa-plus mr-2' }),
+    'Create Category'
+  ]))
+
   await Promise.all([loadCategories(), loadStats()])
 })
 

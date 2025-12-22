@@ -180,6 +180,7 @@ export const useMenusApi = () => {
     // Create complete menu with profile, categories, and items
     createMenu: (data: any) => api.post('/menus', data),
     getMyMenus: () => api.get('/menus/my'),
+    getMenuById: (menuId: number) => api.get(`/menus/${menuId}`),
     updateMenu: (menuId: string, data: any) => api.put(`/menus/${menuId}`, data),
     deleteMenu: (menuId: string) => api.delete(`/menus/${menuId}`)
   }

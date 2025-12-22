@@ -97,8 +97,9 @@
           <i class="fas fa-layer-group w-5"></i>
           <span>Categories</span>
         </NuxtLink>
-
+        
         <NuxtLink
+          v-if="!true"
           to="/menu/events"
           :class="[
             'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
@@ -110,8 +111,13 @@
           <i class="fas fa-calendar-alt w-5"></i>
           <span>Events</span>
         </NuxtLink>
+        <span v-else class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-[var(--dark-text-color)] opacity-50 cursor-not-allowed hover:bg-[var(--medium-background-color)]">
+          <i class="fas fa-calendar-alt w-5"></i>
+          Events
+        </span>
 
         <NuxtLink
+         v-if="!true"
           to="/menu/tables"
           :class="[
             'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
@@ -123,6 +129,10 @@
           <i class="fas fa-qrcode w-5"></i>
           <span>QR Codes</span>
         </NuxtLink>
+         <span v-else class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-[var(--dark-text-color)] opacity-50 cursor-not-allowed hover:bg-[var(--medium-background-color)]">
+          <i class="fas fa-qrcode w-5"></i>
+          QR Codes
+        </span>
       </nav>
 
       <!-- Stats Section -->

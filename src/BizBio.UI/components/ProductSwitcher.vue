@@ -1,7 +1,7 @@
 <template>
   <div class="bg-[var(--light-background-color)] border-b border-[var(--light-border-color)] sticky top-20 z-40 py-6 px-4 md:px-8">
+    <!-- Product Dropdown Section -->
     <div class="flex items-center justify-between mb-4">
-      <!-- Product Dropdown -->
       <div class="relative" ref="dropdownRef">
         <button
           @click="dropdownOpen = !dropdownOpen"
@@ -42,16 +42,16 @@
       </div>
     </div>
 
-    <!-- Page Header and Actions -->
-    <div class="flex items-center justify-between">
-      <!-- Page Header (Title and Description) -->
-      <div>
-        <h1 class="text-3xl font-bold text-[var(--dark-text-color)]">{{ pageHeader?.title || 'Dashboard' }}</h1>
-        <p class="text-[var(--gray-text-color)] mt-1">{{ pageHeader?.description || 'Manage your content' }}</p>
+    <!-- Page Header and Actions Section -->
+    <div class="flex items-center justify-between flex-wrap gap-4">
+      <!-- Page Title and Description (Left) -->
+      <div class="flex-1 min-w-0">
+        <h1 class="text-2xl md:text-3xl font-bold text-[var(--dark-text-color)]">{{ pageHeader.title }}</h1>
+        <p class="text-sm md:text-base text-[var(--gray-text-color)] mt-1">{{ pageHeader.description }}</p>
       </div>
 
-      <!-- Page Actions (Buttons, etc) -->
-      <div class="flex items-center gap-3">
+      <!-- Action Buttons (Right) -->
+      <div class="flex items-center gap-3 flex-shrink-0">
         <component v-if="pageActions" :is="pageActions()" />
       </div>
     </div>
@@ -59,15 +59,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, inject } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const route = useRoute()
 const dropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
 
-// Inject page metadata from pages
-const pageHeader = inject<{ title: string, description: string } | null>('pageHeader', null)
-const pageActions = inject<(() => any) | null>('pageActions', null)
+// Use page metadata composable
+const { pageHeader, pageActions } = usePageMeta()
 
 const products = [
   {

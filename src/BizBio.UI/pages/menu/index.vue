@@ -43,7 +43,7 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm text-gray-600 mb-1">QR Scans</p>
-              <p class="text-3xl font-bold text-gray-900">{{ stats.scans }}</p>
+              <p class="text-lg font-bold text-gray-900">Coming Soon</p>
             </div>
             <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
               <i class="fas fa-qrcode text-orange-600 text-xl"></i>
@@ -158,21 +158,24 @@ const stats = ref({
 // Provide stats to the layout
 provide('menuStats', stats)
 
-// Provide page metadata to the layout
-provide('pageHeader', {
-  title: 'Menu Dashboard',
-  description: 'Manage your digital menus and menu items'
-})
-
-provide('pageActions', () => h('NuxtLink', {
-  to: '/dashboard/menu/create',
-  class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
-}, [
-  h('i', { class: 'fas fa-plus mr-2' }),
-  'Create Menu'
-]))
+// Use page metadata composable
+const { setPageHeader, setPageActions } = usePageMeta()
 
 onMounted(async () => {
+  // Set page metadata
+  setPageHeader({
+    title: 'Menu Dashboard',
+    description: 'Manage your digital menus and menu items'
+  })
+
+  setPageActions(() => h('NuxtLink', {
+    to: '/dashboard/menu/create',
+    class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
+  }, [
+    h('i', { class: 'fas fa-plus mr-2' }),
+    'Create Menu'
+  ]))
+
   await loadDashboardData()
 })
 
@@ -196,7 +199,9 @@ async function loadDashboardData() {
     stats.value.menus = menus.length
 
     // Set items count
-    const items = Array.isArray(itemsResponse) ? itemsResponse : (itemsResponse?.data || [])
+    const items = (itemsResponse?.data || itemsResponse?.data?.items || [])
+
+    console.log('Library items response:', itemsResponse)
     stats.value.items = items.length
 
     // Set categories count
@@ -204,7 +209,7 @@ async function loadDashboardData() {
     stats.value.categories = categories.length
 
     // TODO: Add API call for scans when available
-    stats.value.scans = 1243
+    stats.value.scans = '1243'
   } catch (error) {
     console.error('Error loading dashboard data:', error)
     // Fallback to empty data on error

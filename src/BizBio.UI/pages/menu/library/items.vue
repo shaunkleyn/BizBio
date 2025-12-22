@@ -384,19 +384,8 @@ const stats = ref({
 })
 provide('menuStats', stats)
 
-// Provide page metadata
-provide('pageHeader', {
-  title: 'Library Items',
-  description: 'Manage your menu items and add them to any menu'
-})
-
-provide('pageActions', () => h('button', {
-  onClick: () => showItemModal.value = true,
-  class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
-}, [
-  h('i', { class: 'fas fa-plus mr-2' }),
-  'Add Item'
-]))
+// Use page metadata composable
+const { setPageHeader, setPageActions } = usePageMeta()
 
 const filteredItems = computed(() => {
   let filtered = items.value
@@ -421,6 +410,20 @@ const isAllSelected = computed(() => {
 })
 
 onMounted(async () => {
+  // Set page metadata
+  setPageHeader({
+    title: 'Library Items',
+    description: 'Manage your menu items and add them to any menu'
+  })
+
+  setPageActions(() => h('button', {
+    onClick: () => showItemModal.value = true,
+    class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
+  }, [
+    h('i', { class: 'fas fa-plus mr-2' }),
+    'Add Item'
+  ]))
+
   await Promise.all([loadItems(), loadCategories()])
 })
 

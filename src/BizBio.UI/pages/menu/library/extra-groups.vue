@@ -260,19 +260,8 @@ const stats = ref({
 })
 provide('menuStats', stats)
 
-// Provide page metadata
-provide('pageHeader', {
-  title: 'Extra Groups Library',
-  description: 'Group related extras together (e.g., "Choose Toppings", "Add Extra Cheese")'
-})
-
-provide('pageActions', () => h('button', {
-  onClick: () => showCreateModal.value = true,
-  class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
-}, [
-  h('i', { class: 'fas fa-plus mr-2' }),
-  'Add Extra Group'
-]))
+// Use page metadata composable
+const { setPageHeader, setPageActions } = usePageMeta()
 
 const fetchExtraGroups = async () => {
   loading.value = true
@@ -417,6 +406,20 @@ const loadStats = async () => {
 }
 
 onMounted(() => {
+  // Set page metadata
+  setPageHeader({
+    title: 'Extra Groups Library',
+    description: 'Group related extras together (e.g., "Choose Toppings", "Add Extra Cheese")'
+  })
+
+  setPageActions(() => h('button', {
+    onClick: () => showCreateModal.value = true,
+    class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
+  }, [
+    h('i', { class: 'fas fa-plus mr-2' }),
+    'Add Extra Group'
+  ]))
+
   fetchExtraGroups()
   loadStats()
 })

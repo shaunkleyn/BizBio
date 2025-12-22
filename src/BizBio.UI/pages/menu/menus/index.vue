@@ -70,21 +70,24 @@ const stats = ref({
 // Provide stats to the layout
 provide('menuStats', stats)
 
-// Provide page metadata
-provide('pageHeader', {
-  title: 'Menus',
-  description: 'Create and manage your digital menus'
-})
-
-provide('pageActions', () => h('NuxtLink', {
-  to: '/dashboard/menu/create',
-  class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
-}, [
-  h('i', { class: 'fas fa-plus mr-2' }),
-  'Create Menu'
-]))
+// Use page metadata composable
+const { setPageHeader, setPageActions } = usePageMeta()
 
 onMounted(async () => {
+  // Set page metadata
+  setPageHeader({
+    title: 'Menus',
+    description: 'Create and manage your digital menus'
+  })
+
+  setPageActions(() => h('NuxtLink', {
+    to: '/dashboard/menu/create',
+    class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
+  }, [
+    h('i', { class: 'fas fa-plus mr-2' }),
+    'Create Menu'
+  ]))
+
   await Promise.all([loadMenus(), loadStats()])
 })
 

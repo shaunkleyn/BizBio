@@ -1,13 +1,13 @@
 <template>
   <header class="bg-[var(--light-background-color)] shadow-md sticky top-0 z-50 border-b border-[var(--light-border-color)]">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto px-4 sm:px-6">
       <div class="flex justify-between items-center h-20">
         <!-- Logo -->
         <NuxtLink to="/dashboard" class="flex-shrink-0">
           <img
-            src="/151.avif"
+            src="/logo.svg"
             alt="BizBio"
-            class="h-16"
+            class="h-10"
           />
         </NuxtLink>
 

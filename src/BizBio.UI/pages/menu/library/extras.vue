@@ -215,19 +215,27 @@ const stats = ref({
 })
 provide('menuStats', stats)
 
-// Provide page metadata
-provide('pageHeader', {
-  title: 'Extras Library',
-  description: 'Manage reusable extras/modifiers for your menu items'
-})
+// Use page metadata composable
+const { setPageHeader, setPageActions } = usePageMeta()
 
-provide('pageActions', () => h('button', {
-  onClick: () => showCreateModal.value = true,
-  class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
-}, [
-  h('i', { class: 'fas fa-plus mr-2' }),
-  'Add Extra'
-]))
+onMounted(() => {
+  // Set page metadata
+  setPageHeader({
+    title: 'Extras Library',
+    description: 'Manage reusable extras/modifiers for your menu items'
+  })
+
+  setPageActions(() => h('button', {
+    onClick: () => showCreateModal.value = true,
+    class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
+  }, [
+    h('i', { class: 'fas fa-plus mr-2' }),
+    'Add Extra'
+  ]))
+
+  fetchExtras()
+  loadStats()
+})
 
 const fetchExtras = async () => {
   loading.value = true
@@ -342,9 +350,4 @@ const closeModal = () => {
     displayOrder: 0
   }
 }
-
-onMounted(() => {
-  fetchExtras()
-  loadStats()
-})
 </script>
