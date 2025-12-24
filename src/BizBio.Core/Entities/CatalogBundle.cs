@@ -26,4 +26,5 @@ public class CatalogBundle : BaseEntity
     // Navigation properties
     public virtual Catalog Catalog { get; set; } = null!;
     public virtual ICollection<CatalogBundleStep> Steps { get; set; } = new List<CatalogBundleStep>();
+    public virtual ICollection<CatalogBundleCategory> CatalogBundleCategories { get; set; } = new List<CatalogBundleCategory>();
 }

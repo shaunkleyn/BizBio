@@ -101,6 +101,25 @@ export const useCartStore = defineStore('cart', () => {
     return `cart-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
   }
 
+  function addBundleItem(bundleData: { bundle: any; configuration: any; totalPrice: number; quantity?: number }) {
+    const { bundle, configuration, totalPrice, quantity = 1 } = bundleData
+
+    const cartItem: CartItem = {
+      id: generateCartItemId(),
+      catalogItemId: bundle.id,
+      name: bundle.name,
+      description: bundle.description,
+      basePrice: totalPrice, // Total includes all options
+      quantity,
+      options: [], // Options are stored in bundleSelections
+      isBundle: true,
+      bundleSelections: configuration,
+      image: bundle.images ? JSON.parse(bundle.images)[0] : undefined
+    }
+
+    items.value.push(cartItem)
+  }
+
   return {
     items,
     isCartOpen,
@@ -110,6 +129,7 @@ export const useCartStore = defineStore('cart', () => {
     serviceFee,
     total,
     addItem,
+    addBundleItem,
     removeItem,
     updateQuantity,
     clearCart,

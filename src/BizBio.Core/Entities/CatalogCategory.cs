@@ -12,6 +12,9 @@ public class CatalogCategory : BaseEntity
     // UserId for library categories (categories owned by user but not in a specific catalog)
     public int? UserId { get; set; }
 
+    // For hierarchical categories (e.g., Men > Shoes > Running Shoes)
+    public int? ParentCategoryId { get; set; }
+
     [Required]
     [MaxLength(255)]
     public string Name { get; set; } = null!;
@@ -35,6 +38,15 @@ public class CatalogCategory : BaseEntity
 
     // Navigation properties
     public virtual Catalog? Catalog { get; set; }
+    public virtual User? User { get; set; }
 
     public virtual ICollection<CatalogItem> Items { get; set; } = new List<CatalogItem>();
+
+
+    // Hierarchical navigation
+    public virtual CatalogCategory? ParentCategory { get; set; }
+    public virtual ICollection<CatalogCategory> SubCategories { get; set; } = new List<CatalogCategory>();
+
+    // Many-to-many with CatalogItem through CatalogItemCategory
+    public virtual ICollection<CatalogItemCategory> CatalogItemCategories { get; set; } = new List<CatalogItemCategory>();
 }

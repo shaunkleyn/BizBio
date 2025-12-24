@@ -205,12 +205,21 @@
 
     <!-- Item Detail Modal -->
     <ItemDetailModal
-      v-if="selectedItem"
+      v-if="selectedItem && !selectedItem.isBundle"
       :item="selectedItem"
       :menu-slug="route.params.slug as string"
       :edit-mode="editMode"
       @close="selectedItem = null"
       @edit="editItem"
+    />
+
+    <!-- Bundle Configuration Modal -->
+    <BundleConfigModal
+      v-if="selectedBundle"
+      :is-open="!!selectedBundle"
+      :bundle="selectedBundle"
+      @close="selectedBundle = null"
+      @add-to-cart="handleBundleAddToCart"
     />
 
     <!-- Cart Drawer -->
@@ -246,6 +255,7 @@ const error = ref<string | null>(null)
 const menuData = ref<any>(null)
 const items = ref<any[]>([])
 const selectedItem = ref<any>(null)
+const selectedBundle = ref<any>(null)
 const activeCategory = ref<number | null>(null)
 const editMode = ref(false)
 const editingItem = ref<any>(null)
@@ -337,7 +347,42 @@ function cleanupScrollSpy() {
 }
 
 function openItemDetail(item: any) {
-  selectedItem.value = item
+  if (item.itemType === 1) {
+    // Bundle item - open bundle configuration modal
+    openBundleConfig(item)
+  } else {
+    // Regular item - open item detail modal
+    selectedItem.value = item
+  }
+}
+
+async function openBundleConfig(item: any) {
+  // TODO: Load full bundle data with steps and options from API
+  // For now, assume item has bundleId and we need to fetch the bundle details
+  try {
+    // Placeholder: In production, fetch bundle data from API
+    // const response = await bundlesApi.getBundle(catalogId, item.bundleId)
+    // selectedBundle.value = response.data
+
+    // For now, set a mock bundle structure
+    selectedBundle.value = {
+      id: item.id,
+      name: item.name,
+      description: item.description,
+      basePrice: item.price,
+      images: item.images,
+      steps: item.bundleSteps || [] // Assuming bundle steps are loaded with the item
+    }
+  } catch (error) {
+    console.error('Error loading bundle:', error)
+    toast.error('Failed to load bundle configuration')
+  }
+}
+
+function handleBundleAddToCart(bundleData: any) {
+  cartStore.addBundleItem(bundleData)
+  toast.success(`${bundleData.bundle.name} added to cart!`)
+  cartStore.openCart()
 }
 
 function quickAddToCart(item: any) {

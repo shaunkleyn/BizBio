@@ -1,0 +1,655 @@
+{
+    "selectors": [
+        {
+            "label": "All Specials",
+            "filtering_type": "ALL",
+            "sort": 0
+        },
+        {
+            "label": "Buy 1 Get 1 Free",
+            "filtering_type": "BUY_1_GET_1_FREE",
+            "sort": 1
+        },
+        {
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 2
+        },
+        {
+            "label": "Food Discount",
+            "filtering_type": "FOOD_TOTAL_DISCOUNT",
+            "sort": 3
+        },
+        {
+            "label": "Free Delivery",
+            "filtering_type": "FREE_DELIVERY",
+            "sort": 4
+        },
+        {
+            "label": "Other",
+            "filtering_type": "OTHER",
+            "sort": 5
+        }
+    ],
+    "marketing_labels": [
+        {
+            "_uuid": "f7a6d486c4d846b998a822e72ed6b820",
+            "label": "15% OFF (Max R33)  with MORE. Code: DEC15",
+            "filtering_type": "OTHER",
+            "sort": 4,
+            "restaurant_ids": [
+                25797,
+                22326,
+                27903,
+                2847,
+                4070,
+                25821,
+                28288,
+                990,
+                30543,
+                28758,
+                3045,
+                16842,
+                10866,
+                28728,
+                17922,
+                20337,
+                30328,
+                20663,
+                21901,
+                12806,
+                34138,
+                10673,
+                21745,
+                11885,
+                28281,
+                29383,
+                989,
+                27176,
+                22316,
+                4042,
+                24996,
+                1911,
+                16728,
+                15403,
+                11567,
+                24889,
+                20336,
+                22619,
+                29932,
+                29829,
+                15579,
+                20268,
+                18998,
+                27953,
+                21361,
+                23429,
+                23424,
+                2994,
+                2298,
+                10006,
+                29583,
+                24753,
+                30150,
+                11924,
+                25015,
+                28372,
+                13718,
+                10919,
+                4081,
+                13710,
+                25204,
+                24607,
+                34370,
+                17496,
+                18302,
+                2901,
+                29026,
+                29295,
+                645,
+                29406,
+                28295,
+                24918,
+                23253,
+                19737,
+                19960,
+                26430,
+                12845,
+                18861,
+                27955,
+                29152,
+                24804,
+                27979,
+                29910,
+                29405,
+                27594,
+                15315,
+                16569,
+                15493,
+                4071,
+                26660
+            ]
+        },
+        {
+            "_uuid": "9ed317929ba34a3e9a275658d7df214d",
+            "label": "Spend R100 & get 20% OFF! Code: EARLY15",
+            "filtering_type": "OTHER",
+            "sort": 4,
+            "restaurant_ids": [
+                15596,
+                31157,
+                27281,
+                25598,
+                21675,
+                31161,
+                19350,
+                33452,
+                14391,
+                29033,
+                29407,
+                32967,
+                23929,
+                26077
+            ]
+        },
+        {
+            "_uuid": "288a20dc7a1c4e31b08a3c0910b50d53",
+            "label": "Get R50 OFF. Spend R250. Code: FEAST040",
+            "filtering_type": "OTHER",
+            "sort": 4,
+            "restaurant_ids": [
+                20820,
+                2408,
+                26923,
+                25838,
+                2429,
+                17295,
+                26928,
+                19027,
+                2989,
+                10908,
+                13438,
+                25762
+            ]
+        },
+        {
+            "_uuid": "90e5d81802ad4459b59df9f28ebe9c7c",
+            "label": "20% OFF Select Meals!",
+            "filtering_type": "OTHER",
+            "sort": 4,
+            "restaurant_ids": [
+                20433,
+                1340,
+                1341,
+                10856,
+                10291,
+                12028,
+                27630,
+                10288
+            ]
+        },
+        {
+            "_uuid": "a77445b74c44436d9fafa78802f43210",
+            "label": "Get 10% OFF (R30 Max). Spend R150. Code: SWEET22",
+            "filtering_type": "OTHER",
+            "sort": 4,
+            "restaurant_ids": [
+                29847,
+                3808,
+                15897,
+                21517,
+                28271,
+                16765,
+                32590,
+                12829,
+                32287
+            ]
+        }
+    ],
+    "promo_delivery": [
+        {
+            "label": "SPEND R100 & GET FREE DELIVERY",
+            "filtering_type": "FREE_DELIVERY",
+            "sort": 2,
+            "restaurant_ids": [
+                29033
+            ]
+        },
+        {
+            "label": "FREE DELIVERY",
+            "filtering_type": "FREE_DELIVERY",
+            "sort": 2,
+            "restaurant_ids": [
+                13387
+            ]
+        },
+        {
+            "label": "SPEND R150 & GET FREE DELIVERY",
+            "filtering_type": "FREE_DELIVERY",
+            "sort": 2,
+            "restaurant_ids": [
+                32287
+            ]
+        },
+        {
+            "label": "FREE DELIVERY",
+            "filtering_type": "FREE_DELIVERY",
+            "sort": 2,
+            "restaurant_ids": [
+                29886
+            ]
+        },
+        {
+            "label": "SPEND R200 & GET FREE DELIVERY",
+            "filtering_type": "FREE_DELIVERY",
+            "sort": 2,
+            "restaurant_ids": [
+                34385
+            ]
+        },
+        {
+            "label": "SPEND R200 & GET FREE DELIVERY",
+            "filtering_type": "FREE_DELIVERY",
+            "sort": 2,
+            "restaurant_ids": [
+                32185
+            ]
+        },
+        {
+            "label": "FREE DELIVERY",
+            "filtering_type": "FREE_DELIVERY",
+            "sort": 2,
+            "restaurant_ids": [
+                22619
+            ]
+        },
+        {
+            "label": "FREE DELIVERY",
+            "filtering_type": "FREE_DELIVERY",
+            "sort": 2,
+            "restaurant_ids": [
+                29394
+            ]
+        },
+        {
+            "label": "FREE DELIVERY",
+            "filtering_type": "FREE_DELIVERY",
+            "sort": 2,
+            "restaurant_ids": [
+                30978
+            ]
+        },
+        {
+            "label": "FREE DELIVERY",
+            "filtering_type": "FREE_DELIVERY",
+            "sort": 2,
+            "restaurant_ids": [
+                13386
+            ]
+        },
+        {
+            "label": "FREE DELIVERY",
+            "filtering_type": "FREE_DELIVERY",
+            "sort": 2,
+            "restaurant_ids": [
+                30361
+            ]
+        }
+    ],
+    "promo_food_total": [
+        {
+            "label": "SPEND R64 ON ITEM & GET R15 OFF",
+            "filtering_type": "FOOD_TOTAL_DISCOUNT",
+            "sort": 3,
+            "restaurant_ids": [
+                22499
+            ]
+        },
+        {
+            "label": "GET R20 OFF ITEM TOTAL",
+            "filtering_type": "FOOD_TOTAL_DISCOUNT",
+            "sort": 3,
+            "restaurant_ids": [
+                29383
+            ]
+        },
+        {
+            "label": "SPEND R200 ON ITEM & GET 20% OFF",
+            "filtering_type": "FOOD_TOTAL_DISCOUNT",
+            "sort": 3,
+            "restaurant_ids": [
+                27979
+            ]
+        },
+        {
+            "label": "SPEND R200 ON ITEM & GET 20% OFF",
+            "filtering_type": "FOOD_TOTAL_DISCOUNT",
+            "sort": 3,
+            "restaurant_ids": [
+                24804
+            ]
+        },
+        {
+            "label": "SPEND R150 ON ITEM & GET 20% OFF",
+            "filtering_type": "FOOD_TOTAL_DISCOUNT",
+            "sort": 3,
+            "restaurant_ids": [
+                34336
+            ]
+        }
+    ],
+    "menu_deal_discount": [
+        {
+            "_uuid": "a1f62a537715470c816c5fdb8c36e331",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                4070
+            ]
+        },
+        {
+            "_uuid": "7176ff3516204352b731a4917291d1c6",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                1008,
+                29625,
+                11621,
+                1321
+            ]
+        },
+        {
+            "_uuid": "58a1cd0f1b7742618ce2dd08ec246005",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                17922
+            ]
+        },
+        {
+            "_uuid": "8d77f307afa24669b41a02b5f821eb0f",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                20820,
+                26923,
+                25838
+            ]
+        },
+        {
+            "_uuid": "79ed00a1e2a845d59ab4a91010d14eae",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                2408,
+                10908
+            ]
+        },
+        {
+            "_uuid": "6e12c4e61d9a4f2e81ece9392c882d23",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                29383
+            ]
+        },
+        {
+            "_uuid": "effa3d293e184a05a48d089da9241a6c",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                1012
+            ]
+        },
+        {
+            "_uuid": "3ce862059ad543f0a4f1a76f85262599",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                22499
+            ]
+        },
+        {
+            "_uuid": "fb41a996639644dd919bae461c16183c",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                15297
+            ]
+        },
+        {
+            "_uuid": "f92c433ac52d4368b14fd2422c19588c",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                15403
+            ]
+        },
+        {
+            "_uuid": "1e0e0cb9431c464b8a1667f6eb13732c",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                24287
+            ]
+        },
+        {
+            "_uuid": "ca68bf3b1b004de08876c824da53df38",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                29829
+            ]
+        },
+        {
+            "_uuid": "94336a94db524c0795521fb5e6c9bc2d",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                2429
+            ]
+        },
+        {
+            "_uuid": "81f4b7de949a47b498c0afa98c12d5bd",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                17295,
+                19027,
+                25762
+            ]
+        },
+        {
+            "_uuid": "67e67d4d568446d193e8a0c078619865",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                26928,
+                2989,
+                13438
+            ]
+        },
+        {
+            "_uuid": "f5ef26d733ef467f837fd9e4b7d17cb1",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                1014
+            ]
+        },
+        {
+            "_uuid": "3f78270e4c4a48f4b16fd3513cb3b83f",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                12331
+            ]
+        },
+        {
+            "_uuid": "fccba045ae3749eb8f3282824a3181f1",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                31617
+            ]
+        },
+        {
+            "_uuid": "e77f5bd39e404fe492451425bd5fee84",
+            "label": "Deals",
+            "filtering_type": "MEAL_DEALS",
+            "sort": 1,
+            "restaurant_ids": [
+                31616
+            ]
+        }
+    ],
+    "menu_deal_buy_1_get_1_free": [
+        {
+            "_uuid": "a19e60c7459c4a199a165b9964de8c81",
+            "label": "Buy 1 Get 1 Free",
+            "filtering_type": "BUY_1_GET_1_FREE",
+            "sort": 0,
+            "restaurant_ids": [
+                16842
+            ]
+        },
+        {
+            "_uuid": "09e4c60090084d62bf02fb6acd5b2376",
+            "label": "Buy 1 Get 1 Free",
+            "filtering_type": "BUY_1_GET_1_FREE",
+            "sort": 0,
+            "restaurant_ids": [
+                20860
+            ]
+        },
+        {
+            "_uuid": "ea39ad070bdf4b29b4a816d2495073d4",
+            "label": "Buy 1 Get 1 Free",
+            "filtering_type": "BUY_1_GET_1_FREE",
+            "sort": 0,
+            "restaurant_ids": [
+                28281
+            ]
+        },
+        {
+            "_uuid": "2c7a022aa4fc4961a464a6ef24448489",
+            "label": "Buy 1 Get 1 Free",
+            "filtering_type": "BUY_1_GET_1_FREE",
+            "sort": 0,
+            "restaurant_ids": [
+                29383
+            ]
+        },
+        {
+            "_uuid": "5a0e92f62d20484081fb76d1bbbc738b",
+            "label": "Buy 1 Get 1 Free",
+            "filtering_type": "BUY_1_GET_1_FREE",
+            "sort": 0,
+            "restaurant_ids": [
+                15403
+            ]
+        },
+        {
+            "_uuid": "a5be20232cd54eb3a422820a156ada29",
+            "label": "Buy 1 Get 1 Free",
+            "filtering_type": "BUY_1_GET_1_FREE",
+            "sort": 0,
+            "restaurant_ids": [
+                19350
+            ]
+        },
+        {
+            "_uuid": "028577b2b5a34f2da18dd7a655218d6b",
+            "label": "Buy 1 Get 1 Free",
+            "filtering_type": "BUY_1_GET_1_FREE",
+            "sort": 0,
+            "restaurant_ids": [
+                33319
+            ]
+        },
+        {
+            "_uuid": "eaf82616622045d0bd0623ac8212bb33",
+            "label": "Buy 1 Get 1 Free",
+            "filtering_type": "BUY_1_GET_1_FREE",
+            "sort": 0,
+            "restaurant_ids": [
+                33316
+            ]
+        },
+        {
+            "_uuid": "35b25b4437aa419c810c059c2d5776ba",
+            "label": "Buy 1 Get 1 Free",
+            "filtering_type": "BUY_1_GET_1_FREE",
+            "sort": 0,
+            "restaurant_ids": [
+                19737
+            ]
+        },
+        {
+            "_uuid": "14a060edffee494fa12074260836f859",
+            "label": "Buy 1 Get 1 Free",
+            "filtering_type": "BUY_1_GET_1_FREE",
+            "sort": 0,
+            "restaurant_ids": [
+                21869
+            ]
+        },
+        {
+            "_uuid": "857a871e8f0f4f94bfb950743a8043bc",
+            "label": "Buy 1 Get 1 Free",
+            "filtering_type": "BUY_1_GET_1_FREE",
+            "sort": 0,
+            "restaurant_ids": [
+                15315
+            ]
+        },
+        {
+            "_uuid": "24ad6157bf254656983d4450aff53b16",
+            "label": "Buy 1 Get 1 Free",
+            "filtering_type": "BUY_1_GET_1_FREE",
+            "sort": 0,
+            "restaurant_ids": [
+                15312
+            ]
+        },
+        {
+            "_uuid": "a5b32a6c70b3416fa93425c57e8483ac",
+            "label": "Buy 1 Get 1 Free",
+            "filtering_type": "BUY_1_GET_1_FREE",
+            "sort": 0,
+            "restaurant_ids": [
+                31439
+            ]
+        }
+    ],
+    "tal_more": [
+        {
+            "sort": 5,
+            "type": "free_delivery",
+            "max_count": 100,
+            "used_count": 2,
+            "min_spend": 150,
+            "tal_benefit_key": "mrd_free_restaurant_or_takealot_now_delivery",
+            "tal_set_key": "more_premium_20230101",
+            "message": "Free Delivery on R150 order with TakealotMORE"
+        }
+    ]
+}

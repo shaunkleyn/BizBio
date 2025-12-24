@@ -12,6 +12,9 @@ module.exports = {
         HOST: '0.0.0.0', // Listen on all interfaces for cloudflared
         NITRO_PORT: 3000,
         NITRO_HOST: '0.0.0.0',
+        NUXT_PUBLIC_API_URL: 'https://api.bizbio.co.za/api/v1',
+        NUXT_PUBLIC_APP_INSIGHTS_CONNECTION_STRING: 'InstrumentationKey=cf8e0ef0-0844-4cfe-b49c-0838a880835b;IngestionEndpoint=https://southafricanorth-1.in.applicationinsights.azure.com/;LiveEndpoint=https://southafricanorth.livediagnostics.monitor.azure.com/;ApplicationId=12ed36f7-1a54-438d-b149-fac495a0c94d',
+        NUXT_PUBLIC_GOOGLE_ANALYTICS_ID: 'G-FSFC9WQ181',
       },
       error_file: './logs/err.log',
       out_file: './logs/out.log',
@@ -41,6 +44,9 @@ module.exports = {
         NODE_ENV: 'production',
         PORT: 3000,
         HOST: '0.0.0.0',
+        NUXT_PUBLIC_API_URL: 'https://api.bizbio.co.za/api/v1',
+        NUXT_PUBLIC_APP_INSIGHTS_CONNECTION_STRING: 'InstrumentationKey=cf8e0ef0-0844-4cfe-b49c-0838a880835b;IngestionEndpoint=https://southafricanorth-1.in.applicationinsights.azure.com/;LiveEndpoint=https://southafricanorth.livediagnostics.monitor.azure.com/;ApplicationId=12ed36f7-1a54-438d-b149-fac495a0c94d',
+        NUXT_PUBLIC_GOOGLE_ANALYTICS_ID: 'G-FSFC9WQ181',
       }
     }
   ],

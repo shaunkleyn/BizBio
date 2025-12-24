@@ -18,6 +18,8 @@ public class CatalogItem : BaseEntity
     // UserId for library items (items owned by user but not in a specific catalog)
     public int? UserId { get; set; }
 
+    // DEPRECATED: Use CatalogItemCategories for many-to-many relationship instead
+    // Keeping for backward compatibility during migration
     public int? CategoryId { get; set; }
 
     public CatalogItemType ItemType { get; set; } = CatalogItemType.Regular;
@@ -61,4 +63,9 @@ public class CatalogItem : BaseEntity
     public virtual User? User { get; set; }
     public virtual ICollection<CatalogItemVariant> Variants { get; set; } = new List<CatalogItemVariant>();
     public virtual ICollection<CatalogItemExtraGroupLink> ExtraGroupLinks { get; set; } = new List<CatalogItemExtraGroupLink>();
+    public virtual ICollection<CatalogItemOptionGroupLink> OptionGroupLinks { get; set; } = new List<CatalogItemOptionGroupLink>();
+
+    // Many-to-many with CatalogCategory through CatalogItemCategory
+    // Supports items appearing in multiple categories (e.g., bundle in "Specials" and "Burgers")
+    public virtual ICollection<CatalogItemCategory> CatalogItemCategories { get; set; } = new List<CatalogItemCategory>();
 }

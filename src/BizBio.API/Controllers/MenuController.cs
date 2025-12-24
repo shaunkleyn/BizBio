@@ -470,6 +470,105 @@ public class MenuController : ControllerBase
     }
 
     /// <summary>
+    /// Get menu by ID for editing
+    /// Returns full menu details including catalog structure
+    /// </summary>
+    [HttpGet]
+    [Authorize]
+    [Route("/api/v1/menus/{id}")]
+    public async Task<IActionResult> GetMenuById(int id)
+    {
+        try
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var userId))
+                return Unauthorized(new { success = false, error = "User not authenticated" });
+
+            // Get catalog with full details
+            var catalog = await _catalogRepo.GetDetailByIdAsync(id);
+
+            if (catalog == null)
+                return NotFound(new { success = false, error = "Menu not found" });
+
+            // Verify ownership via Profile
+            if (catalog.Profile?.UserId != userId)
+                return Forbid();
+
+            // Map to response DTO
+            var response = new
+            {
+                id = catalog.Id,
+                profileId = catalog.ProfileId,
+                name = catalog.Name,
+                description = catalog.Description,
+                slug = catalog.Profile?.Slug,
+                categories = catalog.Categories
+                    .Where(c => c.IsActive)
+                    .OrderBy(c => c.SortOrder)
+                    .Select(c => new
+                    {
+                        id = c.Id,
+                        name = c.Name,
+                        description = c.Description,
+                        icon = c.Icon,
+                        sortOrder = c.SortOrder,
+                        itemCount = c.CatalogItemCategories.Count(cic => cic.CatalogItem.IsActive)
+                    })
+                    .ToList(),
+                items = catalog.Items
+                    .Where(i => i.IsActive)
+                    .OrderBy(i => i.SortOrder)
+                    .Select(i => new
+                    {
+                        id = i.Id,
+                        name = i.Name,
+                        description = i.Description,
+                        price = i.Price,
+                        images = string.IsNullOrEmpty(i.Images)
+                            ? new List<string>()
+                            : System.Text.Json.JsonSerializer.Deserialize<List<string>>(i.Images) ?? new List<string>(),
+                        categoryIds = i.CatalogItemCategories.Select(cic => cic.CategoryId).ToList(),
+                        sortOrder = i.SortOrder,
+                        variantCount = i.Variants.Count(v => v.IsActive),
+                        hasOptions = i.OptionGroupLinks.Any(l => l.IsActive),
+                        hasExtras = i.ExtraGroupLinks.Any(l => l.IsActive)
+                    })
+                    .ToList(),
+                bundles = catalog.Bundles
+                    .Where(b => b.IsActive)
+                    .OrderBy(b => b.SortOrder)
+                    .Select(b => new
+                    {
+                        id = b.Id,
+                        name = b.Name,
+                        description = b.Description,
+                        basePrice = b.BasePrice,
+                        images = string.IsNullOrEmpty(b.Images)
+                            ? new List<string>()
+                            : System.Text.Json.JsonSerializer.Deserialize<List<string>>(b.Images) ?? new List<string>(),
+                        categoryIds = b.CatalogBundleCategories
+                            .Where(cbc => cbc.IsActive)
+                            .Select(cbc => cbc.CategoryId)
+                            .ToList(),
+                        sortOrder = b.SortOrder
+                    })
+                    .ToList()
+            };
+
+            return Ok(new { success = true, data = response });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new
+            {
+                success = false,
+                error = "Failed to retrieve menu",
+                details = ex.Message
+            });
+        }
+    }
+
+    /// <summary>
     /// Get catalog item details with variants
     /// Publicly accessible endpoint for viewing item details
     /// </summary>

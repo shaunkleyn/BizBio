@@ -82,6 +82,45 @@ public class CatalogRepository : ICatalogRepository
         }
     }
 
+    public async Task<Catalog?> GetDetailByIdAsync(int id)
+    {
+        try
+        {
+            _logger.LogDebug("Fetching catalog detail by ID: {CatalogId} (no cache for editing)", id);
+            // No cache for editing - need fresh data
+            return await _context.Catalogs
+                .Include(c => c.Profile)
+                .Include(c => c.Categories.Where(cat => cat.IsActive).OrderBy(cat => cat.SortOrder))
+                .Include(c => c.Items.Where(i => i.IsActive).OrderBy(i => i.SortOrder))
+                    .ThenInclude(i => i.Variants.Where(v => v.IsActive))
+                .Include(c => c.Items)
+                    .ThenInclude(i => i.CatalogItemCategories)
+                        .ThenInclude(cic => cic.Category)
+                .Include(c => c.Items)
+                    .ThenInclude(i => i.OptionGroupLinks.Where(l => l.IsActive))
+                        .ThenInclude(l => l.OptionGroup)
+                .Include(c => c.Items)
+                    .ThenInclude(i => i.ExtraGroupLinks.Where(l => l.IsActive))
+                        .ThenInclude(l => l.ExtraGroup)
+                .Include(c => c.Bundles.Where(b => b.IsActive).OrderBy(b => b.SortOrder))
+                    .ThenInclude(b => b.CatalogBundleCategories.Where(cbc => cbc.IsActive))
+                        .ThenInclude(cbc => cbc.Category)
+                .AsSplitQuery() // Use split query for better performance with multiple includes
+                .FirstOrDefaultAsync(c => c.Id == id && c.IsActive);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching catalog detail by ID: {CatalogId}", id);
+            _telemetryClient.TrackException(ex, new Dictionary<string, string>
+            {
+                { "Repository", "CatalogRepository" },
+                { "Method", "GetDetailByIdAsync" },
+                { "CatalogId", id.ToString() }
+            });
+            throw;
+        }
+    }
+
     public async Task<int> GetItemCountAsync(int catalogId)
     {
         try

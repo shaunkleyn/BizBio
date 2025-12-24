@@ -10,9 +10,9 @@ namespace BizBio.Core.Entities
     {
         public int Id { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
-        public bool IsValid { get; set; }
+        public bool IsValid { get; set; } = true;
 
         public DateTime CreatedAt { get; set; }
 

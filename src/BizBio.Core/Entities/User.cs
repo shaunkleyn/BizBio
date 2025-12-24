@@ -25,7 +25,8 @@ public class User : BaseEntity
 
     public bool EmailVerified { get; set; } = false;
 
-    public bool IsActive { get; set; } = true;
+    // IsActive is inherited from BaseEntity
+    // public bool IsActive { get; set; } = true;
 
     [MaxLength(255)]
     public string? EmailVerificationToken { get; set; }

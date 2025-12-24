@@ -103,6 +103,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPaymentService, PayFastService>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
+builder.Services.AddScoped<ISubscriptionAddonService, SubscriptionAddonService>();
 
 // Session Configuration (for NFC scan tracking)
 builder.Services.AddMemoryCache();

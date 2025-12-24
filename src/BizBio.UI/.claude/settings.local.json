@@ -11,7 +11,21 @@
       "Bash(if exist .nuxt rmdir /s /q .nuxt)",
       "Bash(if exist node_modules.vite rmdir /s /q node_modules.vite)",
       "Bash(npm run build:dev:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(ls:*)",
+      "Bash(if [ -f \".env production\" ])",
+      "Bash(then mv \".env production\" .env.production)",
+      "Bash(else echo \"File not found\")",
+      "Bash(fi)",
+      "Bash(test:*)",
+      "WebFetch(domain:www.mrd.com)",
+      "WebSearch",
+      "WebFetch(domain:www.mrdfood.com)",
+      "Bash(grep:*)",
+      "WebFetch(domain:api.mrd.com)",
+      "WebFetch(domain:api.mrdfood.com)",
+      "Bash(powershell -Command \"Get-Content ''MRD-TOP RATED.json'' | Select-Object -First 50\")",
+      "Bash(powershell -Command \"Get-Content ''MRD-TOP RATED.json'' -Raw | Select-String -Pattern ''\"\"\\(endpoint|url|api|path|route\\)\"\"'' -AllMatches | Select-Object -First 10\")"
     ],
     "deny": [],
     "ask": []

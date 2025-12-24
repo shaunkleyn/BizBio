@@ -120,5 +120,6 @@ public class SubscriptionTier : BaseEntity
 
     // Navigation properties
     public virtual ICollection<UserSubscription> Subscriptions { get; set; } = new List<UserSubscription>();
+    public virtual ICollection<SubscriptionTierAddon> TierAddons { get; set; } = new List<SubscriptionTierAddon>();
     public virtual ProductLineLookup ProductLine { get; set; } = null!;
 }

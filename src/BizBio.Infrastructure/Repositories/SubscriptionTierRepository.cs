@@ -24,8 +24,10 @@ public class SubscriptionTierRepository : ISubscriptionTierRepository
     public async Task<SubscriptionTier?> GetByIdAsync(int id)
     {
         var cacheKey = $"{TierCacheKeyPrefix}{id}";
-        return await _cacheService.GetOrSetAsync(cacheKey, async () =>
+        // Use SubscriptionTier (not SubscriptionTier?) as T, and ensure lambda returns SubscriptionTier
+        return await _cacheService.GetOrSetAsync<SubscriptionTier>(cacheKey, async () =>
         {
+            // FirstOrDefaultAsync returns SubscriptionTier? but that's fine for a reference type
             return await _context.SubscriptionTiers
                 .Include(t => t.ProductLine)
                 .Include(t => t.Subscriptions)
@@ -36,7 +38,8 @@ public class SubscriptionTierRepository : ISubscriptionTierRepository
     public async Task<SubscriptionTier?> GetByCodeAsync(string tierCode)
     {
         var cacheKey = $"{TierCodeCacheKeyPrefix}{tierCode}";
-        return await _cacheService.GetOrSetAsync(cacheKey, async () =>
+        // Use SubscriptionTier (not SubscriptionTier?) as T, and ensure lambda returns SubscriptionTier
+        return await _cacheService.GetOrSetAsync<SubscriptionTier>(cacheKey, async () =>
         {
             return await _context.SubscriptionTiers
                 .Include(t => t.ProductLine)

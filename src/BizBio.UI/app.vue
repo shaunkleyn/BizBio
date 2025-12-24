@@ -8,6 +8,13 @@
 </template>
 
 <script setup>
+// Initialize auth store on app load
+const authStore = useAuthStore()
+
+if (import.meta.client) {
+  authStore.initAuth()
+}
+
 // Set page transition
 useHead({
   titleTemplate: (titleChunk) => {

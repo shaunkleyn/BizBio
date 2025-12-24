@@ -296,7 +296,7 @@
                     {{ getProductName(productId) }}
                   </span>
                   <button
-                    @click="removeProductFromStep(stepIndex, index)"
+                    @click="removeProductFromStep(Number(stepIndex), Number(index))"
                     class="text-red-600 hover:bg-red-50 p-2 rounded transition-colors"
                   >
                     <i class="fas fa-times"></i>
@@ -426,7 +426,7 @@
                       </div>
                     </div>
                     <button
-                      @click="removeOptionGroup(stepIndex, groupIndex)"
+                      @click="removeOptionGroup(Number(stepIndex), Number(groupIndex))"
                       class="ml-4 p-2 text-red-600 hover:bg-red-50 rounded transition-colors"
                     >
                       <i class="fas fa-trash"></i>
@@ -440,7 +440,7 @@
                         Options
                       </label>
                       <button
-                        @click="addOption(stepIndex, groupIndex)"
+                        @click="addOption(Number(stepIndex), Number(groupIndex))"
                         class="text-sm text-[var(--primary-color)] hover:underline"
                       >
                         <i class="fas fa-plus mr-1"></i>
@@ -481,7 +481,7 @@
                           Default
                         </label>
                         <button
-                          @click="removeOption(stepIndex, groupIndex, optionIndex)"
+                          @click="removeOption(Number(stepIndex), Number(groupIndex), Number(optionIndex))"
                           class="p-2 text-red-600 hover:bg-red-50 rounded transition-colors"
                         >
                           <i class="fas fa-times"></i>
@@ -534,18 +534,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useBundlesApi } from '~/composables/useApi'
+import { ref, computed, onMounted } from 'vue'
+import { useBundlesApi, useLibraryItemsApi, useCatalogsApi } from '~/composables/useApi'
 import { useToast } from '~/composables/useToast'
 import { useRouter } from 'vue-router'
 
 const bundlesApi = useBundlesApi()
+const { getLibraryItems } = useLibraryItemsApi()
+const { getMyCatalogs } = useCatalogsApi()
 const toast = useToast()
 const router = useRouter()
 
 const currentStep = ref(1)
 const saving = ref(false)
-const catalogId = ref('1') // TODO: Get from user's catalog
+const loading = ref(false)
+const catalogId = ref('')
 
 const bundleData = ref({
   name: '',
@@ -557,17 +560,34 @@ const bundleData = ref({
   steps: [] as any[]
 })
 
-// Mock products - TODO: Load from API
-const availableProducts = ref([
-  { id: 1, name: 'Bacon, Avo & Feta Pizza' },
-  { id: 2, name: 'Classic Cheese Pizza' },
-  { id: 3, name: 'Pepperoni Deluxe Pizza' },
-  { id: 4, name: 'Pepsi 2L' },
-  { id: 5, name: 'Coke 2L' },
-  { id: 6, name: '7 Up 2L' },
-  { id: 7, name: 'Mirinda 2L' },
-  { id: 8, name: 'Mountain Dew 2L' }
-])
+const availableProducts = ref<any[]>([])
+
+// Load catalog and products on mount
+onMounted(async () => {
+  try {
+    loading.value = true
+
+    // Get user's first catalog
+    const catalogsResponse = await getMyCatalogs()
+    if (catalogsResponse.success && catalogsResponse.data?.length > 0) {
+      catalogId.value = catalogsResponse.data[0].id.toString()
+    }
+
+    // Load library items
+    const itemsResponse = await getLibraryItems()
+    if (itemsResponse.success && itemsResponse.data) {
+      availableProducts.value = itemsResponse.data.map((item: any) => ({
+        id: item.id,
+        name: item.name
+      }))
+    }
+  } catch (error) {
+    console.error('Error loading data:', error)
+    toast.error('Failed to load products')
+  } finally {
+    loading.value = false
+  }
+})
 
 function getStepLabel(step: number): string {
   const labels = ['Basic Info', 'Add Steps', 'Assign Products', 'Add Options']

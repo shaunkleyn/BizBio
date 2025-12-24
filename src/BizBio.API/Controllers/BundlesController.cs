@@ -308,7 +308,7 @@ public class BundlesController : ControllerBase
     /// Add an option group to a bundle step
     /// </summary>
     [HttpPost("{bundleId}/steps/{stepId}/option-groups")]
-    public async Task<IActionResult> AddOptionGroup(int catalogId, int bundleId, int stepId, [FromBody] CreateOptionGroupDto dto)
+    public async Task<IActionResult> AddOptionGroup(int catalogId, int bundleId, int stepId, [FromBody] CreateBundleOptionGroupDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -401,7 +401,7 @@ public class BundlesController : ControllerBase
     /// Add an option to an option group
     /// </summary>
     [HttpPost("{bundleId}/option-groups/{optionGroupId}/options")]
-    public async Task<IActionResult> AddOption(int catalogId, int bundleId, int optionGroupId, [FromBody] CreateOptionDto dto)
+    public async Task<IActionResult> AddOption(int catalogId, int bundleId, int optionGroupId, [FromBody] CreateBundleOptionDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -490,7 +490,7 @@ public class AddProductToStepDto
 /// <summary>
 /// Data transfer object for creating an option group
 /// </summary>
-public class CreateOptionGroupDto
+public class CreateBundleOptionGroupDto
 {
     public string Name { get; set; } = null!;
     public bool IsRequired { get; set; } = false;
@@ -501,7 +501,7 @@ public class CreateOptionGroupDto
 /// <summary>
 /// Data transfer object for creating an option
 /// </summary>
-public class CreateOptionDto
+public class CreateBundleOptionDto
 {
     public string Name { get; set; } = null!;
     public decimal PriceModifier { get; set; } = 0M;

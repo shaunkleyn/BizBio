@@ -34,7 +34,7 @@ public class LibraryItemsController : ControllerBase
         var userId = GetUserId();
 
         var query = _context.CatalogItems
-            .Where(i => i.UserId == userId && i.CatalogId == null && i.IsActive);
+            .Where(i => i.UserId == userId);
 
         if (categoryId.HasValue)
         {
@@ -283,7 +283,7 @@ public class LibraryItemsController : ControllerBase
         var userId = GetUserId();
 
         var item = await _context.CatalogItems
-            .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId && i.CatalogId == null);
+            .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId);
 
         if (item == null)
             return NotFound(new { success = false, error = "Item not found" });
@@ -307,11 +307,10 @@ public class LibraryItemsController : ControllerBase
         // Update variants if provided
         if (dto.Variants != null)
         {
-            // Remove existing variants
-            var existingVariants = await _context.CatalogItemVariants
+            // Remove existing variants - use ExecuteDeleteAsync for better performance
+            await _context.CatalogItemVariants
                 .Where(v => v.CatalogItemId == item.Id)
-                .ToListAsync();
-            _context.CatalogItemVariants.RemoveRange(existingVariants);
+                .ExecuteDeleteAsync();
 
             // Add new variants
             foreach (var variantDto in dto.Variants)
@@ -329,6 +328,7 @@ public class LibraryItemsController : ControllerBase
                     Barcode = variantDto.Barcode,
                     IsDefault = variantDto.IsDefault,
                     WeightG = variantDto.WeightG,
+                    SortOrder = variantDto.SortOrder ?? 0,
                     IsActive = true,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
@@ -388,7 +388,7 @@ public class LibraryItemsController : ControllerBase
         var userId = GetUserId();
 
         var item = await _context.CatalogItems
-            .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId && i.CatalogId == null);
+            .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId);
 
         if (item == null)
             return NotFound(new { success = false, error = "Item not found" });
@@ -413,7 +413,7 @@ public class LibraryItemsController : ControllerBase
         var libraryItem = await _context.CatalogItems
             .Include(i => i.Variants)
             .Include(i => i.ExtraGroupLinks.Where(l => l.IsActive))
-            .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId && i.CatalogId == null);
+            .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId);
 
         if (libraryItem == null)
             return NotFound(new { success = false, error = "Library item not found" });
@@ -564,6 +564,7 @@ public class CreateVariantDto
     public string? Barcode { get; set; }
     public bool IsDefault { get; set; } = false;
     public int? WeightG { get; set; }
+    public int? SortOrder { get; set; }
 }
 
 public class AddToCatalogDto

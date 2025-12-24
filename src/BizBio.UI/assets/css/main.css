@@ -403,3 +403,7 @@ h1, h2, h3, h4, h5, h6 {
 		.gradient-purple-pink-yellow {
 			background: linear-gradient(34deg, #a275ea 20%, #f15b8e 50%, #ffc11a 85%);
 		}
+
+		.align-content-center {
+			align-content: center !important;
+		}

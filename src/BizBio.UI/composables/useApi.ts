@@ -224,35 +224,35 @@ export const useBundlesApi = () => {
 
   return {
     // Bundle operations
-    getBundles: (catalogId: string) => api.get(`/v1/dashboard/catalogs/${catalogId}/bundles`),
+    getBundles: (catalogId: string) => api.get(`/dashboard/catalogs/${catalogId}/bundles`),
     getBundle: (catalogId: string, bundleId: string) =>
-      api.get(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}`),
+      api.get(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}`),
     createBundle: (catalogId: string, data: any) =>
-      api.post(`/v1/dashboard/catalogs/${catalogId}/bundles`, data),
+      api.post(`/dashboard/catalogs/${catalogId}/bundles`, data),
     updateBundle: (catalogId: string, bundleId: string, data: any) =>
-      api.put(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}`, data),
+      api.put(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}`, data),
     deleteBundle: (catalogId: string, bundleId: string) =>
-      api.delete(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}`),
+      api.delete(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}`),
 
     // Step operations
     addStep: (catalogId: string, bundleId: string, data: any) =>
-      api.post(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}/steps`, data),
+      api.post(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}/steps`, data),
 
     // Product assignment
     addProductToStep: (catalogId: string, bundleId: string, stepId: string, data: any) =>
-      api.post(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}/steps/${stepId}/products`, data),
+      api.post(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}/steps/${stepId}/products`, data),
 
     // Option groups
     addOptionGroup: (catalogId: string, bundleId: string, stepId: string, data: any) =>
-      api.post(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}/steps/${stepId}/option-groups`, data),
+      api.post(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}/steps/${stepId}/option-groups`, data),
 
     // Options
     addOption: (catalogId: string, bundleId: string, optionGroupId: string, data: any) =>
-      api.post(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}/option-groups/${optionGroupId}/options`, data),
+      api.post(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}/option-groups/${optionGroupId}/options`, data),
 
     // Add bundle to category
     addToCategory: (catalogId: string, bundleId: string, data: any) =>
-      api.post(`/v1/dashboard/catalogs/${catalogId}/bundles/${bundleId}/add-to-category`, data)
+      api.post(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}/add-to-category`, data)
   }
 }
 
@@ -316,5 +316,65 @@ export const useLibraryCategoriesApi = () => {
     updateCategory: (id: number, data: any) => api.put(`/library/categories/${id}`, data),
     deleteCategory: (id: number) => api.delete(`/library/categories/${id}`),
     addToCatalog: (id: number, data: any) => api.post(`/library/categories/${id}/add-to-catalog`, data)
+  }
+}
+
+// Catalogs API (Menu Editor)
+export const useCatalogsApi = () => {
+  const api = useApi()
+
+  return {
+    // Get full catalog details for editing - uses /menus/{id} endpoint
+    getCatalogDetail: (id: number) => api.get(`/v1/menus/${id}`),
+
+    // Reorder operations
+    reorderCategories: (catalogId: number, items: any) =>
+      api.put(`/v1/catalogs/${catalogId}/categories/reorder`, items),
+    reorderItems: (catalogId: number, items: any) =>
+      api.put(`/v1/catalogs/${catalogId}/items/reorder`, items),
+
+    // Add to catalog operations
+    addItemToCatalog: (catalogId: number, dto: any) =>
+      api.post(`/v1/catalogs/${catalogId}/items`, dto),
+    addBundleToCatalog: (catalogId: number, dto: any) =>
+      api.post(`/v1/catalogs/${catalogId}/bundles`, dto),
+
+    // Remove from catalog operations
+    removeItem: (catalogId: number, itemId: number) =>
+      api.delete(`/v1/catalogs/${catalogId}/items/${itemId}`),
+    removeBundle: (catalogId: number, bundleId: number) =>
+      api.delete(`/v1/catalogs/${catalogId}/bundles/${bundleId}`),
+
+    // Update item categories
+    updateItemCategories: (catalogId: number, itemId: number, dto: any) =>
+      api.put(`/v1/catalogs/${catalogId}/items/${itemId}/categories`, dto)
+  }
+}
+
+// Options API (Product Customizations)
+export const useOptionsApi = () => {
+  const api = useApi()
+
+  return {
+    // Options CRUD
+    getOptions: () => api.get('/library/options'),
+    getOption: (id: number) => api.get(`/library/options/${id}`),
+    createOption: (data: any) => api.post('/library/options', data),
+    updateOption: (id: number, data: any) => api.put(`/library/options/${id}`, data),
+    deleteOption: (id: number) => api.delete(`/library/options/${id}`)
+  }
+}
+
+// Option Groups API
+export const useOptionGroupsApi = () => {
+  const api = useApi()
+
+  return {
+    // Option Groups CRUD
+    getOptionGroups: () => api.get('/library/option-groups'),
+    getOptionGroup: (id: number) => api.get(`/library/option-groups/${id}`),
+    createOptionGroup: (data: any) => api.post('/library/option-groups', data),
+    updateOptionGroup: (id: number, data: any) => api.put(`/library/option-groups/${id}`, data),
+    deleteOptionGroup: (id: number) => api.delete(`/library/option-groups/${id}`)
   }
 }

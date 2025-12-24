@@ -1,5 +1,6 @@
 using BizBio.Core.Entities;
 using BizBio.Core.Enums;
+using BizBio.Infrastructure.Data.Seeding;
 using Microsoft.EntityFrameworkCore;
 
 namespace BizBio.Infrastructure.Data;
@@ -13,6 +14,11 @@ public static class DbSeeder
         // Seed Enum Lookups first (required for foreign keys)
         Console.WriteLine("Seeding enum lookups...");
         await EnumSeeder.SeedEnumLookupsAsync(context);
+//        await MenuSeeder.SeedAsync(
+//    context.Database.GetConnectionString()
+//);
+//        await context.SaveChangesAsync();
+
         Console.WriteLine("Enum lookups seeded successfully");
 
         // Seed Subscription Tiers if not already present

@@ -14,7 +14,7 @@ public class MenuCreationDto
     public string? Country { get; set; }
     public WorkingHoursDto? WorkingHours { get; set; }
     public List<CategoryDto> Categories { get; set; } = new();
-    public List<MenuItemDto> Items { get; set; } = new();
+    public List<MenuCreationItemDto> Items { get; set; } = new();
     public SubscriptionPlanDto? SubscriptionPlan { get; set; }
     public TrialDto? Trial { get; set; }
 }
@@ -45,7 +45,7 @@ public class CategoryDto
     public int Order { get; set; }
 }
 
-public class MenuItemDto
+public class MenuCreationItemDto
 {
     public string CategoryId { get; set; } = null!; // Will be mapped to actual category ID
     public string Name { get; set; } = null!;

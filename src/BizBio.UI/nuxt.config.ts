@@ -1,77 +1,83 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-11-23',
-
-  devtools: { enabled: false },
-
-  // SSR Configuration - enabled by default but explicit for clarity
+  devtools: {
+    enabled: false,
+  },
   ssr: true,
-
   modules: [
     '~/modules/fix-windows-path',
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
-    '@nuxt/image'
+    '@nuxt/image',
+    '@nookuio/nuxt',
   ],
-
-  css: [
-   // '@fortawesome/fontawesome-free/css/all.min.css',
-    '~/assets/css/main.css',
-    '~/assets/fonts/css/all.css',
-
-  ],
-
+  css: ['~/assets/css/main.css', '~/assets/fonts/css/all.css'],
   app: {
     head: {
       title: 'BizBio - Digital Business Profiles',
       meta: [
-        { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        {
+          charset: 'utf-8',
+        },
+        {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1',
+        },
         {
           name: 'description',
-          content: 'Create and share your digital business profile with BizBio'
-        }
+          content: 'Create and share your digital business profile with BizBio',
+        },
       ],
       link: [
         {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap'
+          href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap',
         },
-        { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
-        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
-        { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
-        { rel: 'manifest', href: '/site.webmanifest' },
-      ]
-    }
+        {
+          rel: 'apple-touch-icon',
+          sizes: '180x180',
+          href: '/apple-touch-icon.png',
+        },
+        {
+          rel: 'icon',
+          type: 'image/png',
+          sizes: '32x32',
+          href: '/favicon-32x32.png',
+        },
+        {
+          rel: 'icon',
+          type: 'image/png',
+          sizes: '16x16',
+          href: '/favicon-16x16.png',
+        },
+        {
+          rel: 'manifest',
+          href: '/site.webmanifest',
+        },
+      ],
+    },
   },
-
   runtimeConfig: {
     public: {
-      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'https://localhost:5001/api/v1',
-      appInsightsConnectionString: process.env.NUXT_PUBLIC_APP_INSIGHTS_CONNECTION_STRING || '',
-      googleAnalyticsId: process.env.NUXT_PUBLIC_GOOGLE_ANALYTICS_ID || 'G-XXXXXXXXXX',
-      cookieDomain: process.env.NUXT_PUBLIC_COOKIE_DOMAIN || undefined
-    }
+      apiUrl:
+        process.env.NUXT_PUBLIC_API_URL || 'https://localhost:5001/api/v1',
+      appInsightsConnectionString:
+        process.env.NUXT_PUBLIC_APP_INSIGHTS_CONNECTION_STRING || '',
+      googleAnalyticsId:
+        process.env.NUXT_PUBLIC_GOOGLE_ANALYTICS_ID || 'G-XXXXXXXXXX',
+      cookieDomain: process.env.NUXT_PUBLIC_COOKIE_DOMAIN || undefined,
+    },
   },
-
-  // Performance optimizations
   nitro: {
     compressPublicAssets: true,
-    preset: 'node-server', // Optimized for Node.js server deployment
-    
-    // Production optimizations
-    // Note: minify disabled due to Rollup bug on Windows with Nuxt 3.20.1
-    // Re-enable after upgrading to a fixed version
+    preset: 'node-server',
     minify: false,
     sourceMap: false,
-    
-    // Server configuration for VPS deployment
     experimental: {
-      wasm: false // Disable if not needed to reduce memory
-    }
+      wasm: false,
+    },
   },
-
-  // Image optimization
   image: {
     quality: 80,
     formats: ['webp', 'avif', 'png', 'jpg'],
@@ -84,43 +90,65 @@ export default defineNuxtConfig({
       xxl: 1536,
     },
   },
-
-  // Route rules for better performance
   routeRules: {
-    // Static pages - prerendered at build time
-    '/': { prerender: true },
-    '/pricing': { prerender: true },
-    '/categories': { prerender: true },
-    '/help': { prerender: true },
-    '/contact': { prerender: true },
-    '/terms': { prerender: true },
-    '/privacy': { prerender: true },
-
-    // Dashboard - client-side only for auth-protected pages
-    '/dashboard/**': { ssr: false },
-
-    // Auth pages - SSR only
-    '/login': { ssr: true },
-    '/register': { ssr: true },
-    '/forgot-password': { ssr: true },
-    '/reset-password': { ssr: true },
-    '/verify-email': { ssr: true },
-
-    // Search and products - SSR with cache
-    '/search': { ssr: true, cache: { maxAge: 60 * 10 } },
-    '/products': { ssr: true, cache: { maxAge: 60 * 15 } },
+    '/': {
+      prerender: true,
+    },
+    '/pricing': {
+      prerender: true,
+    },
+    '/categories': {
+      prerender: true,
+    },
+    '/help': {
+      prerender: true,
+    },
+    '/contact': {
+      prerender: true,
+    },
+    '/terms': {
+      prerender: true,
+    },
+    '/privacy': {
+      prerender: true,
+    },
+    '/dashboard/**': {
+      ssr: false,
+    },
+    '/login': {
+      ssr: true,
+    },
+    '/register': {
+      ssr: true,
+    },
+    '/forgot-password': {
+      ssr: true,
+    },
+    '/reset-password': {
+      ssr: true,
+    },
+    '/verify-email': {
+      ssr: true,
+    },
+    '/search': {
+      ssr: true,
+      cache: {
+        maxAge: 60 * 10,
+      },
+    },
+    '/products': {
+      ssr: true,
+      cache: {
+        maxAge: 60 * 15,
+      },
+    },
   },
-  
   darkMode: 'class',
-
-  // Production build optimizations
   experimental: {
-    payloadExtraction: false, // Can help with performance on VPS
+    payloadExtraction: false,
     renderJsonPayloads: true,
     typedPages: true,
   },
-
-  // Optimize builds for production
   vite: {
     build: {
       rollupOptions: {
@@ -128,12 +156,13 @@ export default defineNuxtConfig({
           manualChunks: (id) => {
             // Only split chunks for client-side modules
             if (id.includes('node_modules')) {
-              if (id.includes('pinia')) return 'pinia';
-              // Skip axios as it's external on server-side
+              if (id.includes('pinia')) {
+                return 'pinia';
+              }
             }
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   },
-})
+});

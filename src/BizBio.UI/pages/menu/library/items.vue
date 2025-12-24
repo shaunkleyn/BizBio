@@ -1,6 +1,6 @@
 <template>
   <div class="p-4 md:p-8">
-    <div class="max-w-7xl mx-auto">
+    <div class="w-100 mx-auto">
       <!-- Filters & View Toggle -->
       <div class="mb-8">
         <div class="flex flex-wrap gap-4">
@@ -20,6 +20,16 @@
             <option v-for="category in categories" :key="category.id" :value="category.id">
               {{ category.name }}
             </option>
+          </select>
+          <!-- Rows Per Page -->
+          <select
+            v-model="rowsPerPage"
+            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+          >
+            <option :value="10">10 per page</option>
+            <option :value="25">25 per page</option>
+            <option :value="50">50 per page</option>
+            <option :value="100">100 per page</option>
           </select>
           <!-- View Toggle -->
           <div class="flex border border-gray-300 rounded-lg overflow-hidden">
@@ -110,7 +120,7 @@
         <button
           v-if="!searchQuery"
           @click="showItemModal = true"
-          class="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors"
+          class="px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors"
         >
           <i class="fas fa-plus mr-2"></i>
           Add Your First Item
@@ -120,7 +130,7 @@
       <!-- Grid View -->
       <div v-else-if="viewMode === 'grid'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
-          v-for="item in filteredItems"
+          v-for="item in paginatedItems"
           :key="item.id"
           class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden relative"
         >
@@ -213,7 +223,7 @@
         <table class="w-full">
           <thead class="bg-gray-50 border-b border-gray-200">
             <tr>
-              <th class="px-6 py-3 text-left">
+              <th class="px-4 py-2 text-center">
                 <input
                   type="checkbox"
                   :checked="isAllSelected"
@@ -221,33 +231,54 @@
                   class="w-5 h-5 text-[var(--primary-color)] rounded"
                 />
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Item
+              <th 
+                @click="sortTable('name')"
+                class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors"
+              >
+                <div class="flex items-center gap-2">
+                  Item
+                  <i v-if="sortBy === 'name'" :class="sortOrder === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'" class="text-[var(--primary-color)]"></i>
+                  <i v-else class="fas fa-sort text-gray-400"></i>
+                </div>
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Category
+              <th 
+                @click="sortTable('category')"
+                class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors"
+              >
+                <div class="flex items-center justify-center gap-2">
+                  Category
+                  <i v-if="sortBy === 'category'" :class="sortOrder === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'" class="text-[var(--primary-color)]"></i>
+                  <i v-else class="fas fa-sort text-gray-400"></i>
+                </div>
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Price
+              <th 
+                @click="sortTable('price')"
+                class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors"
+              >
+                <div class="flex items-center gap-2">
+                  Price
+                  <i v-if="sortBy === 'price'" :class="sortOrder === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'" class="text-[var(--primary-color)]"></i>
+                  <i v-else class="fas fa-sort text-gray-400"></i>
+                </div>
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Tags
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Variants
               </th>
-              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200">
             <tr
-              v-for="item in filteredItems"
+              v-for="item in paginatedItems"
               :key="item.id"
               :class="selectedItems.includes(item.id) ? 'bg-blue-50' : 'hover:bg-gray-50'"
             >
-              <td class="px-6 py-4">
+              <td class="px-4 py-2 text-center">
                 <input
                   type="checkbox"
                   :checked="selectedItems.includes(item.id)"
@@ -255,8 +286,8 @@
                   class="w-5 h-5 text-[var(--primary-color)] rounded"
                 />
               </td>
-              <td class="px-6 py-4">
-                <div class="flex items-center gap-3">
+              <td class="px-4 py-2">
+                <div class="flex items-center gap-3 w-auto">
                   <div class="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                     <img
                       v-if="item.images && item.images.length > 0"
@@ -264,31 +295,31 @@
                       :alt="item.name"
                       class="w-full h-full object-cover"
                     />
-                    <i v-else class="fas fa-utensils text-gray-400 flex items-center justify-center w-full h-full"></i>
+                    <i v-else class="fas fa-utensils text-gray-400 flex text-center align-content-center justify-center w-full h-full"></i>
                   </div>
                   <div>
-                    <div class="font-semibold text-gray-900">{{ item.name }}</div>
-                    <div v-if="item.description" class="text-sm text-gray-600 truncate max-w-xs">
+                    <div class="font-semibold text-sm text-gray-900">{{ item.name }}</div>
+                    <div v-if="item.description" class="text-xs text-gray-600">
                       {{ item.description }}
                     </div>
                   </div>
                 </div>
               </td>
-              <td class="px-6 py-4">
-                <span v-if="item.categoryId" class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded">
+              <td class="px-4 py-2 text-center">
+                <span v-if="item.categoryId" class="px-2 py-1 bg-blue-100 text-blue-800 text-xs text-nowrap font-semibold rounded-full">
                   {{ getCategoryName(item.categoryId) }}
                 </span>
                 <span v-else class="text-sm text-gray-500">-</span>
               </td>
-              <td class="px-6 py-4">
-                <span class="font-semibold text-gray-900">R{{ item.price.toFixed(2) }}</span>
+              <td class="px-4 py-2 text-right">
+                <span class="font-semibold text-sm text-gray-900  text-right">R{{ item.price.toFixed(2) }}</span>
               </td>
-              <td class="px-6 py-4">
+              <td class="px-4 py-2">
                 <div v-if="item.tags && item.tags.length > 0" class="flex flex-wrap gap-1">
                   <span
                     v-for="tag in item.tags.slice(0, 2)"
                     :key="tag"
-                    class="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded"
+                    class="px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded-full"
                   >
                     {{ tag }}
                   </span>
@@ -298,24 +329,22 @@
                 </div>
                 <span v-else class="text-sm text-gray-500">-</span>
               </td>
-              <td class="px-6 py-4">
+              <td class="px-4 py-2 text-center">
                 <span class="text-sm text-gray-900">{{ item.variants.length || 0 }}</span>
               </td>
-              <td class="px-6 py-4 text-right">
+              <td class="px-4 py-2 text-right">
                 <div class="flex justify-end gap-2">
                   <button
                     @click="editItem(item)"
-                    class="px-3 py-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors text-sm font-medium"
+                    class="p-2 text-center text-blue-600 hover:bg-blue-50 rounded-lg transition-colors text-sm"
                   >
-                    <i class="fas fa-edit mr-1"></i>
-                    Edit
+                    <i class="fas fa-edit"></i>
                   </button>
                   <button
                     @click="deleteItem(item)"
-                    class="px-3 py-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium"
+                    class="p-2 text-center text-red-600 hover:bg-red-50 rounded-lg transition-colors text-sm"
                   >
-                    <i class="fas fa-trash mr-1"></i>
-                    Delete
+                    <i class="fas fa-trash"></i>
                   </button>
                 </div>
               </td>
@@ -323,6 +352,116 @@
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination -->
+      <div ref="paginationRef" v-if="filteredItems.length > 0" class="mt-6 flex items-center justify-between">
+        <div class="text-sm text-gray-600">
+          Showing {{ ((currentPage - 1) * rowsPerPage) + 1 }} to {{ Math.min(currentPage * rowsPerPage, filteredItems.length) }} of {{ filteredItems.length }} items
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            @click="currentPage = 1"
+            :disabled="currentPage === 1"
+            class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <i class="fas fa-angle-double-left"></i>
+          </button>
+          <button
+            @click="currentPage--"
+            :disabled="currentPage === 1"
+            class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <i class="fas fa-angle-left"></i>
+          </button>
+          <div class="flex items-center gap-1">
+            <button
+              v-for="page in visiblePages"
+              :key="page"
+              @click="currentPage = page"
+              :class="[
+                'px-4 py-2 border rounded-lg transition-colors',
+                currentPage === page
+                  ? 'bg-[var(--primary-color)] text-white border-[var(--primary-color)]'
+                  : 'border-gray-300 hover:bg-gray-50'
+              ]"
+            >
+              {{ page }}
+            </button>
+          </div>
+          <button
+            @click="currentPage++"
+            :disabled="currentPage === totalPages"
+            class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <i class="fas fa-angle-right"></i>
+          </button>
+          <button
+            @click="currentPage = totalPages"
+            :disabled="currentPage === totalPages"
+            class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <i class="fas fa-angle-double-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Floating Pagination Panel (shows when pagination is not in view) -->
+      <Teleport to="body">
+        <Transition name="slide-up">
+          <div
+            v-if="filteredItems.length > 0 && !isPaginationVisible && viewMode === 'list'"
+            class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40"
+          >
+            <div class="bg-white/90 backdrop-blur-lg border border-gray-200/50 rounded-2xl shadow-2xl px-6 py-4">
+              <div class="flex items-center gap-3">
+                <button
+                  @click="currentPage = 1"
+                  :disabled="currentPage === 1"
+                  class="px-3 py-2 bg-white/60 border border-gray-300/50 rounded-lg hover:bg-white/80 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  <i class="fas fa-angle-double-left"></i>
+                </button>
+                <button
+                  @click="currentPage--"
+                  :disabled="currentPage === 1"
+                  class="px-3 py-2 bg-white/60 border border-gray-300/50 rounded-lg hover:bg-white/80 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  <i class="fas fa-angle-left"></i>
+                </button>
+                <div class="flex items-center gap-1">
+                  <button
+                    v-for="page in visiblePages"
+                    :key="page"
+                    @click="currentPage = page"
+                    :class="[
+                      'px-4 py-2 border rounded-lg transition-all',
+                      currentPage === page
+                        ? 'bg-[var(--primary-color)] text-white border-[var(--primary-color)] shadow-lg'
+                        : 'bg-white/60 border-gray-300/50 hover:bg-white/80'
+                    ]"
+                  >
+                    {{ page }}
+                  </button>
+                </div>
+                <button
+                  @click="currentPage++"
+                  :disabled="currentPage === totalPages"
+                  class="px-3 py-2 bg-white/60 border border-gray-300/50 rounded-lg hover:bg-white/80 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  <i class="fas fa-angle-right"></i>
+                </button>
+                <button
+                  @click="currentPage = totalPages"
+                  :disabled="currentPage === totalPages"
+                  class="px-3 py-2 bg-white/60 border border-gray-300/50 rounded-lg hover:bg-white/80 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  <i class="fas fa-angle-double-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </Transition>
+      </Teleport>
       </div>
     </div>
 
@@ -351,7 +490,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, h } from 'vue'
+import { ref, computed, onMounted, onUnmounted, h, watch } from 'vue'
 import { useLibraryItemsApi, useLibraryCategoriesApi } from '~/composables/useApi'
 import { useToast } from '~/composables/useToast'
 
@@ -372,9 +511,15 @@ const showItemModal = ref(false)
 const showCategoryModal = ref(false)
 const showBulkTagModal = ref(false)
 const editingItem = ref<any>(null)
-const viewMode = ref<'grid' | 'list'>('grid')
+const viewMode = ref<'grid' | 'list'>('list')
 const selectedItems = ref<number[]>([])
 const bulkCategory = ref<number | null>(null)
+const sortBy = ref<'name' | 'price' | 'category'>('name')
+const sortOrder = ref<'asc' | 'desc'>('asc')
+const currentPage = ref(1)
+const rowsPerPage = ref(25)
+const paginationRef = ref<HTMLElement | null>(null)
+const isPaginationVisible = ref(true)
 
 // Stats for sidebar
 const stats = ref({
@@ -402,7 +547,63 @@ const filteredItems = computed(() => {
     filtered = filtered.filter(item => item.categoryId === selectedCategory.value)
   }
 
+  // Sort items
+  filtered = [...filtered].sort((a, b) => {
+    let compareA, compareB
+
+    switch (sortBy.value) {
+      case 'name':
+        compareA = a.name.toLowerCase()
+        compareB = b.name.toLowerCase()
+        break
+      case 'price':
+        compareA = a.price
+        compareB = b.price
+        break
+      case 'category':
+        compareA = getCategoryName(a.categoryId).toLowerCase()
+        compareB = getCategoryName(b.categoryId).toLowerCase()
+        break
+      default:
+        return 0
+    }
+
+    if (compareA < compareB) return sortOrder.value === 'asc' ? -1 : 1
+    if (compareA > compareB) return sortOrder.value === 'asc' ? 1 : -1
+    return 0
+  })
+
   return filtered
+})
+
+const totalPages = computed(() => Math.ceil(filteredItems.value.length / rowsPerPage.value))
+
+const paginatedItems = computed(() => {
+  const start = (currentPage.value - 1) * rowsPerPage.value
+  const end = start + rowsPerPage.value
+  return filteredItems.value.slice(start, end)
+})
+
+const visiblePages = computed(() => {
+  const pages = []
+  const maxVisible = 5
+  let startPage = Math.max(1, currentPage.value - Math.floor(maxVisible / 2))
+  let endPage = Math.min(totalPages.value, startPage + maxVisible - 1)
+
+  if (endPage - startPage < maxVisible - 1) {
+    startPage = Math.max(1, endPage - maxVisible + 1)
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i)
+  }
+
+  return pages
+})
+
+// Reset to page 1 when filters change
+watch([searchQuery, selectedCategory, rowsPerPage], () => {
+  currentPage.value = 1
 })
 
 const isAllSelected = computed(() => {
@@ -418,13 +619,29 @@ onMounted(async () => {
 
   setPageActions(() => h('button', {
     onClick: () => showItemModal.value = true,
-    class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
+    class: 'px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
   }, [
     h('i', { class: 'fas fa-plus mr-2' }),
     'Add Item'
   ]))
 
   await Promise.all([loadItems(), loadCategories()])
+
+  // Set up intersection observer for pagination visibility
+  if (paginationRef.value) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        isPaginationVisible.value = entries[0].isIntersecting
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(paginationRef.value)
+    
+    // Clean up observer on unmount
+    onUnmounted(() => {
+      observer.disconnect()
+    })
+  }
 })
 
 async function loadItems() {
@@ -568,6 +785,17 @@ function closeItemModal() {
   editingItem.value = null
 }
 
+function sortTable(column: 'name' | 'price' | 'category') {
+  if (sortBy.value === column) {
+    // Toggle sort order
+    sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    // New column, default to ascending
+    sortBy.value = column
+    sortOrder.value = 'asc'
+  }
+}
+
 async function itemSaved() {
   closeItemModal()
   await loadItems()
@@ -580,5 +808,21 @@ async function itemSaved() {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Floating pagination transitions */
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+}
+
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
 }
 </style>

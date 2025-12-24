@@ -1,45 +1,30 @@
 <template>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Loading State -->
-    <div v-if="loading" class="flex flex-col justify-center items-center py-20">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--primary-color)] mb-4"></div>
-      <p class="text-[var(--gray-text-color)]">Loading menu...</p>
-    </div>
-
-    <!-- Error State -->
-    <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-      <i class="fas fa-exclamation-circle text-4xl text-red-500 mb-3"></i>
-      <h3 class="text-xl font-semibold text-red-900 mb-2">Error Loading Menu</h3>
-      <p class="text-red-700">{{ error }}</p>
-      <NuxtLink
-        to="/menu/menus"
-        class="inline-block mt-4 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-      >
-        Back to Menus
-      </NuxtLink>
-    </div>
-
-    <!-- Edit Form -->
-    <div v-else>
-      <!-- Header -->
-      <div class="mb-8">
-        <div class="flex items-center gap-4 mb-4">
-          <NuxtLink
-            to="/menu/menus"
-            class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
-          >
-            <i class="fas fa-arrow-left text-[var(--gray-text-color)]"></i>
-          </NuxtLink>
-          <div>
-            <h1 class="text-3xl font-bold text-[var(--dark-text-color)]">Edit Menu</h1>
-            <p class="text-[var(--gray-text-color)] mt-1">Update your menu details</p>
-          </div>
-        </div>
+  <div class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto">
+      <!-- Loading State -->
+      <div v-if="loading" class="flex flex-col justify-center items-center py-20">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--primary-color)] mb-4"></div>
+        <p class="text-[var(--gray-text-color)]">Loading menu...</p>
       </div>
 
-      <!-- Form -->
-      <form @submit.prevent="saveMenu" class="bg-white rounded-lg shadow-md p-8 max-w-3xl">
-        <div class="space-y-6">
+      <!-- Error State -->
+      <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+        <i class="fas fa-exclamation-circle text-4xl text-red-500 mb-3"></i>
+        <h3 class="text-xl font-semibold text-red-900 mb-2">Error Loading Menu</h3>
+        <p class="text-red-700">{{ error }}</p>
+        <NuxtLink
+          to="/menu/menus"
+          class="inline-block mt-4 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+        >
+          Back to Menus
+        </NuxtLink>
+      </div>
+
+      <!-- Edit Form -->
+      <div v-else>
+        <!-- Form -->
+        <form @submit.prevent="saveMenu" class="bg-white rounded-lg shadow-md p-8">
+          <div class="space-y-6">
           <!-- Menu Name -->
           <div>
             <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
@@ -52,6 +37,7 @@
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent"
               placeholder="e.g., Lunch Menu, Dinner Menu"
             />
+          </div>
           </div>
 
           <!-- Slug -->
@@ -113,53 +99,49 @@
               Active (visible to public)
             </label>
           </div>
-        </div>
 
-        <!-- Action Buttons -->
-        <div class="flex items-center gap-4 mt-8 pt-6 border-t border-gray-200">
-          <button
-            type="submit"
-            :disabled="saving"
-            class="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <i v-if="saving" class="fas fa-spinner fa-spin mr-2"></i>
-            <i v-else class="fas fa-save mr-2"></i>
-            {{ saving ? 'Saving...' : 'Save Changes' }}
-          </button>
-          <NuxtLink
-            to="/menu/menus"
-            class="px-6 py-3 border border-gray-300 rounded-lg text-[var(--gray-text-color)] hover:bg-gray-50 transition-colors font-semibold"
-          >
-            Cancel
-          </NuxtLink>
-          <button
-            type="button"
-            @click="deleteMenu"
-            class="ml-auto px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-semibold"
-          >
-            <i class="fas fa-trash mr-2"></i>
-            Delete Menu
-          </button>
-        </div>
-      </form>
+          <!-- Delete Button -->
+          <div class="mt-8 pt-6 border-t border-gray-200">
+            <button
+              type="button"
+              @click="deleteMenu"
+              class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-semibold"
+            >
+              <i class="fas fa-trash mr-2"></i>
+              Delete Menu
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, h } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useMenusApi } from '~/composables/useApi'
 import { useToast } from '~/composables/useToast'
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'menu'
 })
 
 const route = useRoute()
 const router = useRouter()
 const menusApi = useMenusApi()
 const toast = useToast()
+
+// Stats for sidebar
+const stats = ref({
+  menus: 0,
+  items: 0,
+  categories: 0
+})
+provide('menuStats', stats)
+
+// Use page metadata composable
+const { setPageHeader, setPageActions } = usePageMeta()
 
 const loading = ref(true)
 const saving = ref(false)
@@ -176,6 +158,27 @@ const formData = ref({
 
 onMounted(async () => {
   await loadMenu()
+  
+  // Set page metadata after loading
+  setPageHeader({
+    title: 'Edit Menu',
+    description: 'Update your menu details and settings'
+  })
+
+  setPageActions(() => h('div', { class: 'flex gap-3' }, [
+    h('NuxtLink', {
+      to: '/menu/menus',
+      class: 'px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-semibold inline-flex items-center'
+    }, 'Cancel'),
+    h('button', {
+      onClick: () => saveMenu(),
+      type: 'button',
+      class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold inline-flex items-center'
+    }, [
+      h('i', { class: 'fas fa-save mr-2' }),
+      'Save Changes'
+    ])
+  ]))
 })
 
 async function loadMenu() {

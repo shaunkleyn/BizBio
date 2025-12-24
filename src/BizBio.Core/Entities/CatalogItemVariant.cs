@@ -42,10 +42,13 @@ namespace BizBio.Core.Entities
 
         public bool IsDefault { get; set; }
 
+        public int SortOrder { get; set; }
+
         //public DateTime CreatedAt { get; set; }
         //public DateTime UpdatedAt { get; set; }
 
-        public ICollection<CatalogItemVariantAttributeValue> VariantAttributeValues { get; set; } = new List<CatalogItemVariantAttributeValue>();
+        // COMMENTED OUT - VariantAttributeValues is part of redundant attribute system
+        // public ICollection<CatalogItemVariantAttributeValue> VariantAttributeValues { get; set; } = new List<CatalogItemVariantAttributeValue>();
 
         public ICollection<CatalogItemInventory> Inventories { get; set; } = new List<CatalogItemInventory>();
 

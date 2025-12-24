@@ -1,25 +1,6 @@
 <template>
-  <NuxtLayout name="dashboard">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <!-- Header -->
-      <div class="flex justify-between items-center mb-8">
-        <div>
-          <h1 class="text-3xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)]">
-            Menu Bundles
-          </h1>
-          <p class="text-[var(--gray-text-color)] mt-2">
-            Create special bundle deals like "Family Meal Deal" with multiple items and options
-          </p>
-        </div>
-        <NuxtLink
-          to="/dashboard/bundles/create"
-          class="inline-flex items-center px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors"
-        >
-          <i class="fas fa-plus mr-2"></i>
-          Create Bundle
-        </NuxtLink>
-      </div>
-
+  <div class="p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
       <!-- Upgrade Notice -->
       <div
         v-if="!hasBundleFeature"
@@ -237,16 +218,31 @@
         </div>
       </div>
     </div>
-  </NuxtLayout>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, h } from 'vue'
 import { useBundlesApi } from '~/composables/useApi'
 import { useToast } from '~/composables/useToast'
 
+definePageMeta({
+  layout: 'menu'
+})
+
 const bundlesApi = useBundlesApi()
 const toast = useToast()
+
+// Stats for sidebar
+const stats = ref({
+  menus: 0,
+  items: 0,
+  categories: 0
+})
+provide('menuStats', stats)
+
+// Use page metadata composable
+const { setPageHeader, setPageActions } = usePageMeta()
 
 const loading = ref(true)
 const bundles = ref<any[]>([])
@@ -260,6 +256,20 @@ const catalogId = ref<string>('1') // TODO: Get from user's catalog
 const categories = ref<any[]>([]) // TODO: Load from API
 
 onMounted(async () => {
+  // Set page metadata
+  setPageHeader({
+    title: 'Bundles',
+    description: 'Create special bundle deals like "Family Meal Deal" with multiple items and options'
+  })
+
+  setPageActions(() => h('NuxtLink', {
+    to: '/dashboard/bundles/create',
+    class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
+  }, [
+    h('i', { class: 'fas fa-plus mr-2' }),
+    'Create Bundle'
+  ]))
+
   await loadBundles()
   await loadCategories()
 })

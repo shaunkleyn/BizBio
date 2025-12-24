@@ -19,19 +19,23 @@
     "deploy": "npm run build && npm run pm2:restart"
   },
   "dependencies": {
+    "@microsoft/applicationinsights-web": "^3.0.7",
     "@nuxt/image": "^1.8.1",
     "@pinia/nuxt": "^0.5.5",
-    "@microsoft/applicationinsights-web": "^3.0.7",
+    "@vueuse/core": "^14.1.0",
     "axios": "^1.7.9",
     "nuxt": "3.15.0",
     "pinia": "^2.2.8",
+    "sortablejs": "^1.15.6",
     "vue": "^3.5.13",
-    "vue-router": "^4.4.5",
-    "vue-gtag": "^2.0.1"
+    "vue-gtag": "^2.0.1",
+    "vue-router": "^4.4.5"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^6.12.2",
     "@fortawesome/fontawesome-free": "^6.7.2",
+    "@nookuio/nuxt": "^1.5.9",
+    "@nuxtjs/tailwindcss": "^6.12.2",
+    "@types/sortablejs": "^1.15.9",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.18"

@@ -13,15 +13,15 @@
 
         <!-- Desktop Navigation -->
         <nav class="hidden lg:flex items-center space-x-6">
-          <NuxtLink
+          <button
             v-for="link in navLinks"
             :key="link.to"
-            :to="link.to"
+            @click="handleNavigation(link.to)"
             class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 font-[var(--font-family-body)]"
           >
             <i :class="[link.icon, 'mr-2']"></i>
             {{ link.label }}
-          </NuxtLink>
+          </button>
           <button
             @click="handleLogout"
             class="text-[var(--gray-text-color)] hover:text-[var(--accent-color)] transition-colors duration-200 font-[var(--font-family-body)]"
@@ -43,16 +43,15 @@
       <!-- Mobile Navigation -->
       <nav v-if="mobileMenuOpen" class="lg:hidden pb-4">
         <div class="flex flex-col space-y-3">
-          <NuxtLink
+          <button
             v-for="link in navLinks"
             :key="link.to"
-            :to="link.to"
-            class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 py-2"
-            @click="mobileMenuOpen = false"
+            @click="handleNavigation(link.to)"
+            class="text-[var(--gray-text-color)] hover:text-[var(--primary-color)] transition-colors duration-200 py-2 text-left"
           >
             <i :class="[link.icon, 'mr-2']"></i>
             {{ link.label }}
-          </NuxtLink>
+          </button>
           <button
             @click="handleLogout"
             class="text-[var(--accent-color)] hover:text-[var(--accent-color)] transition-colors duration-200 py-2 text-left"
@@ -87,6 +86,11 @@ const defaultNavLinks: NavLink[] = [
 ]
 
 const navLinks = inject<NavLink[]>('globalNavLinks', defaultNavLinks)
+
+const handleNavigation = (path: string) => {
+  mobileMenuOpen.value = false
+  router.push(path)
+}
 
 const handleLogout = () => {
   authStore.logout()

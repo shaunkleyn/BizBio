@@ -1,0 +1,70 @@
+Help me create a database.  you can ask me questions as we go along but id like the tables to cater for food, people and products.  for example, i have the following products:
+- Menu: Restaurant owners can sign up and then manage their menus on my system.  My system will then display the menu items, prices, allergens, etc. the menu can also display bundles such as 2 burgers + chips + colddrink for R150.  the user can choose flavours, add extras, remove ingedients, change ingredients (like swop burger pattie for chicken patty) bundles and items will both be displayed on a menu and can appear in more than 1 category.  for example, "2 burgers + chips + coldrink" can be listed under a "specials" category as well as under "burgers". Note that there can also be special periods, for example, pizzas may be 20% off for the festive season, or there's a buy 1, get 1 free beer special for fathers day.  I also want the ability for users to be able to book a specific table and also allow the user to add "table personalities" such as "Fun fact: Bruce Willis once sat here" or "The romantic spot" or "Ocean View". menus is by default available to the public but some menus or items can be limited to registered users only (for example, registered user gets 10% off, or registered users have access to deluxe milkshakes). there will be menu versioning. the restautrant can schedule different menus for events, times of day, special days, bookings, live events, etc. for example, they can have a breakfast menu that will only be visible during a certain period. or a special menu for a wedding. or a custom menu for a birthday, etc.
+- Card: Individuals and organisations can sign up and manage their digital business cards on my system.  an organisation can manage business cards for all of their employees as well as the busines's business card.  the public can then view the business / user digital business card on my site.  business cards can also show who the person works with, knows, is friends with, is a client of, is the manager of, etc. A business card can also be a resume of someone and can contain numerous social media links.  
+- Retail: an idividual or company can manage their products on my system.  for example, if a small business sells clothing, it will be similar to a menu but just with products. so it'll have categories and sub-categories (like men > shoes, pants, shirts, etc.) the product can have different sizes, colours, textures, wieghts, etc.  a different size, colour, texture,etc of a product can also have different prices. for example, the same pants in black can maybe be R200 but the brown one can be R180.
+
+i offer a 14 day trial for users that sign up. i'm thinking that i'll offer 14 day trials for each product.  for example, if John signs up for the "menu" product, he has a 14 day trial.  if he then decides a week later that he wants to have a digital business card, he'll get a 14-day trial on the card product.
+
+Each product have different tiers. Some have 3, others have 4, in future I might add or remove some.  the tiers differ in name, price, benefits, etc.  for example, the "menu" product have 3 tiers named: 
+- Starter @ R149/m
+- Entree @R299/m
+- Banquet @R599/pm
+
+The Entree and Banquet plans / tiers has an option to add "addons" namely:
+- Waiter call @R49/m
+- Order Sending@R79/m
+- Menu Pro @149/m
+
+Note, that in future, i might add some more or add addons for "Card" and "Retail" products as well.
+
+I also want to add analytics to the pages to see what are good sellers, how many views a menu had, how many people looked at grey pants, etc.
+
+My system wont allow the user to purchase items (maybe it'll be added in future) but for now its purely for pricing, however, there is a "cart" feature so that when someone is at a restuarant, they can add items to the cart and send the order to the restaurant's whatsapp number.
+
+All of the products should be customizable, for example, on menus they can use a specific template or custom font, background color, pictures, etc, on business cards they can choose from templates or design their own using colors, sections, fonts, icons, etc. and the same with the retail option.  The customization is limited to specific plans/tiers.
+
+I want it clean and scalable and designed similar to shopify and other popular e-commerce and restaurant management system. i want a a shared “content container” model (sometimes called polymorphic catalogs or content hubs).
+
+using the recommended db design, show where and how would you store the data to present the following menu item to the end user. note that this menu item is only available on Dec 25 from 16:00 to 22:00:
+```
+
+Bundle (e.g., "Family Meal Deal" - R250)
+
+├── Step 1 (e.g., "Choose First Pizza")
+│   ├── Allowed Products
+│   │   └── Bacon, Avo & Feta Pizza
+│   │   └── Classic Cheese Pizza
+│   │   └── Pepperoni Deluxe Pizza
+│   └── Option Groups
+│       ├── Choose Base (Required: Min 1, Max 1)
+│       │   ├── Gluten Free (Free)
+│       │   ├── Traditional (Free)
+│       │   └── Pan (Free)
+│       ├── Extra Meat Toppings (Optional: Min 0, Max 10)
+│       │   ├── Bacon (+R28.90)
+│       │   ├── Chicken (+R28.90)
+├── Step 2 (e.g., "Choose Second Pizza")
+│   ├── Allowed Products
+│   │   └── Bacon, Avo & Feta Pizza
+│   │   └── Classic Cheese Pizza
+│   │   └── Pepperoni Deluxe Pizza
+│   └── Option Groups
+│       ├── Choose Base (Required: Min 1, Max 1)
+│       │   ├── Gluten Free (Free)
+│       │   ├── Traditional (Free)
+│       │   └── Pan (Free)
+│       ├── Extra Meat Toppings (Optional: Min 0, Max 10)
+│       │   ├── Bacon (+R28.90)
+│       │   ├── Chicken (+R28.90) 
+│       ├── Extra Veg Toppings (Optional: Min 0, Max 10) 
+│       │   ├── Onion (+R28.90) 
+│       │   ├── Tomato (+R28.90)  
+│       ├── Extra Other Toppings (Optional: Min 0, Max 10) 
+│       │   ├── Egg (+R28.90) 
+│       │   ├── Hashbrown (+R28.90)   
+├── Step 3 (e.g., "Choose Cold Drink")
+│   ├── Choose colddrink
+     │   └── Pepsi 2L (Out of stock)
+     │   └── Coke 2L 
+     │   └── Sprite 2L  
+```

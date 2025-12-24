@@ -34,7 +34,7 @@ public class LibraryCategoriesController : ControllerBase
         var userId = GetUserId();
 
         var categories = await _context.Categories
-            .Where(c => c.UserId == userId && c.CatalogId == null && c.IsActive)
+            .Where(c => c.UserId == userId && c.IsActive)
             .OrderBy(c => c.SortOrder)
             .ThenBy(c => c.Name)
             .Select(c => new
@@ -45,7 +45,7 @@ public class LibraryCategoriesController : ControllerBase
                 c.Icon,
                 images = ParseJsonArray(c.Images),
                 c.SortOrder,
-                itemCount = c.Items.Count(i => i.IsActive)
+                itemCount = c.CatalogItemCategories.Count(ic => ic.CatalogItem != null && ic.CatalogItem.IsActive)
             })
             .ToListAsync();
 
@@ -61,7 +61,7 @@ public class LibraryCategoriesController : ControllerBase
         var userId = GetUserId();
 
         var category = await _context.Categories
-            .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId && c.CatalogId == null);
+            .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 
         if (category == null)
             return NotFound(new { success = false, error = "Category not found" });
@@ -131,7 +131,7 @@ public class LibraryCategoriesController : ControllerBase
         var userId = GetUserId();
 
         var category = await _context.Categories
-            .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId && c.CatalogId == null);
+            .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 
         if (category == null)
             return NotFound(new { success = false, error = "Category not found" });
@@ -161,14 +161,14 @@ public class LibraryCategoriesController : ControllerBase
         var userId = GetUserId();
 
         var category = await _context.Categories
-            .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId && c.CatalogId == null);
+            .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 
         if (category == null)
             return NotFound(new { success = false, error = "Category not found" });
 
         // Check if category has items
-        var hasItems = await _context.CatalogItems
-            .AnyAsync(i => i.CategoryId == id && i.IsActive);
+        var hasItems = await _context.CatalogItemCategories
+            .AnyAsync(cic => cic.CategoryId == id && cic.CatalogItem != null && cic.CatalogItem.IsActive);
 
         if (hasItems)
             return BadRequest(new
@@ -195,7 +195,7 @@ public class LibraryCategoriesController : ControllerBase
         var userId = GetUserId();
 
         var libraryCategory = await _context.Categories
-            .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId && c.CatalogId == null);
+            .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 
         if (libraryCategory == null)
             return NotFound(new { success = false, error = "Library category not found" });

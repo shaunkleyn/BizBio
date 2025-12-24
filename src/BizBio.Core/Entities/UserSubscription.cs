@@ -12,6 +12,12 @@ public class UserSubscription : BaseEntity
 
     public int TierId { get; set; }
 
+    /// <summary>
+    /// Which product line this subscription is for (Menu, Card, Retail)
+    /// Allows tracking separate 14-day trials per product
+    /// </summary>
+    public int ProductLineId { get; set; }
+
     public int StatusId { get; set; }
 
     public int BillingCycleId { get; set; }
@@ -64,4 +70,6 @@ public class UserSubscription : BaseEntity
     public virtual SubscriptionTier Tier { get; set; } = null!;
     public virtual SubscriptionStatusLookup Status { get; set; } = null!;
     public virtual BillingCycleLookup BillingCycle { get; set; } = null!;
+    public virtual ProductLineLookup ProductLine { get; set; } = null!;
+    public virtual ICollection<UserSubscriptionAddon> Addons { get; set; } = new List<UserSubscriptionAddon>();
 }
