@@ -325,29 +325,29 @@ export const useCatalogsApi = () => {
 
   return {
     // Get full catalog details for editing - uses /menus/{id} endpoint
-    getCatalogDetail: (id: number) => api.get(`/v1/menus/${id}`),
+    getCatalogDetail: (id: number) => api.get(`/menus/${id}`),
 
     // Reorder operations
     reorderCategories: (catalogId: number, items: any) =>
-      api.put(`/v1/catalogs/${catalogId}/categories/reorder`, items),
+      api.put(`/catalogs/${catalogId}/categories/reorder`, items),
     reorderItems: (catalogId: number, items: any) =>
-      api.put(`/v1/catalogs/${catalogId}/items/reorder`, items),
+      api.put(`/catalogs/${catalogId}/items/reorder`, items),
 
     // Add to catalog operations
     addItemToCatalog: (catalogId: number, dto: any) =>
-      api.post(`/v1/catalogs/${catalogId}/items`, dto),
+      api.post(`/catalogs/${catalogId}/items`, dto),
     addBundleToCatalog: (catalogId: number, dto: any) =>
-      api.post(`/v1/catalogs/${catalogId}/bundles`, dto),
+      api.post(`/catalogs/${catalogId}/bundles`, dto),
 
     // Remove from catalog operations
     removeItem: (catalogId: number, itemId: number) =>
-      api.delete(`/v1/catalogs/${catalogId}/items/${itemId}`),
+      api.delete(`/catalogs/${catalogId}/items/${itemId}`),
     removeBundle: (catalogId: number, bundleId: number) =>
-      api.delete(`/v1/catalogs/${catalogId}/bundles/${bundleId}`),
+      api.delete(`/catalogs/${catalogId}/bundles/${bundleId}`),
 
     // Update item categories
     updateItemCategories: (catalogId: number, itemId: number, dto: any) =>
-      api.put(`/v1/catalogs/${catalogId}/items/${itemId}/categories`, dto)
+      api.put(`/catalogs/${catalogId}/items/${itemId}/categories`, dto)
   }
 }
 

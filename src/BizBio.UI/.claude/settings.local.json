@@ -25,7 +25,10 @@
       "WebFetch(domain:api.mrd.com)",
       "WebFetch(domain:api.mrdfood.com)",
       "Bash(powershell -Command \"Get-Content ''MRD-TOP RATED.json'' | Select-Object -First 50\")",
-      "Bash(powershell -Command \"Get-Content ''MRD-TOP RATED.json'' -Raw | Select-String -Pattern ''\"\"\\(endpoint|url|api|path|route\\)\"\"'' -AllMatches | Select-Object -First 10\")"
+      "Bash(powershell -Command \"Get-Content ''MRD-TOP RATED.json'' -Raw | Select-String -Pattern ''\"\"\\(endpoint|url|api|path|route\\)\"\"'' -AllMatches | Select-Object -First 10\")",
+      "Bash(taskkill //F //PID 40628)",
+      "Bash(dotnet run)",
+      "Bash(taskkill //F //PID 58116)"
     ],
     "deny": [],
     "ask": []

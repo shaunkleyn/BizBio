@@ -225,12 +225,17 @@ public class MenuEditorController : ControllerBase
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
 
-            // Get the library item
+            // Get the library item (items owned by user, not assigned to a catalog)
             var libraryItem = await _context.CatalogItems
-                .FirstOrDefaultAsync(i => i.Id == dto.LibraryItemId && i.CatalogId == null);
+                .Include(i => i.Variants)
+                .Include(i => i.OptionGroupLinks)
+                    .ThenInclude(l => l.OptionGroup)
+                .Include(i => i.ExtraGroupLinks)
+                    .ThenInclude(l => l.ExtraGroup)
+                .FirstOrDefaultAsync(i => i.Id == dto.LibraryItemId && i.UserId == userId && i.CatalogId == null);
 
             if (libraryItem == null)
-                return NotFound(new { success = false, error = "Library item not found" });
+                return NotFound(new { success = false, error = "Library item not found or not owned by user" });
 
             // Create catalog item (copy from library)
             var catalogItem = new CatalogItem
@@ -240,6 +245,8 @@ public class MenuEditorController : ControllerBase
                 Description = libraryItem.Description,
                 Price = libraryItem.Price,
                 Images = libraryItem.Images,
+                Tags = libraryItem.Tags,
+                ItemType = libraryItem.ItemType,
                 SortOrder = dto.SortOrder,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow,
@@ -248,6 +255,55 @@ public class MenuEditorController : ControllerBase
 
             _context.CatalogItems.Add(catalogItem);
             await _context.SaveChangesAsync();
+
+            // Copy variants from library item
+            foreach (var variant in libraryItem.Variants.Where(v => v.IsActive))
+            {
+                var catalogVariant = new CatalogItemVariant
+                {
+                    CatalogItemId = catalogItem.Id,
+                    Title = variant.Title,
+                    Price = variant.Price,
+                    SizeValue = variant.SizeValue,
+                    SizeUnit = variant.SizeUnit,
+                    IsDefault = variant.IsDefault,
+                    SortOrder = variant.SortOrder,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
+                _context.CatalogItemVariants.Add(catalogVariant);
+            }
+
+            // Copy option group links
+            foreach (var link in libraryItem.OptionGroupLinks.Where(l => l.IsActive))
+            {
+                var catalogLink = new CatalogItemOptionGroupLink
+                {
+                    CatalogItemId = catalogItem.Id,
+                    OptionGroupId = link.OptionGroupId,
+                    DisplayOrder = link.DisplayOrder,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
+                _context.CatalogItemOptionGroupLinks.Add(catalogLink);
+            }
+
+            // Copy extra group links
+            foreach (var link in libraryItem.ExtraGroupLinks.Where(l => l.IsActive))
+            {
+                var catalogLink = new CatalogItemExtraGroupLink
+                {
+                    CatalogItemId = catalogItem.Id,
+                    ExtraGroupId = link.ExtraGroupId,
+                    DisplayOrder = link.DisplayOrder,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
+                _context.CatalogItemExtraGroupLinks.Add(catalogLink);
+            }
 
             // Add to categories
             foreach (var categoryId in dto.CategoryIds)

@@ -513,6 +513,7 @@ public class MenuController : ControllerBase
                         icon = c.Icon,
                         sortOrder = c.SortOrder,
                         itemCount = c.CatalogItemCategories.Count(cic => cic.CatalogItem.IsActive)
+                            + catalog.Items.Count(i => i.IsActive && i.CategoryId == c.Id && !i.CatalogItemCategories.Any())
                     })
                     .ToList(),
                 items = catalog.Items
@@ -527,7 +528,9 @@ public class MenuController : ControllerBase
                         images = string.IsNullOrEmpty(i.Images)
                             ? new List<string>()
                             : System.Text.Json.JsonSerializer.Deserialize<List<string>>(i.Images) ?? new List<string>(),
-                        categoryIds = i.CatalogItemCategories.Select(cic => cic.CategoryId).ToList(),
+                        categoryIds = i.CatalogItemCategories.Any()
+                            ? i.CatalogItemCategories.Select(cic => cic.CategoryId).ToList()
+                            : (i.CategoryId.HasValue ? new List<int> { i.CategoryId.Value } : new List<int>()),
                         sortOrder = i.SortOrder,
                         variantCount = i.Variants.Count(v => v.IsActive),
                         hasOptions = i.OptionGroupLinks.Any(l => l.IsActive),
