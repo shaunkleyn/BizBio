@@ -1,46 +1,21 @@
 <template>
-  <NuxtLayout name="dashboard">
-    <div class="menu-editor-container">
+  <div class="p-4 md:p-8">
+    <div class="mx-auto">
       <!-- Loading State -->
-      <div v-if="loading" class="flex justify-center items-center min-h-screen">
+      <div v-if="loading" class="flex justify-center items-center py-20">
         <div class="text-center">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--primary-color)] mx-auto mb-4"></div>
           <p class="text-gray-600">Loading menu...</p>
         </div>
       </div>
 
       <!-- Menu Editor -->
       <div v-else-if="catalog" class="menu-editor">
-        <!-- Header -->
-        <div class="editor-header bg-white shadow-sm rounded-lg p-6 mb-6">
-          <div class="flex justify-between items-center">
-            <div>
-              <h1 class="text-3xl font-bold text-gray-900">{{ catalog.name }}</h1>
-              <p class="text-gray-600 mt-1">Edit your menu structure</p>
-            </div>
-            <div class="flex gap-3">
-              <button
-                @click="handleCancel"
-                class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                @click="handleSave"
-                :disabled="isSaving || !hasChanges"
-                class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                {{ isSaving ? 'Saving...' : 'Save Changes' }}
-              </button>
-            </div>
-          </div>
-        </div>
-
         <!-- Two-Panel Layout -->
         <div class="editor-panels grid grid-cols-12 gap-6">
           <!-- Left: Category Sidebar -->
           <div class="col-span-3">
-            <div class="bg-white shadow-sm rounded-lg p-4">
+            <div class="bg-white shadow-sm rounded-lg p-4 sticky top-24 self-start" style="max-height: calc(100vh - 13rem); overflow-y: auto;">
               <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-semibold text-gray-900">Categories</h2>
                 <button
@@ -92,7 +67,7 @@
 
           <!-- Right: Items Panel -->
           <div class="col-span-9">
-            <div class="bg-white shadow-sm rounded-lg p-6">
+            <div class="bg-white shadow-sm rounded-lg p-6 sticky top-24 self-start" style="max-height: calc(100vh - 13rem); overflow-y: auto;">
               <!-- Header with controls -->
               <div class="flex justify-between items-center mb-6">
                 <h2 class="text-lg font-semibold text-gray-900">
@@ -574,21 +549,36 @@
         </div>
       </div>
     </div>
-  </NuxtLayout>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick, watch, h } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCatalogsApi } from '~/composables/useApi'
 import { useDragDrop } from '~/composables/useDragDrop'
 import ItemSelectorModal from '~/components/menu-editor/ItemSelectorModal.vue'
 import BundleSelectorModal from '~/components/menu-editor/BundleSelectorModal.vue'
 
+definePageMeta({
+  layout: 'menu'
+})
+
 const route = useRoute()
 const router = useRouter()
 const catalogsApi = useCatalogsApi()
 const { enableSortable } = useDragDrop()
+
+// Use page metadata composable
+const { setPageHeader, setPageActions } = usePageMeta()
+
+// Stats for sidebar
+const stats = ref({
+  menus: 0,
+  items: 0,
+  categories: 0
+})
+provide('menuStats', stats)
 
 // State
 const catalogId = computed(() => parseInt(route.params.id as string))
@@ -682,6 +672,31 @@ const loadCatalog = async () => {
       console.log('Catalog set:', catalog.value)
       console.log('Categories set:', categories.value)
       console.log('Loading state:', loading.value)
+
+      // Update stats for sidebar
+      stats.value = {
+        menus: 1,
+        items: response.data.items?.length || 0,
+        categories: response.data.categories?.length || 0
+      }
+
+      // Set page header and actions
+      setPageHeader({
+        title: catalog.value.name || 'Edit Menu',
+        description: 'Manage categories, items, and bundles'
+      })
+
+      setPageActions(() => h('div', { class: 'flex gap-3' }, [
+        h('button', {
+          onClick: handleCancel,
+          class: 'px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors'
+        }, 'Cancel'),
+        h('button', {
+          onClick: handleSave,
+          disabled: isSaving.value || !hasChanges.value,
+          class: 'px-6 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
+        }, isSaving.value ? 'Saving...' : 'Save Changes')
+      ]))
 
       if (categories.value.length > 0 && !selectedCategoryId.value) {
         selectedCategoryId.value = categories.value[0].id
