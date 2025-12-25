@@ -412,6 +412,7 @@
       <ItemSelectorModal
         v-if="showItemSelector"
         :catalog-id="catalogId"
+        :pre-selected-category="selectedCategoryId"
         @select="addItemsToMenu"
         @close="showItemSelector = false"
       />
@@ -419,9 +420,125 @@
       <BundleSelectorModal
         v-if="showBundleSelector"
         :catalog-id="catalogId"
+        :pre-selected-category="selectedCategoryId"
         @select="addBundleToMenu"
         @close="showBundleSelector = false"
       />
+
+      <!-- Category Modal -->
+      <div v-if="showCategoryModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="showCategoryModal = false">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+          <div class="p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ editingCategory ? 'Edit Category' : 'Add Category' }}</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input
+                  v-model="categoryForm.name"
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="e.g., Appetizers, Main Course"
+                  @keyup.enter="saveCategory"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Description (optional)</label>
+                <textarea
+                  v-model="categoryForm.description"
+                  rows="2"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Brief description"
+                ></textarea>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Icon (emoji, optional)</label>
+                <input
+                  v-model="categoryForm.icon"
+                  type="text"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="e.g., 🍕"
+                />
+              </div>
+            </div>
+            <div class="flex justify-end gap-3 mt-6">
+              <button
+                @click="closeCategoryModal"
+                class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                @click="saveCategory"
+                class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+              >
+                {{ editingCategory ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Item Modal -->
+      <div v-if="showEditItemModal && editingItem" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto" @click.self="closeEditItemModal">
+        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 my-8">
+          <div class="p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Edit Item in Menu</h3>
+            <p class="text-sm text-gray-600 mb-4">
+              To edit the item details (name, price, etc.), go to Library → Items.
+              Here you can only manage this item's categories in the menu.
+            </p>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Item Name</label>
+                <p class="text-gray-900 font-medium">{{ editingItem.name }}</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Assigned Categories</label>
+                <div class="space-y-2 max-h-48 overflow-y-auto">
+                  <label
+                    v-for="category in categories"
+                    :key="category.id"
+                    class="flex items-center gap-2 p-2 rounded hover:bg-gray-50 cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      :checked="editItemCategoryIds.includes(category.id)"
+                      @change="toggleEditItemCategory(category.id)"
+                      class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
+                    />
+                    <span class="text-sm text-gray-900">{{ category.name }}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-between gap-3 mt-6">
+              <button
+                @click="navigateToLibraryItem(editingItem.libraryItemId || editingItem.id)"
+                class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm"
+              >
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                Edit in Library
+              </button>
+              <div class="flex gap-3">
+                <button
+                  @click="closeEditItemModal"
+                  class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  @click="saveEditedItem"
+                  class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+                >
+                  Save Categories
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Confirmation Dialog -->
       <div v-if="confirmDialog.show" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="confirmDialog.show = false">
@@ -451,7 +568,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCatalogsApi } from '~/composables/useApi'
 import { useDragDrop } from '~/composables/useDragDrop'
@@ -474,6 +591,11 @@ const selectedCategoryId = ref<number | null>(null)
 const showItemSelector = ref(false)
 const showBundleSelector = ref(false)
 const showCategoryModal = ref(false)
+const showEditItemModal = ref(false)
+const editingCategory = ref<any>(null)
+const editingItem = ref<any>(null)
+const editItemCategoryIds = ref<number[]>([])
+const categoryForm = ref({ name: '', description: '', icon: '' })
 const confirmDialog = ref<{
   show: boolean
   title: string
@@ -577,6 +699,11 @@ const loadCatalog = async () => {
 const enableDragDrop = () => {
   const { destroySortable } = useDragDrop()
 
+  console.log('enableDragDrop called')
+  console.log('categoryList.value:', categoryList.value)
+  console.log('itemsTable.value:', itemsTable.value)
+  console.log('itemsGrid.value:', itemsGrid.value)
+
   // Destroy existing instances
   if (categorySortable) {
     destroySortable(categorySortable)
@@ -589,17 +716,29 @@ const enableDragDrop = () => {
 
   // Categories drag-and-drop
   if (categoryList.value) {
+    console.log('Enabling category sortable')
     categorySortable = enableSortable(categoryList.value, {
-      onUpdate: handleCategoryReorder
+      handle: '.drag-handle',
+      animation: 150,
+      onEnd: handleCategoryReorder
     })
+    console.log('Category sortable created:', categorySortable)
+  } else {
+    console.warn('categoryList.value is null - cannot enable sortable')
   }
 
   // Items drag-and-drop - for grid view or table view
   const itemsElement = viewMode.value === 'table' ? itemsTable.value : itemsGrid.value
   if (itemsElement) {
+    console.log('Enabling items sortable, element:', itemsElement)
     itemsSortable = enableSortable(itemsElement, {
-      onUpdate: handleItemReorder
+      handle: '.drag-handle',
+      animation: 150,
+      onEnd: handleItemReorder
     })
+    console.log('Items sortable created:', itemsSortable)
+  } else {
+    console.warn('itemsElement is null - cannot enable sortable')
   }
 }
 
@@ -734,8 +873,93 @@ const removeBundle = (bundleId: number) => {
 }
 
 const editItem = (item: any) => {
-  // Navigate to library items page with the item ID
-  router.push(`/dashboard/library/items/${item.id}`)
+  editingItem.value = item
+  editItemCategoryIds.value = [...(item.categoryIds || [])]
+  showEditItemModal.value = true
+}
+
+const closeEditItemModal = () => {
+  showEditItemModal.value = false
+  editingItem.value = null
+  editItemCategoryIds.value = []
+}
+
+const toggleEditItemCategory = (categoryId: number) => {
+  const index = editItemCategoryIds.value.indexOf(categoryId)
+  if (index > -1) {
+    editItemCategoryIds.value.splice(index, 1)
+  } else {
+    editItemCategoryIds.value.push(categoryId)
+  }
+}
+
+const saveEditedItem = async () => {
+  if (!editingItem.value) return
+
+  try {
+    // Update item categories
+    await catalogsApi.updateItemCategories(
+      catalogId.value,
+      editingItem.value.id,
+      { categoryIds: editItemCategoryIds.value }
+    )
+
+    // Update local state
+    const itemIndex = catalog.value.items.findIndex((i: any) => i.id === editingItem.value.id)
+    if (itemIndex !== -1) {
+      catalog.value.items[itemIndex].categoryIds = [...editItemCategoryIds.value]
+    }
+
+    hasChanges.value = true
+    closeEditItemModal()
+  } catch (error) {
+    console.error('Failed to update item categories', error)
+    alert('Failed to update item categories. Please try again.')
+  }
+}
+
+const navigateToLibraryItem = (libraryItemId: number) => {
+  window.open(`/menu/library/items`, '_blank')
+}
+
+const saveCategory = async () => {
+  if (!categoryForm.value.name.trim()) {
+    alert('Please enter a category name')
+    return
+  }
+
+  try {
+    if (editingCategory.value) {
+      // Update existing category
+      await catalogsApi.updateCategory(editingCategory.value.id, categoryForm.value)
+      const index = categories.value.findIndex(c => c.id === editingCategory.value.id)
+      if (index !== -1) {
+        categories.value[index] = { ...categories.value[index], ...categoryForm.value }
+      }
+    } else {
+      // Create new category
+      const response = await catalogsApi.createCategory(catalogId.value, {
+        ...categoryForm.value,
+        sortOrder: categories.value.length
+      })
+      
+      if (response.success && response.data) {
+        categories.value.push(response.data)
+      }
+    }
+
+    hasChanges.value = true
+    closeCategoryModal()
+  } catch (error) {
+    console.error('Failed to save category', error)
+    alert('Failed to save category. Please try again.')
+  }
+}
+
+const closeCategoryModal = () => {
+  showCategoryModal.value = false
+  editingCategory.value = null
+  categoryForm.value = { name: '', description: '', icon: '' }
 }
 
 const editBundle = (bundle: any) => {
@@ -774,6 +998,14 @@ const handleCancel = () => {
 // Watchers
 watch(viewMode, () => {
   nextTick(() => {
+    console.log('viewMode changed, re-enabling drag-drop')
+    enableDragDrop()
+  })
+})
+
+watch(selectedCategoryId, () => {
+  nextTick(() => {
+    console.log('selectedCategoryId changed, re-enabling drag-drop for items')
     enableDragDrop()
   })
 })
@@ -781,6 +1013,16 @@ watch(viewMode, () => {
 // Lifecycle
 onMounted(() => {
   loadCatalog()
+})
+
+onUnmounted(() => {
+  const { destroySortable } = useDragDrop()
+  if (categorySortable) {
+    destroySortable(categorySortable)
+  }
+  if (itemsSortable) {
+    destroySortable(itemsSortable)
+  }
 })
 </script>
 

@@ -137,6 +137,7 @@ import { useBundlesApi, useLibraryCategoriesApi } from '~/composables/useApi'
 
 const props = defineProps<{
   catalogId: number
+  preSelectedCategory?: number | null
 }>()
 
 const emit = defineEmits<{
@@ -186,6 +187,11 @@ const loadData = async () => {
 
     if (categoriesResponse.success) {
       catalogCategories.value = categoriesResponse.data
+    }
+
+    // Auto-select pre-selected category if provided
+    if (props.preSelectedCategory) {
+      selectedCategories.value = [props.preSelectedCategory]
     }
   } catch (error) {
     console.error('Failed to load bundles', error)

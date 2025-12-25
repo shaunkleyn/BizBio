@@ -239,6 +239,7 @@ import { useLibraryItemsApi, useCatalogsApi } from '~/composables/useApi'
 
 const props = defineProps<{
   catalogId: number
+  preSelectedCategory?: number | null
 }>()
 
 const emit = defineEmits<{
@@ -272,14 +273,12 @@ const filteredItems = computed(() => {
 
   let filtered = items.value
 
-  // Filter by unassigned status (items not assigned to any category)
+  // Filter by unassigned status (items not in THIS catalog)
   if (showOnlyUnassigned.value) {
-    filtered = filtered.filter(item => {
-      // Check if item has no CategoryId (old field) and no categoryIds (new field)
-      const hasNoCategoryId = !item.CategoryId && item.CategoryId !== 0
-      const hasNoCategoryIds = !item.categoryIds || item.categoryIds.length === 0
-      return hasNoCategoryId && hasNoCategoryIds
-    })
+    const catalogItemIds = new Set(
+      catalogItems.value.map((item: any) => item.libraryItemId || item.id)
+    )
+    filtered = filtered.filter(item => !catalogItemIds.has(item.id))
   }
 
   // Filter by search query
@@ -291,15 +290,18 @@ const filteredItems = computed(() => {
     )
   }
 
-  // Filter by category
+  // Filter by category (library category, not catalog category)
   if (selectedCategoryFilter.value) {
     filtered = filtered.filter(item =>
-      item.categoryIds?.includes(selectedCategoryFilter.value)
+      item.categoryId === selectedCategoryFilter.value
     )
   }
 
   return filtered
 })
+
+// Store catalog items for unassigned filter
+const catalogItems = ref<any[]>([])
 
 // Methods
 const loadData = async () => {
@@ -343,10 +345,22 @@ const loadData = async () => {
         catalogCategories.value = []
         libraryCategories.value = []
       }
+
+      // Store catalog items for unassigned filter
+      if (Array.isArray(catalogResponse.data.items)) {
+        catalogItems.value = catalogResponse.data.items
+      }
+    }
+
+    // Auto-select pre-selected category if provided
+    if (props.preSelectedCategory) {
+      selectedCategories.value = [props.preSelectedCategory]
     }
 
     console.log('Items loaded:', items.value.length)
     console.log('Categories loaded:', catalogCategories.value.length)
+    console.log('Catalog items:', catalogItems.value.length)
+    console.log('Pre-selected category:', props.preSelectedCategory)
   } catch (error) {
     console.error('Failed to load items', error)
     items.value = []

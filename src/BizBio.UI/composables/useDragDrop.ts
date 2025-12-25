@@ -1,7 +1,7 @@
 import Sortable, { type SortableOptions } from 'sortablejs'
 
 export interface DragDropOptions extends Partial<SortableOptions> {
-  onUpdate?: (event: Sortable.SortableEvent) => void
+  onEnd?: (event: Sortable.SortableEvent) => void
   onAdd?: (event: Sortable.SortableEvent) => void
   onRemove?: (event: Sortable.SortableEvent) => void
 }
@@ -30,7 +30,7 @@ export function useDragDrop() {
       return null
     }
 
-    const { onUpdate, onAdd, onRemove, ...sortableOptions } = options
+    const { onEnd, onAdd, onRemove, ...sortableOptions } = options
 
     const sortable = Sortable.create(el, {
       animation: 150,
@@ -40,8 +40,9 @@ export function useDragDrop() {
       chosenClass: 'sortable-chosen',
       ...sortableOptions,
       onEnd: (event) => {
-        if (onUpdate) {
-          onUpdate(event)
+        console.log('Sortable onEnd event:', event)
+        if (onEnd) {
+          onEnd(event)
         }
         if (sortableOptions.onEnd) {
           sortableOptions.onEnd(event)
@@ -65,6 +66,7 @@ export function useDragDrop() {
       }
     })
 
+    console.log('Sortable instance created:', sortable)
     return sortable
   }
 
