@@ -10,16 +10,16 @@
     <!-- Drawer -->
     <div
       :class="[
-        'fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl z-50 transform transition-transform duration-300 flex flex-col',
+        'fixed top-0 right-0 h-full w-full md:w-96 mesh-card bg-md-surface shadow-md-5 z-50 transform transition-transform duration-300 flex flex-col',
         cartStore.isCartOpen ? 'translate-x-0' : 'translate-x-full'
       ]"
     >
       <!-- Header -->
-      <div class="flex items-center justify-between p-4 border-b border-gray-200 flex-shrink-0">
-        <h2 class="text-xl font-bold text-gray-900">Your Cart</h2>
+      <div class="flex items-center justify-between p-4 border-b border-md-outline-variant flex-shrink-0 bg-gradient-primary">
+        <h2 class="text-xl font-bold text-white">Your Cart</h2>
         <button
           @click="cartStore.closeCart()"
-          class="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+          class="w-10 h-10 flex items-center justify-center text-white hover:bg-white/20 rounded-full transition-colors"
         >
           <i class="fas fa-times"></i>
         </button>
@@ -28,14 +28,15 @@
       <!-- Empty Cart State -->
       <div
         v-if="cartStore.itemCount === 0"
-        class="flex-1 flex flex-col items-center justify-center p-8 text-center"
+        class="flex-1 flex flex-col items-center justify-center p-8 text-center relative overflow-hidden"
       >
-        <i class="fas fa-shopping-cart text-6xl text-gray-300 mb-4"></i>
-        <h3 class="text-xl font-semibold text-gray-900 mb-2">Your cart is empty</h3>
-        <p class="text-gray-600 mb-6">Add some delicious items to get started</p>
+        <div class="absolute inset-0 mesh-bg-2 opacity-20"></div>
+        <i class="fas fa-shopping-cart text-6xl text-md-on-surface-variant/30 mb-4 relative z-10"></i>
+        <h3 class="text-xl font-semibold text-md-on-surface mb-2 relative z-10">Your cart is empty</h3>
+        <p class="text-md-on-surface-variant mb-6 relative z-10">Add some delicious items to get started</p>
         <button
           @click="cartStore.closeCart()"
-          class="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors"
+          class="px-6 py-3 btn-gradient rounded-xl hover:shadow-glow-purple transition-all relative z-10"
         >
           Continue Shopping
         </button>
@@ -133,7 +134,7 @@
       </div>
 
       <!-- Footer with Totals and Checkout -->
-      <div v-if="cartStore.itemCount > 0" class="border-t border-gray-200 p-4 bg-white flex-shrink-0">
+      <div v-if="cartStore.itemCount > 0" class="border-t border-md-outline-variant p-4 bg-md-surface-container flex-shrink-0">
         <!-- Clear Cart Button -->
         <button
           @click="confirmClearCart"
@@ -166,7 +167,7 @@
         <!-- Checkout Button -->
         <button
           @click="checkout"
-          class="w-full py-4 bg-[var(--primary-color)] text-white font-semibold rounded-lg hover:bg-[var(--secondary-color)] transition-colors"
+          class="w-full py-4 btn-gradient font-semibold rounded-xl hover:shadow-glow-purple transition-all"
         >
           <i class="fas fa-shopping-bag mr-2"></i>
           Proceed to Checkout
@@ -181,23 +182,23 @@
       @click="showClearConfirm = false"
     >
       <div
-        class="bg-white rounded-lg p-6 max-w-sm w-full"
+        class="mesh-card bg-md-surface rounded-2xl p-6 max-w-sm w-full shadow-md-5"
         @click.stop
       >
-        <h3 class="text-xl font-bold text-gray-900 mb-2">Clear Cart?</h3>
-        <p class="text-gray-600 mb-6">
+        <h3 class="text-xl font-bold text-md-on-surface mb-2">Clear Cart?</h3>
+        <p class="text-md-on-surface-variant mb-6">
           Are you sure you want to remove all items from your cart? This action cannot be undone.
         </p>
         <div class="flex gap-3">
           <button
             @click="showClearConfirm = false"
-            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            class="flex-1 px-4 py-2 bg-md-surface-container border border-md-outline-variant text-md-on-surface-variant rounded-xl hover:bg-md-surface-container-high transition-colors"
           >
             Cancel
           </button>
           <button
             @click="clearCart"
-            class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            class="flex-1 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:shadow-glow-pink transition-all"
           >
             Clear Cart
           </button>
@@ -212,15 +213,15 @@
       @click="showCheckoutModal = false"
     >
       <div
-        class="bg-white w-full md:max-w-lg md:rounded-lg rounded-t-2xl max-h-[90vh] overflow-y-auto"
+        class="mesh-card bg-md-surface w-full md:max-w-lg md:rounded-2xl rounded-t-2xl max-h-[90vh] overflow-y-auto shadow-md-5"
         @click.stop
       >
         <!-- Header -->
-        <div class="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between">
-          <h3 class="text-xl font-bold text-gray-900">Checkout</h3>
+        <div class="sticky top-0 bg-gradient-primary border-b border-md-outline-variant p-4 flex items-center justify-between">
+          <h3 class="text-xl font-bold text-white">Checkout</h3>
           <button
             @click="showCheckoutModal = false"
-            class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+            class="w-8 h-8 flex items-center justify-center text-white hover:bg-white/20 rounded-full transition-colors"
           >
             <i class="fas fa-times"></i>
           </button>
@@ -318,17 +319,17 @@
         </div>
 
         <!-- Footer -->
-        <div class="sticky bottom-0 bg-white border-t border-gray-200 p-4 flex gap-3">
+        <div class="sticky bottom-0 bg-md-surface-container border-t border-md-outline-variant p-4 flex gap-3">
           <button
             @click="showCheckoutModal = false"
-            class="flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+            class="flex-1 px-4 py-3 bg-md-surface-container border border-md-outline-variant text-md-on-surface-variant rounded-xl hover:bg-md-surface-container-high transition-colors font-medium"
           >
             Cancel
           </button>
           <button
             @click="completeCheckout"
             :disabled="checkoutLoading"
-            class="flex-1 px-4 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            class="flex-1 px-4 py-3 btn-gradient rounded-xl hover:shadow-glow-purple transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span v-if="checkoutLoading">
               <i class="fas fa-spinner fa-spin mr-2"></i>

@@ -1,31 +1,39 @@
 <template>
-  <div class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="$emit('close')">
-    <div class="modal-content bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[80vh] flex flex-col">
-      <!-- Header -->
-      <div class="modal-header p-6 border-b border-gray-200">
-        <div class="flex justify-between items-center">
-          <h2 class="text-2xl font-bold text-gray-900">Add Items to Menu</h2>
-          <button @click="$emit('close')" class="text-gray-400 hover:text-gray-600 transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+  <div class="modal-overlay fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeSlide" @click.self="$emit('close')">
+    <div class="modal-content mesh-card bg-md-surface rounded-2xl shadow-md-5 max-w-4xl w-full max-h-[85vh] flex flex-col overflow-hidden border border-md-outline-variant">
+      <!-- Header with Gradient -->
+      <div class="modal-header p-6 border-b border-md-outline-variant relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-primary opacity-5"></div>
+        <div class="flex justify-between items-center relative z-10">
+          <div>
+            <h2 class="text-2xl font-heading font-bold gradient-text">Add Items to Menu</h2>
+            <p class="text-sm text-md-on-surface-variant mt-1">Select items to add to your menu category</p>
+          </div>
+          <button 
+            @click="$emit('close')" 
+            class="w-10 h-10 rounded-full bg-md-error-container text-md-on-error-container hover:bg-md-error hover:text-md-on-error transition-all md-ripple shadow-md-1"
+          >
+            <i class="fas fa-times"></i>
           </button>
         </div>
 
         <!-- Search and Filters -->
-        <div class="mt-4 space-y-3">
-          <div class="flex gap-3">
-            <div class="flex-1">
-              <input
-                v-model="searchQuery"
-                type="text"
-                placeholder="Search items..."
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-              />
+        <div class="mt-4 space-y-3 relative z-10">
+          <div class="flex gap-3 flex-wrap">
+            <div class="flex-1 min-w-[200px]">
+              <div class="relative">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-md-on-surface-variant"></i>
+                <input
+                  v-model="searchQuery"
+                  type="text"
+                  placeholder="Search items..."
+                  class="w-full pl-11 pr-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary focus:border-md-primary transition-all"
+                />
+              </div>
             </div>
             <select
               v-model="selectedCategoryFilter"
-              class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              class="px-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary focus:border-md-primary transition-all"
             >
               <option :value="null">All Categories</option>
               <option v-for="cat in libraryCategories" :key="cat.id" :value="cat.id">
@@ -34,50 +42,50 @@
             </select>
 
             <!-- View Toggle -->
-            <div class="flex border border-gray-300 rounded-lg overflow-hidden">
+            <div class="flex bg-md-surface-container rounded-xl p-1">
               <button
                 @click="viewMode = 'table'"
                 :class="[
-                  'px-3 py-2 text-sm transition-colors',
-                  viewMode === 'table' ? 'bg-primary text-white' : 'bg-white text-gray-700 hover:bg-gray-50'
+                  'px-4 py-2 text-sm font-medium rounded-lg transition-all md-ripple',
+                  viewMode === 'table' ? 'bg-gradient-primary text-white shadow-md-2' : 'text-md-on-surface-variant hover:text-md-primary'
                 ]"
               >
+                <i class="fas fa-list mr-2"></i>
                 Table
               </button>
               <button
                 @click="viewMode = 'grid'"
                 :class="[
-                  'px-3 py-2 text-sm transition-colors',
-                  viewMode === 'grid' ? 'bg-primary text-white' : 'bg-white text-gray-700 hover:bg-gray-50'
+                  'px-4 py-2 text-sm font-medium rounded-lg transition-all md-ripple',
+                  viewMode === 'grid' ? 'bg-gradient-secondary text-white shadow-md-2' : 'text-md-on-surface-variant hover:text-md-secondary'
                 ]"
               >
+                <i class="fas fa-th mr-2"></i>
                 Grid
               </button>
             </div>
 
             <!-- Thumbnail Size Slider (only for grid view) -->
-            <div v-if="viewMode === 'grid'" class="flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded-lg">
-              <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
+            <div v-if="viewMode === 'grid'" class="flex items-center gap-3 px-4 py-2 bg-md-surface-container border border-md-outline-variant rounded-xl">
+              <i class="fas fa-image text-md-on-surface-variant"></i>
               <input
                 v-model="thumbnailSize"
                 type="range"
                 min="80"
                 max="200"
                 step="20"
-                class="w-20"
+                class="w-24 accent-md-primary"
               />
-              <span class="text-xs text-gray-600">{{ thumbnailSize }}px</span>
+              <span class="text-sm font-medium text-md-on-surface-variant">{{ thumbnailSize }}px</span>
             </div>
           </div>
 
           <!-- Unassigned Filter -->
-          <label class="flex items-center gap-2 cursor-pointer">
+          <label class="flex items-center gap-3 cursor-pointer group">
             <input
               type="checkbox"
               v-model="showOnlyUnassigned"
-              class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
+              class="w-5 h-5 text-md-primary bg-md-surface-container border-md-outline rounded-md focus:ring-2 focus:ring-md-primary transition-all"
             />
             <span class="text-sm text-gray-700">Show only unassigned items</span>
           </label>
@@ -193,48 +201,58 @@
         </div>
       <!-- </div> -->
 
-      <!-- Footer -->
-      <div class="modal-footer p-6 border-t border-gray-200">
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-2">
-            Assign to Categories
-          </label>
-          <div class="flex flex-wrap gap-2">
-            <label
-              v-for="category in catalogCategories"
-              :key="category.id"
-              class="flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
-              :class="{ 'bg-primary-50 border-primary': selectedCategories.includes(category.id) }"
-            >
-              <input
-                type="checkbox"
-                :value="category.id"
-                v-model="selectedCategories"
-                class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
-              />
-              <span class="text-sm">{{ category.name }}</span>
+      <!-- Footer with Gradient Background -->
+      <div class="modal-footer p-6 border-t border-md-outline-variant relative overflow-hidden">
+        <div class="absolute inset-0 mesh-bg-2 opacity-30"></div>
+        <div class="relative z-10 space-y-4">
+          <div>
+            <label class="block text-sm font-bold text-md-on-surface mb-3 flex items-center gap-2">
+              <i class="fas fa-layer-group text-md-primary"></i>
+              Assign to Categories
             </label>
+            <div class="flex flex-wrap gap-2">
+              <label
+                v-for="category in catalogCategories"
+                :key="category.id"
+                class="flex items-center gap-2 px-4 py-2.5 border rounded-xl cursor-pointer transition-all md-ripple"
+                :class="selectedCategories.includes(category.id) 
+                  ? 'bg-gradient-primary text-white border-transparent shadow-glow-purple' 
+                  : 'bg-md-surface-container border-md-outline-variant hover:border-md-primary hover:shadow-md-1'"
+              >
+                <input
+                  type="checkbox"
+                  :value="category.id"
+                  v-model="selectedCategories"
+                  class="w-4 h-4 rounded accent-md-primary"
+                />
+                <span class="text-sm font-medium">{{ category.name }}</span>
+              </label>
+            </div>
           </div>
-        </div>
 
-        <div class="flex justify-between items-center">
-          <p class="text-sm text-gray-600">
-            {{ selectedItems.length }} item{{ selectedItems.length !== 1 ? 's' : '' }} selected
-          </p>
-          <div class="flex gap-3">
-            <button
-              @click="$emit('close')"
-              class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              @click="handleAddItems"
-              :disabled="selectedItems.length === 0 || selectedCategories.length === 0"
-              class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              Add Items
-            </button>
+          <div class="flex justify-between items-center pt-2">
+            <div class="flex items-center gap-2 px-4 py-2 bg-md-primary-container rounded-xl">
+              <i class="fas fa-check-circle text-md-primary"></i>
+              <p class="text-sm font-bold text-md-on-primary-container">
+                {{ selectedItems.length }} item{{ selectedItems.length !== 1 ? 's' : '' }} selected
+              </p>
+            </div>
+            <div class="flex gap-3">
+              <button
+                @click="$emit('close')"
+                class="px-6 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl text-md-on-surface-variant font-medium hover:bg-md-surface-container-high hover:shadow-md-1 transition-all md-ripple"
+              >
+                Cancel
+              </button>
+              <button
+                @click="handleAddItems"
+                :disabled="selectedItems.length === 0 || selectedCategories.length === 0"
+                class="px-6 py-3 btn-gradient rounded-xl font-bold shadow-md-2 hover:shadow-glow-purple disabled:opacity-50 disabled:cursor-not-allowed transition-all md-ripple flex items-center gap-2"
+              >
+                <i class="fas fa-plus-circle"></i>
+                Add Items
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -6,23 +6,23 @@
         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
         @click.self="close"
       >
-        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+        <div class="mesh-card bg-md-surface rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-md-5">
           <!-- Header -->
-          <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 z-10">
+          <div class="sticky top-0 bg-md-surface-container border-b border-md-outline-variant px-6 py-4 z-10">
             <div class="flex items-center justify-between">
               <div>
-                <h2 class="text-2xl font-bold text-[var(--dark-text-color)]">
+                <h2 class="text-2xl font-bold text-md-on-surface">
                   {{ bundle?.name }}
                 </h2>
-                <p class="text-sm text-[var(--gray-text-color)] mt-1">
+                <p class="text-sm text-md-on-surface-variant mt-1">
                   {{ bundle?.description }}
                 </p>
               </div>
               <button
                 @click="close"
-                class="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                class="p-2 hover:bg-md-surface-container-high rounded-full transition-colors"
               >
-                <i class="fas fa-times text-xl text-[var(--gray-text-color)]"></i>
+                <i class="fas fa-times text-xl text-md-on-surface-variant"></i>
               </button>
             </div>
 
@@ -163,7 +163,7 @@
           </div>
 
           <!-- Footer -->
-          <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4">
+          <div class="sticky bottom-0 bg-md-surface-container border-t border-md-outline-variant px-6 py-4">
             <!-- Price Summary -->
             <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
               <div>

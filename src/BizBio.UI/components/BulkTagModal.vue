@@ -4,13 +4,14 @@
     @click="emit('close')"
   >
     <div
-      class="bg-white rounded-lg w-full max-w-md"
+      class="mesh-card bg-md-surface rounded-2xl w-full max-w-md shadow-md-5"
       @click.stop
     >
       <!-- Header -->
-      <div class="p-6 border-b border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900">Add Tags to Selected Items</h2>
-        <p class="text-sm text-gray-600 mt-1">Select tags to add to all selected items</p>
+      <div class="p-6 border-b border-md-outline-variant relative overflow-hidden">
+        <div class="absolute inset-0 mesh-bg-2 opacity-10"></div>
+        <h2 class="text-2xl font-bold text-md-on-surface relative z-10">Add Tags to Selected Items</h2>
+        <p class="text-sm text-md-on-surface-variant mt-1 relative z-10">Select tags to add to all selected items</p>
       </div>
 
       <!-- Content -->
@@ -75,17 +76,17 @@
       </div>
 
       <!-- Footer -->
-      <div class="p-6 border-t border-gray-200 flex gap-3">
+      <div class="p-6 border-t border-md-outline-variant flex gap-3">
         <button
           @click="emit('close')"
-          class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+          class="flex-1 px-4 py-2 bg-md-surface-container border border-md-outline-variant text-md-on-surface-variant rounded-xl hover:bg-md-surface-container-high transition-colors font-medium"
         >
           Cancel
         </button>
         <button
           @click="applyTags"
           :disabled="selectedTags.length === 0"
-          class="flex-1 px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+          class="flex-1 px-4 py-2 btn-gradient rounded-xl hover:shadow-glow-purple transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Add {{ selectedTags.length }} Tag{{ selectedTags.length > 1 ? 's' : '' }}
         </button>

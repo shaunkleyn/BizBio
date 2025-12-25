@@ -1,101 +1,122 @@
 <template>
 
-  <aside class="w-64 bg-[var(--light-background-color)] sticky top-20 border-r border-[var(--light-border-color)] hidden lg:block overflow-y-auto self-start" style="max-height: calc(100vh - 5rem);">
-    <div class="p-6">
-      <!-- Product Header with Dropdown -->
-      <div class="relative mb-8" ref="dropdownRef">
-        <button
-          @click="toggleDropdown"
-          class="w-full flex items-center gap-3 p-3 hover:bg-[var(--medium-background-color)] rounded-lg transition-all"
-        >
-          <div class="w-10 h-10 bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent2-color)] rounded-lg flex items-center justify-center flex-shrink-0">
-            <i :class="[currentProduct.icon, 'text-white']"></i>
+  <aside class="w-64 bg-md-surface shadow-md-2 sticky top-16 border-r border-md-outline-variant hidden lg:block overflow-y-auto self-start" style="max-height: calc(100vh - 4rem);">
+    <div class="p-4">
+      <!-- Product Header with Gradient -->
+      <div class="relative mb-6 gradient-border p-4 rounded-xl animate-scale-in">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center flex-shrink-0 shadow-glow-purple">
+            <i :class="[currentProduct.icon, 'text-white text-xl']"></i>
           </div>
-          <div class="flex-1 text-left min-w-0">
-            <h2 class="font-bold text-[var(--dark-text-color)]">{{ currentProduct.name }}</h2>
-            <p class="text-xs text-[var(--gray-text-color)]">{{ currentProduct.subtitle }}</p>
+          <div class="flex-1 min-w-0">
+            <h2 class="font-bold text-md-on-surface text-base">{{ currentProduct.name }}</h2>
+            <p class="text-xs text-md-on-surface-variant">{{ currentProduct.subtitle }}</p>
           </div>
-          <i class="fas fa-chevron-down text-[var(--gray-text-color)] text-xs flex-shrink-0"></i>
-        </button>
+        </div>
       </div>
 
       <!-- Navigation Links -->
-      <nav class="space-y-2">
+      <nav class="space-y-1">
         <NuxtLink
           to="/menu"
           :class="[
-            'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+            'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
             isActive('/menu') && !route.path.includes('/menu/')
-              ? 'bg-[var(--primary-color)] bg-opacity-10 text-white font-semibold'
-              : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+              ? 'bg-gradient-primary text-white shadow-glow-purple'
+              : 'text-md-on-surface-variant hover:text-md-primary'
           ]"
         >
-          <i class="fas fa-th-large w-5"></i>
-          <span>Overview</span>
+          <div :class="[
+            'absolute inset-0 bg-md-primary-container opacity-0 group-hover:opacity-100 transition-opacity',
+            isActive('/menu') && !route.path.includes('/menu/') ? 'opacity-0' : ''
+          ]"></div>
+          <i class="fas fa-th-large w-5 relative z-10"></i>
+          <span class="text-sm relative z-10">Overview</span>
         </NuxtLink>
 
         <NuxtLink
           to="/menu/menus"
           :class="[
-            'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+            'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
             isActive('/menu/menus')
-              ? 'bg-[var(--primary-color)] bg-opacity-10 text-white font-semibold'
-              : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+              ? 'bg-gradient-secondary text-white shadow-glow-pink'
+              : 'text-md-on-surface-variant hover:text-md-secondary'
           ]"
         >
-          <i class="fas fa-book-open w-5"></i>
-          <span>Menus</span>
+          <div :class="[
+            'absolute inset-0 bg-md-secondary-container opacity-0 group-hover:opacity-100 transition-opacity',
+            isActive('/menu/menus') ? 'opacity-0' : ''
+          ]"></div>
+          <i class="fas fa-book-open w-5 relative z-10"></i>
+          <span class="text-sm relative z-10">Menus</span>
         </NuxtLink>
+
         <NuxtLink
             to="/dashboard/bundles"
             :class="[
-              'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
               route.path === '/dashboard/bundles'
-                ? 'bg-[var(--primary-color)] bg-opacity-10 text-white font-semibold'
-                : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+                ? 'bg-gradient-tertiary text-white shadow-glow-teal'
+                : 'text-md-on-surface-variant hover:text-md-tertiary'
             ]"
           >
-            <i class="fas fa-utensils w-5"></i>
-            <span>Bundles</span>
+            <div :class="[
+              'absolute inset-0 bg-md-tertiary-container opacity-0 group-hover:opacity-100 transition-opacity',
+              route.path === '/dashboard/bundles' ? 'opacity-0' : ''
+            ]"></div>
+            <i class="fas fa-layer-group w-5 relative z-10"></i>
+            <span class="text-sm relative z-10">Bundles</span>
           </NuxtLink>
 
         <!-- Library Submenu -->
-        <div>
-          <div class="text-xs font-semibold text-[var(--gray-text-color)] uppercase px-4 py-2 mt-4 mb-2">Library</div>
+        <div class="mt-6">
+          <div class="flex items-center gap-2 px-4 py-2 mb-2">
+            <div class="h-px flex-1 bg-gradient-primary"></div>
+            <span class="text-xs font-bold text-md-on-surface-variant uppercase tracking-wider">Library</span>
+            <div class="h-px flex-1 bg-gradient-primary"></div>
+          </div>
 
           <NuxtLink
             to="/menu/library/items"
             :class="[
-              'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
               route.path === '/menu/library/items'
-                ? 'bg-[var(--primary-color)] bg-opacity-10 text-white font-semibold'
-                : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+                ? 'bg-gradient-accent text-white shadow-md-2'
+                : 'text-md-on-surface-variant hover:text-md-accent'
             ]"
           >
-            <i class="fas fa-utensils w-5"></i>
-            <span>Items</span>
+            <div :class="[
+              'absolute inset-0 bg-md-accent-container opacity-0 group-hover:opacity-100 transition-opacity',
+              route.path === '/menu/library/items' ? 'opacity-0' : ''
+            ]"></div>
+            <i class="fas fa-utensils w-5 relative z-10"></i>
+            <span class="text-sm relative z-10">Items</span>
           </NuxtLink>
 
           <NuxtLink
             to="/menu/library/extras"
             :class="[
-              'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
               route.path === '/menu/library/extras'
-                ? 'bg-[var(--primary-color)] bg-opacity-10 text-white font-semibold'
-                : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+                ? 'bg-gradient-primary text-white shadow-glow-purple'
+                : 'text-md-on-surface-variant hover:text-md-primary'
             ]"
           >
-            <i class="fas fa-plus-circle w-5"></i>
-            <span>Extras</span>
+            <div :class="[
+              'absolute inset-0 bg-md-primary-container opacity-0 group-hover:opacity-100 transition-opacity',
+              route.path === '/menu/library/extras' ? 'opacity-0' : ''
+            ]"></div>
+            <i class="fas fa-plus-circle w-5 relative z-10"></i>
+            <span class="text-sm relative z-10">Extras</span>
           </NuxtLink>
 
           <NuxtLink
             to="/menu/library/extra-groups"
             :class="[
-              'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
               route.path === '/menu/library/extra-groups'
-                ? 'bg-[var(--primary-color)] bg-opacity-10 text-white font-semibold'
-                : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+                ? 'bg-gradient-secondary text-white shadow-glow-pink'
+                : 'text-md-on-surface-variant hover:text-md-secondary'
             ]"
           >
             <i class="fas fa-object-group w-5"></i>

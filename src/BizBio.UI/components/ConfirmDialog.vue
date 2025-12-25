@@ -3,54 +3,57 @@
     <Transition name="modal">
       <div
         v-if="isOpen"
-        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100] p-4"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4 animate-fadeSlide"
         @click.self="handleCancel"
       >
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+        <div class="mesh-card bg-md-surface rounded-2xl shadow-md-5 max-w-md w-full border border-md-outline-variant overflow-hidden">
           <!-- Header -->
-          <div class="p-6 border-b border-[var(--light-border-color)]">
-            <div class="flex items-center gap-4">
+          <div class="p-6 border-b border-md-outline-variant relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-primary opacity-5"></div>
+            <div class="flex items-center gap-4 relative z-10">
               <div
                 :class="[
-                  'w-12 h-12 rounded-full flex items-center justify-center',
-                  variant === 'danger' ? 'bg-red-100' : 'bg-blue-100'
+                  'w-14 h-14 rounded-2xl flex items-center justify-center shadow-md-2',
+                  variant === 'danger' ? 'bg-gradient-to-br from-red-500 to-red-600' : 'bg-gradient-to-br from-blue-500 to-purple-600'
                 ]"
               >
                 <i
                   :class="[
-                    'text-2xl',
-                    variant === 'danger' ? 'fas fa-exclamation-triangle text-red-600' : 'fas fa-question-circle text-blue-600'
+                    'text-2xl text-white',
+                    variant === 'danger' ? 'fas fa-exclamation-triangle' : 'fas fa-question-circle'
                   ]"
                 ></i>
               </div>
-              <h3 class="text-xl font-bold text-[var(--dark-text-color)] flex-1">
+              <h3 class="text-xl font-heading font-bold text-md-on-surface flex-1">
                 {{ title }}
               </h3>
             </div>
           </div>
 
           <!-- Body -->
-          <div class="p-6">
-            <p class="text-[var(--dark-text-color)]">{{ message }}</p>
+          <div class="p-6 relative overflow-hidden">
+            <div class="absolute inset-0 mesh-bg-2 opacity-20"></div>
+            <p class="text-md-on-surface-variant relative z-10 leading-relaxed">{{ message }}</p>
           </div>
 
           <!-- Footer -->
-          <div class="p-6 border-t border-[var(--light-border-color)] flex gap-3">
+          <div class="p-6 border-t border-md-outline-variant flex gap-3">
             <button
               @click="handleCancel"
-              class="flex-1 px-4 py-3 border-2 border-[var(--light-border-color)] text-[var(--dark-text-color)] rounded-lg hover:border-[var(--primary-color)] transition-colors font-semibold"
+              class="flex-1 px-5 py-3 bg-md-surface-container border border-md-outline-variant text-md-on-surface-variant rounded-xl hover:bg-md-surface-container-high hover:shadow-md-1 transition-all font-semibold md-ripple"
             >
               {{ cancelText }}
             </button>
             <button
               @click="handleConfirm"
               :class="[
-                'flex-1 px-4 py-3 rounded-lg transition-colors font-semibold',
+                'flex-1 px-5 py-3 rounded-xl transition-all font-bold shadow-md-2 md-ripple flex items-center justify-center gap-2',
                 variant === 'danger'
-                  ? 'bg-red-600 text-white hover:bg-red-700'
-                  : 'bg-[var(--primary-color)] text-white hover:bg-[var(--primary-button-hover-bg-color)]'
+                  ? 'bg-gradient-to-r from-red-500 to-red-600 text-white hover:shadow-glow-pink'
+                  : 'btn-gradient hover:shadow-glow-purple'
               ]"
             >
+              <i :class="variant === 'danger' ? 'fas fa-trash' : 'fas fa-check'"></i>
               {{ confirmText }}
             </button>
           </div>

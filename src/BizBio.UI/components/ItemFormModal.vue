@@ -4,17 +4,17 @@
     @click="emit('close')"
   >
     <div
-      class="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto my-8"
+      class="mesh-card bg-md-surface rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto my-8 shadow-md-5"
       @click.stop
     >
       <!-- Header -->
-      <div class="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between z-10">
-        <h2 class="text-2xl font-bold text-gray-900">
+      <div class="sticky top-0 bg-gradient-primary border-b border-md-outline-variant p-6 flex items-center justify-between z-10">
+        <h2 class="text-2xl font-bold text-white">
           {{ item ? 'Edit Item' : 'Add New Item' }}
         </h2>
         <button
           @click="emit('close')"
-          class="w-10 h-10 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+          class="w-10 h-10 flex items-center justify-center text-white hover:bg-white/20 rounded-full transition-colors"
         >
           <i class="fas fa-times"></i>
         </button>

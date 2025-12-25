@@ -4,23 +4,23 @@
     @click="emit('close')"
   >
     <div
-      class="bg-white w-full md:max-w-2xl md:rounded-t-2xl md:rounded-b-2xl max-h-[90vh] overflow-hidden flex flex-col rounded-t-2xl"
+      class="mesh-card bg-md-surface w-full md:max-w-2xl md:rounded-2xl max-h-[90vh] overflow-hidden flex flex-col rounded-t-2xl shadow-md-5"
       @click.stop
     >
       <!-- Image -->
-      <div v-if="item.images" class="h-64 bg-gradient-to-br from-gray-200 to-gray-300 flex-shrink-0">
+      <div v-if="item.images" class="h-64 bg-gradient-to-br from-purple-500 to-pink-500 flex-shrink-0">
         <img :src="item.images" :alt="item.name" class="w-full h-full object-cover" />
       </div>
-      <div v-else class="h-64 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center flex-shrink-0">
-        <i class="fas fa-utensils text-6xl text-gray-400"></i>
+      <div v-else class="h-64 bg-gradient-primary flex items-center justify-center flex-shrink-0">
+        <i class="fas fa-utensils text-6xl text-white/50"></i>
       </div>
 
       <!-- Close Button -->
       <button
         @click="emit('close')"
-        class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors"
+        class="absolute top-4 right-4 w-10 h-10 bg-md-surface rounded-full shadow-md-3 flex items-center justify-center hover:bg-md-surface-container-high transition-colors"
       >
-        <i class="fas fa-times text-gray-600"></i>
+        <i class="fas fa-times text-md-on-surface"></i>
       </button>
 
       <!-- Scrollable Content -->
