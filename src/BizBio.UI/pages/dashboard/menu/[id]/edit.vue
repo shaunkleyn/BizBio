@@ -306,24 +306,34 @@
                     </svg>
                   </div>
 
-                  <div v-if="item.images && item.images.length > 0" class="aspect-video bg-gray-100">
-                    <img :src="item.images[0]" :alt="item.name" class="w-full h-full object-cover" />
-                  </div>
-                  <div v-else class="aspect-video bg-gray-100 flex items-center justify-center">
-                    <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+                  <div class="relative">
+                    <div v-if="item.images && item.images.length > 0" class="aspect-video bg-gray-100">
+                      <img :src="item.images[0]" :alt="item.name" class="w-full h-full object-cover" />
+                    </div>
+                    <div v-else class="aspect-video bg-gray-100 flex items-center justify-center">
+                      <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <span v-if="item.variantCount > 0" class="absolute top-0 left-0 px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">{{ item.variantCount }} Variant{{ item.variantCount > 1 ? 's' : '' }}</span>
+                    <!-- Price positioned at bottom of image -->
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-3 py-2">
+                      <span class="text-sm font-bold text-white">R{{ item.price?.toFixed(2) }}</span>
+                      <div class="absolute top-0 bottom-0 right-0 flex flex-col justify-end gap-1">
+                        <span v-if="item.hasOptions" class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">Options</span>
+                        <span v-if="item.hasExtras" class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">Extras</span>
+                      </div>
+                    </div>
                   </div>
 
                   <div class="p-4">
-                    <h3 class="font-semibold text-gray-900 truncate">{{ item.name }}</h3>
+                    <h3 class="font-medium text-sm text-gray-900 line-clamp-2">{{ item.name }}</h3>
                     <p class="text-sm text-gray-500 truncate">{{ item.description }}</p>
                     <div class="mt-2 flex justify-between items-center">
-                      <span class="text-lg font-bold text-primary">R{{ item.price.toFixed(2) }}</span>
                       <div class="flex gap-1">
                         <span v-if="item.hasOptions" class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">Options</span>
                         <span v-if="item.hasExtras" class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">Extras</span>
-                        <span v-if="item.variantCount > 0" class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">{{ item.variantCount }} vars</span>
+                        
                       </div>
                     </div>
 

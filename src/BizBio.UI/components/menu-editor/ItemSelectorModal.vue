@@ -153,36 +153,45 @@
           <div
             v-for="item in filteredItems"
             :key="item.id"
-            class="item-card border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-all cursor-pointer"
+            class="item-card border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-all cursor-pointer relative"
             :class="{ 'ring-2 ring-primary': selectedItems.includes(item.id) }"
             @click="toggleItem(item.id)"
           >
-            <div v-if="item.images && item.images.length > 0" class="aspect-square bg-gray-100">
-              <img :src="item.images[0]" :alt="item.name" class="w-full h-full object-cover" />
+            <div class="relative">
+              <div v-if="item.images && item.images.length > 0" class="aspect-square bg-gray-100">
+                <img :src="item.images[0]" :alt="item.name" class="w-full h-full object-cover" />
+              </div>
+              <div v-else class="aspect-square bg-gray-100 flex items-center justify-center">
+                <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <!-- Price positioned at bottom of image -->
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-3 py-2">
+                <span class="text-sm font-bold text-white">R{{ item.price?.toFixed(2) }}</span>
+              </div>
             </div>
-            <div v-else class="aspect-square bg-gray-100 flex items-center justify-center">
-              <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-            </div>
-
-            <div class="p-2">
-              <div class="flex items-start justify-between mb-1">
-                <h3 class="font-medium text-sm text-gray-900 truncate flex-1">{{ item.name }}</h3>
+              
+              <!-- Checkbox positioned at top right of image -->
+              <div class="absolute top-2 right-2">
                 <input
                   type="checkbox"
                   :checked="selectedItems.includes(item.id)"
-                  class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
+                  class="h-5 w-5 text-primary border-2 border-white rounded shadow-lg focus:ring-primary bg-white"
                   @click.stop="toggleItem(item.id)"
                 />
               </div>
-              <div class="mt-1">
-                <span class="text-sm font-semibold text-primary">R{{ item.price?.toFixed(2) }}</span>
+
+              
+            <!-- </div> -->
+
+            <div class="p-3">
+              <h3 class="font-medium text-sm text-gray-900 line-clamp-2">{{ item.name }}</h3>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      <!-- </div> -->
 
       <!-- Footer -->
       <div class="modal-footer p-6 border-t border-gray-200">
@@ -260,7 +269,7 @@ const selectedCategoryFilter = ref<number | null>(null)
 const selectedItems = ref<number[]>([])
 const selectedCategories = ref<number[]>([])
 const viewMode = ref<'table' | 'grid'>('table')
-const showOnlyUnassigned = ref(false)
+const showOnlyUnassigned = ref(true) // Default to true to show only unassigned items
 const thumbnailSize = ref(120) // px for grid view
 
 // Computed
