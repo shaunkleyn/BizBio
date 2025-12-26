@@ -1,32 +1,38 @@
 <template>
   <div
-    class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 overflow-y-auto"
-    @click="emit('close')"
+    class="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4 animate-fadeSlide"
+    @click.self="emit('close')"
   >
     <div
-      class="mesh-card bg-md-surface rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto my-8 shadow-md-5"
-      @click.stop
+      class="modal-content mesh-card bg-md-surface rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden border border-md-outline-variant shadow-md-5"
     >
-      <!-- Header -->
-      <div class="sticky top-0 bg-gradient-primary border-b border-md-outline-variant p-6 flex items-center justify-between z-10">
-        <h2 class="text-2xl font-bold text-white">
-          {{ item ? 'Edit Item' : 'Add New Item' }}
-        </h2>
-        <button
-          @click="emit('close')"
-          class="w-10 h-10 flex items-center justify-center text-white hover:bg-white/20 rounded-full transition-colors"
-        >
-          <i class="fas fa-times"></i>
-        </button>
+      <!-- Header with Gradient -->
+      <div class="modal-header p-6">
+        <div class="flex justify-between items-center relative z-10">
+          <div>
+            <h2 class="text-2xl font-heading font-bold gradient-text">
+              {{ item ? 'Edit Item' : 'Add New Item' }}
+            </h2>
+            <p class="text-sm text-md-on-surface-variant mt-1">
+              {{ item ? 'Update item details' : 'Create a new menu item' }}
+            </p>
+          </div>
+          <button
+            @click="emit('close')"
+            class="modal-close-btn md-ripple shadow-md-1"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
       </div>
 
-      <!-- Form -->
-      <form @submit.prevent="saveItem" class="p-6 space-y-6">
+      <!-- Form - Scrollable Body -->
+      <form @submit.prevent="saveItem" class="flex-1 overflow-y-auto p-6 space-y-6">
         <!-- Images Upload -->
         <div class="space-y-4">
           <div class="flex items-center justify-between">
-            <h3 class="text-lg font-semibold text-gray-900">Images</h3>
-            <span class="text-sm text-gray-500">
+            <h3 class="text-lg font-semibold text-md-on-surface">Images</h3>
+            <span class="text-sm text-md-on-surface-variant">
               Max {{ maxImages }} images
             </span>
           </div>
@@ -37,7 +43,7 @@
             <div
               v-for="(image, index) in form.images"
               :key="index"
-              class="relative aspect-square rounded-lg overflow-hidden border-2 border-gray-200 hover:border-[var(--primary-color)] transition-colors"
+              class="relative aspect-square rounded-lg overflow-hidden border-2 border-md-outline-variant hover:border-[var(--primary-color)] transition-colors"
             >
               <img :src="image" alt="Item image" class="w-full h-full object-cover" />
               <button
@@ -52,10 +58,10 @@
             <!-- Upload Button -->
             <label
               v-if="form.images.length < maxImages"
-              class="aspect-square rounded-lg border-2 border-dashed border-gray-300 hover:border-[var(--primary-color)] transition-colors cursor-pointer flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100"
+              class="aspect-square rounded-lg border-2 border-dashed border-md-outline hover:border-[var(--primary-color)] transition-colors cursor-pointer flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100"
             >
-              <i class="fas fa-cloud-upload text-3xl text-gray-400 mb-2"></i>
-              <span class="text-sm text-gray-600">Upload Image</span>
+              <i class="fas fa-cloud-upload text-3xl text-md-on-surface-variant opacity-70 mb-2"></i>
+              <span class="text-sm text-md-on-surface-variant">Upload Image</span>
               <input
                 type="file"
                 accept="image/*"
@@ -68,11 +74,11 @@
 
         <!-- Basic Info -->
         <div class="space-y-4">
-          <h3 class="text-lg font-semibold text-gray-900">Basic Information</h3>
+          <h3 class="text-lg font-semibold text-md-on-surface">Basic Information</h3>
 
           <!-- Name -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
+            <label class="block text-sm font-medium text-md-on-surface mb-1">
               Item Name <span class="text-red-500">*</span>
             </label>
             <input
@@ -80,32 +86,32 @@
               type="text"
               required
               placeholder="e.g., Margherita Pizza"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+              class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
             />
           </div>
 
           <!-- Description -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
+            <label class="block text-sm font-medium text-md-on-surface mb-1">
               Description
             </label>
             <textarea
               v-model="form.description"
               rows="3"
               placeholder="Describe your item..."
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] resize-none"
+              class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] resize-none"
             ></textarea>
           </div>
 
           <!-- Category & Price -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
+              <label class="block text-sm font-medium text-md-on-surface mb-1">
                 Category
               </label>
               <select
                 v-model="form.categoryId"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
               >
                 <option :value="null">No Category</option>
                 <option v-for="category in categories" :key="category.id" :value="category.id">
@@ -115,7 +121,7 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
+              <label class="block text-sm font-medium text-md-on-surface mb-1">
                 Base Price (R) <span class="text-red-500">*</span>
               </label>
               <input
@@ -125,7 +131,7 @@
                 min="0"
                 required
                 placeholder="0.00"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
               />
             </div>
           </div>
@@ -134,7 +140,7 @@
         <!-- Allergens & Dietary Tags -->
         <div class="space-y-4">
           <div class="flex items-center justify-between">
-            <h3 class="text-lg font-semibold text-gray-900">Allergens & Dietary Info</h3>
+            <h3 class="text-lg font-semibold text-md-on-surface">Allergens & Dietary Info</h3>
           </div>
 
           <!-- Quick Select Tags -->
@@ -148,7 +154,7 @@
                 'px-3 py-1.5 rounded-full text-sm font-medium transition-all',
                 form.tags.includes(tag)
                   ? 'bg-green-500 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-gray-100 text-md-on-surface hover:bg-gray-200'
               ]"
             >
               <i v-if="form.tags.includes(tag)" class="fas fa-check mr-1"></i>
@@ -158,14 +164,14 @@
 
           <!-- Custom Tag Input -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
+            <label class="block text-sm font-medium text-md-on-surface mb-1">
               Add Custom Tags (press Enter or use comma)
             </label>
             <input
               v-model="tagInput"
               type="text"
               placeholder="Type tag and press Enter or use comma..."
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+              class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
               @keydown.enter.prevent="addTagFromInput"
               @input="handleTagInput"
             />
@@ -173,18 +179,18 @@
 
           <!-- Selected Tags as Pills -->
           <div v-if="form.tags.length > 0" class="space-y-2">
-            <label class="block text-sm font-medium text-gray-700">Selected Tags</label>
+            <label class="block text-sm font-medium text-md-on-surface">Selected Tags</label>
             <div class="flex flex-wrap gap-2">
               <span
                 v-for="tag in form.tags"
                 :key="tag"
-                class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
+                class="inline-flex items-center gap-2 px-3 py-1.5 bg-md-primary-container text-md-on-primary-container rounded-full text-sm font-medium"
               >
                 {{ tag }}
                 <button
                   type="button"
                   @click="removeTag(tag)"
-                  class="hover:text-blue-900"
+                  class="hover:text-md-on-primary-container"
                 >
                   <i class="fas fa-times text-xs"></i>
                 </button>
@@ -196,11 +202,11 @@
         <!-- Variants -->
         <div class="space-y-4">
           <div class="flex items-center justify-between">
-            <h3 class="text-lg font-semibold text-gray-900">Variants (Sizes/Options)</h3>
+            <h3 class="text-lg font-semibold text-md-on-surface">Variants (Sizes/Options)</h3>
             <button
               type="button"
               @click="addVariant"
-              class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
+              class="px-4 py-2 bg-md-primary-container0 text-white rounded-lg hover:bg-md-primary transition-colors text-sm"
             >
               <i class="fas fa-plus mr-1"></i>
               Add Variant
@@ -208,19 +214,19 @@
           </div>
 
           <div v-if="form.variants.length === 0" class="text-center py-8 bg-gray-50 rounded-lg">
-            <i class="fas fa-box text-3xl text-gray-300 mb-2"></i>
-            <p class="text-gray-600">No variants added. Click "Add Variant" to add sizes or options.</p>
+            <i class="fas fa-box text-3xl text-md-on-surface-variant opacity-50 mb-2"></i>
+            <p class="text-md-on-surface-variant">No variants added. Click "Add Variant" to add sizes or options.</p>
           </div>
 
           <div v-else class="space-y-3">
             <div
               v-for="(variant, index) in form.variants"
               :key="index"
-              class="border border-gray-200 rounded-lg p-4 bg-gray-50"
+              class="border border-md-outline-variant rounded-lg p-4 bg-gray-50"
             >
               <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">
+                  <label class="block text-sm font-medium text-md-on-surface mb-1">
                     Name <span class="text-red-500">*</span>
                   </label>
                   <input
@@ -228,12 +234,12 @@
                     type="text"
                     required
                     placeholder="e.g., Small, Medium, Large"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                    class="w-full px-3 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
                   />
                 </div>
 
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1">
+                  <label class="block text-sm font-medium text-md-on-surface mb-1">
                     Price (R) <span class="text-red-500">*</span>
                   </label>
                   <input
@@ -243,7 +249,7 @@
                     min="0"
                     required
                     placeholder="0.00"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                    class="w-full px-3 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
                   />
                 </div>
 
@@ -256,7 +262,7 @@
                         @change="updateDefaultVariant(index)"
                         class="mr-2 h-4 w-4 text-[var(--primary-color)] rounded"
                       />
-                      <span class="text-sm font-medium text-gray-700">Default</span>
+                      <span class="text-sm font-medium text-md-on-surface">Default</span>
                     </label>
                   </div>
                   <button
@@ -272,40 +278,102 @@
           </div>
         </div>
 
+        <!-- Options Selection -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-lg font-semibold text-md-on-surface">Options (Required Choices)</h3>
+              <p class="text-sm text-md-on-surface-variant mt-1">Select required customization options for this item</p>
+            </div>
+            <NuxtLink
+              to="/menu/library/option-groups"
+              target="_blank"
+              class="text-sm text-md-tertiary hover:text-md-on-tertiary-container"
+            >
+              Manage Options
+            </NuxtLink>
+          </div>
+
+          <div v-if="loadingOptions" class="text-center py-8 bg-gray-50 rounded-lg">
+            <i class="fas fa-spinner fa-spin text-2xl text-md-on-surface-variant opacity-70 mb-2"></i>
+            <p class="text-md-on-surface-variant">Loading options...</p>
+          </div>
+
+          <div v-else-if="availableOptionGroups.length === 0" class="text-center py-8 bg-gray-50 rounded-lg">
+            <i class="fas fa-sliders-h text-3xl text-md-on-surface-variant opacity-50 mb-2"></i>
+            <p class="text-md-on-surface-variant mb-2">No option groups available</p>
+            <NuxtLink
+              to="/menu/library/option-groups"
+              target="_blank"
+              class="text-sm text-md-tertiary hover:text-md-on-tertiary-container"
+            >
+              Create your first option group
+            </NuxtLink>
+          </div>
+
+          <div v-else class="space-y-2 max-h-60 overflow-y-auto border border-md-outline-variant rounded-lg p-4">
+            <div
+              v-for="group in availableOptionGroups"
+              :key="group.id"
+              class="flex items-start py-2 hover:bg-gray-50 rounded px-2"
+            >
+              <input
+                type="checkbox"
+                :id="`option-group-${group.id}`"
+                :value="Number(group.id)"
+                v-model="form.optionGroupIds"
+                class="mt-1 h-4 w-4 text-md-tertiary border-md-outline rounded focus:ring-md-tertiary"
+              />
+              <label :for="`option-group-${group.id}`" class="ml-3 flex-1 cursor-pointer">
+                <div class="text-sm font-medium text-md-on-surface">
+                  {{ group.name }}
+                  <span class="ml-1 px-2 py-0.5 bg-md-error-container text-md-on-error-container text-xs rounded-full">Required</span>
+                </div>
+                <div class="text-xs text-md-on-surface-variant">
+                  {{ group.description }}
+                  <span v-if="group.options && group.options.length > 0" class="ml-1">
+                    ({{ group.options.length }} options)
+                  </span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
         <!-- Extras Selection -->
         <div class="space-y-4">
           <div class="flex items-center justify-between">
             <div>
-              <h3 class="text-lg font-semibold text-gray-900">Extras & Modifiers</h3>
-              <p class="text-sm text-gray-600 mt-1">Select which extras are available for this item</p>
+              <h3 class="text-lg font-semibold text-md-on-surface">Extras (Optional Add-ons)</h3>
+              <p class="text-sm text-md-on-surface-variant mt-1">Select optional extras available for this item</p>
             </div>
             <NuxtLink
               to="/menu/library/extra-groups"
               target="_blank"
-              class="text-sm text-blue-600 hover:text-blue-800"
+              class="text-sm text-md-primary hover:text-md-on-primary-container"
             >
               Manage Extras
             </NuxtLink>
           </div>
 
           <div v-if="loadingExtras" class="text-center py-8 bg-gray-50 rounded-lg">
-            <i class="fas fa-spinner fa-spin text-2xl text-gray-400 mb-2"></i>
-            <p class="text-gray-600">Loading extras...</p>
+            <i class="fas fa-spinner fa-spin text-2xl text-md-on-surface-variant opacity-70 mb-2"></i>
+            <p class="text-md-on-surface-variant">Loading extras...</p>
           </div>
 
           <div v-else-if="availableExtraGroups.length === 0" class="text-center py-8 bg-gray-50 rounded-lg">
-            <i class="fas fa-plus-circle text-3xl text-gray-300 mb-2"></i>
-            <p class="text-gray-600 mb-2">No extra groups available</p>
+            <i class="fas fa-plus-circle text-3xl text-md-on-surface-variant opacity-50 mb-2"></i>
+            <p class="text-md-on-surface-variant mb-2">No extra groups available</p>
             <NuxtLink
               to="/menu/library/extra-groups"
               target="_blank"
-              class="text-sm text-blue-600 hover:text-blue-800"
+              class="text-sm text-md-primary hover:text-md-on-primary-container"
             >
               Create your first extra group
             </NuxtLink>
           </div>
 
-          <div v-else class="space-y-2 max-h-60 overflow-y-auto border border-gray-200 rounded-lg p-4">
+          <div v-else class="space-y-2 max-h-60 overflow-y-auto border border-md-outline-variant rounded-lg p-4">
             <div
               v-for="group in availableExtraGroups"
               :key="group.id"
@@ -316,11 +384,11 @@
                 :id="`extra-group-${group.id}`"
                 :value="Number(group.id)"
                 v-model="form.extraGroupIds"
-                class="mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                class="mt-1 h-4 w-4 text-md-primary border-md-outline rounded focus:ring-md-primary"
               />
               <label :for="`extra-group-${group.id}`" class="ml-3 flex-1 cursor-pointer">
-                <div class="text-sm font-medium text-gray-800">{{ group.name }}</div>
-                <div class="text-xs text-gray-500">
+                <div class="text-sm font-medium text-md-on-surface">{{ group.name }}</div>
+                <div class="text-xs text-md-on-surface-variant">
                   {{ group.description }}
                   <span v-if="group.extras && group.extras.length > 0" class="ml-1">
                     ({{ group.extras.length }} extras)
@@ -331,22 +399,26 @@
           </div>
         </div>
 
-        <!-- Form Actions -->
-        <div class="flex gap-3 pt-4 border-t border-gray-200">
+      </form>
+
+      <!-- Footer with Gradient Background -->
+      <div class="modal-footer p-6">
+        <div class="relative z-10 flex gap-3">
           <button
             type="button"
             @click="emit('close')"
-            class="flex-1 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+            class="flex-1 px-6 py-3 bg-md-surface-container border border-md-outline-variant text-md-on-surface rounded-xl hover:bg-md-surface-container-high transition-all shadow-md-1 md-ripple font-medium"
           >
             Cancel
           </button>
           <button
-            type="submit"
+            @click="saveItem"
             :disabled="saving || uploading"
-            class="flex-1 px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            class="flex-1 px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-glow-purple transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed md-ripple flex items-center justify-center gap-2"
           >
+            <i v-if="saving || uploading" class="fas fa-spinner fa-spin"></i>
+            <i v-else class="fas fa-save"></i>
             <span v-if="saving || uploading">
-              <i class="fas fa-spinner fa-spin mr-2"></i>
               {{ uploading ? 'Uploading...' : 'Saving...' }}
             </span>
             <span v-else>
@@ -354,7 +426,7 @@
             </span>
           </button>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -381,9 +453,11 @@ const toast = useToast()
 const saving = ref(false)
 const uploading = ref(false)
 const loadingExtras = ref(false)
+const loadingOptions = ref(false)
 const tagInput = ref('')
 const maxImages = ref(5) // TODO: Get from user's subscription
 const availableExtraGroups = ref<any[]>([])
+const availableOptionGroups = ref<any[]>([])
 
 const commonTags = [
   'Gluten-Free',
@@ -406,6 +480,7 @@ const form = reactive({
   images: [] as string[],
   tags: [] as string[],
   variants: [] as any[],
+  optionGroupIds: [] as number[],
   extraGroupIds: [] as number[]
 })
 
@@ -418,16 +493,50 @@ onMounted(async () => {
     form.images = props.item.images || []
     form.tags = props.item.tags || []
     form.variants = props.item.variants?.map((v: any) => ({ ...v })) || []
+
+    // Load option groups
+    form.optionGroupIds = props.item.optionGroups?.map((g: any) => {
+      const id = g.optionGroupId || g.OptionGroupId
+      return typeof id === 'number' ? id : parseInt(id)
+    }).filter((id: any) => !isNaN(id)) || []
+
+    // Load extra groups
     form.extraGroupIds = props.item.extraGroups?.map((g: any) => {
-      // Handle both camelCase and PascalCase, ensure it's a number
       const id = g.extraGroupId || g.ExtraGroupId
       return typeof id === 'number' ? id : parseInt(id)
     }).filter((id: any) => !isNaN(id)) || []
   }
 
-  // Fetch available extra groups
-  await fetchExtraGroups()
+  // Fetch available groups in parallel
+  await Promise.all([
+    fetchOptionGroups(),
+    fetchExtraGroups()
+  ])
 })
+
+async function fetchOptionGroups() {
+  loadingOptions.value = true
+  try {
+    const api = useApi()
+    const response = await api.get('/library/option-groups')
+    console.log('Option groups response:', response)
+    if (response.success) {
+      // Ensure we always set an array
+      if (Array.isArray(response.data)) {
+        availableOptionGroups.value = response.data
+      } else if (response.data && Array.isArray(response.data.optionGroups)) {
+        availableOptionGroups.value = response.data.optionGroups
+      } else {
+        availableOptionGroups.value = []
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching option groups:', error)
+    availableOptionGroups.value = []
+  } finally {
+    loadingOptions.value = false
+  }
+}
 
 async function fetchExtraGroups() {
   loadingExtras.value = true
@@ -574,6 +683,9 @@ async function saveItem() {
         isDefault: v.isDefault || false,
         weightG: v.weightG || null
       })) : [],
+      optionGroupIds: form.optionGroupIds.length > 0
+        ? form.optionGroupIds.map(id => Number(id)).filter(id => !isNaN(id))
+        : [],
       extraGroupIds: form.extraGroupIds.length > 0
         ? form.extraGroupIds.map(id => Number(id)).filter(id => !isNaN(id))
         : []
@@ -599,3 +711,7 @@ async function saveItem() {
   }
 }
 </script>
+
+
+
+

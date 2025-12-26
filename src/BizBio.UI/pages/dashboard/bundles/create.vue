@@ -9,9 +9,9 @@
             <div :class="[
               'flex items-center justify-center w-12 h-12 rounded-full font-bold transition-all',
               currentStep >= step
-                ? 'bg-[var(--primary-color)] text-white'
+                ? 'btn-gradient text-white'
                 : 'bg-[var(--light-border-color)] text-[var(--gray-text-color)]'
-            ]">
+            , 'shadow-md-2 hover:shadow-md-4']">
               <i v-if="currentStep > step" class="fas fa-check"></i>
               <span v-else>{{ step }}</span>
             </div>
@@ -29,7 +29,7 @@
             <!-- Connector Line -->
             <div v-if="step < 4" :class="[
               'hidden sm:block w-16 h-1 transition-all',
-              currentStep > step ? 'bg-[var(--primary-color)]' : 'bg-[var(--light-border-color)]'
+              currentStep > step ? 'bg-md-primary' : 'bg-[var(--light-border-color)]'
             ]"></div>
           </div>
         </div>
@@ -37,7 +37,7 @@
 
       <!-- Step 1: Basic Information -->
       <div v-if="currentStep === 1" class="max-w-3xl mx-auto">
-        <div class="bg-white rounded-lg shadow-sm border border-[var(--light-border-color)] p-8">
+        <div class="bg-md-surface rounded-2xl shadow-sm border border-[var(--light-border-color)] p-8">
           <h2 class="text-2xl font-bold text-[var(--dark-text-color)] mb-6">
             Bundle Information
           </h2>
@@ -120,14 +120,14 @@
           <div class="flex justify-between mt-8">
             <NuxtLink
               to="/dashboard/bundles"
-              class="px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-gray-50 transition-colors"
+              class="px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-md-surface-container transition-colors"
             >
               Cancel
             </NuxtLink>
             <button
               @click="nextStep"
               :disabled="!bundleData.name || !bundleData.basePrice"
-              class="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next: Add Steps
               <i class="fas fa-arrow-right ml-2"></i>
@@ -138,7 +138,7 @@
 
       <!-- Step 2: Bundle Steps -->
       <div v-if="currentStep === 2" class="max-w-4xl mx-auto">
-        <div class="bg-white rounded-lg shadow-sm border border-[var(--light-border-color)] p-8">
+        <div class="bg-md-surface rounded-2xl shadow-sm border border-[var(--light-border-color)] p-8">
           <div class="flex justify-between items-center mb-6">
             <div>
               <h2 class="text-2xl font-bold text-[var(--dark-text-color)]">
@@ -150,7 +150,7 @@
             </div>
             <button
               @click="addStep"
-              class="px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors"
+              class="px-4 py-2 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors"
             >
               <i class="fas fa-plus mr-2"></i>
               Add Step
@@ -165,7 +165,7 @@
               class="border border-[var(--light-border-color)] rounded-lg p-6"
             >
               <div class="flex items-start gap-4">
-                <div class="flex-shrink-0 w-10 h-10 bg-[var(--primary-color)] text-white rounded-full flex items-center justify-center font-bold">
+                <div class="flex-shrink-0 w-10 h-10 btn-gradient text-white rounded-full flex items-center justify-center font-bold shadow-md-2 hover:shadow-md-4">
                   {{ index + 1 }}
                 </div>
                 <div class="flex-1 space-y-4">
@@ -228,7 +228,7 @@
           <div class="flex justify-between mt-8">
             <button
               @click="previousStep"
-              class="px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-gray-50 transition-colors"
+              class="px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-md-surface-container transition-colors"
             >
               <i class="fas fa-arrow-left mr-2"></i>
               Back
@@ -236,7 +236,7 @@
             <button
               @click="nextStep"
               :disabled="bundleData.steps.length === 0"
-              class="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              class="px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next: Assign Products
               <i class="fas fa-arrow-right ml-2"></i>
@@ -247,7 +247,7 @@
 
       <!-- Step 3: Product Assignment -->
       <div v-if="currentStep === 3" class="max-w-5xl mx-auto">
-        <div class="bg-white rounded-lg shadow-sm border border-[var(--light-border-color)] p-8">
+        <div class="bg-md-surface rounded-2xl shadow-sm border border-[var(--light-border-color)] p-8">
           <h2 class="text-2xl font-bold text-[var(--dark-text-color)] mb-6">
             Assign Products to Steps
           </h2>
@@ -259,7 +259,7 @@
               class="border border-[var(--light-border-color)] rounded-lg p-6"
             >
               <div class="flex items-center gap-3 mb-4">
-                <div class="w-8 h-8 bg-[var(--primary-color)] text-white rounded-full flex items-center justify-center font-bold text-sm">
+                <div class="w-8 h-8 btn-gradient text-white rounded-full flex items-center justify-center font-bold text-sm shadow-md-2 hover:shadow-md-4">
                   {{ stepIndex + 1 }}
                 </div>
                 <h3 class="text-lg font-semibold text-[var(--dark-text-color)]">
@@ -290,7 +290,7 @@
                 <div
                   v-for="(productId, index) in step.allowedProducts"
                   :key="index"
-                  class="flex items-center justify-between bg-gray-50 p-3 rounded-lg"
+                  class="flex items-center justify-between bg-md-surface-container p-3 rounded-lg"
                 >
                   <span class="text-[var(--dark-text-color)]">
                     {{ getProductName(productId) }}
@@ -305,7 +305,7 @@
               </div>
 
               <!-- Empty State -->
-              <div v-else class="text-center py-6 bg-gray-50 rounded-lg">
+              <div v-else class="text-center py-6 bg-md-surface-container rounded-lg">
                 <p class="text-[var(--gray-text-color)] text-sm">
                   No products assigned to this step yet
                 </p>
@@ -317,14 +317,14 @@
           <div class="flex justify-between mt-8">
             <button
               @click="previousStep"
-              class="px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-gray-50 transition-colors"
+              class="px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-md-surface-container transition-colors"
             >
               <i class="fas fa-arrow-left mr-2"></i>
               Back
             </button>
             <button
               @click="nextStep"
-              class="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors"
+              class="px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors"
             >
               Next: Add Options
               <i class="fas fa-arrow-right ml-2"></i>
@@ -335,7 +335,7 @@
 
       <!-- Step 4: Option Groups & Options -->
       <div v-if="currentStep === 4" class="max-w-6xl mx-auto">
-        <div class="bg-white rounded-lg shadow-sm border border-[var(--light-border-color)] p-8">
+        <div class="bg-md-surface rounded-2xl shadow-sm border border-[var(--light-border-color)] p-8">
           <h2 class="text-2xl font-bold text-[var(--dark-text-color)] mb-6">
             Add Option Groups & Options
           </h2>
@@ -352,7 +352,7 @@
               <!-- Step Header -->
               <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 bg-[var(--primary-color)] text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div class="w-8 h-8 btn-gradient text-white rounded-full flex items-center justify-center font-bold text-sm shadow-md-2 hover:shadow-md-4">
                     {{ stepIndex + 1 }}
                   </div>
                   <h3 class="text-xl font-semibold text-[var(--dark-text-color)]">
@@ -373,7 +373,7 @@
                 <div
                   v-for="(group, groupIndex) in step.optionGroups"
                   :key="groupIndex"
-                  class="bg-gray-50 rounded-lg p-6"
+                  class="bg-md-surface-container rounded-lg p-6"
                 >
                   <!-- Group Header -->
                   <div class="flex items-start justify-between mb-4">
@@ -386,7 +386,7 @@
                           v-model="group.name"
                           type="text"
                           placeholder="e.g., Choose Your Base"
-                          class="w-full px-4 py-2 border border-[var(--light-border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] bg-white"
+                          class="w-full px-4 py-2 border border-[var(--light-border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] bg-md-surface"
                         />
                       </div>
 
@@ -409,7 +409,7 @@
                             v-model.number="group.minSelect"
                             type="number"
                             min="0"
-                            class="w-full px-3 py-1 border border-[var(--light-border-color)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] bg-white"
+                            class="w-full px-3 py-1 border border-[var(--light-border-color)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] bg-md-surface"
                           />
                         </div>
                         <div>
@@ -420,7 +420,7 @@
                             v-model.number="group.maxSelect"
                             type="number"
                             min="1"
-                            class="w-full px-3 py-1 border border-[var(--light-border-color)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] bg-white"
+                            class="w-full px-3 py-1 border border-[var(--light-border-color)] rounded focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] bg-md-surface"
                           />
                         </div>
                       </div>
@@ -452,7 +452,7 @@
                       <div
                         v-for="(option, optionIndex) in group.options"
                         :key="optionIndex"
-                        class="flex items-center gap-3 bg-white p-3 rounded-lg"
+                        class="flex items-center gap-3 bg-md-surface p-3 rounded-lg"
                       >
                         <input
                           v-model="option.name"
@@ -489,7 +489,7 @@
                       </div>
                     </div>
 
-                    <div v-else class="text-center py-4 bg-white rounded-lg border border-dashed border-[var(--light-border-color)]">
+                    <div v-else class="text-center py-4 bg-md-surface rounded-2xl border border-dashed border-[var(--light-border-color)]">
                       <p class="text-[var(--gray-text-color)] text-sm">
                         No options added yet
                       </p>
@@ -512,7 +512,7 @@
           <div class="flex justify-between mt-8">
             <button
               @click="previousStep"
-              class="px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-gray-50 transition-colors"
+              class="px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-md-surface-container transition-colors"
             >
               <i class="fas fa-arrow-left mr-2"></i>
               Back
@@ -754,3 +754,8 @@ async function saveBundle() {
   }
 }
 </script>
+
+
+
+
+

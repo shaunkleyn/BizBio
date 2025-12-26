@@ -26,7 +26,7 @@
                   type="text"
                   v-model="form.name"
                   required
-                  class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
+                  class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-md-primary"
                 />
               </div>
               <div>
@@ -35,7 +35,7 @@
                   type="email"
                   v-model="form.email"
                   required
-                  class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
+                  class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-md-primary"
                 />
               </div>
             </div>
@@ -46,7 +46,7 @@
                 type="text"
                 v-model="form.subject"
                 required
-                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
+                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-md-primary"
               />
             </div>
 
@@ -56,13 +56,13 @@
                 v-model="form.message"
                 required
                 rows="6"
-                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
+                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-md-primary"
               ></textarea>
             </div>
 
             <button
               type="submit"
-              class="w-full bg-[var(--primary-color)] text-white px-6 py-4 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold text-lg"
+              class="w-full bg-md-primary text-white px-6 py-4 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold text-lg"
             >
               Send Message
             </button>
@@ -91,3 +91,4 @@ useHead({
   title: 'Contact Us',
 })
 </script>
+

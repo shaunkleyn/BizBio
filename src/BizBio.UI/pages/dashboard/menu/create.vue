@@ -9,9 +9,9 @@
             <div :class="[
               'flex items-center justify-center w-12 h-12 rounded-full font-bold transition-all',
               currentStep >= step
-                ? 'bg-[var(--primary-color)] text-white'
+                ? 'btn-gradient text-white'
                 : 'bg-[var(--light-border-color)] text-[var(--gray-text-color)]'
-            ]">
+            , 'shadow-md-2 hover:shadow-md-4']">
               <i v-if="currentStep > step" class="fas fa-check"></i>
               <span v-else>{{ step }}</span>
             </div>
@@ -29,7 +29,7 @@
             <!-- Connector Line -->
             <div v-if="step < 4" :class="[
               'hidden sm:block w-16 h-1 transition-all',
-              currentStep > step ? 'bg-[var(--primary-color)]' : 'bg-[var(--light-border-color)]'
+              currentStep > step ? 'bg-md-primary' : 'bg-[var(--light-border-color)]'
             ]"></div>
           </div>
         </div>
@@ -56,7 +56,7 @@
               'rounded-2xl shadow-xl p-8 transition-all duration-300 cursor-pointer',
               plan.popular
                 ? 'bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] text-white transform scale-105 relative'
-                : 'bg-white border-2 hover:border-[var(--primary-color)] hover:shadow-2xl',
+                : 'bg-md-surface border-2 hover:border-[var(--primary-color)] hover:shadow-2xl',
               menuData.selectedPlan?.id === plan.id
                 ? 'ring-4 ring-[var(--accent3-color)] ring-opacity-50'
                 : 'border-[var(--light-border-color)]'
@@ -75,7 +75,7 @@
               <div :class="[
                 'inline-flex items-center px-4 py-2 rounded-full text-sm font-bold text-white',
                 plan.popular
-                  ? 'bg-white bg-opacity-20 text-white'
+                  ? 'bg-md-surface bg-opacity-20 text-white'
                   : 'bg-[var(--accent3-color)] bg-opacity-10 text-[var(--accent3-color)]'
               ]">
                 <i class="fas fa-gift mr-2 text-white"></i>
@@ -130,9 +130,9 @@
               :class="[
                 'w-full px-6 py-3 rounded-lg transition-all font-semibold',
                 plan.popular
-                  ? 'bg-white text-[var(--primary-color)] hover:bg-opacity-90 shadow-lg'
-                  : 'bg-[var(--primary-color)] text-white hover:bg-[var(--primary-button-hover-bg-color)]'
-              ]"
+                  ? 'bg-md-surface text-[var(--primary-color)] hover:bg-opacity-90 shadow-lg'
+                  : 'btn-gradient text-white hover:bg-[var(--primary-button-hover-bg-color)]'
+              , 'shadow-md-2 hover:shadow-md-4']"
             >
               <i class="fas fa-check mr-2"></i>
               {{ menuData.selectedPlan?.id === plan.id ? 'Selected' : 'Select Plan' }}
@@ -148,9 +148,9 @@
             :class="[
               'px-8 py-4 rounded-lg font-bold text-lg transition-all',
               canProceedToNextStep
-                ? 'bg-[var(--primary-color)] text-white hover:bg-[var(--primary-button-hover-bg-color)] shadow-lg'
+                ? 'btn-gradient text-white hover:bg-[var(--primary-button-hover-bg-color)] shadow-lg'
                 : 'bg-[var(--light-border-color)] text-[var(--gray-text-color)] cursor-not-allowed'
-            ]"
+            , 'shadow-md-2 hover:shadow-md-4']"
           >
             Continue to Menu Setup
             <i class="fas fa-arrow-right ml-2"></i>
@@ -332,3 +332,7 @@ useHead({
   title: 'Create Menu Profile',
 })
 </script>
+
+
+
+

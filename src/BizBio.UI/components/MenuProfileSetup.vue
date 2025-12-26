@@ -1,48 +1,50 @@
 <template>
   <div class="max-w-4xl mx-auto">
     <div class="text-center mb-8">
-      <h2 class="text-3xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-4">
+      <h2 class="text-3xl font-bold text-md-on-background font-[var(--font-family-heading)] mb-4 gradient-text">
         Set Up Your Menu Profile
       </h2>
-      <p class="text-[var(--gray-text-color)]">
+      <p class="text-md-on-surface-variant">
         Tell us about your business and menu
       </p>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-xl p-8">
+    <div class="mesh-card bg-md-surface rounded-2xl shadow-md-5 p-8">
       <!-- Trial Info Banner -->
-      <div class="bg-gradient-to-r from-[var(--accent3-color)] to-[var(--primary-color)] text-white rounded-xl p-4 mb-8 flex items-center justify-between">
+      <div class="gradient-border mesh-card bg-md-surface text-md-on-surface rounded-2xl p-4 mb-8 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <i class="fas fa-gift text-2xl"></i>
+          <div class="bg-gradient-primary rounded-full p-2 shadow-glow-purple">
+            <i class="fas fa-gift text-2xl text-white"></i>
+          </div>
           <div>
             <div class="font-bold">{{ menuData.selectedPlan?.displayName }} - Free Trial</div>
-            <div class="text-sm text-white/80">{{ menuData.trial.daysRemaining }} days remaining</div>
+            <div class="text-sm text-md-on-surface-variant">{{ menuData.trial.daysRemaining }} days remaining</div>
           </div>
         </div>
         <div class="text-right">
-          <div class="text-sm text-white/80">After trial</div>
-          <div class="font-bold text-lg">R{{ menuData.selectedPlan?.price }}/mo</div>
+          <div class="text-sm text-md-on-surface-variant">After trial</div>
+          <div class="font-bold text-lg gradient-text">R{{ menuData.selectedPlan?.price }}/mo</div>
         </div>
       </div>
 
       <form @submit.prevent="handleNext">
         <!-- Business Logo Upload -->
         <div class="mb-6">
-          <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+          <label class="block text-sm font-semibold text-md-on-surface mb-2">
             Business Logo
           </label>
           <div class="flex items-center gap-4">
             <div
               v-if="logoPreview"
-              class="w-24 h-24 rounded-xl border-2 border-[var(--light-border-color)] overflow-hidden"
+              class="w-24 h-24 rounded-2xl border-2 border-md-outline overflow-hidden shadow-md-2"
             >
               <img :src="logoPreview" alt="Logo preview" class="w-full h-full object-cover" />
             </div>
             <div
               v-else
-              class="w-24 h-24 rounded-xl border-2 border-dashed border-[var(--light-border-color)] flex items-center justify-center bg-[var(--light-background-color)]"
+              class="w-24 h-24 rounded-2xl border-2 border-dashed border-md-outline-variant flex items-center justify-center bg-md-surface-container"
             >
-              <i class="fas fa-image text-3xl text-[var(--gray-text-color)]"></i>
+              <i class="fas fa-image text-3xl text-md-on-surface-variant"></i>
             </div>
             <div class="flex-1">
               <input
@@ -55,12 +57,12 @@
               <button
                 type="button"
                 @click="$refs.logoInput.click()"
-                class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
+                class="btn-gradient text-white px-4 py-2 rounded-xl hover:shadow-md-3 transition-all font-semibold shadow-md-2"
               >
                 <i class="fas fa-upload mr-2"></i>
                 Upload Logo
               </button>
-              <p class="text-xs text-[var(--gray-text-color)] mt-2">
+              <p class="text-xs text-md-on-surface-variant mt-2">
                 Recommended: Square image, min 200x200px
               </p>
             </div>
@@ -70,41 +72,41 @@
         <div class="grid md:grid-cols-2 gap-6">
           <!-- Menu Name -->
           <div>
-            <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
-              Menu Name <span class="text-[var(--accent-color)]">*</span>
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">
+              Menu Name <span class="text-md-error">*</span>
             </label>
             <input
               v-model="menuData.menuProfile.name"
               type="text"
               required
               placeholder="e.g., Summer Menu 2024"
-              class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors"
+              class="w-full px-4 py-3 bg-md-surface-container text-md-on-surface border-2 border-md-outline-variant rounded-xl focus:border-md-primary focus:outline-none transition-colors"
             />
           </div>
 
           <!-- Business Name -->
           <div>
-            <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
-              Business Name <span class="text-[var(--accent-color)]">*</span>
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">
+              Business Name <span class="text-md-error">*</span>
             </label>
             <input
               v-model="menuData.menuProfile.businessName"
               type="text"
               required
               placeholder="e.g., The Golden Spoon"
-              class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors"
+              class="w-full px-4 py-3 bg-md-surface-container text-md-on-surface border-2 border-md-outline-variant rounded-xl focus:border-md-primary focus:outline-none transition-colors"
             />
           </div>
 
           <!-- Cuisine Type -->
           <div>
-            <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
-              Cuisine Type <span class="text-[var(--accent-color)]">*</span>
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">
+              Cuisine Type <span class="text-md-error">*</span>
             </label>
             <select
               v-model="menuData.menuProfile.cuisine"
               required
-              class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors"
+              class="w-full px-4 py-3 bg-md-surface-container text-md-on-surface border-2 border-md-outline-variant rounded-xl focus:border-md-primary focus:outline-none transition-colors"
             >
               <option value="">Select cuisine</option>
               <option value="italian">Italian</option>
@@ -123,64 +125,64 @@
 
           <!-- Phone Number -->
           <div>
-            <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">
               Phone Number
             </label>
             <input
               v-model="menuData.menuProfile.phoneNumber"
               type="tel"
               placeholder="+27 12 345 6789"
-              class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors"
+              class="w-full px-4 py-3 bg-md-surface-container text-md-on-surface border-2 border-md-outline-variant rounded-xl focus:border-md-primary focus:outline-none transition-colors"
             />
           </div>
 
           <!-- Email -->
           <div>
-            <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">
               Email Address
             </label>
             <input
               v-model="menuData.menuProfile.email"
               type="email"
               placeholder="info@restaurant.com"
-              class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors"
+              class="w-full px-4 py-3 bg-md-surface-container text-md-on-surface border-2 border-md-outline-variant rounded-xl focus:border-md-primary focus:outline-none transition-colors"
             />
           </div>
 
           <!-- Address -->
           <div>
-            <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">
               Address
             </label>
             <input
               v-model="menuData.menuProfile.address"
               type="text"
               placeholder="123 Main Street"
-              class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors"
+              class="w-full px-4 py-3 bg-md-surface-container text-md-on-surface border-2 border-md-outline-variant rounded-xl focus:border-md-primary focus:outline-none transition-colors"
             />
           </div>
 
           <!-- City -->
           <div>
-            <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">
               City
             </label>
             <input
               v-model="menuData.menuProfile.city"
               type="text"
               placeholder="Johannesburg"
-              class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors"
+              class="w-full px-4 py-3 bg-md-surface-container text-md-on-surface border-2 border-md-outline-variant rounded-xl focus:border-md-primary focus:outline-none transition-colors"
             />
           </div>
 
           <!-- Country -->
           <div>
-            <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">
               Country
             </label>
             <select
               v-model="menuData.menuProfile.country"
-              class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors"
+              class="w-full px-4 py-3 bg-md-surface-container text-md-on-surface border-2 border-md-outline-variant rounded-xl focus:border-md-primary focus:outline-none transition-colors"
             >
               <option value="">Select country</option>
               <option value="ZA">South Africa</option>
@@ -194,14 +196,14 @@
 
         <!-- Description -->
         <div class="mt-6">
-          <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+          <label class="block text-sm font-semibold text-md-on-surface mb-2">
             Menu Description
           </label>
           <textarea
             v-model="menuData.menuProfile.description"
             rows="4"
             placeholder="Tell your customers about your menu..."
-            class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors resize-none"
+            class="w-full px-4 py-3 bg-md-surface-container text-md-on-surface border-2 border-md-outline-variant rounded-xl focus:border-md-primary focus:outline-none transition-colors resize-none"
           ></textarea>
         </div>
 
@@ -224,7 +226,7 @@
                 class="sr-only peer"
                 @change="handleSEOToggle"
               />
-              <div class="w-14 h-7 bg-[var(--light-border-color)] peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[var(--primary-color)] peer-focus:ring-opacity-30 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[var(--primary-color)]"></div>
+              <div class="w-14 h-7 bg-md-outline-variant peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-md-primary peer-focus:ring-opacity-30 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-md-on-primary after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-md-surface-container-highest after:border-md-outline after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-md-primary"></div>
             </label>
           </div>
 
@@ -232,7 +234,7 @@
           <div v-show="menuData.menuProfile.enableSEO" class="space-y-4 mt-6 pt-6 border-t-2 border-[var(--primary-color)] border-opacity-20">
             <!-- URL Slug -->
             <div>
-              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">
                 Menu URL Slug
                 <span class="text-[var(--gray-text-color)] font-normal ml-2">(Auto-generated from menu name)</span>
               </label>
@@ -254,7 +256,7 @@
 
             <!-- Meta Title -->
             <div>
-              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">
                 SEO Title
                 <span class="text-[var(--gray-text-color)] font-normal ml-2">(Optional - defaults to menu name)</span>
               </label>
@@ -263,7 +265,7 @@
                 type="text"
                 :placeholder="`${menuData.menuProfile.name || 'Your Menu'} - ${menuData.menuProfile.businessName || 'Your Business'}`"
                 maxlength="60"
-                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors"
+                class="w-full px-4 py-3 bg-md-surface-container text-md-on-surface border-2 border-md-outline-variant rounded-xl focus:border-md-primary focus:outline-none transition-colors"
               />
               <p class="text-xs text-[var(--gray-text-color)] mt-1">
                 {{ menuData.menuProfile.metaTitle.length }}/60 characters - This appears in search results
@@ -272,7 +274,7 @@
 
             <!-- Meta Description -->
             <div>
-              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">
                 SEO Description
                 <span class="text-[var(--gray-text-color)] font-normal ml-2">(Optional - defaults to menu description)</span>
               </label>
@@ -281,7 +283,7 @@
                 rows="3"
                 :placeholder="`Discover our delicious ${menuData.menuProfile.cuisine || 'cuisine'} menu at ${menuData.menuProfile.businessName || 'our restaurant'}. View our full menu with prices and order online.`"
                 maxlength="160"
-                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors resize-none"
+                class="w-full px-4 py-3 bg-md-surface-container text-md-on-surface border-2 border-md-outline-variant rounded-xl focus:border-md-primary focus:outline-none transition-colors resize-none"
               ></textarea>
               <p class="text-xs text-[var(--gray-text-color)] mt-1">
                 {{ menuData.menuProfile.metaDescription.length }}/160 characters - This appears below your title in search results
@@ -290,7 +292,7 @@
 
             <!-- Keywords -->
             <div>
-              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">
                 Keywords
                 <span class="text-[var(--gray-text-color)] font-normal ml-2">(Optional - comma separated)</span>
               </label>
@@ -298,7 +300,7 @@
                 v-model="menuData.menuProfile.keywords"
                 type="text"
                 placeholder="restaurant menu, italian food, pizza, pasta, delivery"
-                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none transition-colors"
+                class="w-full px-4 py-3 bg-md-surface-container text-md-on-surface border-2 border-md-outline-variant rounded-xl focus:border-md-primary focus:outline-none transition-colors"
               />
               <p class="text-xs text-[var(--gray-text-color)] mt-1">
                 <i class="fas fa-lightbulb mr-1"></i>
@@ -307,13 +309,13 @@
             </div>
 
             <!-- SEO Preview -->
-            <div class="mt-6 p-4 bg-white rounded-lg border-2 border-[var(--light-border-color)]">
+            <div class="mt-6 p-4 bg-md-surface-container rounded-2xl border-2 border-md-outline-variant">
               <div class="text-xs text-[var(--gray-text-color)] mb-2 uppercase font-semibold">
                 <i class="fas fa-eye mr-1"></i>
                 Google Search Preview
               </div>
               <div class="space-y-1">
-                <div class="text-blue-600 text-lg font-medium line-clamp-1">
+                <div class="text-md-primary text-lg font-medium line-clamp-1">
                   {{ menuData.menuProfile.metaTitle || `${menuData.menuProfile.name || 'Your Menu'} - ${menuData.menuProfile.businessName || 'Your Business'}` }}
                 </div>
                 <div class="text-green-700 text-sm">
@@ -377,7 +379,7 @@
           <button
             type="button"
             @click="$emit('previous')"
-            class="px-6 py-3 border-2 border-[var(--light-border-color)] text-[var(--dark-text-color)] rounded-lg hover:border-[var(--primary-color)] transition-colors font-semibold"
+            class="px-6 py-3 bg-md-surface-container text-md-on-surface border-2 border-md-outline-variant rounded-xl hover:bg-md-surface-container-high transition-colors font-semibold shadow-md-1"
           >
             <i class="fas fa-arrow-left mr-2"></i>
             Back
@@ -386,10 +388,10 @@
             type="submit"
             :disabled="!canProceed"
             :class="[
-              'px-8 py-3 rounded-lg font-semibold transition-all',
+              'px-8 py-3 rounded-xl font-semibold transition-all shadow-md-2',
               canProceed
-                ? 'bg-[var(--primary-color)] text-white hover:bg-[var(--primary-button-hover-bg-color)]'
-                : 'bg-[var(--light-border-color)] text-[var(--gray-text-color)] cursor-not-allowed'
+                ? 'btn-gradient text-white hover:shadow-md-4'
+                : 'bg-md-surface-container text-md-on-surface-variant cursor-not-allowed opacity-50'
             ]"
           >
             Continue to Categories
@@ -461,3 +463,6 @@ const handleNext = () => {
   }
 }
 </script>
+
+
+

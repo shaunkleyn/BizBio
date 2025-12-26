@@ -23,14 +23,14 @@
         />
         <button
           @click="goBack"
-          class="absolute top-4 left-4 w-10 h-10 bg-white bg-opacity-90 rounded-full shadow-lg flex items-center justify-center hover:bg-opacity-100 transition-all"
+          class="absolute top-4 left-4 w-10 h-10 bg-md-surface bg-opacity-90 rounded-full shadow-lg flex items-center justify-center hover:bg-opacity-100 transition-all"
         >
-          <i class="fas fa-arrow-left text-gray-700"></i>
+          <i class="fas fa-arrow-left text-md-on-surface"></i>
         </button>
         <button
           v-if="isAuthenticated"
           @click="toggleEditMode"
-          class="absolute top-4 right-4 px-4 py-2 bg-white bg-opacity-90 rounded-full shadow-lg hover:bg-opacity-100 transition-all text-sm font-medium"
+          class="absolute top-4 right-4 px-4 py-2 bg-md-surface bg-opacity-90 rounded-full shadow-lg hover:bg-opacity-100 transition-all text-sm font-medium"
         >
           <i class="fas fa-edit mr-2"></i>
           {{ editMode ? 'Done' : 'Edit' }}
@@ -38,7 +38,7 @@
       </div>
 
       <!-- Restaurant Info Header -->
-      <div class="bg-white shadow-sm">
+      <div class="bg-md-surface shadow-sm">
         <div class="max-w-7xl mx-auto px-4 py-4">
           <div class="flex items-start justify-between mb-2">
             <div class="flex-1">
@@ -87,25 +87,26 @@
       </div>
 
       <!-- Category Tabs (Sticky) -->
-      <div v-if="categories.length > 0" class="sticky top-0 z-40 bg-white shadow-sm">
+      <div v-if="categories.length > 0" class="sticky top-16 z-30 bg-md-surface shadow-md border-b border-md-outline-variant">
         <div class="overflow-x-auto hide-scrollbar">
-          <div class="flex space-x-1 px-4 py-3 min-w-max border-b border-gray-200">
+          <div class="flex space-x-1 px-4 py-3 min-w-max">
             <button
               v-for="category in categories"
               :key="category.id"
+              :data-category-id="category.id"
               @click="scrollToCategory(category.id)"
               :class="[
-                'px-4 py-2 text-sm font-medium whitespace-nowrap transition-all relative',
+                'px-5 py-2.5 text-sm font-semibold whitespace-nowrap transition-all relative rounded-xl',
                 activeCategory === category.id
-                  ? 'text-[var(--primary-color)]'
-                  : 'text-[var(--gray-text-color)] hover:text-[var(--dark-text-color)]'
+                  ? 'bg-gradient-to-r from-md-primary to-md-secondary text-white shadow-md-2'
+                  : 'text-md-on-surface-variant hover:bg-md-surface-container-high hover:text-md-on-surface'
               ]"
             >
               {{ category.name }}
-              <div
+              <span
                 v-if="activeCategory === category.id"
-                class="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--primary-color)]"
-              ></div>
+                class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-md-primary rounded-full"
+              ></span>
             </button>
           </div>
         </div>
@@ -123,12 +124,12 @@
             {{ category.name }}
           </h2>
 
-          <div class="bg-white divide-y divide-gray-100">
+          <div class="bg-md-surface divide-y divide-gray-100">
             <div
               v-for="item in getCategoryItems(category.id)"
               :key="item.id"
               @click="openItemDetail(item)"
-              class="px-4 py-4 hover:bg-gray-50 transition-colors cursor-pointer relative"
+              class="px-4 py-4 hover:bg-md-surface-container transition-colors cursor-pointer relative"
             >
               <div class="flex gap-4">
                 <!-- Item Info -->
@@ -164,13 +165,13 @@
                 <!-- Item Image -->
                 <div class="flex-shrink-0 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg overflow-hidden">
                   <img
-                    v-if="item.images"
-                    :src="item.images"
+                    v-if="item.images && item.images.length > 0"
+                    :src="item.images[0]"
                     :alt="item.name"
                     class="w-full h-full object-cover"
                   />
                   <div v-else class="w-full h-full flex items-center justify-center">
-                    <i class="fas fa-utensils text-2xl md:text-3xl text-gray-400"></i>
+                    <i class="fas fa-utensils text-2xl md:text-3xl text-md-on-surface-variant opacity-70"></i>
                   </div>
                 </div>
               </div>
@@ -178,7 +179,7 @@
           </div>
 
           <!-- Empty Category -->
-          <div v-if="getCategoryItems(category.id).length === 0" class="text-center py-12 text-[var(--gray-text-color)] bg-white">
+          <div v-if="getCategoryItems(category.id).length === 0" class="text-center py-12 text-[var(--gray-text-color)] bg-md-surface">
             <i class="fas fa-box-open text-5xl mb-3 opacity-50"></i>
             <p class="text-sm">No items in this category</p>
           </div>
@@ -193,7 +194,7 @@
       >
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+            <div class="w-10 h-10 bg-md-surface bg-opacity-20 rounded-full flex items-center justify-center">
               <i class="fas fa-shopping-cart text-lg"></i>
             </div>
             <span class="font-semibold text-lg">{{ cartStore.itemCount }} {{ cartStore.itemCount === 1 ? 'item' : 'items' }}</span>
@@ -236,7 +237,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useMenusApi } from '~/composables/useApi'
 import { useCartStore } from '~/stores/cart'
@@ -265,6 +266,17 @@ const isAuthenticated = computed(() => authStore.isAuthenticated)
 const categories = computed(() => {
   if (!menuData.value?.categories) return []
   return menuData.value.categories.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+})
+
+// Watch active category and scroll tab into view
+watch(activeCategory, async (newCategoryId) => {
+  if (newCategoryId) {
+    await nextTick()
+    const activeButton = document.querySelector(`button[data-category-id="${newCategoryId}"]`)
+    if (activeButton) {
+      activeButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+    }
+  }
 })
 
 onMounted(async () => {
@@ -306,7 +318,10 @@ function getCategoryItems(categoryId: number) {
 function scrollToCategory(categoryId: number) {
   const element = document.getElementById(`category-${categoryId}`)
   if (element) {
-    const offset = 60 // Adjust for sticky headers
+    // Account for both global header (64px) and sticky category tabs (~60px)
+    const headerHeight = 64 // Global header
+    const tabsHeight = 60 // Category tabs
+    const offset = headerHeight + tabsHeight + 10 // Extra padding
     const elementPosition = element.getBoundingClientRect().top
     const offsetPosition = elementPosition + window.pageYOffset - offset
 
@@ -314,6 +329,9 @@ function scrollToCategory(categoryId: number) {
       top: offsetPosition,
       behavior: 'smooth'
     })
+    
+    // Update active category immediately for better UX
+    activeCategory.value = categoryId
   }
 }
 
@@ -326,18 +344,22 @@ function setupScrollSpy() {
       element: document.getElementById(`category-${cat.id}`)
     }))
 
-    const scrollPosition = window.scrollY + 150
+    // Account for headers when detecting active section
+    const headerOffset = 140 // Global header + category tabs
+    const scrollPosition = window.scrollY + headerOffset
 
     for (let i = categoryElements.length - 1; i >= 0; i--) {
       const cat = categoryElements[i]
       if (cat.element && cat.element.offsetTop <= scrollPosition) {
-        activeCategory.value = cat.id
+        if (activeCategory.value !== cat.id) {
+          activeCategory.value = cat.id
+        }
         break
       }
     }
   }
 
-  window.addEventListener('scroll', scrollListener)
+  window.addEventListener('scroll', scrollListener, { passive: true })
 }
 
 function cleanupScrollSpy() {
@@ -438,3 +460,6 @@ async function handleItemSaved() {
   overflow: hidden;
 }
 </style>
+
+
+

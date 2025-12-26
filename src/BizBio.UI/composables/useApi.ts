@@ -327,6 +327,10 @@ export const useCatalogsApi = () => {
     // Get full catalog details for editing - uses /menus/{id} endpoint
     getCatalogDetail: (id: number) => api.get(`/menus/${id}`),
 
+    // Catalog operations
+    updateCatalog: (id: number, dto: any) =>
+      api.put(`/catalogs/${id}`, dto),
+
     // Category operations
     createCategory: (catalogId: number, dto: any) =>
       api.post(`/catalogs/${catalogId}/categories`, dto),

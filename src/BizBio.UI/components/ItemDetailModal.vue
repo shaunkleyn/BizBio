@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end md:items-center justify-center"
+    class="modal-overlay fixed inset-0 z-50 flex items-end md:items-center justify-center"
     @click="emit('close')"
   >
     <div
@@ -28,15 +28,15 @@
         <!-- Item Info -->
         <div class="mb-6">
           <div class="flex items-start gap-2 mb-2">
-            <h2 class="text-2xl font-bold text-gray-900 flex-1">{{ item.name }}</h2>
+            <h2 class="text-2xl font-heading font-bold gradient-text flex-1">{{ item.name }}</h2>
             <span
               v-if="item.itemType === 1"
-              class="px-3 py-1 bg-orange-100 text-orange-800 text-sm font-semibold rounded-full"
+              class="px-3 py-1 bg-md-accent-container text-md-on-accent-container text-sm font-semibold rounded-full"
             >
               BUNDLE
             </span>
           </div>
-          <p v-if="item.description" class="text-gray-600 mb-4">{{ item.description }}</p>
+          <p v-if="item.description" class="text-md-on-surface-variant mb-4">{{ item.description }}</p>
           <div class="text-2xl font-bold text-[var(--primary-color)]">
             R{{ item.price.toFixed(2) }}
           </div>
@@ -44,14 +44,14 @@
 
         <!-- Bundle Steps (if bundle) -->
         <div v-if="item.itemType === 1 && bundleSteps.length > 0" class="mb-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">Build Your Bundle</h3>
+          <h3 class="text-lg font-semibold text-md-on-surface mb-4">Build Your Bundle</h3>
           <div class="space-y-6">
             <div v-for="step in bundleSteps" :key="step.id" class="border border-gray-200 rounded-lg p-4">
               <div class="flex items-center justify-between mb-3">
-                <h4 class="font-semibold text-gray-900">
+                <h4 class="font-semibold text-md-on-surface">
                   Step {{ step.stepNumber }}: {{ step.name }}
                 </h4>
-                <span class="text-sm text-gray-600">
+                <span class="text-sm text-md-on-surface-variant">
                   Select {{ step.minSelect }}{{ step.maxSelect !== step.minSelect ? `-${step.maxSelect}` : '' }}
                 </span>
               </div>
@@ -62,20 +62,20 @@
                   v-for="product in step.products"
                   :key="product.id"
                   class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:border-[var(--primary-color)] cursor-pointer"
-                  :class="{ 'border-[var(--primary-color)] bg-blue-50': isProductSelected(step.id, product.id) }"
+                  :class="{ 'border-[var(--primary-color)] bg-md-primary-container': isProductSelected(step.id, product.id) }"
                   @click="toggleStepProduct(step, product)"
                 >
                   <div class="flex-1">
-                    <div class="font-medium text-gray-900">{{ product.name }}</div>
+                    <div class="font-medium text-md-on-surface">{{ product.name }}</div>
                   </div>
                   <div class="flex items-center gap-3">
-                    <span v-if="product.priceModifier !== 0" class="text-sm text-gray-600">
+                    <span v-if="product.priceModifier !== 0" class="text-sm text-md-on-surface-variant">
                       +R{{ product.priceModifier.toFixed(2) }}
                     </span>
                     <i
                       :class="[
                         'fas',
-                        isProductSelected(step.id, product.id) ? 'fa-check-circle text-[var(--primary-color)]' : 'fa-circle text-gray-300'
+                        isProductSelected(step.id, product.id) ? 'fa-check-circle text-[var(--primary-color)]' : 'fa-circle text-md-on-surface-variant opacity-50'
                       ]"
                     ></i>
                   </div>
@@ -86,8 +86,8 @@
               <div v-if="step.optionGroups && step.optionGroups.length > 0" class="mt-4 space-y-4">
                 <div v-for="optionGroup in step.optionGroups" :key="optionGroup.id" class="pt-4 border-t border-gray-200">
                   <div class="flex items-center justify-between mb-3">
-                    <h5 class="font-medium text-gray-900">{{ optionGroup.name }}</h5>
-                    <span class="text-sm text-gray-600">
+                    <h5 class="font-medium text-md-on-surface">{{ optionGroup.name }}</h5>
+                    <span class="text-sm text-md-on-surface-variant">
                       {{ optionGroup.isRequired ? 'Required' : 'Optional' }}
                     </span>
                   </div>
@@ -96,20 +96,20 @@
                       v-for="option in optionGroup.options"
                       :key="option.id"
                       class="flex items-center justify-between p-2 border border-gray-200 rounded hover:border-[var(--primary-color)] cursor-pointer"
-                      :class="{ 'border-[var(--primary-color)] bg-blue-50': isOptionSelected(optionGroup.id, option.id) }"
+                      :class="{ 'border-[var(--primary-color)] bg-md-primary-container': isOptionSelected(optionGroup.id, option.id) }"
                       @click="toggleOption(optionGroup, option)"
                     >
                       <div class="flex-1">
-                        <div class="text-sm text-gray-900">{{ option.name }}</div>
+                        <div class="text-sm text-md-on-surface">{{ option.name }}</div>
                       </div>
                       <div class="flex items-center gap-2">
-                        <span v-if="option.priceModifier !== 0" class="text-sm text-gray-600">
+                        <span v-if="option.priceModifier !== 0" class="text-sm text-md-on-surface-variant">
                           {{ option.priceModifier > 0 ? '+' : '' }}R{{ option.priceModifier.toFixed(2) }}
                         </span>
                         <i
                           :class="[
                             'fas',
-                            isOptionSelected(optionGroup.id, option.id) ? 'fa-check-circle text-[var(--primary-color)]' : 'fa-circle text-gray-300'
+                            isOptionSelected(optionGroup.id, option.id) ? 'fa-check-circle text-[var(--primary-color)]' : 'fa-circle text-md-on-surface-variant opacity-50'
                           ]"
                         ></i>
                       </div>
@@ -123,7 +123,7 @@
 
         <!-- Variants (if not bundle) -->
         <div v-if="item.itemType !== 1 && variants.length > 0" class="mb-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-3">Select Size/Variant</h3>
+          <h3 class="text-lg font-semibold text-md-on-surface mb-3">Select Size/Variant</h3>
           <div class="grid grid-cols-1 gap-2">
             <button
               v-for="variant in variants"
@@ -132,12 +132,12 @@
               :class="[
                 'p-3 border-2 rounded-lg text-left transition-colors',
                 selectedVariant?.id === variant.id
-                  ? 'border-[var(--primary-color)] bg-blue-50'
+                  ? 'border-[var(--primary-color)] bg-md-primary-container'
                   : 'border-gray-200 hover:border-[var(--primary-color)]'
               ]"
             >
               <div class="flex justify-between items-center">
-                <span class="font-medium text-gray-900">{{ variant.name }}</span>
+                <span class="font-medium text-md-on-surface">{{ variant.name }}</span>
                 <span class="font-bold text-[var(--primary-color)]">R{{ variant.price.toFixed(2) }}</span>
               </div>
             </button>
@@ -146,10 +146,10 @@
 
         <!-- Options (if not bundle) -->
         <div v-if="item.itemType !== 1 && optionGroups.length > 0" class="mb-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-3">Customize Your Order</h3>
+          <h3 class="text-lg font-semibold text-md-on-surface mb-3">Customize Your Order</h3>
           <div class="space-y-4">
             <div v-for="group in optionGroups" :key="group.id">
-              <h4 class="font-medium text-gray-900 mb-2">{{ group.name }}</h4>
+              <h4 class="font-medium text-md-on-surface mb-2">{{ group.name }}</h4>
               <div class="space-y-2">
                 <label
                   v-for="option in group.options"
@@ -163,9 +163,9 @@
                       v-model="selectedOptions"
                       class="mr-3 h-5 w-5 text-[var(--primary-color)] rounded"
                     />
-                    <span class="text-gray-900">{{ option.name }}</span>
+                    <span class="text-md-on-surface">{{ option.name }}</span>
                   </div>
-                  <span v-if="option.price !== 0" class="text-gray-600 font-medium">
+                  <span v-if="option.price !== 0" class="text-md-on-surface-variant font-medium">
                     +R{{ option.price.toFixed(2) }}
                   </span>
                 </label>
@@ -176,7 +176,7 @@
 
         <!-- Special Instructions -->
         <div class="mb-6">
-          <label class="block text-lg font-semibold text-gray-900 mb-2">
+          <label class="block text-lg font-semibold text-md-on-surface mb-2">
             Special Instructions
           </label>
           <textarea
@@ -192,19 +192,19 @@
       <div class="border-t border-gray-200 p-6 bg-white flex-shrink-0">
         <!-- Quantity Selector -->
         <div class="flex items-center justify-between mb-4">
-          <span class="text-gray-900 font-medium">Quantity</span>
+          <span class="text-md-on-surface font-medium">Quantity</span>
           <div class="flex items-center gap-4">
             <button
               @click="decrementQuantity"
               :disabled="quantity <= 1"
-              class="w-10 h-10 rounded-full border-2 border-[var(--primary-color)] text-[var(--primary-color)] flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[var(--primary-color)] hover:text-white transition-colors"
+              class="w-10 h-10 rounded-full border-2 border-[var(--primary-color)] text-[var(--primary-color)] flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:btn-gradient hover:text-white transition-colors shadow-md-2 hover:shadow-md-4"
             >
               <i class="fas fa-minus"></i>
             </button>
-            <span class="text-xl font-bold text-gray-900 w-8 text-center">{{ quantity }}</span>
+            <span class="text-xl font-bold text-md-on-surface w-8 text-center">{{ quantity }}</span>
             <button
               @click="incrementQuantity"
-              class="w-10 h-10 rounded-full border-2 border-[var(--primary-color)] text-[var(--primary-color)] flex items-center justify-center hover:bg-[var(--primary-color)] hover:text-white transition-colors"
+              class="w-10 h-10 rounded-full border-2 border-md-primary text-md-primary flex items-center justify-center hover:btn-gradient hover:border-transparent hover:text-white transition-colors"
             >
               <i class="fas fa-plus"></i>
             </button>
@@ -215,7 +215,7 @@
         <button
           @click="addToCart"
           :disabled="!canAddToCart"
-          class="w-full py-4 bg-[var(--primary-color)] text-white font-semibold rounded-lg hover:bg-[var(--secondary-color)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          class="w-full py-4 btn-gradient text-white font-semibold rounded-lg hover:bg-[var(--secondary-color)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Add to Cart - R{{ totalPrice.toFixed(2) }}
         </button>
@@ -481,3 +481,10 @@ function addToCart() {
   emit('close')
 }
 </script>
+
+
+
+
+
+
+

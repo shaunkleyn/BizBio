@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+    class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4"
     @click="emit('close')"
   >
     <div
@@ -10,7 +10,7 @@
       <!-- Header -->
       <div class="p-6 border-b border-md-outline-variant relative overflow-hidden">
         <div class="absolute inset-0 mesh-bg-2 opacity-10"></div>
-        <h2 class="text-2xl font-bold text-md-on-surface relative z-10">Add Tags to Selected Items</h2>
+        <h2 class="text-2xl font-heading font-bold gradient-text relative z-10">Add Tags to Selected Items</h2>
         <p class="text-sm text-md-on-surface-variant mt-1 relative z-10">Select tags to add to all selected items</p>
       </div>
 
@@ -18,7 +18,7 @@
       <div class="p-6 space-y-4">
         <!-- Common Tags -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Quick Select</label>
+          <label class="block text-sm font-medium text-md-on-surface mb-2">Quick Select</label>
           <div class="flex flex-wrap gap-2">
             <button
               v-for="tag in commonTags"
@@ -29,7 +29,7 @@
                 'px-3 py-1.5 rounded-full text-sm font-medium transition-all',
                 selectedTags.includes(tag)
                   ? 'bg-green-500 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-md-surface-container-low text-md-on-surface hover:bg-md-surface-container'
               ]"
             >
               <i v-if="selectedTags.includes(tag)" class="fas fa-check mr-1"></i>
@@ -40,7 +40,7 @@
 
         <!-- Custom Tag Input -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">
+          <label class="block text-sm font-medium text-md-on-surface mb-1">
             Custom Tags (press Enter or comma)
           </label>
           <input
@@ -55,18 +55,18 @@
 
         <!-- Selected Tags -->
         <div v-if="selectedTags.length > 0" class="space-y-2">
-          <label class="block text-sm font-medium text-gray-700">Tags to Add</label>
+          <label class="block text-sm font-medium text-md-on-surface">Tags to Add</label>
           <div class="flex flex-wrap gap-2">
             <span
               v-for="tag in selectedTags"
               :key="tag"
-              class="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
+              class="inline-flex items-center gap-2 px-3 py-1.5 bg-md-primary-container text-md-on-primary-container rounded-full text-sm font-medium"
             >
               {{ tag }}
               <button
                 type="button"
                 @click="removeTag(tag)"
-                class="hover:text-blue-900"
+                class="hover:text-md-on-primary-container"
               >
                 <i class="fas fa-times text-xs"></i>
               </button>
@@ -163,3 +163,7 @@ function applyTags() {
   emit('close')
 }
 </script>
+
+
+
+

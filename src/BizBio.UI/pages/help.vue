@@ -26,7 +26,7 @@
           <p class="text-[var(--gray-text-color)] mb-4">Can't find what you're looking for?</p>
           <NuxtLink
             to="/contact"
-            class="inline-flex items-center bg-[var(--primary-color)] text-white px-8 py-3 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
+            class="inline-flex items-center bg-md-primary text-white px-8 py-3 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
           >
             Contact Support
           </NuxtLink>
@@ -64,3 +64,4 @@ useHead({
   title: 'Help Center',
 })
 </script>
+

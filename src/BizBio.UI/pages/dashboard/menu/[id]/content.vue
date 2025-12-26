@@ -4,32 +4,32 @@
       <!-- Header -->
       <div class="mb-6 flex items-center justify-between">
         <div>
-          <h1 class="text-2xl font-bold text-gray-900">Menu Content Editor</h1>
-          <p class="text-gray-600 mt-1">Manage categories, items, and bundles</p>
+          <h1 class="text-2xl font-bold text-md-on-surface">Menu Content Editor</h1>
+          <p class="text-md-on-surface-variant mt-1">Manage categories, items, and bundles</p>
         </div>
         <NuxtLink
           :to="`/dashboard/menu/${catalogId}/edit`"
-          class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+          class="px-4 py-2 text-md-on-surface border border-gray-300 rounded-lg hover:bg-md-surface-container"
         >
           <i class="fas fa-cog mr-2"></i>Menu Settings
         </NuxtLink>
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+      <div v-if="loading" class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant p-12 text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--primary-color)] mx-auto"></div>
-        <p class="text-gray-600 mt-4">Loading menu...</p>
+        <p class="text-md-on-surface-variant mt-4">Loading menu...</p>
       </div>
 
       <!-- Menu Editor -->
       <div v-else class="space-y-6">
         <!-- Categories Section -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant p-6">
           <div class="flex items-center justify-between mb-4">
-            <h2 class="text-xl font-bold text-gray-900">Categories</h2>
+            <h2 class="text-xl font-bold text-md-on-surface">Categories</h2>
             <button
               @click="showAddCategoryDialog = true"
-              class="px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors text-sm"
+              class="px-4 py-2 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors text-sm"
             >
               <i class="fas fa-plus mr-2"></i>Add Category
             </button>
@@ -43,25 +43,25 @@
             <div
               v-for="(category, index) in categories"
               :key="category.id"
-              class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-[var(--primary-color)] transition-colors"
+              class="flex items-center gap-3 p-4 bg-md-surface-container rounded-lg border border-md-outline-variant hover:border-[var(--primary-color)] transition-colors"
             >
-              <i class="fas fa-grip-vertical text-gray-400"></i>
-              <i v-if="category.icon" :class="category.icon" class="text-lg text-gray-600"></i>
+              <i class="fas fa-grip-vertical text-md-on-surface-variant opacity-70"></i>
+              <i v-if="category.icon" :class="category.icon" class="text-lg text-md-on-surface-variant"></i>
               <div class="flex-1">
-                <h3 class="font-semibold text-gray-900">{{ category.name }}</h3>
-                <p v-if="category.description" class="text-sm text-gray-600">{{ category.description }}</p>
+                <h3 class="font-semibold text-md-on-surface">{{ category.name }}</h3>
+                <p v-if="category.description" class="text-sm text-md-on-surface-variant">{{ category.description }}</p>
                 <p class="text-xs text-gray-500 mt-1">{{ category.itemCount || 0 }} items</p>
               </div>
               <div class="flex items-center gap-2">
                 <button
                   @click="editCategory(category)"
-                  class="p-2 text-gray-600 hover:text-[var(--primary-color)] transition-colors"
+                  class="p-2 text-md-on-surface-variant hover:text-[var(--primary-color)] transition-colors"
                 >
                   <i class="fas fa-edit"></i>
                 </button>
                 <button
                   @click="deleteCategory(category.id)"
-                  class="p-2 text-gray-600 hover:text-red-500 transition-colors"
+                  class="p-2 text-md-on-surface-variant hover:text-red-500 transition-colors"
                 >
                   <i class="fas fa-trash"></i>
                 </button>
@@ -71,12 +71,12 @@
         </div>
 
         <!-- Items Section -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant p-6">
           <div class="flex items-center justify-between mb-4">
-            <h2 class="text-xl font-bold text-gray-900">Menu Items</h2>
+            <h2 class="text-xl font-bold text-md-on-surface">Menu Items</h2>
             <button
               @click="openAddItemDialog"
-              class="px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors text-sm"
+              class="px-4 py-2 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors text-sm"
             >
               <i class="fas fa-plus mr-2"></i>Add Item
             </button>
@@ -90,27 +90,27 @@
             <div
               v-for="item in items"
               :key="item.id"
-              class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-[var(--primary-color)] transition-colors"
+              class="flex items-center gap-3 p-4 bg-md-surface-container rounded-lg border border-md-outline-variant hover:border-[var(--primary-color)] transition-colors"
             >
-              <i class="fas fa-grip-vertical text-gray-400"></i>
+              <i class="fas fa-grip-vertical text-md-on-surface-variant opacity-70"></i>
               <img
                 v-if="item.images && item.images.length > 0"
                 :src="item.images[0]"
                 :alt="item.name"
                 class="w-16 h-16 object-cover rounded-lg"
               />
-              <div v-else class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                <i class="fas fa-utensils text-gray-400"></i>
+              <div v-else class="w-16 h-16 bg-md-surface-container rounded-lg flex items-center justify-center">
+                <i class="fas fa-utensils text-md-on-surface-variant opacity-70"></i>
               </div>
               <div class="flex-1">
-                <h3 class="font-semibold text-gray-900">{{ item.name }}</h3>
-                <p v-if="item.description" class="text-sm text-gray-600 line-clamp-1">{{ item.description }}</p>
+                <h3 class="font-semibold text-md-on-surface">{{ item.name }}</h3>
+                <p v-if="item.description" class="text-sm text-md-on-surface-variant line-clamp-1">{{ item.description }}</p>
                 <div class="flex items-center gap-2 mt-1">
                   <span class="text-sm font-semibold text-[var(--primary-color)]">R{{ item.price }}</span>
                   <span
                     v-for="categoryId in item.categoryIds"
                     :key="categoryId"
-                    class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded"
+                    class="text-xs px-2 py-1 bg-md-primary-container text-md-on-primary-container rounded"
                   >
                     {{ getCategoryName(categoryId) }}
                   </span>
@@ -119,14 +119,14 @@
               <div class="flex items-center gap-2">
                 <button
                   @click="editItemCategories(item)"
-                  class="p-2 text-gray-600 hover:text-[var(--primary-color)] transition-colors"
+                  class="p-2 text-md-on-surface-variant hover:text-[var(--primary-color)] transition-colors"
                   title="Edit categories"
                 >
                   <i class="fas fa-tags"></i>
                 </button>
                 <button
                   @click="removeItem(item.id)"
-                  class="p-2 text-gray-600 hover:text-red-500 transition-colors"
+                  class="p-2 text-md-on-surface-variant hover:text-red-500 transition-colors"
                 >
                   <i class="fas fa-trash"></i>
                 </button>
@@ -136,12 +136,12 @@
         </div>
 
         <!-- Bundles Section -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant p-6">
           <div class="flex items-center justify-between mb-4">
-            <h2 class="text-xl font-bold text-gray-900">Bundles</h2>
+            <h2 class="text-xl font-bold text-md-on-surface">Bundles</h2>
             <button
               @click="openAddBundleDialog"
-              class="px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors text-sm"
+              class="px-4 py-2 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors text-sm"
             >
               <i class="fas fa-plus mr-2"></i>Add Bundle
             </button>
@@ -155,27 +155,27 @@
             <div
               v-for="bundle in bundles"
               :key="bundle.id"
-              class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-[var(--primary-color)] transition-colors"
+              class="flex items-center gap-3 p-4 bg-md-surface-container rounded-lg border border-md-outline-variant hover:border-[var(--primary-color)] transition-colors"
             >
-              <i class="fas fa-grip-vertical text-gray-400"></i>
+              <i class="fas fa-grip-vertical text-md-on-surface-variant opacity-70"></i>
               <img
                 v-if="bundle.images && bundle.images.length > 0"
                 :src="bundle.images[0]"
                 :alt="bundle.name"
                 class="w-16 h-16 object-cover rounded-lg"
               />
-              <div v-else class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                <i class="fas fa-box-open text-gray-400"></i>
+              <div v-else class="w-16 h-16 bg-md-surface-container rounded-lg flex items-center justify-center">
+                <i class="fas fa-box-open text-md-on-surface-variant opacity-70"></i>
               </div>
               <div class="flex-1">
-                <h3 class="font-semibold text-gray-900">{{ bundle.name }}</h3>
-                <p v-if="bundle.description" class="text-sm text-gray-600 line-clamp-1">{{ bundle.description }}</p>
+                <h3 class="font-semibold text-md-on-surface">{{ bundle.name }}</h3>
+                <p v-if="bundle.description" class="text-sm text-md-on-surface-variant line-clamp-1">{{ bundle.description }}</p>
                 <div class="flex items-center gap-2 mt-1">
                   <span class="text-sm font-semibold text-[var(--primary-color)]">R{{ bundle.basePrice }}</span>
                   <span
                     v-for="categoryId in bundle.categoryIds"
                     :key="categoryId"
-                    class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded"
+                    class="text-xs px-2 py-1 bg-md-primary-container text-md-on-primary-container rounded"
                   >
                     {{ getCategoryName(categoryId) }}
                   </span>
@@ -184,14 +184,14 @@
               <div class="flex items-center gap-2">
                 <button
                   @click="editBundleCategories(bundle)"
-                  class="p-2 text-gray-600 hover:text-[var(--primary-color)] transition-colors"
+                  class="p-2 text-md-on-surface-variant hover:text-[var(--primary-color)] transition-colors"
                   title="Edit categories"
                 >
                   <i class="fas fa-tags"></i>
                 </button>
                 <button
                   @click="removeBundle(bundle.id)"
-                  class="p-2 text-gray-600 hover:text-red-500 transition-colors"
+                  class="p-2 text-md-on-surface-variant hover:text-red-500 transition-colors"
                 >
                   <i class="fas fa-trash"></i>
                 </button>
@@ -205,11 +205,11 @@
     <!-- Dialogs would go here - simplified for now -->
     <!-- Add Category Dialog -->
     <div v-if="showAddCategoryDialog" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="closeAddCategoryDialog">
-      <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+      <div class="bg-md-surface rounded-2xl p-6 max-w-md w-full mx-4">
         <h3 class="text-xl font-bold mb-4">{{ editingCategory ? 'Edit Category' : 'Add Category' }}</h3>
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+            <label class="block text-sm font-medium text-md-on-surface mb-1">Name</label>
             <input
               v-model="categoryForm.name"
               type="text"
@@ -218,7 +218,7 @@
             />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Description (optional)</label>
+            <label class="block text-sm font-medium text-md-on-surface mb-1">Description (optional)</label>
             <textarea
               v-model="categoryForm.description"
               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
@@ -227,7 +227,7 @@
             ></textarea>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Icon (optional)</label>
+            <label class="block text-sm font-medium text-md-on-surface mb-1">Icon (optional)</label>
             <input
               v-model="categoryForm.icon"
               type="text"
@@ -239,13 +239,13 @@
         <div class="flex justify-end gap-3 mt-6">
           <button
             @click="closeAddCategoryDialog"
-            class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+            class="px-4 py-2 text-md-on-surface hover:bg-md-surface-container-low rounded-lg transition-colors"
           >
             Cancel
           </button>
           <button
             @click="saveCategory"
-            class="px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors"
+            class="px-4 py-2 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors"
           >
             {{ editingCategory ? 'Update' : 'Add' }}
           </button>
@@ -419,3 +419,9 @@ useHead({
   title: 'Menu Content Editor - Dashboard'
 })
 </script>
+
+
+
+
+
+

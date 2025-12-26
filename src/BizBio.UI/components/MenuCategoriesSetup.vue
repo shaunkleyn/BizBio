@@ -1,24 +1,24 @@
 <template>
   <div class="max-w-5xl mx-auto">
     <div class="text-center mb-8">
-      <h2 class="text-3xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-4">
+      <h2 class="text-3xl font-bold text-md-on-surface font-[var(--font-family-heading)] mb-4">
         Create Menu Categories
       </h2>
-      <p class="text-[var(--gray-text-color)]">
+      <p class="text-md-on-surface-variant">
         Organize your menu into categories (e.g., Appetizers, Main Courses, Desserts)
       </p>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-xl p-8">
+    <div class="bg-md-surface rounded-2xl shadow-xl p-8">
       <!-- Plan Limit Info -->
-      <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-6 flex items-center justify-between">
+      <div class="bg-md-primary-container border-2 border-md-primary rounded-xl p-4 mb-6 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <i class="fas fa-info-circle text-blue-600 text-xl"></i>
+          <i class="fas fa-info-circle text-md-primary text-xl"></i>
           <div class="text-sm">
-            <span class="font-semibold text-[var(--dark-text-color)]">
+            <span class="font-semibold text-md-on-surface">
               {{ menuData.categories.length }} / {{ menuData.selectedPlan?.limits.categories }}
             </span>
-            <span class="text-[var(--gray-text-color)]"> categories used</span>
+            <span class="text-md-on-surface-variant"> categories used</span>
           </div>
         </div>
         <div v-if="menuData.categories.length >= menuData.selectedPlan?.limits.categories" class="text-sm text-[var(--accent-color)] font-semibold">
@@ -32,30 +32,30 @@
         <div
           v-for="(category, index) in menuData.categories"
           :key="category.id"
-          class="flex items-center gap-4 p-4 border-2 border-[var(--light-border-color)] rounded-xl hover:border-[var(--primary-color)] transition-colors"
+          class="flex items-center gap-4 p-4 border-2 border-md-outline-variant rounded-xl hover:border-[var(--primary-color)] transition-colors"
         >
           <!-- Icon -->
-          <div class="w-12 h-12 bg-[var(--primary-color)] bg-opacity-10 rounded-lg flex items-center justify-center">
+          <div class="w-12 h-12 bg-md-primary bg-opacity-10 rounded-xl flex items-center justify-center">
             <i :class="['text-[var(--primary-color)] text-xl', category.icon]"></i>
           </div>
 
           <!-- Info -->
           <div class="flex-1">
-            <h4 class="font-bold text-[var(--dark-text-color)]">{{ category.name }}</h4>
-            <p class="text-sm text-[var(--gray-text-color)]">{{ category.description || 'No description' }}</p>
+            <h4 class="font-bold text-md-on-surface">{{ category.name }}</h4>
+            <p class="text-sm text-md-on-surface-variant">{{ category.description || 'No description' }}</p>
           </div>
 
           <!-- Actions -->
           <div class="flex items-center gap-2">
             <button
               @click="editCategory(category)"
-              class="p-2 text-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:bg-opacity-10 rounded-lg transition-colors"
+              class="p-2 text-[var(--primary-color)] hover:bg-md-primary hover:bg-opacity-10 rounded-xl transition-colors"
             >
               <i class="fas fa-edit"></i>
             </button>
             <button
               @click="removeCategory(category.id)"
-              class="p-2 text-[var(--accent-color)] hover:bg-[var(--accent-color)] hover:bg-opacity-10 rounded-lg transition-colors"
+              class="p-2 text-[var(--accent-color)] hover:bg-[var(--accent-color)] hover:bg-opacity-10 rounded-xl transition-colors"
             >
               <i class="fas fa-trash"></i>
             </button>
@@ -64,26 +64,26 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="text-center py-12 border-2 border-dashed border-[var(--light-border-color)] rounded-xl mb-6">
-        <i class="fas fa-folder-open text-6xl text-[var(--gray-text-color)] opacity-50 mb-4"></i>
-        <p class="text-[var(--gray-text-color)]">No categories yet. Add your first category below.</p>
+      <div v-else class="text-center py-12 border-2 border-dashed border-md-outline-variant rounded-xl mb-6">
+        <i class="fas fa-folder-open text-6xl text-md-on-surface-variant opacity-50 mb-4"></i>
+        <p class="text-md-on-surface-variant">No categories yet. Add your first category below.</p>
       </div>
 
       <!-- Add Category Button -->
       <button
         v-if="menuData.categories.length < menuData.selectedPlan?.limits.categories"
         @click="showAddCategoryModal = true"
-        class="w-full py-4 border-2 border-dashed border-[var(--primary-color)] text-[var(--primary-color)] rounded-xl hover:bg-[var(--primary-color)] hover:bg-opacity-5 transition-all font-semibold"
+        class="w-full py-4 border-2 border-dashed border-[var(--primary-color)] text-[var(--primary-color)] rounded-xl hover:bg-md-primary hover:bg-opacity-5 transition-all font-semibold"
       >
         <i class="fas fa-plus-circle mr-2"></i>
         Add Category
       </button>
 
       <!-- Action Buttons -->
-      <div class="flex items-center justify-between mt-8 pt-6 border-t-2 border-[var(--light-border-color)]">
+      <div class="flex items-center justify-between mt-8 pt-6 border-t-2 border-md-outline-variant">
         <button
           @click="$emit('previous')"
-          class="px-6 py-3 border-2 border-[var(--light-border-color)] text-[var(--dark-text-color)] rounded-lg hover:border-[var(--primary-color)] transition-colors font-semibold"
+          class="px-6 py-3 border-2 border-md-outline-variant text-md-on-surface rounded-xl hover:border-[var(--primary-color)] transition-colors font-semibold"
         >
           <i class="fas fa-arrow-left mr-2"></i>
           Back
@@ -92,10 +92,10 @@
           @click="handleNext"
           :disabled="menuData.categories.length === 0"
           :class="[
-            'px-8 py-3 rounded-lg font-semibold transition-all',
+            'px-8 py-3 rounded-xl font-semibold transition-all',
             menuData.categories.length > 0
-              ? 'bg-[var(--primary-color)] text-white hover:bg-[var(--primary-button-hover-bg-color)]'
-              : 'bg-[var(--light-border-color)] text-[var(--gray-text-color)] cursor-not-allowed'
+              ? 'bg-md-primary text-md-on-primary hover:bg-[var(--primary-button-hover-bg-color)]'
+              : 'bg-[var(--light-border-color)] text-md-on-surface-variant cursor-not-allowed'
           ]"
         >
           Continue to Menu Items
@@ -110,14 +110,14 @@
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
       @click.self="closeModal"
     >
-      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col">
+      <div class="bg-md-surface rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col">
         <!-- Modal Header - Fixed -->
-        <div class="flex-shrink-0 p-6 border-b border-[var(--light-border-color)]">
+        <div class="flex-shrink-0 p-6 border-b border-md-outline-variant">
           <div class="flex items-center justify-between">
-            <h3 class="text-xl font-bold text-[var(--dark-text-color)]">
+            <h3 class="text-xl font-bold text-md-on-surface">
               {{ editingCategory ? 'Edit Category' : 'Add New Category' }}
             </h3>
-            <button @click="closeModal" type="button" class="text-[var(--gray-text-color)] hover:text-[var(--dark-text-color)]">
+            <button @click="closeModal" type="button" class="text-md-on-surface-variant hover:text-md-on-surface">
               <i class="fas fa-times text-xl"></i>
             </button>
           </div>
@@ -128,7 +128,7 @@
           <form @submit.prevent="handleSaveCategory" id="categoryForm">
           <!-- Category Name -->
           <div class="mb-4">
-            <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">
               Category Name <span class="text-[var(--accent-color)]">*</span>
             </label>
             <input
@@ -136,26 +136,26 @@
               type="text"
               required
               placeholder="e.g., Appetizers, Main Courses"
-              class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none"
+              class="w-full px-4 py-3 border-2 border-md-outline-variant rounded-xl focus:border-[var(--primary-color)] focus:outline-none"
             />
           </div>
 
           <!-- Description -->
           <div class="mb-4">
-            <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">
               Description
             </label>
             <textarea
               v-model="newCategory.description"
               rows="3"
               placeholder="Brief description of this category"
-              class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none resize-none"
+              class="w-full px-4 py-3 border-2 border-md-outline-variant rounded-xl focus:border-[var(--primary-color)] focus:outline-none resize-none"
             ></textarea>
           </div>
 
           <!-- Icon Selection -->
           <div class="mb-6">
-            <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">
               Category Icon
             </label>
             <div class="grid grid-cols-6 gap-2">
@@ -165,13 +165,13 @@
                 type="button"
                 @click="newCategory.icon = icon"
                 :class="[
-                  'p-3 rounded-lg border-2 transition-all',
+                  'p-3 rounded-xl border-2 transition-all',
                   newCategory.icon === icon
-                    ? 'border-[var(--primary-color)] bg-[var(--primary-color)] bg-opacity-10'
-                    : 'border-[var(--light-border-color)] hover:border-[var(--primary-color)]'
+                    ? 'border-[var(--primary-color)] bg-md-primary bg-opacity-10'
+                    : 'border-md-outline-variant hover:border-[var(--primary-color)]'
                 ]"
               >
-                <i :class="[icon, 'text-xl', newCategory.icon === icon ? 'text-[var(--primary-color)]' : 'text-[var(--gray-text-color)]']"></i>
+                <i :class="[icon, 'text-xl', newCategory.icon === icon ? 'text-[var(--primary-color)]' : 'text-md-on-surface-variant']"></i>
               </button>
             </div>
           </div>
@@ -179,19 +179,19 @@
         </div>
 
         <!-- Modal Footer - Fixed -->
-        <div class="flex-shrink-0 p-6 border-t border-[var(--light-border-color)]">
+        <div class="flex-shrink-0 p-6 border-t border-md-outline-variant">
           <div class="flex gap-3">
             <button
               type="button"
               @click="closeModal"
-              class="flex-1 px-4 py-3 border-2 border-[var(--light-border-color)] text-[var(--dark-text-color)] rounded-lg hover:border-[var(--primary-color)] transition-colors font-semibold"
+              class="flex-1 px-4 py-3 border-2 border-md-outline-variant text-md-on-surface rounded-xl hover:border-[var(--primary-color)] transition-colors font-semibold"
             >
               Cancel
             </button>
             <button
               type="submit"
               form="categoryForm"
-              class="flex-1 px-4 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
+              class="flex-1 px-4 py-3 bg-md-primary text-md-on-primary rounded-xl hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
             >
               <i class="fas fa-check mr-2"></i>
               {{ editingCategory ? 'Update' : 'Add' }}
@@ -305,3 +305,6 @@ const handleNext = () => {
   }
 }
 </script>
+
+
+

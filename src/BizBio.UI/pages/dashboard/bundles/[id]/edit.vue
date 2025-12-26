@@ -44,7 +44,7 @@
 
         <!-- Step 1: Basic Information -->
         <div v-if="currentStep === 1" class="max-w-3xl mx-auto">
-          <div class="bg-white rounded-lg shadow-sm border border-[var(--light-border-color)] p-8">
+          <div class="bg-md-surface rounded-2xl shadow-sm border border-[var(--light-border-color)] p-8">
             <h2 class="text-2xl font-bold text-[var(--dark-text-color)] mb-6">
               Edit Bundle Information
             </h2>
@@ -114,14 +114,14 @@
             <div class="flex justify-between mt-8">
               <NuxtLink
                 to="/dashboard/bundles"
-                class="px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-gray-50 transition-colors"
+                class="px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-md-surface-container transition-colors"
               >
                 Cancel
               </NuxtLink>
               <button
                 @click="nextStep"
                 :disabled="!bundleData.name || !bundleData.basePrice"
-                class="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Next: Manage Steps
                 <i class="fas fa-arrow-right ml-2"></i>
@@ -138,7 +138,7 @@
           <div class="flex justify-between">
             <button
               @click="previousStep"
-              class="px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-gray-50 transition-colors"
+              class="px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-md-surface-container transition-colors"
             >
               <i class="fas fa-arrow-left mr-2"></i>
               Back
@@ -146,7 +146,7 @@
             <button
               v-if="currentStep < 4"
               @click="nextStep"
-              class="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors"
+              class="px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors"
             >
               Next
               <i class="fas fa-arrow-right ml-2"></i>
@@ -273,3 +273,6 @@ async function saveBundle() {
   }
 }
 </script>
+
+
+

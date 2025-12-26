@@ -5,7 +5,7 @@
       <div v-if="loading" class="flex justify-center items-center py-20">
         <div class="text-center">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--primary-color)] mx-auto mb-4"></div>
-          <p class="text-gray-600">Loading menu...</p>
+          <p class="text-md-on-surface-variant">Loading menu...</p>
         </div>
       </div>
 
@@ -15,9 +15,9 @@
         <div class="editor-panels grid grid-cols-12 gap-6">
           <!-- Left: Category Sidebar -->
           <div class="col-span-3">
-            <div class="bg-white shadow-sm rounded-lg p-4 sticky top-24 self-start" style="max-height: calc(100vh - 13rem); overflow-y: auto;">
+            <div class="bg-md-surface shadow-sm rounded-lg p-4 sticky top-24 self-start" style="max-height: calc(100vh - 13rem); overflow-y: auto;">
               <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold text-gray-900">Categories</h2>
+                <h2 class="text-lg font-semibold text-md-on-surface">Categories</h2>
                 <button
                   @click="showCategoryModal = true"
                   class="p-2 text-primary hover:bg-primary-50 rounded-lg transition-colors"
@@ -40,26 +40,28 @@
                   class="category-item group relative p-3 rounded-lg border cursor-pointer transition-all"
                   :class="{
                     'border-primary bg-primary-50': selectedCategoryId === category.id,
-                    'border-gray-200 hover:border-gray-300': selectedCategoryId !== category.id
+                    'border-md-outline-variant hover:border-gray-300': selectedCategoryId !== category.id
                   }"
                   @click="selectedCategoryId = category.id"
                 >
                   <div class="flex items-center gap-3">
-                    <div class="drag-handle cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600">
+                    <div class="drag-handle cursor-grab active:cursor-grabbing text-md-on-surface-variant opacity-50 hover:text-md-on-surface-variant">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
                       </svg>
                     </div>
-                    <div v-if="category.icon" class="text-2xl">{{ category.icon }}</div>
+                    <div v-if="category.icon" class="w-8 h-8 flex items-center justify-center">
+                      <i :class="[category.icon, 'text-xl text-primary']"></i>
+                    </div>
                     <div class="flex-1 min-w-0">
-                      <p class="font-medium text-gray-900 truncate">{{ category.name }}</p>
-                      <p class="text-sm text-gray-500">{{ category.itemCount }} items</p>
+                      <p class="font-medium text-md-on-surface truncate">{{ category.name }}</p>
+                      <p class="text-sm text-md-on-surface-variant">{{ category.itemCount }} items</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div v-if="categories.length === 0" class="text-center py-8 text-gray-500">
+              <div v-if="categories.length === 0" class="text-center py-8 text-md-on-surface-variant">
                 No categories yet. Add your first category!
               </div>
             </div>
@@ -67,10 +69,10 @@
 
           <!-- Right: Items Panel -->
           <div class="col-span-9">
-            <div class="bg-white shadow-sm rounded-lg p-6 sticky top-24 self-start" style="max-height: calc(100vh - 13rem); overflow-y: auto;">
+            <div class="bg-md-surface shadow-sm rounded-lg p-6 sticky top-24 self-start" style="max-height: calc(100vh - 13rem); overflow-y: auto;">
               <!-- Header with controls -->
               <div class="flex justify-between items-center mb-6">
-                <h2 class="text-lg font-semibold text-gray-900">
+                <h2 class="text-lg font-semibold text-md-on-surface">
                   {{ selectedCategory ? selectedCategory.name : 'All Items' }}
                 </h2>
                 <div class="flex gap-3 items-center">
@@ -80,7 +82,7 @@
                       @click="viewMode = 'table'"
                       :class="[
                         'px-3 py-1.5 text-sm transition-colors',
-                        viewMode === 'table' ? 'bg-primary text-white' : 'bg-white text-gray-700 hover:bg-gray-50'
+                        viewMode === 'table' ? 'bg-primary text-white' : 'bg-md-surface text-md-on-surface hover:bg-md-surface-container'
                       ]"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,7 +93,7 @@
                       @click="viewMode = 'grid'"
                       :class="[
                         'px-3 py-1.5 text-sm transition-colors',
-                        viewMode === 'grid' ? 'bg-primary text-white' : 'bg-white text-gray-700 hover:bg-gray-50'
+                        viewMode === 'grid' ? 'bg-primary text-white' : 'bg-md-surface text-md-on-surface hover:bg-md-surface-container'
                       ]"
                     >
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,7 +104,7 @@
 
                   <!-- Thumbnail Size Slider (only for grid view) -->
                   <div v-if="viewMode === 'grid'" class="flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded-lg">
-                    <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-md-on-surface-variant" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                     <input
@@ -113,7 +115,7 @@
                       step="50"
                       class="w-24"
                     />
-                    <span class="text-xs text-gray-600">{{ thumbnailSize }}px</span>
+                    <span class="text-xs text-md-on-surface-variant">{{ thumbnailSize }}px</span>
                   </div>
 
                   <button
@@ -135,14 +137,14 @@
               <div v-if="viewMode === 'table' && (currentCategoryItems.length > 0 || currentCategoryBundles.length > 0)" class="overflow-x-auto">
                 <table class="w-full min-w-[800px]">
                   <thead>
-                    <tr class="border-b border-gray-200">
-                      <th class="text-left py-3 px-4 font-semibold text-gray-700 w-8"></th>
-                      <th class="text-left py-3 px-4 font-semibold text-gray-700">Image</th>
-                      <th class="text-left py-3 px-4 font-semibold text-gray-700">Name</th>
-                      <th class="text-left py-3 px-4 font-semibold text-gray-700">Description</th>
-                      <th class="text-left py-3 px-4 font-semibold text-gray-700">Price</th>
-                      <th class="text-left py-3 px-4 font-semibold text-gray-700">Info</th>
-                      <th class="text-right py-3 px-4 font-semibold text-gray-700">Actions</th>
+                    <tr class="border-b-2 border-md-primary/20">
+                      <th class="text-left py-3 px-4 font-semibold text-md-on-surface w-8"></th>
+                      <th class="text-left py-3 px-4 font-semibold text-md-on-surface">Image</th>
+                      <th class="text-left py-3 px-4 font-semibold text-md-on-surface">Name</th>
+                      <th class="text-left py-3 px-4 font-semibold text-md-on-surface">Description</th>
+                      <th class="text-left py-3 px-4 font-semibold text-md-on-surface">Price</th>
+                      <th class="text-left py-3 px-4 font-semibold text-md-on-surface">Info</th>
+                      <th class="text-right py-3 px-4 font-semibold text-md-on-surface">Actions</th>
                     </tr>
                   </thead>
                   <tbody ref="itemsTable" class="divide-y divide-gray-100">
@@ -152,17 +154,17 @@
                       :key="'item-' + item.id"
                       :data-id="item.id"
                       :data-type="'item'"
-                      class="hover:bg-gray-50 transition-colors group"
+                      class="hover:bg-md-surface-container transition-colors group"
                     >
                       <td class="py-3 px-4">
-                        <div class="drag-handle cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600">
+                        <div class="drag-handle cursor-grab active:cursor-grabbing text-md-on-surface-variant opacity-50 hover:text-md-on-surface-variant">
                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
                           </svg>
                         </div>
                       </td>
                       <td class="py-3 px-4">
-                        <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                        <div class="w-16 h-16 rounded-lg overflow-hidden bg-md-surface-container-low flex items-center justify-center">
                           <img v-if="item.images && item.images.length > 0" :src="item.images[0]" :alt="item.name" class="w-full h-full object-cover" />
                           <svg v-else class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -170,32 +172,32 @@
                         </div>
                       </td>
                       <td class="py-3 px-4">
-                        <p class="font-medium text-gray-900">{{ item.name }}</p>
+                        <p class="font-medium text-md-on-surface">{{ item.name }}</p>
                       </td>
                       <td class="py-3 px-4 max-w-xs">
-                        <p class="text-sm text-gray-600 truncate">{{ item.description }}</p>
+                        <p class="text-sm text-md-on-surface-variant truncate">{{ item.description }}</p>
                       </td>
                       <td class="py-3 px-4">
                         <span class="font-semibold text-primary">R{{ item.price.toFixed(2) }}</span>
                       </td>
                       <td class="py-3 px-4">
                         <div class="flex gap-1">
-                          <span v-if="item.hasOptions" class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">Opts</span>
+                          <span v-if="item.hasOptions" class="px-2 py-1 bg-md-primary-container text-md-on-primary-container text-xs rounded">Opts</span>
                           <span v-if="item.hasExtras" class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">Extras</span>
-                          <span v-if="item.variantCount > 0" class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">{{ item.variantCount }}v</span>
+                          <span v-if="item.variantCount > 0" class="px-2 py-1 bg-md-primary-container text-md-on-primary-container text-xs rounded">{{ item.variantCount }}v</span>
                         </div>
                       </td>
                       <td class="py-3 px-4">
                         <div class="flex justify-end gap-2">
                           <button
                             @click.stop="editItem(item)"
-                            class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+                            class="px-3 py-1 text-sm bg-md-surface-container-low text-md-on-surface rounded hover:bg-md-surface-container transition-colors"
                           >
                             Edit
                           </button>
                           <button
                             @click.stop="removeItem(item.id)"
-                            class="px-3 py-1 text-sm bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors"
+                            class="px-3 py-1 text-sm bg-red-50 text-md-error rounded hover:bg-red-100 transition-colors"
                           >
                             Remove
                           </button>
@@ -209,17 +211,17 @@
                       :key="'bundle-' + bundle.id"
                       :data-id="bundle.id"
                       :data-type="'bundle'"
-                      class="hover:bg-gray-50 transition-colors group bg-orange-50/30"
+                      class="hover:bg-md-surface-container transition-colors group bg-orange-50/30"
                     >
                       <td class="py-3 px-4">
-                        <div class="drag-handle cursor-grab active:cursor-grabbing text-gray-400 hover:text-gray-600">
+                        <div class="drag-handle cursor-grab active:cursor-grabbing text-md-on-surface-variant opacity-50 hover:text-md-on-surface-variant">
                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
                           </svg>
                         </div>
                       </td>
                       <td class="py-3 px-4">
-                        <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                        <div class="w-16 h-16 rounded-lg overflow-hidden bg-md-surface-container-low flex items-center justify-center">
                           <img v-if="bundle.images && bundle.images.length > 0" :src="bundle.images[0]" :alt="bundle.name" class="w-full h-full object-cover" />
                           <svg v-else class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
@@ -229,11 +231,11 @@
                       <td class="py-3 px-4">
                         <div class="flex items-center gap-2">
                           <span class="px-2 py-1 bg-orange-100 text-orange-800 text-xs font-semibold rounded">BUNDLE</span>
-                          <p class="font-medium text-gray-900">{{ bundle.name }}</p>
+                          <p class="font-medium text-md-on-surface">{{ bundle.name }}</p>
                         </div>
                       </td>
                       <td class="py-3 px-4 max-w-xs">
-                        <p class="text-sm text-gray-600 truncate">{{ bundle.description }}</p>
+                        <p class="text-sm text-md-on-surface-variant truncate">{{ bundle.description }}</p>
                       </td>
                       <td class="py-3 px-4">
                         <span class="font-semibold text-primary">R{{ bundle.basePrice.toFixed(2) }}</span>
@@ -243,13 +245,13 @@
                         <div class="flex justify-end gap-2">
                           <button
                             @click.stop="editBundle(bundle)"
-                            class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+                            class="px-3 py-1 text-sm bg-md-surface-container-low text-md-on-surface rounded hover:bg-md-surface-container transition-colors"
                           >
                             Edit
                           </button>
                           <button
                             @click.stop="removeBundle(bundle.id)"
-                            class="px-3 py-1 text-sm bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors"
+                            class="px-3 py-1 text-sm bg-red-50 text-md-error rounded hover:bg-red-100 transition-colors"
                           >
                             Remove
                           </button>
@@ -273,40 +275,40 @@
                   :key="'item-' + item.id"
                   :data-id="item.id"
                   :data-type="'item'"
-                  class="item-card group relative bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-all"
+                  class="item-card group relative bg-md-surface border border-md-outline-variant rounded-lg overflow-hidden hover:shadow-md transition-all"
                 >
-                  <div class="drag-handle absolute top-2 right-2 p-2 bg-white rounded-lg shadow cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity">
-                    <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="drag-handle absolute top-2 right-2 p-2 bg-md-surface rounded-2xl shadow cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity">
+                    <svg class="w-4 h-4 text-md-on-surface-variant" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
                     </svg>
                   </div>
 
                   <div class="relative">
-                    <div v-if="item.images && item.images.length > 0" class="aspect-video bg-gray-100">
+                    <div v-if="item.images && item.images.length > 0" class="aspect-video bg-md-surface-container-low">
                       <img :src="item.images[0]" :alt="item.name" class="w-full h-full object-cover" />
                     </div>
-                    <div v-else class="aspect-video bg-gray-100 flex items-center justify-center">
+                    <div v-else class="aspect-video bg-md-surface-container-low flex items-center justify-center">
                       <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                     </div>
-                    <span v-if="item.variantCount > 0" class="absolute top-0 left-0 px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">{{ item.variantCount }} Variant{{ item.variantCount > 1 ? 's' : '' }}</span>
+                    <span v-if="item.variantCount > 0" class="absolute top-0 left-0 px-2 py-1 bg-md-primary-container text-md-on-primary-container text-xs rounded">{{ item.variantCount }} Variant{{ item.variantCount > 1 ? 's' : '' }}</span>
                     <!-- Price positioned at bottom of image -->
                     <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-3 py-2">
                       <span class="text-sm font-bold text-white">R{{ item.price?.toFixed(2) }}</span>
                       <div class="absolute top-0 bottom-0 right-0 flex flex-col justify-end gap-1">
-                        <span v-if="item.hasOptions" class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">Options</span>
+                        <span v-if="item.hasOptions" class="px-2 py-1 bg-md-primary-container text-md-on-primary-container text-xs rounded">Options</span>
                         <span v-if="item.hasExtras" class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">Extras</span>
                       </div>
                     </div>
                   </div>
 
                   <div class="p-4">
-                    <h3 class="font-medium text-sm text-gray-900 line-clamp-2">{{ item.name }}</h3>
-                    <p class="text-sm text-gray-500 truncate">{{ item.description }}</p>
+                    <h3 class="font-medium text-sm text-md-on-surface line-clamp-2">{{ item.name }}</h3>
+                    <p class="text-sm text-md-on-surface-variant truncate">{{ item.description }}</p>
                     <div class="mt-2 flex justify-between items-center">
                       <div class="flex gap-1">
-                        <span v-if="item.hasOptions" class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">Options</span>
+                        <span v-if="item.hasOptions" class="px-2 py-1 bg-md-primary-container text-md-on-primary-container text-xs rounded">Options</span>
                         <span v-if="item.hasExtras" class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">Extras</span>
                         
                       </div>
@@ -315,13 +317,13 @@
                     <div class="mt-3 flex gap-2">
                       <button
                         @click="editItem(item)"
-                        class="flex-1 px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+                        class="flex-1 px-3 py-1 text-sm bg-md-surface-container-low text-md-on-surface rounded hover:bg-md-surface-container transition-colors"
                       >
                         Edit
                       </button>
                       <button
                         @click="removeItem(item.id)"
-                        class="px-3 py-1 text-sm bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors"
+                        class="px-3 py-1 text-sm bg-red-50 text-md-error rounded hover:bg-red-100 transition-colors"
                       >
                         Remove
                       </button>
@@ -335,18 +337,18 @@
                   :key="'bundle-' + bundle.id"
                   :data-id="bundle.id"
                   :data-type="'bundle'"
-                  class="item-card group relative bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-all"
+                  class="item-card group relative bg-md-surface border border-md-outline-variant rounded-lg overflow-hidden hover:shadow-md transition-all"
                 >
-                  <div class="drag-handle absolute top-2 right-2 p-2 bg-white rounded-lg shadow cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity">
-                    <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="drag-handle absolute top-2 right-2 p-2 bg-md-surface rounded-2xl shadow cursor-grab active:cursor-grabbing opacity-0 group-hover:opacity-100 transition-opacity">
+                    <svg class="w-4 h-4 text-md-on-surface-variant" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
                     </svg>
                   </div>
 
-                  <div v-if="bundle.images && bundle.images.length > 0" class="aspect-video bg-gray-100">
+                  <div v-if="bundle.images && bundle.images.length > 0" class="aspect-video bg-md-surface-container-low">
                     <img :src="bundle.images[0]" :alt="bundle.name" class="w-full h-full object-cover" />
                   </div>
-                  <div v-else class="aspect-video bg-gray-100 flex items-center justify-center">
+                  <div v-else class="aspect-video bg-md-surface-container-low flex items-center justify-center">
                     <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
@@ -356,8 +358,8 @@
                     <div class="flex items-center gap-2 mb-2">
                       <span class="px-2 py-1 bg-orange-100 text-orange-800 text-xs font-semibold rounded">BUNDLE</span>
                     </div>
-                    <h3 class="font-semibold text-gray-900 truncate">{{ bundle.name }}</h3>
-                    <p class="text-sm text-gray-500 truncate">{{ bundle.description }}</p>
+                    <h3 class="font-semibold text-md-on-surface truncate">{{ bundle.name }}</h3>
+                    <p class="text-sm text-md-on-surface-variant truncate">{{ bundle.description }}</p>
                     <div class="mt-2">
                       <span class="text-lg font-bold text-primary">R{{ bundle.basePrice.toFixed(2) }}</span>
                     </div>
@@ -365,13 +367,13 @@
                     <div class="mt-3 flex gap-2">
                       <button
                         @click="editBundle(bundle)"
-                        class="flex-1 px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+                        class="flex-1 px-3 py-1 text-sm bg-md-surface-container-low text-md-on-surface rounded hover:bg-md-surface-container transition-colors"
                       >
                         Edit
                       </button>
                       <button
                         @click="removeBundle(bundle.id)"
-                        class="px-3 py-1 text-sm bg-red-50 text-red-600 rounded hover:bg-red-100 transition-colors"
+                        class="px-3 py-1 text-sm bg-red-50 text-md-error rounded hover:bg-red-100 transition-colors"
                       >
                         Remove
                       </button>
@@ -385,8 +387,8 @@
                 <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <p class="text-gray-600 font-medium">No items in this category yet</p>
-                <p class="text-gray-500 text-sm mt-1">Add items or bundles to get started</p>
+                <p class="text-md-on-surface-variant font-medium">No items in this category yet</p>
+                <p class="text-md-on-surface-variant text-sm mt-1">Add items or bundles to get started</p>
               </div>
             </div>
           </div>
@@ -412,12 +414,12 @@
 
       <!-- Category Modal -->
       <div v-if="showCategoryModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="showCategoryModal = false">
-        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+        <div class="bg-md-surface rounded-2xl shadow-xl max-w-md w-full mx-4">
           <div class="p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ editingCategory ? 'Edit Category' : 'Add Category' }}</h3>
+            <h3 class="text-lg font-semibold text-md-on-surface mb-4">{{ editingCategory ? 'Edit Category' : 'Add Category' }}</h3>
             <div class="space-y-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <label class="block text-sm font-medium text-md-on-surface mb-1">Name</label>
                 <input
                   v-model="categoryForm.name"
                   type="text"
@@ -427,7 +429,7 @@
                 />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Description (optional)</label>
+                <label class="block text-sm font-medium text-md-on-surface mb-1">Description (optional)</label>
                 <textarea
                   v-model="categoryForm.description"
                   rows="2"
@@ -436,7 +438,7 @@
                 ></textarea>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Icon (emoji, optional)</label>
+                <label class="block text-sm font-medium text-md-on-surface mb-1">Icon (emoji, optional)</label>
                 <input
                   v-model="categoryForm.icon"
                   type="text"
@@ -448,7 +450,7 @@
             <div class="flex justify-end gap-3 mt-6">
               <button
                 @click="closeCategoryModal"
-                class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                class="px-4 py-2 border border-gray-300 rounded-lg text-md-on-surface hover:bg-md-surface-container transition-colors"
               >
                 Cancel
               </button>
@@ -465,25 +467,25 @@
 
       <!-- Edit Item Modal -->
       <div v-if="showEditItemModal && editingItem" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto" @click.self="closeEditItemModal">
-        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 my-8">
+        <div class="bg-md-surface rounded-2xl shadow-xl max-w-2xl w-full mx-4 my-8">
           <div class="p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Edit Item in Menu</h3>
-            <p class="text-sm text-gray-600 mb-4">
+            <h3 class="text-lg font-semibold text-md-on-surface mb-4">Edit Item in Menu</h3>
+            <p class="text-sm text-md-on-surface-variant mb-4">
               To edit the item details (name, price, etc.), go to Library → Items.
               Here you can only manage this item's categories in the menu.
             </p>
             <div class="space-y-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Item Name</label>
-                <p class="text-gray-900 font-medium">{{ editingItem.name }}</p>
+                <label class="block text-sm font-medium text-md-on-surface mb-2">Item Name</label>
+                <p class="text-md-on-surface font-medium">{{ editingItem.name }}</p>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Assigned Categories</label>
+                <label class="block text-sm font-medium text-md-on-surface mb-2">Assigned Categories</label>
                 <div class="space-y-2 max-h-48 overflow-y-auto">
                   <label
                     v-for="category in categories"
                     :key="category.id"
-                    class="flex items-center gap-2 p-2 rounded hover:bg-gray-50 cursor-pointer"
+                    class="flex items-center gap-2 p-2 rounded hover:bg-md-surface-container cursor-pointer"
                   >
                     <input
                       type="checkbox"
@@ -491,7 +493,7 @@
                       @change="toggleEditItemCategory(category.id)"
                       class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
                     />
-                    <span class="text-sm text-gray-900">{{ category.name }}</span>
+                    <span class="text-sm text-md-on-surface">{{ category.name }}</span>
                   </label>
                 </div>
               </div>
@@ -499,7 +501,7 @@
             <div class="flex justify-between gap-3 mt-6">
               <button
                 @click="navigateToLibraryItem(editingItem.libraryItemId || editingItem.id)"
-                class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm"
+                class="px-4 py-2 border border-gray-300 rounded-lg text-md-on-surface hover:bg-md-surface-container transition-colors text-sm"
               >
                 <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -509,7 +511,7 @@
               <div class="flex gap-3">
                 <button
                   @click="closeEditItemModal"
-                  class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                  class="px-4 py-2 border border-gray-300 rounded-lg text-md-on-surface hover:bg-md-surface-container transition-colors"
                 >
                   Cancel
                 </button>
@@ -527,14 +529,14 @@
 
       <!-- Confirmation Dialog -->
       <div v-if="confirmDialog.show" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="confirmDialog.show = false">
-        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+        <div class="bg-md-surface rounded-2xl shadow-xl max-w-md w-full mx-4">
           <div class="p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ confirmDialog.title }}</h3>
-            <p class="text-gray-600 mb-6">{{ confirmDialog.message }}</p>
+            <h3 class="text-lg font-semibold text-md-on-surface mb-2">{{ confirmDialog.title }}</h3>
+            <p class="text-md-on-surface-variant mb-6">{{ confirmDialog.message }}</p>
             <div class="flex justify-end gap-3">
               <button
                 @click="confirmDialog.show = false"
-                class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                class="px-4 py-2 border border-gray-300 rounded-lg text-md-on-surface hover:bg-md-surface-container transition-colors"
               >
                 Cancel
               </button>
@@ -680,16 +682,18 @@ const loadCatalog = async () => {
         categories: response.data.categories?.length || 0
       }
 
-      // Set page header and actions
+      // Set page header and actions with inline editing
       setPageHeader({
         title: catalog.value.name || 'Edit Menu',
-        description: 'Manage categories, items, and bundles'
+        description: 'Manage categories, items, and bundles',
+        editable: true,
+        onRename: handleInlineRename
       })
 
       setPageActions(() => h('div', { class: 'flex gap-3' }, [
         h('button', {
           onClick: handleCancel,
-          class: 'px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors'
+          class: 'px-6 py-2 border border-gray-300 rounded-lg text-md-on-surface hover:bg-md-surface-container transition-colors'
         }, 'Cancel'),
         h('button', {
           onClick: handleSave,
@@ -1005,6 +1009,32 @@ const handleSave = async () => {
   }
 }
 
+const handleInlineRename = async (newName: string) => {
+  try {
+    await catalogsApi.updateCatalog(catalogId.value, {
+      name: newName
+    })
+
+    // Update local state
+    if (catalog.value) {
+      catalog.value.name = newName
+    }
+
+    // Update page header
+    setPageHeader({
+      title: newName,
+      description: 'Manage categories, items, and bundles',
+      editable: true,
+      onRename: handleInlineRename
+    })
+
+    hasChanges.value = true
+  } catch (error) {
+    console.error('Failed to rename menu', error)
+    throw error // Re-throw so ProductSwitcher can handle the error
+  }
+}
+
 const handleCancel = () => {
   if (hasChanges.value) {
     confirmDialog.value = {
@@ -1053,11 +1083,11 @@ onUnmounted(() => {
 
 <style scoped>
 .menu-editor-container {
-  @apply min-h-screen bg-gray-50 p-6;
+  @apply min-h-screen bg-md-surface-container p-6;
 }
 
 .sortable-ghost {
-  @apply opacity-40 bg-blue-100;
+  @apply opacity-40 bg-md-primary-container;
 }
 
 .sortable-drag {
@@ -1072,3 +1102,10 @@ onUnmounted(() => {
   @apply cursor-grabbing;
 }
 </style>
+
+
+
+
+
+
+

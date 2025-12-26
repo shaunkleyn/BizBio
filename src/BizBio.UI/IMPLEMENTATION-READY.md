@@ -140,7 +140,7 @@ const { data: addons } = await response.json()
 for (const addon of addons) {
   const pricing = await fetch(`/api/v1/subscription-addons/pricing?addonId=${addon.id}&tierId=${userTierId}`)
   const { data } = await pricing.json()
-  console.log(`${addon.name}: R${data.monthlyPrice}/month`)
+  //console.log(`${addon.name}: R${data.monthlyPrice}/month`)
 }
 ```
 

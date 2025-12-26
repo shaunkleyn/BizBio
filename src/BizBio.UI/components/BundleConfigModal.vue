@@ -35,7 +35,7 @@
                   'flex-1 h-2 rounded-full transition-all',
                   currentStepIndex >= index
                     ? 'bg-[var(--primary-color)]'
-                    : 'bg-gray-200'
+                    : 'bg-md-surface-container'
                 ]"
               ></div>
             </div>
@@ -46,7 +46,7 @@
             <div v-if="currentStep" class="space-y-6">
               <!-- Step Header -->
               <div class="text-center mb-6">
-                <div class="inline-flex items-center justify-center w-12 h-12 bg-[var(--primary-color)] text-white rounded-full font-bold text-lg mb-3">
+                <div class="inline-flex items-center justify-center w-12 h-12 btn-gradient text-white rounded-full font-bold text-lg mb-3">
                   {{ currentStepIndex + 1 }}
                 </div>
                 <h3 class="text-xl font-bold text-[var(--dark-text-color)]">
@@ -66,8 +66,8 @@
                   :class="[
                     'border-2 rounded-lg p-4 cursor-pointer transition-all',
                     isProductSelected(product)
-                      ? 'border-[var(--primary-color)] bg-blue-50'
-                      : 'border-gray-200 hover:border-[var(--primary-color)] hover:bg-gray-50'
+                      ? 'border-[var(--primary-color)] bg-md-primary-container'
+                      : 'border-md-outline-variant hover:border-[var(--primary-color)] hover:bg-md-surface-container'
                   ]"
                 >
                   <div class="flex items-center justify-between">
@@ -76,7 +76,7 @@
                         'w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all',
                         isProductSelected(product)
                           ? 'border-[var(--primary-color)] bg-[var(--primary-color)]'
-                          : 'border-gray-300'
+                          : 'border-md-outline'
                       ]">
                         <i v-if="isProductSelected(product)" class="fas fa-check text-white text-xs"></i>
                       </div>
@@ -98,7 +98,7 @@
                   </div>
 
                   <!-- Option Groups for Selected Product -->
-                  <div v-if="isProductSelected(product) && currentStep.optionGroups?.length > 0" class="mt-4 pt-4 border-t border-gray-200 space-y-4">
+                  <div v-if="isProductSelected(product) && currentStep.optionGroups?.length > 0" class="mt-4 pt-4 border-t border-md-outline-variant space-y-4">
                     <div
                       v-for="optionGroup in currentStep.optionGroups"
                       :key="optionGroup.id"
@@ -123,8 +123,8 @@
                           :class="[
                             'flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all',
                             isOptionSelected(product.id, optionGroup.id, option.id)
-                              ? 'border-[var(--primary-color)] bg-blue-50'
-                              : 'border-gray-200 hover:border-[var(--primary-color)]'
+                              ? 'border-[var(--primary-color)] bg-md-primary-container'
+                              : 'border-md-outline-variant hover:border-[var(--primary-color)]'
                           ]"
                         >
                           <div class="flex items-center gap-2">
@@ -132,17 +132,17 @@
                               'w-4 h-4 rounded-full border-2',
                               isOptionSelected(product.id, optionGroup.id, option.id)
                                 ? 'border-[var(--primary-color)] bg-[var(--primary-color)]'
-                                : 'border-gray-300'
+                                : 'border-md-outline'
                             ]">
                               <div v-if="isOptionSelected(product.id, optionGroup.id, option.id)" class="w-full h-full flex items-center justify-center">
-                                <div class="w-2 h-2 bg-white rounded-full"></div>
+                                <div class="w-2 h-2 bg-md-surface rounded-full"></div>
                               </div>
                             </div>
                             <div v-else :class="[
                               'w-4 h-4 rounded border-2 flex items-center justify-center',
                               isOptionSelected(product.id, optionGroup.id, option.id)
                                 ? 'border-[var(--primary-color)] bg-[var(--primary-color)]'
-                                : 'border-gray-300'
+                                : 'border-md-outline'
                             ]">
                               <i v-if="isOptionSelected(product.id, optionGroup.id, option.id)" class="fas fa-check text-white text-xs"></i>
                             </div>
@@ -165,7 +165,7 @@
           <!-- Footer -->
           <div class="sticky bottom-0 bg-md-surface-container border-t border-md-outline-variant px-6 py-4">
             <!-- Price Summary -->
-            <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
+            <div class="flex items-center justify-between mb-4 pb-4 border-b border-md-outline-variant">
               <div>
                 <p class="text-sm text-[var(--gray-text-color)]">Total Price</p>
                 <p class="text-2xl font-bold text-[var(--dark-text-color)]">
@@ -183,7 +183,7 @@
               <button
                 v-if="currentStepIndex > 0"
                 @click="previousStep"
-                class="flex-1 px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-gray-50 transition-colors font-semibold"
+                class="flex-1 px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-md-surface-container transition-colors font-semibold"
               >
                 <i class="fas fa-arrow-left mr-2"></i>
                 Back
@@ -192,7 +192,7 @@
                 v-if="currentStepIndex < (bundle?.steps?.length || 0) - 1"
                 @click="nextStep"
                 :disabled="!isCurrentStepValid()"
-                class="flex-1 px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                class="flex-1 px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Next Step
                 <i class="fas fa-arrow-right ml-2"></i>
@@ -451,13 +451,13 @@ function close() {
   opacity: 0;
 }
 
-.modal-enter-active .bg-white,
-.modal-leave-active .bg-white {
+.modal-enter-active .bg-md-surface,
+.modal-leave-active .bg-md-surface {
   transition: transform 0.3s ease;
 }
 
-.modal-enter-from .bg-white,
-.modal-leave-to .bg-white {
+.modal-enter-from .bg-md-surface,
+.modal-leave-to .bg-md-surface {
   transform: scale(0.9);
 }
 
@@ -470,3 +470,7 @@ function close() {
   scrollbar-width: none;
 }
 </style>
+
+
+
+

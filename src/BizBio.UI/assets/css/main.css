@@ -6,10 +6,11 @@
 
 :root {
   /* Vibrant & Elegant Color System - Light Theme */
-  --md-primary: #7C3AED;
+  /* Better Purple: Deeper, more vibrant */
+  --md-primary: #8B5CF6;
   --md-on-primary: #FFFFFF;
   --md-primary-container: #F3E8FF;
-  --md-on-primary-container: #4C1D95;
+  --md-on-primary-container: #5B21B6;
   
   --md-secondary: #EC4899;
   --md-on-secondary: #FFFFFF;
@@ -21,10 +22,11 @@
   --md-tertiary-container: #CCFBF1;
   --md-on-tertiary-container: #134E4A;
   
-  --md-accent: #F59E0B;
+  /* Better Orange: Warm, vibrant coral-orange */
+  --md-accent: #FB923C;
   --md-on-accent: #FFFFFF;
-  --md-accent-container: #FEF3C7;
-  --md-on-accent-container: #78350F;
+  --md-accent-container: #FED7AA;
+  --md-on-accent-container: #7C2D12;
   
   --md-error: #EF4444;
   --md-on-error: #FFFFFF;
@@ -51,43 +53,63 @@
   --md-surface-container-high: #E4E4E7;
   --md-surface-container-highest: #D4D4D8;
   
-  /* Gradient Backgrounds */
-  --gradient-primary: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
-  --gradient-secondary: linear-gradient(135deg, #EC4899 0%, #F59E0B 100%);
+  /* Gradient Backgrounds - Vibrant Purple to Warm Orange */
+  --gradient-primary: linear-gradient(135deg, #8B5CF6 0%, #FB923C 100%);
+  --gradient-secondary: linear-gradient(135deg, #EC4899 0%, #FB923C 100%);
   --gradient-tertiary: linear-gradient(135deg, #14B8A6 0%, #3B82F6 100%);
-  --gradient-accent: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
-  --gradient-hero: linear-gradient(135deg, #667EEA 0%, #764BA2 50%, #EC4899 100%);
+  --gradient-accent: linear-gradient(135deg, #FB923C 0%, #F97316 100%);
+  --gradient-hero: linear-gradient(135deg, #8B5CF6 0%, #FB923C 50%, #EC4899 100%);
   --gradient-success: linear-gradient(135deg, #10B981 0%, #14B8A6 100%);
   
-  /* Mesh Gradients */
+  /* Mesh Gradients - 6 Variations for Better Diversity */
+  /* Purple (#8B5CF6 = 258,74%,67%) & Orange (#FB923C = 24,95%,61%) */
   --mesh-gradient-1: 
-    radial-gradient(at 0% 0%, hsla(253,93%,63%,0.15) 0px, transparent 50%),
-    radial-gradient(at 50% 0%, hsla(330,90%,65%,0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(172,76%,46%,0.15) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, hsla(253,93%,63%,0.1) 0px, transparent 50%),
-    radial-gradient(at 50% 50%, hsla(45,93%,58%,0.1) 0px, transparent 50%),
-    radial-gradient(at 100% 50%, hsla(330,90%,65%,0.1) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, hsla(172,76%,46%,0.15) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, hsla(253,93%,63%,0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, hsla(330,90%,65%,0.15) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, hsla(258,74%,67%,0.15) 0px, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(24,95%,61%,0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(172,76%,46%,0.12) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, hsla(258,74%,67%,0.1) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, hsla(24,95%,61%,0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 50%, hsla(258,74%,67%,0.1) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(24,95%,61%,0.15) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, hsla(258,74%,67%,0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(24,95%,61%,0.15) 0px, transparent 50%);
   
   --mesh-gradient-2:
-    radial-gradient(at 27% 37%, hsla(215,98%,61%,0.12) 0px, transparent 50%),
-    radial-gradient(at 97% 21%, hsla(125,98%,72%,0.12) 0px, transparent 50%),
-    radial-gradient(at 52% 99%, hsla(354,98%,61%,0.12) 0px, transparent 50%),
-    radial-gradient(at 10% 29%, hsla(256,96%,67%,0.12) 0px, transparent 50%),
-    radial-gradient(at 97% 96%, hsla(38,60%,74%,0.12) 0px, transparent 50%),
-    radial-gradient(at 33% 50%, hsla(222,67%,73%,0.12) 0px, transparent 50%),
-    radial-gradient(at 79% 53%, hsla(343,68%,79%,0.12) 0px, transparent 50%);
+    radial-gradient(at 20% 30%, hsla(258,90%,65%,0.12) 0px, transparent 50%),
+    radial-gradient(at 80% 20%, hsla(24,85%,65%,0.13) 0px, transparent 50%),
+    radial-gradient(at 50% 80%, hsla(330,90%,65%,0.11) 0px, transparent 50%),
+    radial-gradient(at 10% 70%, hsla(258,75%,70%,0.12) 0px, transparent 50%),
+    radial-gradient(at 90% 90%, hsla(24,80%,68%,0.12) 0px, transparent 50%),
+    radial-gradient(at 40% 40%, hsla(258,70%,72%,0.11) 0px, transparent 50%);
     
   --mesh-gradient-3:
-    radial-gradient(at 40% 20%, hsla(28,100%,74%,0.15) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, hsla(189,100%,56%,0.15) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, hsla(355,100%,93%,0.12) 0px, transparent 50%),
-    radial-gradient(at 80% 50%, hsla(340,100%,76%,0.15) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, hsla(22,100%,77%,0.12) 0px, transparent 50%),
-    radial-gradient(at 80% 100%, hsla(242,100%,70%,0.15) 0px, transparent 50%),
-    radial-gradient(at 0% 0%, hsla(343,100%,76%,0.12) 0px, transparent 50%);
+    radial-gradient(at 40% 20%, hsla(24,95%,70%,0.14) 0px, transparent 50%),
+    radial-gradient(at 80% 10%, hsla(258,90%,60%,0.14) 0px, transparent 50%),
+    radial-gradient(at 10% 60%, hsla(24,90%,75%,0.11) 0px, transparent 50%),
+    radial-gradient(at 70% 70%, hsla(258,85%,72%,0.13) 0px, transparent 50%),
+    radial-gradient(at 20% 90%, hsla(24,92%,65%,0.12) 0px, transparent 50%),
+    radial-gradient(at 60% 40%, hsla(330,85%,70%,0.10) 0px, transparent 50%);
+  
+  --mesh-gradient-4:
+    radial-gradient(at 15% 15%, hsla(258,80%,68%,0.13) 0px, transparent 50%),
+    radial-gradient(at 75% 25%, hsla(24,88%,63%,0.14) 0px, transparent 50%),
+    radial-gradient(at 35% 75%, hsla(172,70%,55%,0.11) 0px, transparent 50%),
+    radial-gradient(at 85% 85%, hsla(258,75%,65%,0.12) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, hsla(24,85%,70%,0.10) 0px, transparent 50%);
+  
+  --mesh-gradient-5:
+    radial-gradient(at 30% 10%, hsla(24,92%,67%,0.15) 0px, transparent 50%),
+    radial-gradient(at 70% 30%, hsla(258,88%,63%,0.13) 0px, transparent 50%),
+    radial-gradient(at 20% 70%, hsla(258,82%,69%,0.12) 0px, transparent 50%),
+    radial-gradient(at 80% 80%, hsla(24,87%,72%,0.14) 0px, transparent 50%),
+    radial-gradient(at 50% 45%, hsla(330,80%,68%,0.10) 0px, transparent 50%);
+  
+  --mesh-gradient-6:
+    radial-gradient(at 25% 25%, hsla(258,85%,66%,0.14) 0px, transparent 50%),
+    radial-gradient(at 65% 15%, hsla(24,90%,69%,0.13) 0px, transparent 50%),
+    radial-gradient(at 45% 65%, hsla(258,78%,71%,0.11) 0px, transparent 50%),
+    radial-gradient(at 15% 85%, hsla(24,83%,64%,0.12) 0px, transparent 50%),
+    radial-gradient(at 85% 55%, hsla(172,75%,58%,0.10) 0px, transparent 50%);
   
   /* Elevation */
   --md-elevation-1: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 2px rgba(0, 0, 0, 0.08);
@@ -177,17 +199,47 @@
   
   --navbar-bg: rgba(24, 24, 27, 0.95);
   
-  /* Dark mode mesh gradients */
+  /* Dark mode mesh gradients - 6 variations with Purple & Orange */
   --mesh-gradient-1: 
-    radial-gradient(at 0% 0%, hsla(253,93%,63%,0.08) 0px, transparent 50%),
-    radial-gradient(at 50% 0%, hsla(330,90%,65%,0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(172,76%,46%,0.08) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, hsla(253,93%,63%,0.06) 0px, transparent 50%),
-    radial-gradient(at 50% 50%, hsla(45,93%,58%,0.06) 0px, transparent 50%),
-    radial-gradient(at 100% 50%, hsla(330,90%,65%,0.06) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, hsla(172,76%,46%,0.08) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, hsla(253,93%,63%,0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, hsla(330,90%,65%,0.08) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, hsla(258,74%,67%,0.08) 0px, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(24,95%,61%,0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(172,76%,46%,0.07) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, hsla(258,74%,67%,0.06) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, hsla(24,95%,61%,0.06) 0px, transparent 50%),
+    radial-gradient(at 100% 50%, hsla(258,74%,67%,0.06) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(24,95%,61%,0.08) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, hsla(258,74%,67%,0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(24,95%,61%,0.08) 0px, transparent 50%);
+  
+  --mesh-gradient-2:
+    radial-gradient(at 20% 30%, hsla(258,90%,65%,0.07) 0px, transparent 50%),
+    radial-gradient(at 80% 20%, hsla(24,85%,65%,0.08) 0px, transparent 50%),
+    radial-gradient(at 50% 80%, hsla(330,90%,65%,0.06) 0px, transparent 50%),
+    radial-gradient(at 10% 70%, hsla(258,75%,70%,0.07) 0px, transparent 50%);
+  
+  --mesh-gradient-3:
+    radial-gradient(at 40% 20%, hsla(24,95%,70%,0.08) 0px, transparent 50%),
+    radial-gradient(at 80% 10%, hsla(258,90%,60%,0.08) 0px, transparent 50%),
+    radial-gradient(at 10% 60%, hsla(24,90%,75%,0.06) 0px, transparent 50%),
+    radial-gradient(at 70% 70%, hsla(258,85%,72%,0.07) 0px, transparent 50%);
+  
+  --mesh-gradient-4:
+    radial-gradient(at 15% 15%, hsla(258,80%,68%,0.07) 0px, transparent 50%),
+    radial-gradient(at 75% 25%, hsla(24,88%,63%,0.08) 0px, transparent 50%),
+    radial-gradient(at 35% 75%, hsla(172,70%,55%,0.06) 0px, transparent 50%),
+    radial-gradient(at 85% 85%, hsla(258,75%,65%,0.07) 0px, transparent 50%);
+  
+  --mesh-gradient-5:
+    radial-gradient(at 30% 10%, hsla(24,92%,67%,0.08) 0px, transparent 50%),
+    radial-gradient(at 70% 30%, hsla(258,88%,63%,0.07) 0px, transparent 50%),
+    radial-gradient(at 20% 70%, hsla(258,82%,69%,0.07) 0px, transparent 50%),
+    radial-gradient(at 80% 80%, hsla(24,87%,72%,0.08) 0px, transparent 50%);
+  
+  --mesh-gradient-6:
+    radial-gradient(at 25% 25%, hsla(258,85%,66%,0.08) 0px, transparent 50%),
+    radial-gradient(at 65% 15%, hsla(24,90%,69%,0.07) 0px, transparent 50%),
+    radial-gradient(at 45% 65%, hsla(258,78%,71%,0.06) 0px, transparent 50%),
+    radial-gradient(at 15% 85%, hsla(24,83%,64%,0.07) 0px, transparent 50%);
 }
 
 body {
@@ -244,6 +296,22 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 1;
 }
 
+/* Mesh card variations for different items - 6 variations */
+.mesh-card-variant-1::before { background: var(--mesh-gradient-1); opacity: 0.6; }
+.mesh-card-variant-2::before { background: var(--mesh-gradient-2); opacity: 0.55; }
+.mesh-card-variant-3::before { background: var(--mesh-gradient-3); opacity: 0.6; }
+.mesh-card-variant-4::before { background: var(--mesh-gradient-4); opacity: 0.55; }
+.mesh-card-variant-5::before { background: var(--mesh-gradient-5); opacity: 0.6; }
+.mesh-card-variant-6::before { background: var(--mesh-gradient-6); opacity: 0.55; }
+
+/* Nth-child variations for automatic alternation - 6-pattern cycle */
+.mesh-card:nth-child(6n+1)::before { background: var(--mesh-gradient-1); opacity: 0.6; }
+.mesh-card:nth-child(6n+2)::before { background: var(--mesh-gradient-2); opacity: 0.55; }
+.mesh-card:nth-child(6n+3)::before { background: var(--mesh-gradient-3); opacity: 0.6; }
+.mesh-card:nth-child(6n+4)::before { background: var(--mesh-gradient-4); opacity: 0.55; }
+.mesh-card:nth-child(6n+5)::before { background: var(--mesh-gradient-5); opacity: 0.6; }
+.mesh-card:nth-child(6n+6)::before { background: var(--mesh-gradient-6); opacity: 0.55; }
+
 .gradient-border {
   position: relative;
   background: var(--md-surface);
@@ -298,21 +366,41 @@ h1, h2, h3, h4, h5, h6 {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
 }
 
-.btn-gradient:hover::before {
-  left: 100%;
-}
+/* ═══════════════════════════════════════════════════════════════
+   ELEGANT BUTTON ANIMATIONS - Modern & Sophisticated
+   ═══════════════════════════════════════════════════════════════ */
 
-/* Material Design Ripple Effect */
-.md-ripple {
+/* Base button setup */
+.btn-gradient,
+.md-ripple,
+button {
   position: relative;
   overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.md-ripple::after {
+/* ─────────────────────────────────────────────────────────────
+   ELEGANT RIPPLE EFFECT - Smooth circular expansion
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes elegantRipple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+  }
+}
+
+.md-ripple::before,
+.btn-gradient::before {
   content: '';
   position: absolute;
   top: 50%;
@@ -320,15 +408,284 @@ h1, h2, h3, h4, h5, h6 {
   width: 0;
   height: 0;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
 }
 
-.md-ripple:active::after {
-  width: 300px;
-  height: 300px;
-  transition: width 0s, height 0s;
+.md-ripple:active::before,
+.btn-gradient:active::before {
+  width: 100%;
+  height: 100%;
+  animation: elegantRipple 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SMOOTH SCALE & GLOW - Subtle press effect
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes smoothPress {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.97);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px 8px rgba(139, 92, 246, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+  }
+}
+
+.btn-gradient:active,
+.md-ripple:active {
+  animation: smoothPress 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SHINE SWEEP - Elegant light sweep on hover
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes shineSweep {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.btn-gradient::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+
+.btn-gradient:hover::after {
+  animation: shineSweep 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FLOATING PARTICLES - Subtle sparkle effect
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes floatUp {
+  0% {
+    transform: translate(-50%, 0) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -30px) scale(1);
+    opacity: 0;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   HOVER EFFECTS - Smooth lift & glow
+   ───────────────────────────────────────────────────────────── */
+
+.btn-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 10px 30px rgba(139, 92, 246, 0.3),
+    0 5px 15px rgba(251, 146, 60, 0.2),
+    0 0 0 1px rgba(139, 92, 246, 0.1);
+}
+
+.md-ripple:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FOCUS STATES - Accessible & elegant
+   ───────────────────────────────────────────────────────────── */
+
+.btn-gradient:focus-visible,
+.md-ripple:focus-visible {
+  outline: 2px solid var(--md-primary);
+  outline-offset: 3px;
+  animation: focusPulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes focusPulse {
+  0%, 100% {
+    outline-color: var(--md-primary);
+    outline-offset: 3px;
+  }
+  50% {
+    outline-color: var(--md-secondary);
+    outline-offset: 5px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   LOADING STATES - Smooth spinner
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes smoothSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.fa-spinner.fa-spin {
+  animation: smoothSpin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   DISABLED STATES - Graceful fade
+   ───────────────────────────────────────────────────────────── */
+
+button:disabled,
+.btn-gradient:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none !important;
+  animation: none !important;
+  pointer-events: none;
+  filter: grayscale(0.3);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   MAGNETIC HOVER - Subtle attraction effect
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes magneticPull {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.btn-gradient:hover {
+  animation: magneticPull 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ICON ANIMATIONS - Smooth icon movements
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(3px);
+  }
+}
+
+.btn-gradient:hover i,
+.md-ripple:hover i {
+  animation: iconBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   GRADIENT SHIFT - Smooth color transitions
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.btn-gradient {
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+.btn-gradient:hover {
+  background-size: 200% 200%;
+  animation: gradientShift 1.5s ease infinite;
+}
+
+/* Regular buttons get simpler animation */
+button:active:not(.btn-gradient):not(.md-ripple) {
+  animation: smoothPress 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Sparkle effect on click - more subtle */
+@keyframes sparkle {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  30% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2);
+  }
+}
+
+@keyframes glowRing {
+  0% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.6),
+                0 0 0 0 rgba(251, 146, 60, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 15px rgba(139, 92, 246, 0),
+                0 0 0 25px rgba(251, 146, 60, 0);
+  }
+}
+
+.btn-gradient::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.btn-gradient:active::after {
+  animation: sparkle 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-gradient:active {
+  animation: buttonPulse 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+             glowRing 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Smooth transitions for all interactive elements */
@@ -746,4 +1103,203 @@ h1, h2, h3, h4, h5, h6 {
 
 .animate-fadeSlide {
   animation: fadeSlide 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced Table Styling */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+table tbody tr {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+table tbody tr:hover {
+  transform: scale(1.001);
+}
+
+/* Table row animations */
+@keyframes tableRowFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+table tbody tr {
+  animation: tableRowFadeIn 0.3s ease-out backwards;
+}
+
+table tbody tr:nth-child(1) { animation-delay: 0.05s; }
+table tbody tr:nth-child(2) { animation-delay: 0.1s; }
+table tbody tr:nth-child(3) { animation-delay: 0.15s; }
+table tbody tr:nth-child(4) { animation-delay: 0.2s; }
+table tbody tr:nth-child(5) { animation-delay: 0.25s; }
+
+/* Smooth scroll for tables */
+.table-container {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--md-outline) var(--md-surface-container);
+}
+
+.table-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: var(--md-surface-container);
+  border-radius: 3px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: var(--md-outline);
+  border-radius: 3px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: var(--md-primary);
+}
+
+/* Enhanced Form Input Styling - Dark Mode Compatible */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+input[type="date"],
+input[type="time"],
+textarea,
+select {
+  background: var(--md-surface-container);
+  color: var(--md-on-surface);
+  border-color: var(--md-outline-variant);
+}
+
+/* Select dropdown options */
+select option {
+  background: var(--md-surface-container);
+  color: var(--md-on-surface);
+}
+
+/* Select in dark mode - ensure proper text color */
+.dark select {
+  background: var(--md-surface-container);
+  color: var(--md-on-surface);
+}
+
+.dark select option {
+  background: var(--md-surface-container-high);
+  color: var(--md-on-surface);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+textarea:focus,
+select:focus {
+  background: var(--md-surface-container-high);
+  border-color: var(--md-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--md-on-surface-variant);
+  opacity: 0.6;
+}
+
+/* Checkboxes and radio buttons */
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--md-primary);
+}
+
+/* Disabled state */
+input:disabled,
+textarea:disabled,
+select:disabled {
+  background: var(--md-surface-container-low);
+  color: var(--md-on-surface-variant);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Standardized Modal Styling */
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.modal-content {
+  background: var(--md-surface);
+}
+
+.modal-header {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid;
+  border-color: rgba(139, 92, 246, 0.2);
+}
+
+.modal-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-primary);
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.modal-footer {
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid var(--md-outline-variant);
+}
+
+.modal-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--mesh-gradient-2);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.modal-close-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--md-error-container);
+  color: var(--md-on-error-container);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-close-btn:hover {
+  background: var(--md-error);
+  color: var(--md-on-error);
+  box-shadow: var(--md-elevation-2);
 }

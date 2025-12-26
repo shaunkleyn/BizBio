@@ -66,6 +66,28 @@ public class LibraryItemsController : ControllerBase
                         v.SizeUnit,
                         v.IsDefault
                     }).ToList(),
+                optionGroups = i.OptionGroupLinks
+                    .Where(l => l.IsActive)
+                    .OrderBy(l => l.DisplayOrder)
+                    .Select(l => new
+                    {
+                        l.OptionGroupId,
+                        l.OptionGroup.Name,
+                        l.OptionGroup.Description,
+                        l.OptionGroup.MinRequired,
+                        l.OptionGroup.MaxAllowed,
+                        l.OptionGroup.IsRequired,
+                        Options = l.OptionGroup.GroupItems
+                            .Where(gi => gi.IsActive)
+                            .OrderBy(gi => gi.DisplayOrder)
+                            .Select(gi => new
+                            {
+                                gi.Option.Id,
+                                gi.Option.Name,
+                                gi.Option.PriceModifier,
+                                gi.IsDefault
+                            }).ToList()
+                    }).ToList(),
                 extraGroups = i.ExtraGroupLinks
                     .Where(l => l.IsActive)
                     .OrderBy(l => l.DisplayOrder)
@@ -104,6 +126,10 @@ public class LibraryItemsController : ControllerBase
 
         var item = await _context.CatalogItems
             .Include(i => i.Variants.Where(v => v.IsActive))
+            .Include(i => i.OptionGroupLinks.Where(l => l.IsActive))
+                .ThenInclude(l => l.OptionGroup)
+                    .ThenInclude(g => g.GroupItems.Where(gi => gi.IsActive))
+                        .ThenInclude(gi => gi.Option)
             .Include(i => i.ExtraGroupLinks.Where(l => l.IsActive))
                 .ThenInclude(l => l.ExtraGroup)
                     .ThenInclude(g => g.GroupItems.Where(gi => gi.IsActive))
@@ -146,6 +172,26 @@ public class LibraryItemsController : ControllerBase
                         v.IsDefault,
                         v.WeightG
                     }).ToList(),
+                    optionGroups = item.OptionGroupLinks
+                        .OrderBy(l => l.DisplayOrder)
+                        .Select(l => new
+                        {
+                            l.OptionGroupId,
+                            l.OptionGroup.Name,
+                            l.OptionGroup.Description,
+                            l.OptionGroup.MinRequired,
+                            l.OptionGroup.MaxAllowed,
+                            l.OptionGroup.IsRequired,
+                            Options = l.OptionGroup.GroupItems
+                                .OrderBy(gi => gi.DisplayOrder)
+                                .Select(gi => new
+                                {
+                                    gi.Option.Id,
+                                    gi.Option.Name,
+                                    gi.Option.PriceModifier,
+                                    gi.IsDefault
+                                }).ToList()
+                        }).ToList(),
                     extraGroups = item.ExtraGroupLinks
                         .OrderBy(l => l.DisplayOrder)
                         .Select(l => new
@@ -235,6 +281,35 @@ public class LibraryItemsController : ControllerBase
                     UpdatedBy = userId.ToString()
                 };
                 _context.CatalogItemVariants.Add(variant);
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        // Link option groups if provided
+        if (dto.OptionGroupIds != null && dto.OptionGroupIds.Any())
+        {
+            var displayOrder = 0;
+            foreach (var optionGroupId in dto.OptionGroupIds)
+            {
+                // Verify the option group belongs to the user
+                var optionGroup = await _context.CatalogItemOptionGroups
+                    .FirstOrDefaultAsync(g => g.Id == optionGroupId && g.UserId == userId && g.IsActive);
+
+                if (optionGroup != null)
+                {
+                    var link = new CatalogItemOptionGroupLink
+                    {
+                        CatalogItemId = item.Id,
+                        OptionGroupId = optionGroupId,
+                        DisplayOrder = displayOrder++,
+                        IsActive = true,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow,
+                        CreatedBy = userId.ToString(),
+                        UpdatedBy = userId.ToString()
+                    };
+                    _context.CatalogItemOptionGroupLinks.Add(link);
+                }
             }
             await _context.SaveChangesAsync();
         }
@@ -336,6 +411,41 @@ public class LibraryItemsController : ControllerBase
                     UpdatedBy = userId.ToString()
                 };
                 _context.CatalogItemVariants.Add(variant);
+            }
+        }
+
+        // Update option group links if provided
+        if (dto.OptionGroupIds != null)
+        {
+            // Remove existing links
+            var existingOptionLinks = await _context.CatalogItemOptionGroupLinks
+                .Where(l => l.CatalogItemId == item.Id)
+                .ToListAsync();
+            _context.CatalogItemOptionGroupLinks.RemoveRange(existingOptionLinks);
+
+            // Add new links
+            var displayOrder = 0;
+            foreach (var optionGroupId in dto.OptionGroupIds)
+            {
+                // Verify the option group belongs to the user
+                var optionGroup = await _context.CatalogItemOptionGroups
+                    .FirstOrDefaultAsync(g => g.Id == optionGroupId && g.UserId == userId && g.IsActive);
+
+                if (optionGroup != null)
+                {
+                    var link = new CatalogItemOptionGroupLink
+                    {
+                        CatalogItemId = item.Id,
+                        OptionGroupId = optionGroupId,
+                        DisplayOrder = displayOrder++,
+                        IsActive = true,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow,
+                        CreatedBy = userId.ToString(),
+                        UpdatedBy = userId.ToString()
+                    };
+                    _context.CatalogItemOptionGroupLinks.Add(link);
+                }
             }
         }
 
@@ -534,6 +644,7 @@ public class CreateLibraryItemDto
     public bool AvailableInEventMode { get; set; } = true;
     public bool EventModeOnly { get; set; } = false;
     public List<CreateVariantDto>? Variants { get; set; }
+    public List<int>? OptionGroupIds { get; set; }
     public List<int>? ExtraGroupIds { get; set; }
 }
 
@@ -549,6 +660,7 @@ public class UpdateLibraryItemDto
     public bool? AvailableInEventMode { get; set; }
     public bool? EventModeOnly { get; set; }
     public List<CreateVariantDto>? Variants { get; set; }
+    public List<int>? OptionGroupIds { get; set; }
     public List<int>? ExtraGroupIds { get; set; }
 }
 

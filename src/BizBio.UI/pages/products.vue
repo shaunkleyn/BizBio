@@ -4,10 +4,10 @@
         <div class="absolute top-20 right-10 w-72 h-72 bg-blue-600 rounded-full opacity-10 blur-3xl"></div>
         <div class="absolute bottom-20 left-10 w-96 h-96 bg-purple-600 rounded-full opacity-10 blur-3xl"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-md-on-surface mb-6">
                 Digital Solutions for <span class="text-blue-600">Modern Businesses</span>
             </h1>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            <p class="text-xl text-md-on-surface-variant max-w-3xl mx-auto mb-8">
                 From digital business cards to interactive menus and product catalogs, BizBio helps you go paperless and professional.
             </p>
         </div>
@@ -17,8 +17,8 @@
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Our Products</h2>
-                <p class="text-lg text-gray-600">Choose the solution that fits your business needs</p>
+                <h2 class="text-3xl sm:text-4xl font-bold text-md-on-surface mb-4">Our Products</h2>
+                <p class="text-lg text-md-on-surface-variant">Choose the solution that fits your business needs</p>
             </div>
 
 
@@ -29,35 +29,35 @@
                     <div class="feature-icon bg-blue-100">
                         <i class="fas fa-id-card text-blue-600 text-2xl"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-3">BizBio Professional</h3>
-                    <p class="text-gray-600 mb-6">Digital business cards that leave a lasting impression. Share your contact info instantly via NFC or QR code.</p>
+                    <h3 class="text-2xl font-bold text-md-on-surface mb-3">BizBio Professional</h3>
+                    <p class="text-md-on-surface-variant mb-6">Digital business cards that leave a lasting impression. Share your contact info instantly via NFC or QR code.</p>
 
                     <div class="space-y-3 mb-6">
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Custom branding & templates</span>
+                            <span class="text-md-on-surface">Custom branding & templates</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Real-time analytics</span>
+                            <span class="text-md-on-surface">Real-time analytics</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Team management</span>
+                            <span class="text-md-on-surface">Team management</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Document uploads</span>
+                            <span class="text-md-on-surface">Document uploads</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Social media integration</span>
+                            <span class="text-md-on-surface">Social media integration</span>
                         </div>
                     </div>
 
                     <div class="mb-4">
                         <span class="text-sm text-gray-500">Starting at</span>
-                        <div class="text-3xl font-bold text-gray-900">R99<span class="text-sm text-gray-600">/month</span></div>
+                        <div class="text-3xl font-bold text-md-on-surface">R99<span class="text-sm text-md-on-surface-variant">/month</span></div>
                     </div>
 
                     <a href="pricing.html" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
@@ -73,35 +73,35 @@
                     <div class="feature-icon bg-orange-100">
                         <i class="fas fa-utensils text-orange-600 text-2xl"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-3">BizBio Menu</h3>
-                    <p class="text-gray-600 mb-6">Digital menus for restaurants, cafes, and bars. Update instantly, no reprinting costs. Perfect for post-COVID contactless dining.</p>
+                    <h3 class="text-2xl font-bold text-md-on-surface mb-3">BizBio Menu</h3>
+                    <p class="text-md-on-surface-variant mb-6">Digital menus for restaurants, cafes, and bars. Update instantly, no reprinting costs. Perfect for post-COVID contactless dining.</p>
 
                     <div class="space-y-3 mb-6">
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Unlimited menu updates</span>
+                            <span class="text-md-on-surface">Unlimited menu updates</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Food photography support</span>
+                            <span class="text-md-on-surface">Food photography support</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Allergen & dietary info</span>
+                            <span class="text-md-on-surface">Allergen & dietary info</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Daily specials section</span>
+                            <span class="text-md-on-surface">Daily specials section</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Multi-location support</span>
+                            <span class="text-md-on-surface">Multi-location support</span>
                         </div>
                     </div>
 
                     <div class="mb-4">
                         <span class="text-sm text-gray-500">Starting at</span>
-                        <div class="text-3xl font-bold text-gray-900">R149<span class="text-sm text-gray-600">/month</span></div>
+                        <div class="text-3xl font-bold text-md-on-surface">R149<span class="text-sm text-md-on-surface-variant">/month</span></div>
                     </div>
 
                     <a href="pricing.html" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
@@ -111,38 +111,38 @@
 
                 <!-- Retail Product -->
                 <div class="product-card bg-white border border-gray-200 rounded-xl p-8 shadow-md">
-                    <div class="feature-icon bg-purple-100">
-                        <i class="fas fa-store text-purple-600 text-2xl"></i>
+                    <div class="feature-icon bg-md-primary-container">
+                        <i class="fas fa-store text-md-primary text-2xl"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-3">BizBio Retail</h3>
-                    <p class="text-gray-600 mb-6">Showcase your products beautifully with digital catalogs. Perfect for boutiques, wholesalers, and service providers.</p>
+                    <h3 class="text-2xl font-bold text-md-on-surface mb-3">BizBio Retail</h3>
+                    <p class="text-md-on-surface-variant mb-6">Showcase your products beautifully with digital catalogs. Perfect for boutiques, wholesalers, and service providers.</p>
 
                     <div class="space-y-3 mb-6">
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Beautiful product galleries</span>
+                            <span class="text-md-on-surface">Beautiful product galleries</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Product variants & specs</span>
+                            <span class="text-md-on-surface">Product variants & specs</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Bulk CSV import</span>
+                            <span class="text-md-on-surface">Bulk CSV import</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Product collections</span>
+                            <span class="text-md-on-surface">Product collections</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-gray-700">Video product demos</span>
+                            <span class="text-md-on-surface">Video product demos</span>
                         </div>
                     </div>
 
                     <div class="mb-4">
                         <span class="text-sm text-gray-500">Starting at</span>
-                        <div class="text-3xl font-bold text-gray-900">R199<span class="text-sm text-gray-600">/month</span></div>
+                        <div class="text-3xl font-bold text-md-on-surface">R199<span class="text-sm text-md-on-surface-variant">/month</span></div>
                     </div>
 
                     <a href="pricing.html" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
@@ -157,10 +157,10 @@
     <section class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                <h2 class="text-3xl sm:text-4xl font-bold text-md-on-surface mb-4">
                     <i class="fas fa-wifi text-blue-600 mr-3"></i>Physical NFC Products
                 </h2>
-                <p class="text-lg text-gray-600">High-quality NFC-enabled products for contactless sharing</p>
+                <p class="text-lg text-md-on-surface-variant">High-quality NFC-enabled products for contactless sharing</p>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -169,10 +169,10 @@
                     <div class="bg-blue-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
                         <i class="fas fa-address-card text-blue-600 text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">NFC Business Card</h3>
-                    <p class="text-gray-600 text-sm mb-4">Premium NFC-enabled business card that shares your profile with a tap</p>
-                    <div class="text-2xl font-bold text-gray-900 mb-4">R150</div>
-                    <ul class="text-sm text-gray-600 space-y-1 mb-4">
+                    <h3 class="text-xl font-bold text-md-on-surface mb-2">NFC Business Card</h3>
+                    <p class="text-md-on-surface-variant text-sm mb-4">Premium NFC-enabled business card that shares your profile with a tap</p>
+                    <div class="text-2xl font-bold text-md-on-surface mb-4">R150</div>
+                    <ul class="text-sm text-md-on-surface-variant space-y-1 mb-4">
                         <li>• Single card</li>
                         <li>• Premium finish</li>
                         <li>• Reprogrammable</li>
@@ -190,10 +190,10 @@
                     <div class="bg-orange-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4 mt-2">
                         <i class="fas fa-hand-sparkles text-orange-600 text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">NFC Wristband</h3>
-                    <p class="text-gray-600 text-sm mb-4">Waterproof wristband for restaurant waiters. Customers tap to view menu or leave reviews</p>
-                    <div class="text-2xl font-bold text-gray-900 mb-4">R120</div>
-                    <ul class="text-sm text-gray-600 space-y-1 mb-4">
+                    <h3 class="text-xl font-bold text-md-on-surface mb-2">NFC Wristband</h3>
+                    <p class="text-md-on-surface-variant text-sm mb-4">Waterproof wristband for restaurant waiters. Customers tap to view menu or leave reviews</p>
+                    <div class="text-2xl font-bold text-md-on-surface mb-4">R120</div>
+                    <ul class="text-sm text-md-on-surface-variant space-y-1 mb-4">
                         <li>• Single wristband</li>
                         <li>• Waterproof silicone</li>
                         <li>• Multiple colors</li>
@@ -205,13 +205,13 @@
 
                 <!-- Table Standee -->
                 <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow duration-200">
-                    <div class="bg-purple-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-qrcode text-purple-600 text-2xl"></i>
+                    <div class="bg-md-primary-container w-16 h-16 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-qrcode text-md-primary text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Table Standee</h3>
-                    <p class="text-gray-600 text-sm mb-4">Acrylic table stand with QR code for easy scanning</p>
-                    <div class="text-2xl font-bold text-gray-900 mb-4">R300</div>
-                    <ul class="text-sm text-gray-600 space-y-1 mb-4">
+                    <h3 class="text-xl font-bold text-md-on-surface mb-2">Table Standee</h3>
+                    <p class="text-md-on-surface-variant text-sm mb-4">Acrylic table stand with QR code for easy scanning</p>
+                    <div class="text-2xl font-bold text-md-on-surface mb-4">R300</div>
+                    <ul class="text-sm text-md-on-surface-variant space-y-1 mb-4">
                         <li>• Acrylic stand</li>
                         <li>• Custom QR code</li>
                         <li>• Professional look</li>
@@ -226,10 +226,10 @@
                     <div class="bg-green-100 w-16 h-16 rounded-lg flex items-center justify-center mb-4">
                         <i class="fas fa-sticker-mule text-green-600 text-2xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Custom QR Stickers</h3>
-                    <p class="text-gray-600 text-sm mb-4">Weatherproof vinyl stickers with your custom QR code</p>
-                    <div class="text-2xl font-bold text-gray-900 mb-4">R500</div>
-                    <ul class="text-sm text-gray-600 space-y-1 mb-4">
+                    <h3 class="text-xl font-bold text-md-on-surface mb-2">Custom QR Stickers</h3>
+                    <p class="text-md-on-surface-variant text-sm mb-4">Weatherproof vinyl stickers with your custom QR code</p>
+                    <div class="text-2xl font-bold text-md-on-surface mb-4">R500</div>
+                    <ul class="text-sm text-md-on-surface-variant space-y-1 mb-4">
                         <li>• Pack of 100</li>
                         <li>• Weatherproof vinyl</li>
                         <li>• Custom design</li>
@@ -243,27 +243,27 @@
             <!-- Bulk Packs -->
             <div class="mt-12 grid md:grid-cols-3 gap-6">
                 <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6">
-                    <h4 class="text-lg font-bold text-gray-900 mb-2">NFC Card Pack (10)</h4>
+                    <h4 class="text-lg font-bold text-md-on-surface mb-2">NFC Card Pack (10)</h4>
                     <div class="text-3xl font-bold text-blue-600 mb-2">R1,200</div>
-                    <p class="text-sm text-gray-600 mb-4">Save R300 on bulk order</p>
+                    <p class="text-sm text-md-on-surface-variant mb-4">Save R300 on bulk order</p>
                     <button class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-semibold">
                         Order Pack
                     </button>
                 </div>
 
                 <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-6">
-                    <h4 class="text-lg font-bold text-gray-900 mb-2">Wristband Pack (5)</h4>
+                    <h4 class="text-lg font-bold text-md-on-surface mb-2">Wristband Pack (5)</h4>
                     <div class="text-3xl font-bold text-orange-600 mb-2">R500</div>
-                    <p class="text-sm text-gray-600 mb-4">Perfect for restaurant teams</p>
+                    <p class="text-sm text-md-on-surface-variant mb-4">Perfect for restaurant teams</p>
                     <button class="w-full bg-orange-600 text-white py-2 rounded-lg hover:bg-orange-700 transition-colors duration-200 text-sm font-semibold">
                         Order Pack
                     </button>
                 </div>
 
                 <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6">
-                    <h4 class="text-lg font-bold text-gray-900 mb-2">Table Standee Pack (10)</h4>
-                    <div class="text-3xl font-bold text-purple-600 mb-2">R2,500</div>
-                    <p class="text-sm text-gray-600 mb-4">Discounted pack for restaurants</p>
+                    <h4 class="text-lg font-bold text-md-on-surface mb-2">Table Standee Pack (10)</h4>
+                    <div class="text-3xl font-bold text-md-primary mb-2">R2,500</div>
+                    <p class="text-sm text-md-on-surface-variant mb-4">Discounted pack for restaurants</p>
                     <button class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200 text-sm font-semibold">
                         Order Pack
                     </button>
@@ -276,8 +276,8 @@
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Professional Services</h2>
-                <p class="text-lg text-gray-600">Let our experts help you create stunning digital profiles</p>
+                <h2 class="text-3xl sm:text-4xl font-bold text-md-on-surface mb-4">Professional Services</h2>
+                <p class="text-lg text-md-on-surface-variant">Let our experts help you create stunning digital profiles</p>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -285,36 +285,36 @@
                     <div class="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
                         <i class="fas fa-paint-brush text-blue-600 text-xl"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">Profile Design</h3>
-                    <p class="text-gray-600 text-sm mb-4">Professional design of your digital profile</p>
-                    <div class="text-xl font-bold text-gray-900">R1,500 - R3,000</div>
+                    <h3 class="text-lg font-bold text-md-on-surface mb-2">Profile Design</h3>
+                    <p class="text-md-on-surface-variant text-sm mb-4">Professional design of your digital profile</p>
+                    <div class="text-xl font-bold text-md-on-surface">R1,500 - R3,000</div>
                 </div>
 
                 <div class="bg-gray-50 rounded-lg p-6 hover:shadow-md transition-shadow duration-200">
                     <div class="bg-orange-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
                         <i class="fas fa-camera text-orange-600 text-xl"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">Menu Photography</h3>
-                    <p class="text-gray-600 text-sm mb-4">Professional food photography in Johannesburg</p>
-                    <div class="text-xl font-bold text-gray-900">R2,500 - R8,000</div>
+                    <h3 class="text-lg font-bold text-md-on-surface mb-2">Menu Photography</h3>
+                    <p class="text-md-on-surface-variant text-sm mb-4">Professional food photography in Johannesburg</p>
+                    <div class="text-xl font-bold text-md-on-surface">R2,500 - R8,000</div>
                 </div>
 
                 <div class="bg-gray-50 rounded-lg p-6 hover:shadow-md transition-shadow duration-200">
-                    <div class="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-box-open text-purple-600 text-xl"></i>
+                    <div class="bg-md-primary-container w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-box-open text-md-primary text-xl"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">Product Photography</h3>
-                    <p class="text-gray-600 text-sm mb-4">Professional product photos in Johannesburg</p>
-                    <div class="text-xl font-bold text-gray-900">R2,000 - R6,000</div>
+                    <h3 class="text-lg font-bold text-md-on-surface mb-2">Product Photography</h3>
+                    <p class="text-md-on-surface-variant text-sm mb-4">Professional product photos in Johannesburg</p>
+                    <div class="text-xl font-bold text-md-on-surface">R2,000 - R6,000</div>
                 </div>
 
                 <div class="bg-gray-50 rounded-lg p-6 hover:shadow-md transition-shadow duration-200">
                     <div class="bg-green-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
                         <i class="fas fa-database text-green-600 text-xl"></i>
                     </div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">Data Migration</h3>
-                    <p class="text-gray-600 text-sm mb-4">Import existing menu/catalog from other systems</p>
-                    <div class="text-xl font-bold text-gray-900">R2,000+</div>
+                    <h3 class="text-lg font-bold text-md-on-surface mb-2">Data Migration</h3>
+                    <p class="text-md-on-surface-variant text-sm mb-4">Import existing menu/catalog from other systems</p>
+                    <div class="text-xl font-bold text-md-on-surface">R2,000+</div>
                 </div>
             </div>
         </div>
@@ -367,13 +367,13 @@
     <!-- CTA Section -->
     <section class="py-20 bg-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Ready to Get Started?</h2>
-            <p class="text-xl text-gray-600 mb-8">Choose the product that's right for your business and start your free trial today.</p>
+            <h2 class="text-3xl sm:text-4xl font-bold text-md-on-surface mb-4">Ready to Get Started?</h2>
+            <p class="text-xl text-md-on-surface-variant mb-8">Choose the product that's right for your business and start your free trial today.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="pricing.html" class="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold text-lg">
                     View Pricing
                 </a>
-                <a href="contact.html" class="bg-gray-100 text-gray-900 px-8 py-4 rounded-lg hover:bg-gray-200 transition-colors duration-200 font-semibold text-lg">
+                <a href="contact.html" class="bg-gray-100 text-md-on-surface px-8 py-4 rounded-lg hover:bg-gray-200 transition-colors duration-200 font-semibold text-lg">
                     Contact Sales
                 </a>
             </div>
@@ -381,7 +381,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 py-12">
+    <footer class="bg-gray-900 text-md-on-surface-variant opacity-50 py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-8">
                 <div>
@@ -420,3 +420,5 @@
 
 </template>
  
+
+

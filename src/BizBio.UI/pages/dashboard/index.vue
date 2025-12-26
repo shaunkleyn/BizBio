@@ -16,48 +16,48 @@
         <!-- Menu Product -->
         <NuxtLink
           to="/menu"
-          class="group bg-white rounded-xl shadow-lg p-8 hover:shadow-2xl transition-all transform hover:-translate-y-1"
+          class="group mesh-card bg-md-surface rounded-2xl shadow-md-3 p-8 card-hover"
         >
-          <div class="bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+          <div class="bg-gradient-primary rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-glow-purple">
             <i class="fas fa-utensils text-white text-3xl"></i>
           </div>
-          <h2 class="text-2xl font-bold text-[var(--dark-text-color)] text-center mb-3">Digital Menu</h2>
-          <p class="text-[var(--gray-text-color)] text-center mb-6">
+          <h2 class="text-2xl font-bold text-md-on-surface text-center mb-3">Digital Menu</h2>
+          <p class="text-md-on-surface-variant text-center mb-6">
             Create and manage digital menus for your restaurant or cafe
           </p>
-          <div class="flex items-center justify-center gap-2 text-[var(--primary-color)] font-semibold">
+          <div class="flex items-center justify-center gap-2 text-md-primary font-semibold">
             <span>Get Started</span>
             <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
           </div>
         </NuxtLink>
 
         <!-- Cards Product (Coming Soon) -->
-        <div class="bg-white rounded-xl shadow-lg p-8 opacity-60 cursor-not-allowed">
-          <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+        <div class="mesh-card bg-md-surface rounded-2xl shadow-md-3 p-8 opacity-60 cursor-not-allowed">
+          <div class="bg-gradient-secondary rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-glow-pink">
             <i class="fas fa-id-card text-white text-3xl"></i>
           </div>
-          <h2 class="text-2xl font-bold text-[var(--dark-text-color)] text-center mb-3">Business Cards</h2>
-          <p class="text-[var(--gray-text-color)] text-center mb-6">
+          <h2 class="text-2xl font-bold text-md-on-surface text-center mb-3">Business Cards</h2>
+          <p class="text-md-on-surface-variant text-center mb-6">
             Create digital business cards and contact profiles
           </p>
           <div class="flex items-center justify-center">
-            <span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-sm font-semibold">
+            <span class="bg-md-surface-container text-md-on-surface-variant px-4 py-2 rounded-full text-sm font-semibold">
               Coming Soon
             </span>
           </div>
         </div>
 
         <!-- Catalog Product (Coming Soon) -->
-        <div class="bg-white rounded-xl shadow-lg p-8 opacity-60 cursor-not-allowed">
-          <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+        <div class="mesh-card bg-md-surface rounded-2xl shadow-md-3 p-8 opacity-60 cursor-not-allowed">
+          <div class="bg-gradient-tertiary rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-glow-teal">
             <i class="fas fa-book text-white text-3xl"></i>
           </div>
-          <h2 class="text-2xl font-bold text-[var(--dark-text-color)] text-center mb-3">Product Catalog</h2>
-          <p class="text-[var(--gray-text-color)] text-center mb-6">
+          <h2 class="text-2xl font-bold text-md-on-surface text-center mb-3">Product Catalog</h2>
+          <p class="text-md-on-surface-variant text-center mb-6">
             Showcase products and services with a digital catalog
           </p>
           <div class="flex items-center justify-center">
-            <span class="bg-gray-200 text-gray-600 px-4 py-2 rounded-full text-sm font-semibold">
+            <span class="bg-md-surface-container text-md-on-surface-variant px-4 py-2 rounded-full text-sm font-semibold">
               Coming Soon
             </span>
           </div>
@@ -66,15 +66,15 @@
 
       <!-- Subscription Info Banner -->
       <div v-if="subscriptionInfo" class="mb-8">
-        <div class="bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-xl shadow-lg p-6 text-white">
+        <div class="mesh-card bg-md-surface rounded-2xl shadow-md-4 p-6 text-md-on-surface">
           <div class="flex items-center justify-between flex-wrap gap-4">
             <div class="flex items-center gap-4">
-              <div class="bg-white/20 rounded-full p-3">
-                <i :class="subscriptionInfo.IsInTrial ? 'fas fa-gift' : 'fas fa-crown'" class="text-2xl"></i>
+              <div class="bg-gradient-primary rounded-full p-3 shadow-glow-purple">
+                <i :class="subscriptionInfo.IsInTrial ? 'fas fa-gift' : 'fas fa-crown'" class="text-2xl text-white"></i>
               </div>
               <div>
                 <h3 class="text-lg font-bold mb-1">{{ subscriptionInfo.TierName || 'Free Plan' }}</h3>
-                <p class="text-white/80 text-sm">
+                <p class="text-md-on-surface-variant text-sm">
                   <template v-if="subscriptionInfo.IsInTrial && subscriptionInfo.TrialDaysRemaining !== null">
                     Trial: {{ subscriptionInfo.TrialDaysRemaining }} day{{ subscriptionInfo.TrialDaysRemaining !== 1 ? 's' : '' }} remaining
                   </template>
@@ -87,8 +87,8 @@
             </div>
             <NuxtLink
               to="/dashboard/subscription"
-              :class="subscriptionInfo.NeedsPayment ? 'bg-red-500 text-white animate-pulse' : 'bg-white text-[var(--primary-color)]'"
-              class="px-6 py-3 rounded-lg hover:bg-opacity-90 transition-all font-semibold"
+              :class="subscriptionInfo.NeedsPayment ? 'bg-md-error text-md-on-error animate-pulse shadow-md-3' : 'btn-gradient shadow-md-2'"
+              class="px-6 py-3 rounded-xl hover:shadow-md-4 transition-all font-semibold"
             >
               <template v-if="subscriptionInfo.NeedsPayment">
                 Activate Plan
@@ -106,45 +106,45 @@
 
       <!-- Quick Info Cards -->
       <div class="grid md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[var(--primary-color)]">
+        <div class="gradient-border mesh-card bg-md-surface shadow-md-3 p-6 card-hover">
           <div class="flex items-center gap-3 mb-3">
-            <div class="bg-[var(--primary-color)] bg-opacity-10 rounded-lg p-3">
-              <i class="fas fa-utensils text-[var(--primary-color)] text-xl"></i>
+            <div class="bg-gradient-primary rounded-lg p-3 shadow-glow-purple">
+              <i class="fas fa-utensils text-white text-xl"></i>
             </div>
-            <h3 class="font-bold text-[var(--dark-text-color)]">Digital Menu</h3>
+            <h3 class="font-bold text-md-on-surface">Digital Menu</h3>
           </div>
-          <p class="text-sm text-[var(--gray-text-color)] mb-4">
+          <p class="text-sm text-md-on-surface-variant mb-4">
             Perfect for restaurants, cafes, and food businesses. Create beautiful digital menus with QR codes.
           </p>
-          <NuxtLink to="/menu" class="text-sm text-[var(--primary-color)] font-semibold hover:underline">
+          <NuxtLink to="/menu" class="text-sm gradient-text font-semibold hover:underline">
             Explore Menu <i class="fas fa-arrow-right ml-1"></i>
           </NuxtLink>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500 opacity-60">
+        <div class="gradient-border mesh-card bg-md-surface shadow-md-3 p-6 opacity-60">
           <div class="flex items-center gap-3 mb-3">
-            <div class="bg-blue-500 bg-opacity-10 rounded-lg p-3">
-              <i class="fas fa-id-card text-blue-500 text-xl"></i>
+            <div class="bg-gradient-secondary rounded-lg p-3 shadow-glow-pink">
+              <i class="fas fa-id-card text-white text-xl"></i>
             </div>
-            <h3 class="font-bold text-[var(--dark-text-color)]">Business Cards</h3>
+            <h3 class="font-bold text-md-on-surface">Business Cards</h3>
           </div>
-          <p class="text-sm text-[var(--gray-text-color)] mb-4">
+          <p class="text-sm text-md-on-surface-variant mb-4">
             Share your contact information instantly with digital business cards and NFC technology.
           </p>
-          <span class="text-sm text-gray-500 font-semibold">Coming Soon</span>
+          <span class="text-sm text-md-on-surface-variant font-semibold">Coming Soon</span>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500 opacity-60">
+        <div class="gradient-border mesh-card bg-md-surface shadow-md-3 p-6 opacity-60">
           <div class="flex items-center gap-3 mb-3">
-            <div class="bg-orange-500 bg-opacity-10 rounded-lg p-3">
-              <i class="fas fa-book text-orange-500 text-xl"></i>
+            <div class="bg-gradient-tertiary rounded-lg p-3 shadow-glow-teal">
+              <i class="fas fa-book text-white text-xl"></i>
             </div>
-            <h3 class="font-bold text-[var(--dark-text-color)]">Product Catalog</h3>
+            <h3 class="font-bold text-md-on-surface">Product Catalog</h3>
           </div>
-          <p class="text-sm text-[var(--gray-text-color)] mb-4">
+          <p class="text-sm text-md-on-surface-variant mb-4">
             Showcase your products and services with a professional digital catalog for retail businesses.
           </p>
-          <span class="text-sm text-gray-500 font-semibold">Coming Soon</span>
+          <span class="text-sm text-md-on-surface-variant font-semibold">Coming Soon</span>
         </div>
       </div>
     </div>

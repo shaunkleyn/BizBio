@@ -19,7 +19,7 @@
         <h2 class="text-xl font-bold text-white">Your Cart</h2>
         <button
           @click="cartStore.closeCart()"
-          class="w-10 h-10 flex items-center justify-center text-white hover:bg-white/20 rounded-full transition-colors"
+          class="w-10 h-10 flex items-center justify-center text-white hover:bg-md-surface/20 rounded-full transition-colors"
         >
           <i class="fas fa-times"></i>
         </button>
@@ -48,7 +48,7 @@
           <div
             v-for="item in cartStore.items"
             :key="item.id"
-            class="bg-gray-50 rounded-lg p-4 border border-gray-200"
+            class="bg-md-surface-container rounded-lg p-4 border border-md-outline-variant"
           >
             <div class="flex gap-3 mb-3">
               <!-- Item Image -->
@@ -60,14 +60,14 @@
                   class="w-full h-full object-cover"
                 />
                 <div v-else class="w-full h-full flex items-center justify-center">
-                  <i class="fas fa-utensils text-gray-400"></i>
+                  <i class="fas fa-utensils text-md-on-surface-variant opacity-70"></i>
                 </div>
               </div>
 
               <!-- Item Info -->
               <div class="flex-1 min-w-0">
                 <div class="flex items-start justify-between mb-1">
-                  <h3 class="font-semibold text-gray-900 flex-1 pr-2">{{ item.name }}</h3>
+                  <h3 class="font-semibold text-md-on-surface flex-1 pr-2">{{ item.name }}</h3>
                   <button
                     @click="cartStore.removeItem(item.id)"
                     class="text-red-500 hover:text-red-700 flex-shrink-0"
@@ -77,13 +77,13 @@
                 </div>
 
                 <!-- Variant -->
-                <div v-if="item.variant" class="text-sm text-gray-600 mb-1">
+                <div v-if="item.variant" class="text-sm text-md-on-surface-variant mb-1">
                   <i class="fas fa-tag mr-1"></i>
                   {{ item.variant.name }}
                 </div>
 
                 <!-- Options -->
-                <div v-if="item.options && item.options.length > 0" class="text-sm text-gray-600 mb-2">
+                <div v-if="item.options && item.options.length > 0" class="text-sm text-md-on-surface-variant mb-2">
                   <div v-for="option in item.options" :key="option.id" class="flex items-start gap-1">
                     <i class="fas fa-plus text-xs mt-0.5"></i>
                     <span>{{ option.optionName }}</span>
@@ -91,14 +91,14 @@
                 </div>
 
                 <!-- Special Instructions -->
-                <div v-if="item.specialInstructions" class="text-sm text-gray-600 italic mb-2">
+                <div v-if="item.specialInstructions" class="text-sm text-md-on-surface-variant italic mb-2">
                   <i class="fas fa-comment-dots mr-1"></i>
                   "{{ item.specialInstructions }}"
                 </div>
 
                 <!-- Bundle Badge -->
                 <div v-if="item.isBundle" class="mb-2">
-                  <span class="px-2 py-0.5 bg-orange-100 text-orange-800 text-xs font-semibold rounded">
+                  <span class="px-2 py-0.5 bg-md-accent-container text-md-on-accent-container text-xs font-semibold rounded">
                     BUNDLE
                   </span>
                 </div>
@@ -109,14 +109,14 @@
                   <div class="flex items-center gap-2">
                     <button
                       @click="cartStore.updateQuantity(item.id, item.quantity - 1)"
-                      class="w-8 h-8 rounded-full border border-[var(--primary-color)] text-[var(--primary-color)] flex items-center justify-center hover:bg-[var(--primary-color)] hover:text-white transition-colors"
+                      class="w-8 h-8 rounded-full border border-md-primary text-md-primary flex items-center justify-center hover:btn-gradient hover:border-transparent hover:text-white transition-colors"
                     >
                       <i class="fas fa-minus text-xs"></i>
                     </button>
-                    <span class="font-semibold text-gray-900 w-8 text-center">{{ item.quantity }}</span>
+                    <span class="font-semibold text-md-on-surface w-8 text-center">{{ item.quantity }}</span>
                     <button
                       @click="cartStore.updateQuantity(item.id, item.quantity + 1)"
-                      class="w-8 h-8 rounded-full border border-[var(--primary-color)] text-[var(--primary-color)] flex items-center justify-center hover:bg-[var(--primary-color)] hover:text-white transition-colors"
+                      class="w-8 h-8 rounded-full border border-md-primary text-md-primary flex items-center justify-center hover:btn-gradient hover:border-transparent hover:text-white transition-colors"
                     >
                       <i class="fas fa-plus text-xs"></i>
                     </button>
@@ -146,19 +146,19 @@
 
         <!-- Totals -->
         <div class="space-y-2 mb-4">
-          <div class="flex justify-between text-gray-600">
+          <div class="flex justify-between text-md-on-surface-variant">
             <span>Subtotal</span>
             <span>R{{ cartStore.subtotal.toFixed(2) }}</span>
           </div>
-          <div v-if="cartStore.deliveryFee > 0" class="flex justify-between text-gray-600">
+          <div v-if="cartStore.deliveryFee > 0" class="flex justify-between text-md-on-surface-variant">
             <span>Delivery Fee</span>
             <span>R{{ cartStore.deliveryFee.toFixed(2) }}</span>
           </div>
-          <div v-if="cartStore.serviceFee > 0" class="flex justify-between text-gray-600">
+          <div v-if="cartStore.serviceFee > 0" class="flex justify-between text-md-on-surface-variant">
             <span>Service Fee</span>
             <span>R{{ cartStore.serviceFee.toFixed(2) }}</span>
           </div>
-          <div class="flex justify-between text-xl font-bold text-gray-900 pt-2 border-t border-gray-200">
+          <div class="flex justify-between text-xl font-bold text-md-on-surface pt-2 border-t border-md-outline-variant">
             <span>Total</span>
             <span class="text-[var(--primary-color)]">R{{ cartStore.total.toFixed(2) }}</span>
           </div>
@@ -221,7 +221,7 @@
           <h3 class="text-xl font-bold text-white">Checkout</h3>
           <button
             @click="showCheckoutModal = false"
-            class="w-8 h-8 flex items-center justify-center text-white hover:bg-white/20 rounded-full transition-colors"
+            class="w-8 h-8 flex items-center justify-center text-white hover:bg-md-surface/20 rounded-full transition-colors"
           >
             <i class="fas fa-times"></i>
           </button>
@@ -231,86 +231,86 @@
         <div class="p-4 space-y-4">
           <!-- Customer Name -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
+            <label class="block text-sm font-medium text-md-on-surface mb-1">
               Name <span class="text-red-500">*</span>
             </label>
             <input
               v-model="customerName"
               type="text"
               placeholder="Enter your name"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent"
+              class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent"
             />
           </div>
 
           <!-- Customer Phone -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
+            <label class="block text-sm font-medium text-md-on-surface mb-1">
               Phone Number <span class="text-red-500">*</span>
             </label>
             <input
               v-model="customerPhone"
               type="tel"
               placeholder="Enter your phone number"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent"
+              class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent"
             />
           </div>
 
           <!-- Customer Email -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
+            <label class="block text-sm font-medium text-md-on-surface mb-1">
               Email (Optional)
             </label>
             <input
               v-model="customerEmail"
               type="email"
               placeholder="Enter your email"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent"
+              class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent"
             />
           </div>
 
           <!-- Delivery Address -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
+            <label class="block text-sm font-medium text-md-on-surface mb-1">
               Delivery Address (Optional)
             </label>
             <textarea
               v-model="deliveryAddress"
               placeholder="Enter delivery address"
               rows="2"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent resize-none"
+              class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent resize-none"
             ></textarea>
           </div>
 
           <!-- Order Notes -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">
+            <label class="block text-sm font-medium text-md-on-surface mb-1">
               Order Notes (Optional)
             </label>
             <textarea
               v-model="orderNotes"
               placeholder="Any special requests?"
               rows="3"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent resize-none"
+              class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent resize-none"
             ></textarea>
           </div>
 
           <!-- Order Summary -->
-          <div class="border-t border-gray-200 pt-4">
-            <h4 class="font-semibold text-gray-900 mb-2">Order Summary</h4>
+          <div class="border-t border-md-outline-variant pt-4">
+            <h4 class="font-semibold text-md-on-surface mb-2">Order Summary</h4>
             <div class="space-y-2 text-sm">
               <div class="flex justify-between">
-                <span class="text-gray-600">Subtotal</span>
+                <span class="text-md-on-surface-variant">Subtotal</span>
                 <span class="font-medium">R{{ cartStore.subtotal.toFixed(2) }}</span>
               </div>
               <div v-if="cartStore.deliveryFee > 0" class="flex justify-between">
-                <span class="text-gray-600">Delivery Fee</span>
+                <span class="text-md-on-surface-variant">Delivery Fee</span>
                 <span class="font-medium">R{{ cartStore.deliveryFee.toFixed(2) }}</span>
               </div>
               <div v-if="cartStore.serviceFee > 0" class="flex justify-between">
-                <span class="text-gray-600">Service Fee</span>
+                <span class="text-md-on-surface-variant">Service Fee</span>
                 <span class="font-medium">R{{ cartStore.serviceFee.toFixed(2) }}</span>
               </div>
-              <div class="flex justify-between text-lg font-bold pt-2 border-t border-gray-200">
+              <div class="flex justify-between text-lg font-bold pt-2 border-t border-md-outline-variant">
                 <span>Total</span>
                 <span class="text-[var(--primary-color)]">R{{ cartStore.total.toFixed(2) }}</span>
               </div>
@@ -452,3 +452,8 @@ async function completeCheckout() {
   }
 }
 </script>
+
+
+
+
+

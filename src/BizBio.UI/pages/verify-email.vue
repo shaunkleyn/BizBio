@@ -3,7 +3,7 @@
     <section class="min-h-screen bg-gradient-to-br from-[var(--light-background-color)] to-white flex items-center justify-center py-12 px-4">
       <div class="max-w-md w-full text-center">
         <div v-if="verifying" class="bg-white rounded-2xl shadow-2xl p-12">
-          <i class="fas fa-spinner fa-spin text-6xl text-[var(--primary-color)] mb-4"></i>
+          <i class="fas fa-spinner fa-spin text-6xl text-md-primary mb-4"></i>
           <p class="text-xl text-[var(--dark-text-color)]">Verifying your email...</p>
         </div>
 
@@ -13,7 +13,7 @@
           <p class="text-[var(--gray-text-color)] mb-6">Your email has been successfully verified.</p>
           <NuxtLink
             to="/login"
-            class="inline-block bg-[var(--primary-color)] text-white px-8 py-3 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
+            class="inline-block bg-md-primary text-white px-8 py-3 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
           >
             Continue to Login
           </NuxtLink>
@@ -25,7 +25,7 @@
           <p class="text-[var(--gray-text-color)] mb-6">{{ error }}</p>
           <NuxtLink
             to="/login"
-            class="inline-block bg-[var(--primary-color)] text-white px-8 py-3 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
+            class="inline-block bg-md-primary text-white px-8 py-3 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
           >
             Back to Login
           </NuxtLink>
@@ -65,3 +65,4 @@ onMounted(async () => {
 
 useHead({ title: 'Verify Email' })
 </script>
+

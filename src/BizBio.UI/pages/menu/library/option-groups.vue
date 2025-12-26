@@ -17,46 +17,56 @@
       <div
         v-for="group in optionGroups"
         :key="group.id"
-        class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+        class="mesh-card bg-md-surface rounded-2xl shadow-md-2 p-6 hover:shadow-md-4 transition-all border border-md-outline-variant"
       >
         <div class="flex justify-between items-start mb-4">
           <div>
-            <h3 class="text-xl font-bold text-gray-800">{{ group.name }}</h3>
-            <p v-if="group.description" class="text-gray-600 mt-1">{{ group.description }}</p>
-            <div class="flex gap-4 mt-2 text-sm text-gray-500">
-              <span>Min: {{ group.minRequired }}</span>
-              <span>Max: {{ group.maxAllowed || 'Unlimited' }}</span>
-              <span v-if="group.isRequired" class="text-red-600 font-semibold">Required</span>
-              <span v-else class="text-gray-500">Optional</span>
+            <h3 class="text-xl font-bold gradient-text">{{ group.name }}</h3>
+            <p v-if="group.description" class="text-md-on-surface-variant mt-1">{{ group.description }}</p>
+            <div class="flex gap-4 mt-2 text-sm">
+              <span class="px-3 py-1 bg-md-primary-container text-md-on-primary-container rounded-full font-medium">
+                <i class="fas fa-arrow-down mr-1"></i>Min: {{ group.minRequired }}
+              </span>
+              <span class="px-3 py-1 bg-md-secondary-container text-md-on-secondary-container rounded-full font-medium">
+                <i class="fas fa-arrow-up mr-1"></i>Max: {{ group.maxAllowed || 'Unlimited' }}
+              </span>
+              <span v-if="group.isRequired" class="px-3 py-1 bg-md-error-container text-md-on-error-container rounded-full font-medium">
+                <i class="fas fa-exclamation-circle mr-1"></i>Required
+              </span>
+              <span v-else class="px-3 py-1 bg-md-surface-container text-md-on-surface-variant rounded-full font-medium">
+                <i class="fas fa-info-circle mr-1"></i>Optional
+              </span>
             </div>
           </div>
           <div class="flex gap-2">
             <button
               @click="editGroup(group)"
-              class="text-blue-600 hover:text-blue-900 px-3 py-1"
+              class="p-2 text-md-primary hover:bg-md-primary-container rounded-xl transition-all shadow-md-1 hover:shadow-md-2"
+              title="Edit"
             >
-              Edit
+              <i class="fas fa-edit"></i>
             </button>
             <button
               @click="deleteGroup(group.id)"
-              class="text-red-600 hover:text-red-900 px-3 py-1"
+              class="p-2 text-md-error hover:bg-md-error-container rounded-xl transition-all shadow-md-1 hover:shadow-md-2"
+              title="Delete"
             >
-              Delete
+              <i class="fas fa-trash"></i>
             </button>
           </div>
         </div>
 
         <!-- Options in Group -->
         <div v-if="group.options && group.options.length > 0" class="mt-4">
-          <h4 class="text-sm font-semibold text-gray-700 mb-2">Options in this group:</h4>
+          <h4 class="text-sm font-semibold text-md-on-surface mb-2">Options in this group:</h4>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
             <div
               v-for="item in group.options"
               :key="item.id"
-              class="flex justify-between items-center bg-gray-50 rounded-lg p-3"
+              class="flex justify-between items-center bg-md-surface-container rounded-lg p-3"
             >
               <div class="flex-1">
-                <span class="text-sm font-medium text-gray-800">{{ item.option.name }}</span>
+                <span class="text-sm font-semibold text-md-on-surface">{{ item.option.name }}</span>
                 <span class="text-xs ml-2" :class="{
                   'text-green-600': item.option.priceModifier > 0,
                   'text-red-600': item.option.priceModifier < 0,
@@ -78,11 +88,11 @@
     </div>
 
     <!-- Empty State -->
-    <div v-else class="bg-white rounded-lg shadow-md p-12 text-center">
+    <div v-else class="bg-md-surface rounded-2xl shadow-md p-12 text-center">
       <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
       </svg>
-      <h3 class="mt-2 text-sm font-medium text-gray-900">No option groups</h3>
+      <h3 class="mt-2 text-sm font-semibold text-md-on-surface">No option groups</h3>
       <p class="mt-1 text-sm text-gray-500">Get started by creating a new option group.</p>
       <div class="mt-6">
         <button
@@ -97,66 +107,73 @@
     <!-- Create/Edit Modal -->
     <div
       v-if="showCreateModal || editingGroup"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      class="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4 animate-fadeSlide"
       @click.self="closeModal"
     >
-      <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <div class="p-6">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">
-              {{ editingGroup ? 'Edit Option Group' : 'Create Option Group' }}
-            </h2>
-            <button @click="closeModal" class="text-gray-400 hover:text-gray-600">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+      <div class="modal-content mesh-card bg-md-surface rounded-2xl shadow-md-5 max-w-3xl w-full max-h-[85vh] flex flex-col overflow-hidden border border-md-outline-variant">
+        <div class="modal-header p-6">
+          <div class="flex justify-between items-center relative z-10">
+            <div>
+              <h2 class="text-2xl font-heading font-bold gradient-text">
+                {{ editingGroup ? 'Edit Option Group' : 'Create Option Group' }}
+              </h2>
+              <p class="text-sm text-md-on-surface-variant mt-1">
+                {{ editingGroup ? 'Update group details' : 'Create a new option group' }}
+              </p>
+            </div>
+            <button
+              @click="closeModal"
+              class="modal-close-btn md-ripple shadow-md-1"
+            >
+              <i class="fas fa-times"></i>
             </button>
           </div>
+        </div>
 
-          <form @submit.prevent="saveGroup" class="space-y-4">
+        <form @submit.prevent="saveGroup" class="flex-1 overflow-y-auto p-6 space-y-6">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">Name *</label>
               <input
                 v-model="formData.name"
                 type="text"
                 required
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary transition-all"
                 placeholder="e.g., Size, Remove Ingredients, Choose Your Base"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">Description</label>
               <textarea
                 v-model="formData.description"
                 rows="2"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary transition-all"
                 placeholder="Optional description"
               ></textarea>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Required *</label>
+                <label class="block text-sm font-semibold text-md-on-surface mb-2">Minimum Required *</label>
                 <input
                   v-model.number="formData.minRequired"
                   type="number"
                   min="0"
                   required
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  class="w-full px-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary transition-all"
                   placeholder="1"
                 />
                 <p class="text-xs text-gray-500 mt-1">1 = Customer must select at least one</p>
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Allowed *</label>
+                <label class="block text-sm font-semibold text-md-on-surface mb-2">Maximum Allowed *</label>
                 <input
                   v-model.number="formData.maxAllowed"
                   type="number"
                   min="1"
                   required
-                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  class="w-full px-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary transition-all"
                   placeholder="1"
                 />
                 <p class="text-xs text-gray-500 mt-1">1 = Single choice, 0 = Unlimited</p>
@@ -170,30 +187,30 @@
                 id="isRequired"
                 class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               />
-              <label for="isRequired" class="ml-2 block text-sm text-gray-700">
+              <label for="isRequired" class="ml-2 block text-sm text-md-on-surface">
                 This is a required selection
               </label>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Display Order</label>
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">Display Order</label>
               <input
                 v-model.number="formData.displayOrder"
                 type="number"
                 min="0"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary transition-all"
                 placeholder="0"
               />
             </div>
 
             <!-- Select Options -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Select Options</label>
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">Select Options</label>
               <div v-if="availableOptions.length > 0" class="border border-gray-300 rounded-lg p-4 max-h-60 overflow-y-auto">
                 <div
                   v-for="option in availableOptions"
                   :key="option.id"
-                  class="flex items-center py-2 hover:bg-gray-50 rounded px-2"
+                  class="flex items-center py-2 hover:bg-md-surface-container rounded px-2"
                 >
                   <input
                     type="checkbox"
@@ -203,7 +220,7 @@
                     class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                   />
                   <label :for="`option-${option.id}`" class="ml-3 flex-1 flex justify-between items-center cursor-pointer">
-                    <span class="text-sm text-gray-800">{{ option.name }}</span>
+                    <span class="text-sm text-md-on-surface">{{ option.name }}</span>
                     <span class="text-sm" :class="{
                       'text-green-600': option.priceModifier > 0,
                       'text-red-600': option.priceModifier < 0,
@@ -218,27 +235,31 @@
                 No options available. Create options first in the Options Library.
               </p>
             </div>
+          </form>
 
-            <div class="flex justify-end gap-3 pt-4 border-t">
+          <!-- Footer with Gradient Background -->
+          <div class="modal-footer p-6">
+            <div class="relative z-10 flex gap-3">
               <button
                 type="button"
                 @click="closeModal"
-                class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                class="flex-1 px-6 py-3 bg-md-surface-container border border-md-outline-variant text-md-on-surface rounded-xl hover:bg-md-surface-container-high transition-all shadow-md-1 md-ripple font-medium"
               >
                 Cancel
               </button>
               <button
-                type="submit"
+                @click="saveGroup"
                 :disabled="saving"
-                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="flex-1 px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-glow-purple transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed md-ripple flex items-center justify-center gap-2"
               >
-                {{ saving ? 'Saving...' : editingGroup ? 'Update' : 'Create' }}
+                <i v-if="saving" class="fas fa-spinner fa-spin"></i>
+                <i v-else class="fas fa-save"></i>
+                <span>{{ saving ? 'Saving...' : editingGroup ? 'Update' : 'Create' }}</span>
               </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   </div>
 </template>
@@ -433,9 +454,9 @@ onMounted(() => {
 
   setPageActions(() => h('button', {
     onClick: () => showCreateModal.value = true,
-    class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
+    class: 'px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors font-bold flex items-center gap-2'
   }, [
-    h('i', { class: 'fas fa-plus mr-2' }),
+    h('i', { class: 'fas fa-plus' }),
     'Add Option Group'
   ]))
 
@@ -443,3 +464,13 @@ onMounted(() => {
   loadStats()
 })
 </script>
+
+
+
+
+
+
+
+
+
+

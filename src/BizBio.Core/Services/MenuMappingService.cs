@@ -45,6 +45,10 @@ public class MenuMappingService
     /// <summary>
     /// Builds the global options[] and extras[] arrays at menu level
     /// Returns maps of GroupId -> ArrayIndex for efficient lookup
+    ///
+    /// Now loads from BOTH systems:
+    /// - CatalogItemOptionGroup tables (dedicated option groups)
+    /// - CatalogItemExtraGroup tables (dedicated extra groups + legacy groups)
     /// </summary>
     private (
         List<OptionGroupDto> options,
@@ -58,23 +62,36 @@ public class MenuMappingService
         var optionIndexMap = new Dictionary<int, int>();
         var extraIndexMap = new Dictionary<int, int>();
 
-        // Get all unique extra groups used in this catalog
+        int optionIndex = 0;
+        int extraIndex = 0;
+
+        // === 1. Load from dedicated Option Groups ===
+        var allOptionGroups = catalog.Items
+            .SelectMany(item => item.OptionGroupLinks)
+            .Select(link => link.OptionGroup)
+            .DistinctBy(g => g.Id)
+            .OrderBy(g => g.DisplayOrder);
+
+        foreach (var group in allOptionGroups)
+        {
+            options.Add(MapOptionGroupToDto(group));
+            optionIndexMap[group.Id] = optionIndex++;
+        }
+
+        // === 2. Load from Extra Groups ===
         var allExtraGroups = catalog.Items
             .SelectMany(item => item.ExtraGroupLinks)
             .Select(link => link.ExtraGroup)
             .DistinctBy(g => g.Id)
             .OrderBy(g => g.DisplayOrder);
 
-        int optionIndex = 0;
-        int extraIndex = 0;
-
         foreach (var group in allExtraGroups)
         {
-            // Separate into Options (required) vs Extras (optional)
-            // Options have MinRequired >= 1
+            // Legacy support: Some extra groups might have MinRequired >= 1 (act as options)
+            // This handles the case where you're migrating from single-table to dual-table approach
             if (group.MinRequired >= 1)
             {
-                options.Add(MapToOptionGroup(group));
+                options.Add(MapExtraGroupToOptionDto(group));
                 optionIndexMap[group.Id] = optionIndex++;
             }
             else
@@ -143,6 +160,23 @@ public class MenuMappingService
         var optionIndices = new List<int>();
         var extraIndices = new List<int>();
 
+        // === 1. Load from OptionGroupLinks (dedicated options system) ===
+        foreach (var link in item.OptionGroupLinks)
+        {
+            // Check if this option group applies to this specific variant
+            // or if it's linked to the item level (applies to all variants)
+            if (link.VariantId == null || link.VariantId == variant.Id)
+            {
+                var groupId = link.OptionGroupId;
+
+                if (optionIndexMap.ContainsKey(groupId))
+                {
+                    optionIndices.Add(optionIndexMap[groupId]);
+                }
+            }
+        }
+
+        // === 2. Load from ExtraGroupLinks (extras system + legacy options) ===
         foreach (var link in item.ExtraGroupLinks)
         {
             // Check if this extra group applies to this specific variant
@@ -151,7 +185,7 @@ public class MenuMappingService
             {
                 var groupId = link.ExtraGroupId;
 
-                // Add to appropriate indices list
+                // Add to appropriate indices list based on which map contains it
                 if (optionIndexMap.ContainsKey(groupId))
                 {
                     optionIndices.Add(optionIndexMap[groupId]);
@@ -170,8 +204,8 @@ public class MenuMappingService
             Default = variant.IsDefault,
             Price = variant.Price,
             OldPrice = null, // Calculate from promotional pricing if needed
-            OptionIndices = optionIndices.OrderBy(i => i).ToList(),
-            ExtraIndices = extraIndices.OrderBy(i => i).ToList(),
+            OptionIndices = optionIndices.Distinct().OrderBy(i => i).ToList(),
+            ExtraIndices = extraIndices.Distinct().OrderBy(i => i).ToList(),
             BusinessIdentity = new BusinessIdentityDto
             {
                 External = variant.Sku
@@ -179,7 +213,42 @@ public class MenuMappingService
         };
     }
 
-    private OptionGroupDto MapToOptionGroup(CatalogItemExtraGroup group)
+    /// <summary>
+    /// Maps from dedicated CatalogItemOptionGroup to OptionGroupDto (primary method)
+    /// </summary>
+    private OptionGroupDto MapOptionGroupToDto(CatalogItemOptionGroup group)
+    {
+        return new OptionGroupDto
+        {
+            Id = group.Id,
+            Name = group.Name,
+            Label = group.Description ?? $"Please select {group.Name.ToLower()}",
+            MinimumSelect = group.MinRequired,
+            MaximumSelect = group.MaxAllowed > 0 ? group.MaxAllowed : 1,
+            OrderIndex = group.DisplayOrder,
+            Items = group.GroupItems
+                .OrderBy(gi => gi.DisplayOrder)
+                .Select(gi => new OptionItemDto
+                {
+                    Id = gi.Option.Id,
+                    Name = gi.Option.Name,
+                    Default = gi.IsDefault,
+                    Price = gi.Option.PriceModifier,
+                    OrderIndex = gi.DisplayOrder,
+                    BusinessIdentity = new BusinessIdentityDto
+                    {
+                        External = gi.Option.Description
+                    }
+                })
+                .ToList()
+        };
+    }
+
+    /// <summary>
+    /// Maps from CatalogItemExtraGroup to OptionGroupDto (legacy support)
+    /// For when extra groups have MinRequired >= 1 and act as options
+    /// </summary>
+    private OptionGroupDto MapExtraGroupToOptionDto(CatalogItemExtraGroup group)
     {
         return new OptionGroupDto
         {

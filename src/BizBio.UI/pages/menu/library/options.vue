@@ -13,55 +13,59 @@
     </div>
 
     <!-- Options List -->
-    <div v-else-if="options.length > 0" class="bg-white rounded-lg shadow-md overflow-hidden">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+    <div v-else-if="options.length > 0" class="mesh-card bg-md-surface rounded-2xl shadow-md-3 overflow-hidden">
+      <table class="min-w-full">
+        <thead class="bg-gradient-to-r from-md-primary/10 to-md-secondary/10 border-b-2 border-md-primary/20">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price Modifier</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Display Order</th>
-            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            <th class="px-6 py-3 text-left text-xs font-bold text-md-on-surface uppercase tracking-wider">Name</th>
+            <th class="px-6 py-3 text-left text-xs font-bold text-md-on-surface uppercase tracking-wider">Price Modifier</th>
+            <th class="px-6 py-3 text-left text-xs font-bold text-md-on-surface uppercase tracking-wider">Description</th>
+            <th class="px-6 py-3 text-left text-xs font-bold text-md-on-surface uppercase tracking-wider">Display Order</th>
+            <th class="px-6 py-3 text-right text-xs font-bold text-md-on-surface uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="option in options" :key="option.id" class="hover:bg-gray-50 transition-colors">
+        <tbody class="divide-y divide-md-outline-variant">
+          <tr v-for="option in options" :key="option.id" class="hover:bg-md-surface-container-low transition-all">
             <td class="px-6 py-4 whitespace-nowrap">
               <div class="flex items-center">
                 <div v-if="option.imageUrl" class="flex-shrink-0 h-10 w-10 mr-3">
                   <img :src="option.imageUrl" :alt="option.name" class="h-10 w-10 rounded-full object-cover" />
                 </div>
-                <div class="text-sm font-medium text-gray-900">{{ option.name }}</div>
+                <div class="text-sm font-medium text-md-on-surface">{{ option.name }}</div>
               </div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
               <div class="text-sm font-semibold" :class="{
                 'text-green-600': option.priceModifier > 0,
-                'text-red-600': option.priceModifier < 0,
-                'text-gray-500': option.priceModifier === 0
+                'text-md-error': option.priceModifier < 0,
+                'text-md-on-surface-variant': option.priceModifier === 0
               }">
                 {{ option.priceModifier >= 0 ? '+' : '' }}R{{ option.priceModifier.toFixed(2) }}
               </div>
             </td>
             <td class="px-6 py-4">
-              <div class="text-sm text-gray-500 truncate max-w-md">{{ option.description || '-' }}</div>
+              <div class="text-sm text-md-on-surface-variant truncate max-w-md">{{ option.description || '-' }}</div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm text-gray-500">{{ option.displayOrder }}</div>
+              <div class="text-sm text-md-on-surface-variant">{{ option.displayOrder }}</div>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-              <button
-                @click="editOption(option)"
-                class="text-blue-600 hover:text-blue-900 mr-4"
-              >
-                Edit
-              </button>
-              <button
-                @click="deleteOption(option.id)"
-                class="text-red-600 hover:text-red-900"
-              >
-                Delete
-              </button>
+            <td class="px-6 py-4 whitespace-nowrap text-right">
+              <div class="flex justify-end gap-2">
+                <button
+                  @click="editOption(option)"
+                  class="p-2 text-md-primary hover:bg-md-primary-container rounded-xl transition-all shadow-md-1 hover:shadow-md-2"
+                  title="Edit"
+                >
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button
+                  @click="deleteOption(option.id)"
+                  class="p-2 text-md-error hover:bg-md-error-container rounded-xl transition-all shadow-md-1 hover:shadow-md-2"
+                  title="Delete"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -69,12 +73,12 @@
     </div>
 
     <!-- Empty State -->
-    <div v-else class="bg-white rounded-lg shadow-md p-12 text-center">
-      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div v-else class="bg-md-surface rounded-2xl shadow-md p-12 text-center">
+      <svg class="mx-auto h-12 w-12 text-md-on-surface-variant opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
       </svg>
-      <h3 class="mt-2 text-sm font-medium text-gray-900">No options</h3>
-      <p class="mt-1 text-sm text-gray-500">Get started by creating a new product option.</p>
+      <h3 class="mt-2 text-sm font-medium text-md-on-surface">No options</h3>
+      <p class="mt-1 text-sm text-md-on-surface-variant">Get started by creating a new product option.</p>
       <div class="mt-6">
         <button
           @click="showCreateModal = true"
@@ -88,103 +92,114 @@
     <!-- Create/Edit Modal -->
     <div
       v-if="showCreateModal || editingOption"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      class="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4 animate-fadeSlide"
       @click.self="closeModal"
     >
-      <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <div class="p-6">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">
-              {{ editingOption ? 'Edit Option' : 'Create Option' }}
-            </h2>
-            <button @click="closeModal" class="text-gray-400 hover:text-gray-600">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+      <div class="modal-content mesh-card bg-md-surface rounded-2xl shadow-md-5 max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden border border-md-outline-variant">
+        <div class="modal-header p-6">
+          <div class="flex justify-between items-center relative z-10">
+            <div>
+              <h2 class="text-2xl font-heading font-bold gradient-text">
+                {{ editingOption ? 'Edit Option' : 'Create Option' }}
+              </h2>
+              <p class="text-sm text-md-on-surface-variant mt-1">
+                {{ editingOption ? 'Update option details' : 'Create a new option' }}
+              </p>
+            </div>
+            <button
+              @click="closeModal"
+              class="modal-close-btn md-ripple shadow-md-1"
+            >
+              <i class="fas fa-times"></i>
             </button>
           </div>
+        </div>
 
-          <form @submit.prevent="saveOption" class="space-y-4">
+        <form @submit.prevent="saveOption" class="flex-1 overflow-y-auto p-6 space-y-6">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+              <label class="block text-sm font-bold text-md-on-surface mb-2">Name *</label>
               <input
                 v-model="formData.name"
                 type="text"
                 required
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary transition-all"
                 placeholder="e.g., Small, Medium, Large, No Onions"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
+              <label class="block text-sm font-bold text-md-on-surface mb-2">
                 Price Modifier *
-                <span class="text-xs text-gray-500 ml-2">(Use negative values for price reductions)</span>
+                <span class="text-xs text-md-on-surface-variant ml-2">(Use negative values for price reductions)</span>
               </label>
               <input
                 v-model.number="formData.priceModifier"
                 type="number"
                 step="0.01"
                 required
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary transition-all"
                 placeholder="0.00"
               />
-              <p class="mt-1 text-xs text-gray-500">
+              <p class="mt-1 text-xs text-md-on-surface-variant">
                 Positive values add to the price, negative values subtract. Use 0 for no change.
               </p>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+              <label class="block text-sm font-bold text-md-on-surface mb-2">Description</label>
               <textarea
                 v-model="formData.description"
                 rows="3"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary transition-all"
                 placeholder="Optional description"
               ></textarea>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+              <label class="block text-sm font-bold text-md-on-surface mb-2">Image URL</label>
               <input
                 v-model="formData.imageUrl"
                 type="url"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary transition-all"
                 placeholder="https://example.com/image.jpg"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">Display Order</label>
+              <label class="block text-sm font-bold text-md-on-surface mb-2">Display Order</label>
               <input
                 v-model.number="formData.displayOrder"
                 type="number"
                 min="0"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="w-full px-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary transition-all"
                 placeholder="0"
               />
             </div>
+          </form>
 
-            <div class="flex justify-end gap-3 pt-4">
+          <!-- Footer with Gradient Background -->
+          <div class="modal-footer p-6">
+            <div class="relative z-10 flex gap-3">
               <button
                 type="button"
                 @click="closeModal"
-                class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                class="flex-1 px-6 py-3 bg-md-surface-container border border-md-outline-variant text-md-on-surface rounded-xl hover:bg-md-surface-container-high transition-all shadow-md-1 md-ripple font-medium"
               >
                 Cancel
               </button>
               <button
-                type="submit"
+                @click="saveOption"
                 :disabled="saving"
-                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                class="flex-1 px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-glow-purple transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed md-ripple flex items-center justify-center gap-2"
               >
-                {{ saving ? 'Saving...' : editingOption ? 'Update' : 'Create' }}
+                <i v-if="saving" class="fas fa-spinner fa-spin"></i>
+                <i v-else class="fas fa-save"></i>
+                <span>{{ saving ? 'Saving...' : editingOption ? 'Update' : 'Create' }}</span>
               </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   </div>
 </template>
@@ -233,9 +248,9 @@ onMounted(() => {
 
   setPageActions(() => h('button', {
     onClick: () => showCreateModal.value = true,
-    class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
+    class: 'px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors font-bold flex items-center gap-2'
   }, [
-    h('i', { class: 'fas fa-plus mr-2' }),
+    h('i', { class: 'fas fa-plus' }),
     'Add Option'
   ]))
 
@@ -355,3 +370,12 @@ const closeModal = () => {
   }
 }
 </script>
+
+
+
+
+
+
+
+
+

@@ -19,7 +19,7 @@
                 type="password"
                 v-model="password"
                 required
-                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
+                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-md-primary"
               />
             </div>
 
@@ -29,14 +29,14 @@
                 type="password"
                 v-model="confirmPassword"
                 required
-                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
+                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-md-primary"
               />
             </div>
 
             <button
               type="submit"
               :disabled="loading"
-              class="w-full bg-[var(--primary-color)] text-white px-6 py-4 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold disabled:opacity-50"
+              class="w-full bg-md-primary text-white px-6 py-4 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold disabled:opacity-50"
             >
               {{ loading ? 'Resetting...' : 'Reset Password' }}
             </button>
@@ -82,3 +82,4 @@ const handleSubmit = async () => {
 
 useHead({ title: 'Reset Password' })
 </script>
+

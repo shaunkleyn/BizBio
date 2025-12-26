@@ -33,20 +33,20 @@
                 type="email"
                 v-model="email"
                 required
-                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]"
+                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-md-primary"
               />
             </div>
 
             <button
               type="submit"
               :disabled="loading"
-              class="w-full bg-[var(--primary-color)] text-white px-6 py-4 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold disabled:opacity-50"
+              class="w-full bg-md-primary text-white px-6 py-4 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold disabled:opacity-50"
             >
               {{ loading ? 'Sending...' : 'Send Reset Link' }}
             </button>
 
             <div class="text-center">
-              <NuxtLink to="/login" class="text-[var(--primary-color)] hover:underline">
+              <NuxtLink to="/login" class="text-md-primary hover:underline">
                 Back to Login
               </NuxtLink>
             </div>
@@ -83,3 +83,4 @@ const handleSubmit = async () => {
 
 useHead({ title: 'Forgot Password' })
 </script>
+

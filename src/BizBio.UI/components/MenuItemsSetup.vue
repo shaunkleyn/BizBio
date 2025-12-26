@@ -1,24 +1,24 @@
 <template>
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-8">
-      <h2 class="text-3xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-4">
+      <h2 class="text-3xl font-bold text-md-on-surface font-[var(--font-family-heading)] mb-4">
         Add Menu Items
       </h2>
-      <p class="text-[var(--gray-text-color)]">
+      <p class="text-md-on-surface-variant">
         Add dishes and items to your menu categories
       </p>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-xl p-8">
+    <div class="bg-md-surface rounded-2xl shadow-xl p-8">
       <!-- Plan Limit Info -->
-      <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-6 flex items-center justify-between">
+      <div class="bg-md-primary-container border-2 border-md-primary rounded-xl p-4 mb-6 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <i class="fas fa-info-circle text-blue-600 text-xl"></i>
+          <i class="fas fa-info-circle text-md-primary text-xl"></i>
           <div class="text-sm">
-            <span class="font-semibold text-[var(--dark-text-color)]">
+            <span class="font-semibold text-md-on-surface">
               {{ menuData.menuItems.length }} / {{ menuData.selectedPlan?.limits.totalItems }}
             </span>
-            <span class="text-[var(--gray-text-color)]"> items used</span>
+            <span class="text-md-on-surface-variant"> items used</span>
           </div>
         </div>
         <div v-if="menuData.menuItems.length >= menuData.selectedPlan?.limits.totalItems" class="text-sm text-[var(--accent-color)] font-semibold">
@@ -31,25 +31,25 @@
       <div v-if="canImportCSV" class="bg-gradient-to-r from-[var(--primary-color)] from-opacity-5 to-[var(--accent3-color)] to-opacity-5 rounded-xl border-2 border-[var(--primary-color)] border-opacity-20 p-6 mb-6">
         <div class="flex items-start justify-between gap-4">
           <div class="flex-1">
-            <h3 class="text-lg font-bold text-[var(--dark-text-color)] mb-2 flex items-center gap-2">
+            <h3 class="text-lg font-bold text-md-on-surface mb-2 flex items-center gap-2">
               <i class="fas fa-file-csv text-[var(--primary-color)]"></i>
               Bulk Import from CSV
-              <span class="text-xs font-semibold px-2 py-1 bg-[var(--primary-color)] text-white rounded-full">PRO</span>
+              <span class="text-xs font-semibold px-2 py-1 bg-md-primary text-md-on-primary rounded-full">PRO</span>
             </h3>
-            <p class="text-sm text-[var(--gray-text-color)] mb-4">
+            <p class="text-sm text-md-on-surface-variant mb-4">
               Save time by importing multiple menu items at once from a CSV file
             </p>
             <div class="flex flex-wrap gap-3">
               <button
                 @click="csvImport.downloadTemplate()"
-                class="px-4 py-2 border-2 border-[var(--primary-color)] text-[var(--primary-color)] rounded-lg hover:bg-[var(--primary-color)] hover:text-white transition-colors font-semibold"
+                class="px-4 py-2 border-2 border-[var(--primary-color)] text-[var(--primary-color)] rounded-xl hover:bg-md-primary hover:text-md-on-primary transition-colors font-semibold"
               >
                 <i class="fas fa-download mr-2"></i>
                 Download Template
               </button>
               <button
                 @click="$refs.csvFileInput.click()"
-                class="px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
+                class="px-4 py-2 bg-md-primary text-md-on-primary rounded-xl hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
               >
                 <i class="fas fa-upload mr-2"></i>
                 Import CSV
@@ -73,16 +73,16 @@
       <div v-else class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl border-2 border-gray-200 p-6 mb-6">
         <div class="flex items-start justify-between gap-4">
           <div class="flex-1">
-            <h3 class="text-lg font-bold text-[var(--dark-text-color)] mb-2 flex items-center gap-2">
-              <i class="fas fa-lock text-gray-400"></i>
+            <h3 class="text-lg font-bold text-md-on-surface mb-2 flex items-center gap-2">
+              <i class="fas fa-lock text-md-on-surface-variant opacity-70"></i>
               CSV Import - Professional Feature
             </h3>
-            <p class="text-sm text-[var(--gray-text-color)] mb-4">
+            <p class="text-sm text-md-on-surface-variant mb-4">
               Upgrade to Professional or Premium plan to import menu items in bulk from CSV files
             </p>
             <button
               @click="showUpgradeModal = true"
-              class="px-4 py-2 bg-gradient-to-r from-[var(--primary-color)] to-[var(--accent3-color)] text-white rounded-lg hover:shadow-lg transition-all font-semibold"
+              class="px-4 py-2 bg-gradient-to-r from-[var(--primary-color)] to-[var(--accent3-color)] text-md-on-primary rounded-xl hover:shadow-lg transition-all font-semibold"
             >
               <i class="fas fa-rocket mr-2"></i>
               Upgrade Plan
@@ -92,7 +92,7 @@
       </div>
 
       <!-- Category Tabs -->
-      <div class="border-b-2 border-[var(--light-border-color)] mb-6">
+      <div class="border-b-2 border-md-outline-variant mb-6">
         <div class="flex gap-2 overflow-x-auto pb-2">
           <button
             v-for="category in menuData.categories"
@@ -101,8 +101,8 @@
             :class="[
               'px-4 py-2 rounded-t-lg font-semibold whitespace-nowrap transition-all',
               selectedCategoryId === category.id
-                ? 'bg-[var(--primary-color)] text-white'
-                : 'text-[var(--gray-text-color)] hover:text-[var(--primary-color)] hover:bg-[var(--light-background-color)]'
+                ? 'bg-md-primary text-md-on-primary'
+                : 'text-md-on-surface-variant hover:text-[var(--primary-color)] hover:bg-[var(--light-background-color)]'
             ]"
           >
             <i :class="[category.icon, 'mr-2']"></i>
@@ -119,11 +119,11 @@
         <div
           v-for="item in selectedCategoryItems"
           :key="item.id"
-          class="border-2 border-[var(--light-border-color)] rounded-xl p-4 hover:border-[var(--primary-color)] transition-colors"
+          class="border-2 border-md-outline-variant rounded-xl p-4 hover:border-[var(--primary-color)] transition-colors"
         >
           <div class="flex gap-4">
             <!-- Image -->
-            <div class="w-20 h-20 rounded-lg overflow-hidden bg-[var(--light-background-color)] flex-shrink-0">
+            <div class="w-20 h-20 rounded-xl overflow-hidden bg-[var(--light-background-color)] flex-shrink-0">
               <img
                 v-if="item.imageUrl"
                 :src="item.imageUrl"
@@ -131,19 +131,19 @@
                 class="w-full h-full object-cover"
               />
               <div v-else class="w-full h-full flex items-center justify-center">
-                <i class="fas fa-image text-[var(--gray-text-color)] text-2xl"></i>
+                <i class="fas fa-image text-md-on-surface-variant text-2xl"></i>
               </div>
             </div>
 
             <!-- Info -->
             <div class="flex-1 min-w-0">
               <div class="flex items-start justify-between gap-2 mb-1">
-                <h4 class="font-bold text-[var(--dark-text-color)] truncate">{{ item.name }}</h4>
+                <h4 class="font-bold text-md-on-surface truncate">{{ item.name }}</h4>
                 <div class="flex-shrink-0 font-bold text-[var(--primary-color)]">
                   R{{ item.price.toFixed(2) }}
                 </div>
               </div>
-              <p class="text-sm text-[var(--gray-text-color)] line-clamp-2 mb-2">
+              <p class="text-sm text-md-on-surface-variant line-clamp-2 mb-2">
                 {{ item.description || 'No description' }}
               </p>
 
@@ -162,7 +162,7 @@
               <div class="flex gap-2">
                 <button
                   @click="editItem(item)"
-                  class="text-xs px-3 py-1 text-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:bg-opacity-10 rounded transition-colors"
+                  class="text-xs px-3 py-1 text-[var(--primary-color)] hover:bg-md-primary hover:bg-opacity-10 rounded transition-colors"
                 >
                   <i class="fas fa-edit mr-1"></i>Edit
                 </button>
@@ -179,26 +179,26 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="text-center py-12 border-2 border-dashed border-[var(--light-border-color)] rounded-xl mb-6">
-        <i class="fas fa-utensils text-6xl text-[var(--gray-text-color)] opacity-50 mb-4"></i>
-        <p class="text-[var(--gray-text-color)]">No items in this category yet. Add your first item below.</p>
+      <div v-else class="text-center py-12 border-2 border-dashed border-md-outline-variant rounded-xl mb-6">
+        <i class="fas fa-utensils text-6xl text-md-on-surface-variant opacity-50 mb-4"></i>
+        <p class="text-md-on-surface-variant">No items in this category yet. Add your first item below.</p>
       </div>
 
       <!-- Add Item Button -->
       <button
         v-if="menuData.menuItems.length < menuData.selectedPlan?.limits.totalItems"
         @click="showAddItemModal = true"
-        class="w-full py-4 border-2 border-dashed border-[var(--primary-color)] text-[var(--primary-color)] rounded-xl hover:bg-[var(--primary-color)] hover:bg-opacity-5 transition-all font-semibold"
+        class="w-full py-4 border-2 border-dashed border-[var(--primary-color)] text-[var(--primary-color)] rounded-xl hover:bg-md-primary hover:bg-opacity-5 transition-all font-semibold"
       >
         <i class="fas fa-plus-circle mr-2"></i>
         Add Item to {{ selectedCategoryName }}
       </button>
 
       <!-- Action Buttons -->
-      <div class="flex items-center justify-between mt-8 pt-6 border-t-2 border-[var(--light-border-color)]">
+      <div class="flex items-center justify-between mt-8 pt-6 border-t-2 border-md-outline-variant">
         <button
           @click="$emit('previous')"
-          class="px-6 py-3 border-2 border-[var(--light-border-color)] text-[var(--dark-text-color)] rounded-lg hover:border-[var(--primary-color)] transition-colors font-semibold"
+          class="px-6 py-3 border-2 border-md-outline-variant text-md-on-surface rounded-xl hover:border-[var(--primary-color)] transition-colors font-semibold"
         >
           <i class="fas fa-arrow-left mr-2"></i>
           Back
@@ -207,10 +207,10 @@
           @click="handleComplete"
           :disabled="props.isSubmitting"
           :class="[
-            'px-8 py-3 rounded-lg transition-all font-bold text-lg',
+            'px-8 py-3 rounded-xl transition-all font-bold text-lg',
             props.isSubmitting
-              ? 'bg-[var(--light-border-color)] text-[var(--gray-text-color)] cursor-not-allowed'
-              : 'bg-gradient-to-r from-[var(--primary-color)] to-[var(--accent3-color)] text-white hover:shadow-lg'
+              ? 'bg-[var(--light-border-color)] text-md-on-surface-variant cursor-not-allowed'
+              : 'bg-gradient-to-r from-[var(--primary-color)] to-[var(--accent3-color)] text-md-on-primary hover:shadow-lg'
           ]"
         >
           <i :class="[props.isSubmitting ? 'fas fa-spinner fa-spin' : 'fas fa-check-circle', 'mr-2']"></i>
@@ -225,14 +225,14 @@
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
       @click.self="closeModal"
     >
-      <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col">
+      <div class="bg-md-surface rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col">
         <!-- Modal Header - Fixed -->
-        <div class="flex-shrink-0 p-6 border-b border-[var(--light-border-color)]">
+        <div class="flex-shrink-0 p-6 border-b border-md-outline-variant">
           <div class="flex items-center justify-between">
-            <h3 class="text-xl font-bold text-[var(--dark-text-color)]">
+            <h3 class="text-xl font-bold text-md-on-surface">
               {{ editingItem ? 'Edit Menu Item' : 'Add New Menu Item' }}
             </h3>
-            <button @click="closeModal" type="button" class="text-[var(--gray-text-color)] hover:text-[var(--dark-text-color)]">
+            <button @click="closeModal" type="button" class="text-md-on-surface-variant hover:text-md-on-surface">
               <i class="fas fa-times text-xl"></i>
             </button>
           </div>
@@ -244,7 +244,7 @@
           <div class="grid md:grid-cols-2 gap-4">
             <!-- Item Name -->
             <div class="md:col-span-2">
-              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">
                 Item Name <span class="text-[var(--accent-color)]">*</span>
               </label>
               <input
@@ -252,13 +252,13 @@
                 type="text"
                 required
                 placeholder="e.g., Margherita Pizza"
-                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none"
+                class="w-full px-4 py-3 border-2 border-md-outline-variant rounded-xl focus:border-[var(--primary-color)] focus:outline-none"
               />
             </div>
 
             <!-- Price -->
             <div>
-              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">
                 Price (R) <span class="text-[var(--accent-color)]">*</span>
               </label>
               <input
@@ -268,19 +268,19 @@
                 min="0"
                 required
                 placeholder="0.00"
-                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none"
+                class="w-full px-4 py-3 border-2 border-md-outline-variant rounded-xl focus:border-[var(--primary-color)] focus:outline-none"
               />
             </div>
 
             <!-- Category -->
             <div>
-              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">
                 Category <span class="text-[var(--accent-color)]">*</span>
               </label>
               <select
                 v-model="newItem.categoryId"
                 required
-                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none"
+                class="w-full px-4 py-3 border-2 border-md-outline-variant rounded-xl focus:border-[var(--primary-color)] focus:outline-none"
               >
                 <option v-for="cat in menuData.categories" :key="cat.id" :value="cat.id">
                   {{ cat.name }}
@@ -290,34 +290,34 @@
 
             <!-- Description -->
             <div class="md:col-span-2">
-              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">
                 Description
               </label>
               <textarea
                 v-model="newItem.description"
                 rows="3"
                 placeholder="Describe this menu item..."
-                class="w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:border-[var(--primary-color)] focus:outline-none resize-none"
+                class="w-full px-4 py-3 border-2 border-md-outline-variant rounded-xl focus:border-[var(--primary-color)] focus:outline-none resize-none"
               ></textarea>
             </div>
 
             <!-- Image Upload -->
             <div class="md:col-span-2">
-              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">
                 Item Image
               </label>
               <div class="flex items-center gap-4">
                 <div
                   v-if="itemImagePreview"
-                  class="w-24 h-24 rounded-lg border-2 border-[var(--light-border-color)] overflow-hidden"
+                  class="w-24 h-24 rounded-xl border-2 border-md-outline-variant overflow-hidden"
                 >
                   <img :src="itemImagePreview" alt="Item preview" class="w-full h-full object-cover" />
                 </div>
                 <div
                   v-else
-                  class="w-24 h-24 rounded-lg border-2 border-dashed border-[var(--light-border-color)] flex items-center justify-center bg-[var(--light-background-color)]"
+                  class="w-24 h-24 rounded-xl border-2 border-dashed border-md-outline-variant flex items-center justify-center bg-[var(--light-background-color)]"
                 >
-                  <i class="fas fa-image text-3xl text-[var(--gray-text-color)]"></i>
+                  <i class="fas fa-image text-3xl text-md-on-surface-variant"></i>
                 </div>
                 <div>
                   <input
@@ -330,7 +330,7 @@
                   <button
                     type="button"
                     @click="$refs.itemImageInput.click()"
-                    class="bg-[var(--primary-color)] text-white px-4 py-2 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors"
+                    class="bg-md-primary text-md-on-primary px-4 py-2 rounded-xl hover:bg-[var(--primary-button-hover-bg-color)] transition-colors"
                   >
                     <i class="fas fa-upload mr-2"></i>
                     Upload Image
@@ -341,14 +341,14 @@
 
             <!-- Dietary Options -->
             <div class="md:col-span-2">
-              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">
                 Dietary Options
               </label>
               <div class="flex flex-wrap gap-2">
                 <label
                   v-for="option in dietaryOptions"
                   :key="option"
-                  class="flex items-center gap-2 px-3 py-2 border-2 border-[var(--light-border-color)] rounded-lg cursor-pointer hover:border-[var(--primary-color)] transition-colors"
+                  class="flex items-center gap-2 px-3 py-2 border-2 border-md-outline-variant rounded-xl cursor-pointer hover:border-[var(--primary-color)] transition-colors"
                 >
                   <input
                     v-model="newItem.dietary"
@@ -363,14 +363,14 @@
 
             <!-- Allergens -->
             <div class="md:col-span-2">
-              <label class="block text-sm font-semibold text-[var(--dark-text-color)] mb-2">
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">
                 Allergens
               </label>
               <div class="flex flex-wrap gap-2">
                 <label
                   v-for="allergen in commonAllergens"
                   :key="allergen"
-                  class="flex items-center gap-2 px-3 py-2 border-2 border-[var(--light-border-color)] rounded-lg cursor-pointer hover:border-[var(--accent-color)] transition-colors"
+                  class="flex items-center gap-2 px-3 py-2 border-2 border-md-outline-variant rounded-xl cursor-pointer hover:border-[var(--accent-color)] transition-colors"
                 >
                   <input
                     v-model="newItem.allergens"
@@ -387,19 +387,19 @@
         </div>
 
         <!-- Modal Footer - Fixed -->
-        <div class="flex-shrink-0 p-6 border-t border-[var(--light-border-color)]">
+        <div class="flex-shrink-0 p-6 border-t border-md-outline-variant">
           <div class="flex gap-3">
             <button
               type="button"
               @click="closeModal"
-              class="flex-1 px-4 py-3 border-2 border-[var(--light-border-color)] text-[var(--dark-text-color)] rounded-lg hover:border-[var(--primary-color)] transition-colors font-semibold"
+              class="flex-1 px-4 py-3 border-2 border-md-outline-variant text-md-on-surface rounded-xl hover:border-[var(--primary-color)] transition-colors font-semibold"
             >
               Cancel
             </button>
             <button
               type="submit"
               form="itemForm"
-              class="flex-1 px-4 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
+              class="flex-1 px-4 py-3 bg-md-primary text-md-on-primary rounded-xl hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
             >
               <i class="fas fa-check mr-2"></i>
               {{ editingItem ? 'Update' : 'Add' }} Item
@@ -438,19 +438,19 @@
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
       @click.self="closeCSVPreview"
     >
-      <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col">
+      <div class="bg-md-surface rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col">
         <!-- Modal Header -->
-        <div class="flex-shrink-0 p-6 border-b border-[var(--light-border-color)]">
+        <div class="flex-shrink-0 p-6 border-b border-md-outline-variant">
           <div class="flex items-center justify-between">
             <div>
-              <h3 class="text-xl font-bold text-[var(--dark-text-color)]">
+              <h3 class="text-xl font-bold text-md-on-surface">
                 CSV Import Preview
               </h3>
-              <p class="text-sm text-[var(--gray-text-color)] mt-1">
+              <p class="text-sm text-md-on-surface-variant mt-1">
                 Review items before importing
               </p>
             </div>
-            <button @click="closeCSVPreview" type="button" class="text-[var(--gray-text-color)] hover:text-[var(--dark-text-color)]">
+            <button @click="closeCSVPreview" type="button" class="text-md-on-surface-variant hover:text-md-on-surface">
               <i class="fas fa-times text-xl"></i>
             </button>
           </div>
@@ -460,7 +460,7 @@
         <div class="flex-1 overflow-y-auto p-6">
           <!-- Import Summary -->
           <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="bg-green-50 border-2 border-green-200 rounded-lg p-4">
+            <div class="bg-green-50 border-2 border-green-200 rounded-xl p-4">
               <div class="flex items-center gap-3">
                 <i class="fas fa-check-circle text-green-600 text-2xl"></i>
                 <div>
@@ -469,7 +469,7 @@
                 </div>
               </div>
             </div>
-            <div class="bg-red-50 border-2 border-red-200 rounded-lg p-4">
+            <div class="bg-red-50 border-2 border-red-200 rounded-xl p-4">
               <div class="flex items-center gap-3">
                 <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
                 <div>
@@ -502,7 +502,7 @@
 
           <!-- Valid Items Preview -->
           <div v-if="csvPreviewData.valid.length > 0">
-            <h4 class="text-lg font-bold text-[var(--dark-text-color)] mb-3">
+            <h4 class="text-lg font-bold text-md-on-surface mb-3">
               <i class="fas fa-check-circle mr-2 text-green-600"></i>
               Items to Import ({{ csvPreviewData.valid.length }})
             </h4>
@@ -510,14 +510,14 @@
               <div
                 v-for="(item, idx) in csvPreviewData.valid"
                 :key="idx"
-                class="border-2 border-[var(--light-border-color)] rounded-lg p-3 hover:border-[var(--primary-color)] transition-colors"
+                class="border-2 border-md-outline-variant rounded-xl p-3 hover:border-[var(--primary-color)] transition-colors"
               >
                 <div class="flex items-center justify-between">
                   <div class="flex-1">
-                    <div class="font-bold text-[var(--dark-text-color)]">{{ item.name }}</div>
-                    <div class="text-sm text-[var(--gray-text-color)]">{{ item.description }}</div>
+                    <div class="font-bold text-md-on-surface">{{ item.name }}</div>
+                    <div class="text-sm text-md-on-surface-variant">{{ item.description }}</div>
                     <div class="flex flex-wrap gap-2 mt-2">
-                      <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">
+                      <span class="text-xs px-2 py-1 bg-md-primary-container text-md-on-primary-container rounded-full">
                         {{ getCategoryName(item.categoryId) }}
                       </span>
                       <span
@@ -539,12 +539,12 @@
         </div>
 
         <!-- Modal Footer -->
-        <div class="flex-shrink-0 p-6 border-t border-[var(--light-border-color)]">
+        <div class="flex-shrink-0 p-6 border-t border-md-outline-variant">
           <div class="flex gap-3 justify-end">
             <button
               type="button"
               @click="closeCSVPreview"
-              class="px-6 py-3 border-2 border-[var(--light-border-color)] text-[var(--dark-text-color)] rounded-lg hover:border-[var(--primary-color)] transition-colors font-semibold"
+              class="px-6 py-3 border-2 border-md-outline-variant text-md-on-surface rounded-xl hover:border-[var(--primary-color)] transition-colors font-semibold"
             >
               Cancel
             </button>
@@ -552,7 +552,7 @@
               v-if="csvPreviewData.valid.length > 0"
               type="button"
               @click="confirmCSVImport"
-              class="px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
+              class="px-6 py-3 bg-md-primary text-md-on-primary rounded-xl hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
             >
               <i class="fas fa-check mr-2"></i>
               Import {{ csvPreviewData.valid.length }} Items
@@ -568,27 +568,27 @@
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
       @click.self="showUpgradeModal = false"
     >
-      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+      <div class="bg-md-surface rounded-2xl shadow-2xl max-w-md w-full p-8">
         <div class="text-center">
           <div class="w-16 h-16 bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] rounded-full flex items-center justify-center mx-auto mb-4">
-            <i class="fas fa-rocket text-3xl text-white"></i>
+            <i class="fas fa-rocket text-3xl text-md-on-primary"></i>
           </div>
-          <h3 class="text-2xl font-bold text-[var(--dark-text-color)] mb-2">
+          <h3 class="text-2xl font-bold text-md-on-surface mb-2">
             Upgrade to Professional
           </h3>
-          <p class="text-[var(--gray-text-color)] mb-6">
+          <p class="text-md-on-surface-variant mb-6">
             Get access to CSV import and many more features with Professional or Premium plan
           </p>
           <div class="flex gap-3">
             <button
               @click="showUpgradeModal = false"
-              class="flex-1 px-4 py-3 border-2 border-[var(--light-border-color)] text-[var(--dark-text-color)] rounded-lg hover:border-[var(--primary-color)] transition-colors font-semibold"
+              class="flex-1 px-4 py-3 border-2 border-md-outline-variant text-md-on-surface rounded-xl hover:border-[var(--primary-color)] transition-colors font-semibold"
             >
               Maybe Later
             </button>
             <NuxtLink
               to="/pricing"
-              class="flex-1 px-4 py-3 bg-gradient-to-r from-[var(--primary-color)] to-[var(--accent3-color)] text-white rounded-lg hover:shadow-lg transition-all font-semibold text-center"
+              class="flex-1 px-4 py-3 bg-gradient-to-r from-[var(--primary-color)] to-[var(--accent3-color)] text-md-on-primary rounded-xl hover:shadow-lg transition-all font-semibold text-center"
             >
               View Plans
             </NuxtLink>
@@ -834,3 +834,7 @@ onMounted(() => {
   }
 })
 </script>
+
+
+
+

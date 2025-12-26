@@ -2,19 +2,19 @@
   <div class="p-4 md:p-8">
     <div class="max-w-7xl mx-auto">
       <!-- Loading State -->
-      <div v-if="loading" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+      <div v-if="loading" class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant p-12 text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--primary-color)] mx-auto"></div>
-        <p class="text-gray-600 mt-4">Loading menus...</p>
+        <p class="text-md-on-surface-variant mt-4">Loading menus...</p>
       </div>
 
       <!-- Empty State -->
-      <div v-else-if="menus.length === 0" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+      <div v-else-if="menus.length === 0" class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant p-12 text-center">
         <i class="fas fa-book-open text-6xl text-gray-300 mb-4"></i>
-        <h3 class="text-xl font-bold text-gray-900 mb-2">No Menus Yet</h3>
-        <p class="text-gray-600 mb-6">Create your first menu to get started organizing your items.</p>
+        <h3 class="text-xl font-bold text-md-on-surface mb-2">No Menus Yet</h3>
+        <p class="text-md-on-surface-variant mb-6">Create your first menu to get started organizing your items.</p>
         <NuxtLink
           to="/dashboard/menu/create"
-          class="inline-block px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold"
+          class="inline-block px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors font-semibold"
         >
           <i class="fas fa-plus mr-2"></i>
           Create Your First Menu
@@ -26,21 +26,21 @@
         <div
           v-for="menu in menus"
           :key="menu.id"
-          class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+          class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant p-6 hover:shadow-md transition-shadow cursor-pointer"
           @click="navigateTo(`/menu/${menu.slug}`)"
         >
           <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-bold text-gray-900">{{ menu.name }}</h3>
+            <h3 class="text-lg font-bold text-md-on-surface">{{ menu.name }}</h3>
             <div class="flex items-center gap-2" @click.stop>
               <NuxtLink
                 :to="`/dashboard/menu/${menu.id}/edit`"
-                class="text-gray-600 hover:text-[var(--primary-color)] transition-colors"
+                class="text-md-on-surface-variant hover:text-[var(--primary-color)] transition-colors"
               >
                 <i class="fas fa-edit"></i>
               </NuxtLink>
             </div>
           </div>
-          <p class="text-sm text-gray-600 mb-4">{{ menu.description || 'No description' }}</p>
+          <p class="text-sm text-md-on-surface-variant mb-4">{{ menu.description || 'No description' }}</p>
           <div class="flex items-center justify-between text-sm">
             <span class="text-gray-500">{{ menu.itemCount || 0 }} items</span>
             <span class="text-xs text-gray-400">Updated {{ formatDate(menu.updatedAt) }}</span>
@@ -82,7 +82,7 @@ onMounted(async () => {
 
   setPageActions(() => h('NuxtLink', {
     to: '/dashboard/menu/create',
-    class: 'px-6 py-3 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--secondary-color)] transition-colors font-semibold'
+    class: 'px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors font-semibold'
   }, [
     h('i', { class: 'fas fa-plus mr-2' }),
     'Create Menu'
@@ -145,3 +145,7 @@ useHead({
   title: 'Menus - Menu Dashboard',
 })
 </script>
+
+
+
+

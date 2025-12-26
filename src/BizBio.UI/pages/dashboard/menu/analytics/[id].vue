@@ -52,11 +52,11 @@
               </span>
             </div>
             <h3 class="text-4xl font-bold mb-1">{{ analytics.totalViews.toLocaleString() }}</h3>
-            <p class="text-blue-100">Total Views</p>
+            <p class="text-md-on-primary">Total Views</p>
           </div>
 
           <!-- Unique Visitors -->
-          <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-xl p-6 text-white">
+          <div class="bg-gradient-to-br bg-gradient-primary rounded-2xl shadow-xl p-6 text-white">
             <div class="flex items-center justify-between mb-2">
               <i class="fas fa-users text-3xl opacity-80"></i>
               <span class="text-sm font-semibold bg-white bg-opacity-20 px-3 py-1 rounded-full">
@@ -64,7 +64,7 @@
               </span>
             </div>
             <h3 class="text-4xl font-bold mb-1">{{ analytics.uniqueVisitors.toLocaleString() }}</h3>
-            <p class="text-purple-100">Unique Visitors</p>
+            <p class="text-md-on-primary">Unique Visitors</p>
           </div>
 
           <!-- Avg Time Spent -->
@@ -213,7 +213,7 @@
                 <div class="flex-1 bg-[var(--light-background-color)] rounded-full h-4 overflow-hidden">
                   <div
                     :style="{ width: `${depth.userPercentage}%` }"
-                    class="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                    class="h-full bg-gradient-to-r bg-gradient-tertiary"
                   ></div>
                 </div>
                 <span class="text-sm text-[var(--gray-text-color)] w-24 text-right">{{ depth.userPercentage }}% of users</span>
@@ -334,3 +334,5 @@ useHead({
   title: 'Menu Analytics - BizBio',
 })
 </script>
+
+

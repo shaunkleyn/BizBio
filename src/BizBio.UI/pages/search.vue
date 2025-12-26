@@ -25,14 +25,14 @@
                     type="text"
                     v-model="searchQuery"
                     placeholder="Search businesses, services, or professionals..."
-                    class="block w-full pl-12 pr-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-colors"
+                    class="block w-full pl-12 pr-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-md-primary transition-colors"
                     @keyup.enter="handleSearch"
                   />
                 </div>
               </div>
               <button
                 @click="handleSearch"
-                class="bg-[var(--primary-color)] text-white px-8 py-3 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
+                class="bg-md-primary text-white px-8 py-3 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold"
               >
                 Search
               </button>
@@ -42,7 +42,7 @@
 
         <!-- Results or Empty State -->
         <div v-if="searching" class="text-center py-12">
-          <i class="fas fa-spinner fa-spin text-4xl text-[var(--primary-color)]"></i>
+          <i class="fas fa-spinner fa-spin text-4xl text-md-primary"></i>
           <p class="text-[var(--gray-text-color)] mt-4">Searching...</p>
         </div>
 
@@ -65,7 +65,7 @@
             <p class="text-[var(--gray-text-color)] mb-4">{{ result.description }}</p>
             <NuxtLink
               :to="`/${result.slug}`"
-              class="text-[var(--primary-color)] hover:underline font-semibold"
+              class="text-md-primary hover:underline font-semibold"
             >
               View Profile →
             </NuxtLink>
@@ -99,3 +99,4 @@ useHead({
   title: 'Search Businesses',
 })
 </script>
+

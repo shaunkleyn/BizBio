@@ -119,8 +119,46 @@
                 : 'text-md-on-surface-variant hover:text-md-secondary'
             ]"
           >
-            <i class="fas fa-object-group w-5"></i>
-            <span>Extra Groups</span>
+            <div :class="[
+              'absolute inset-0 bg-md-secondary-container opacity-0 group-hover:opacity-100 transition-opacity',
+              route.path === '/menu/library/extra-groups' ? 'opacity-0' : ''
+            ]"></div>
+            <i class="fas fa-object-group w-5 relative z-10"></i>
+            <span class="text-sm relative z-10">Extra Groups</span>
+          </NuxtLink>
+
+          <NuxtLink
+            to="/menu/library/options"
+            :class="[
+              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
+              route.path === '/menu/library/options'
+                ? 'bg-gradient-tertiary text-white shadow-glow-teal'
+                : 'text-md-on-surface-variant hover:text-md-tertiary'
+            ]"
+          >
+            <div :class="[
+              'absolute inset-0 bg-md-tertiary-container opacity-0 group-hover:opacity-100 transition-opacity',
+              route.path === '/menu/library/options' ? 'opacity-0' : ''
+            ]"></div>
+            <i class="fas fa-sliders-h w-5 relative z-10"></i>
+            <span class="text-sm relative z-10">Options</span>
+          </NuxtLink>
+
+          <NuxtLink
+            to="/menu/library/option-groups"
+            :class="[
+              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
+              route.path === '/menu/library/option-groups'
+                ? 'bg-gradient-accent text-white shadow-md-2'
+                : 'text-md-on-surface-variant hover:text-md-accent'
+            ]"
+          >
+            <div :class="[
+              'absolute inset-0 bg-md-accent-container opacity-0 group-hover:opacity-100 transition-opacity',
+              route.path === '/menu/library/option-groups' ? 'opacity-0' : ''
+            ]"></div>
+            <i class="fas fa-layer-group w-5 relative z-10"></i>
+            <span class="text-sm relative z-10">Option Groups</span>
           </NuxtLink>
         </div>
 
@@ -129,7 +167,7 @@
           :class="[
             'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
             isActive('/menu/categories')
-              ? 'bg-[var(--primary-color)] bg-opacity-10 text-white font-semibold'
+              ? 'bg-md-primary-container text-white font-semibold'
               : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
           ]"
         >
@@ -143,7 +181,7 @@
           :class="[
             'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
             isActive('/menu/events')
-              ? 'bg-[var(--primary-color)] bg-opacity-10 text-white font-semibold'
+              ? 'bg-md-primary-container text-white font-semibold'
               : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
           ]"
         >
@@ -161,7 +199,7 @@
           :class="[
             'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
             isActive('/menu/tables')
-              ? 'bg-[var(--primary-color)] bg-opacity-10 text-white font-semibold'
+              ? 'bg-md-primary-container text-white font-semibold'
               : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
           ]"
         >
@@ -210,7 +248,7 @@
         class="flex items-center gap-3 px-4 py-3 hover:bg-[var(--medium-background-color)] transition-colors"
       >
         <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
-          :class="product.id === currentProduct.id ? 'bg-[var(--primary-color)] bg-opacity-10' : 'bg-[var(--medium-background-color)]'"
+          :class="product.id === currentProduct.id ? 'bg-md-primary-container' : 'bg-[var(--medium-background-color)]'"
         >
           <i :class="[product.icon, product.id === currentProduct.id ? 'text-[var(--primary-color)]' : 'text-[var(--gray-text-color)]', 'text-xl']"></i>
         </div>
@@ -315,3 +353,4 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })
 </script>
+

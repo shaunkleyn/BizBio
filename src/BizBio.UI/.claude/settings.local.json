@@ -28,7 +28,8 @@
       "Bash(powershell -Command \"Get-Content ''MRD-TOP RATED.json'' -Raw | Select-String -Pattern ''\"\"\\(endpoint|url|api|path|route\\)\"\"'' -AllMatches | Select-Object -First 10\")",
       "Bash(taskkill //F //PID 40628)",
       "Bash(dotnet run)",
-      "Bash(taskkill //F //PID 58116)"
+      "Bash(taskkill //F //PID 58116)",
+      "Bash(taskkill:*)"
     ],
     "deny": [],
     "ask": []

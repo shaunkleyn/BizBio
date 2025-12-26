@@ -5,10 +5,10 @@
       <div class="absolute top-20 right-10 w-72 h-72 bg-blue-600 rounded-full opacity-10 blur-3xl"></div>
       <div class="absolute bottom-20 left-10 w-96 h-96 bg-purple-600 rounded-full opacity-10 blur-3xl"></div>
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-md-on-surface mb-6">
           Simple, Transparent Pricing
         </h1>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+        <p class="text-xl text-md-on-surface-variant max-w-3xl mx-auto mb-8">
           Choose the perfect plan for your business. Upgrade, downgrade, or cancel anytime.
         </p>
       </div>
@@ -18,7 +18,7 @@
 
         <!-- Loading State -->
         <div v-if="loading" class="text-center py-12">
-          <i class="fas fa-spinner fa-spin text-6xl text-[var(--primary-color)] mb-4"></i>
+          <i class="fas fa-spinner fa-spin text-6xl text-md-primary mb-4"></i>
           <p class="text-[var(--gray-text-color)]">Loading pricing plans...</p>
         </div>
 
@@ -28,7 +28,7 @@
           <i class="fas fa-exclamation-circle text-[var(--accent-color)] text-5xl mb-4"></i>
           <p class="text-[var(--dark-text-color)] mb-4">{{ error }}</p>
           <button @click="loadPricingTiers"
-            class="bg-[var(--primary-color)] text-white px-6 py-3 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold">
+            class="bg-md-primary text-white px-6 py-3 rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors font-semibold">
             Try Again
           </button>
         </div>
@@ -40,7 +40,7 @@
             'rounded-2xl shadow-xl p-8 transition-all duration-300',
             tier.popular
               ? 'bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] text-white transform scale-105 relative'
-              : 'bg-white border-2 border-[var(--light-border-color)] hover:border-[var(--primary-color)]'
+              : 'bg-white border-2 border-[var(--light-border-color)] hover:border-md-primary'
           ]">
             <!-- Popular Badge -->
             <div v-if="tier.popular"
@@ -87,10 +87,10 @@
             <NuxtLink :to="tier.buttonLink" :class="[
               'block w-full text-center px-6 py-3 rounded-lg transition-all font-semibold',
               tier.popular
-                ? 'bg-white text-[var(--primary-color)] hover:bg-opacity-90 shadow-lg'
+                ? 'bg-white text-md-primary hover:bg-opacity-90 shadow-lg'
                 : tier.price === 0
-                  ? 'border-2 border-[var(--primary-color)] text-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:text-white'
-                  : 'border-2 border-[var(--primary-color)] text-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:text-white'
+                  ? 'border-2 border-md-primary text-md-primary hover:bg-md-primary hover:text-white'
+                  : 'border-2 border-md-primary text-md-primary hover:bg-md-primary hover:text-white'
             ]">
               {{ tier.buttonText }}
             </NuxtLink>
@@ -150,7 +150,7 @@
 
           <div class="inline-flex items-center gap-4 bg-white bg-opacity-10 backdrop-blur-sm rounded-full p-2">
             <button id="monthly-toggle"
-              class="px-6 py-2 rounded-full font-semibold bg-white text-[var(--primary-color)] transition-all">
+              class="px-6 py-2 rounded-full font-semibold bg-white text-md-primary transition-all">
               Monthly
             </button>
             <button id="annual-toggle"
@@ -217,7 +217,7 @@
             'rounded-2xl shadow-xl p-8 transition-all duration-300',
             tier.popular
               ? 'bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent3-color)] text-white transform scale-105 relative'
-              : 'bg-white border-2 border-[var(--light-border-color)] hover:border-[var(--primary-color)]'
+              : 'bg-white border-2 border-[var(--light-border-color)] hover:border-md-primary'
           ]">
           
             <!-- Popular Badge -->
@@ -265,10 +265,10 @@
             <NuxtLink :to="tier.buttonLink" :class="[
               'block w-full text-center px-6 py-3 rounded-lg transition-all font-semibold',
               tier.popular
-                ? 'bg-white text-[var(--primary-color)] hover:bg-opacity-90 shadow-lg'
+                ? 'bg-white text-md-primary hover:bg-opacity-90 shadow-lg'
                 : tier.price === 0
-                  ? 'border-2 border-[var(--primary-color)] text-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:text-white'
-                  : 'border-2 border-[var(--primary-color)] text-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:text-white'
+                  ? 'border-2 border-md-primary text-md-primary hover:bg-md-primary hover:text-white'
+                  : 'border-2 border-md-primary text-md-primary hover:bg-md-primary hover:text-white'
             ]">
               {{ tier.buttonText }}
             </NuxtLink>
@@ -323,16 +323,16 @@
             </div>
 
             <div
-              class="bg-white rounded-2xl border-2 border-[var(--primary-color)] p-8 hover:shadow-2xl transition-all relative transform lg:scale-105">
+              class="bg-white rounded-2xl border-2 border-md-primary p-8 hover:shadow-2xl transition-all relative transform lg:scale-105">
               <div class="absolute -top-4 left-1/2 -translate-x-1/2">
-                <span class="bg-[var(--primary-color)] text-white px-4 py-1 rounded-full text-xs font-bold">
+                <span class="bg-md-primary text-white px-4 py-1 rounded-full text-xs font-bold">
                   MOST POPULAR
                 </span>
               </div>
               <div class="text-center mb-6">
                 <div
-                  class="w-16 h-16 bg-[var(--primary-color)] bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <i class="fas fa-star text-[var(--primary-color)] text-2xl" aria-hidden="true"></i>
+                  class="w-16 h-16 bg-md-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-star text-md-primary text-2xl" aria-hidden="true"></i>
                 </div>
                 <h3 class="text-2xl font-bold text-[var(--dark-text-color)] mb-2">
                   Professional
@@ -350,32 +350,32 @@
               </div>
               <ul class="space-y-3 mb-8">
                 <li class="flex items-start gap-2 text-sm">
-                  <i class="fas fa-check text-[var(--primary-color)] mt-1" aria-hidden="true"></i>
+                  <i class="fas fa-check text-md-primary mt-1" aria-hidden="true"></i>
                   <span>Up to 15 table personalities</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm">
-                  <i class="fas fa-check text-[var(--primary-color)] mt-1" aria-hidden="true"></i>
+                  <i class="fas fa-check text-md-primary mt-1" aria-hidden="true"></i>
                   <span>Digital menu (3 menus)</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm">
-                  <i class="fas fa-check text-[var(--primary-color)] mt-1" aria-hidden="true"></i>
+                  <i class="fas fa-check text-md-primary mt-1" aria-hidden="true"></i>
                   <span>NFC tag support</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm">
-                  <i class="fas fa-check text-[var(--primary-color)] mt-1" aria-hidden="true"></i>
+                  <i class="fas fa-check text-md-primary mt-1" aria-hidden="true"></i>
                   <span>Advanced analytics</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm">
-                  <i class="fas fa-check text-[var(--primary-color)] mt-1" aria-hidden="true"></i>
+                  <i class="fas fa-check text-md-primary mt-1" aria-hidden="true"></i>
                   <span>Event management</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm">
-                  <i class="fas fa-check text-[var(--primary-color)] mt-1" aria-hidden="true"></i>
+                  <i class="fas fa-check text-md-primary mt-1" aria-hidden="true"></i>
                   <span>Priority support</span>
                 </li>
               </ul>
               <button
-                class="w-full bg-[var(--primary-color)] text-white py-3 rounded-lg font-bold hover:bg-[var(--primary-button-hover-bg-color)] transition-colors">
+                class="w-full bg-md-primary text-white py-3 rounded-lg font-bold hover:bg-[var(--primary-button-hover-bg-color)] transition-colors">
                 Select Plan
               </button>
             </div>
@@ -513,7 +513,7 @@
                   <i class="fas fa-table text-[var(--accent3-color)] text-xl" aria-hidden="true"></i>
                 </div>
                 <label class="flex items-center cursor-pointer">
-                  <input type="checkbox" class="w-5 h-5 text-[var(--primary-color)] rounded" value="on">
+                  <input type="checkbox" class="w-5 h-5 text-md-primary rounded" value="on">
                 </label>
               </div>
               <h3 class="text-xl font-bold text-[var(--dark-text-color)] mb-2">
@@ -532,11 +532,11 @@
               class="bg-white rounded-xl border border-[var(--light-border-color)] p-6 hover:shadow-lg transition-all">
               <div class="flex items-start justify-between mb-4">
                 <div
-                  class="w-12 h-12 bg-[var(--primary-color)] bg-opacity-10 rounded-lg flex items-center justify-center">
-                  <i class="fas fa-chart-line text-[var(--primary-color)] text-xl" aria-hidden="true"></i>
+                  class="w-12 h-12 bg-md-primary bg-opacity-10 rounded-lg flex items-center justify-center">
+                  <i class="fas fa-chart-line text-md-primary text-xl" aria-hidden="true"></i>
                 </div>
                 <label class="flex items-center cursor-pointer">
-                  <input type="checkbox" class="w-5 h-5 text-[var(--primary-color)] rounded" value="on">
+                  <input type="checkbox" class="w-5 h-5 text-md-primary rounded" value="on">
                 </label>
               </div>
               <h3 class="text-xl font-bold text-[var(--dark-text-color)] mb-2">
@@ -559,7 +559,7 @@
                   <i class="fas fa-nfc-symbol text-[var(--accent4-color)] text-xl" aria-hidden="true"></i>
                 </div>
                 <label class="flex items-center cursor-pointer">
-                  <input type="checkbox" class="w-5 h-5 text-[var(--primary-color)] rounded" value="on">
+                  <input type="checkbox" class="w-5 h-5 text-md-primary rounded" value="on">
                 </label>
               </div>
               <h3 class="text-xl font-bold text-[var(--dark-text-color)] mb-2">
@@ -582,7 +582,7 @@
                   <i class="fas fa-sms text-[var(--accent2-color)] text-xl" aria-hidden="true"></i>
                 </div>
                 <label class="flex items-center cursor-pointer">
-                  <input type="checkbox" class="w-5 h-5 text-[var(--primary-color)] rounded" value="on">
+                  <input type="checkbox" class="w-5 h-5 text-md-primary rounded" value="on">
                 </label>
               </div>
               <h3 class="text-xl font-bold text-[var(--dark-text-color)] mb-2">
@@ -605,7 +605,7 @@
                   <i class="fas fa-globe text-[var(--accent3-color)] text-xl" aria-hidden="true"></i>
                 </div>
                 <label class="flex items-center cursor-pointer">
-                  <input type="checkbox" class="w-5 h-5 text-[var(--primary-color)] rounded" value="on">
+                  <input type="checkbox" class="w-5 h-5 text-md-primary rounded" value="on">
                 </label>
               </div>
               <h3 class="text-xl font-bold text-[var(--dark-text-color)] mb-2">
@@ -624,11 +624,11 @@
               class="bg-white rounded-xl border border-[var(--light-border-color)] p-6 hover:shadow-lg transition-all">
               <div class="flex items-start justify-between mb-4">
                 <div
-                  class="w-12 h-12 bg-[var(--primary-color)] bg-opacity-10 rounded-lg flex items-center justify-center">
-                  <i class="fas fa-headset text-[var(--primary-color)] text-xl" aria-hidden="true"></i>
+                  class="w-12 h-12 bg-md-primary bg-opacity-10 rounded-lg flex items-center justify-center">
+                  <i class="fas fa-headset text-md-primary text-xl" aria-hidden="true"></i>
                 </div>
                 <label class="flex items-center cursor-pointer">
-                  <input type="checkbox" class="w-5 h-5 text-[var(--primary-color)] rounded" value="on">
+                  <input type="checkbox" class="w-5 h-5 text-md-primary rounded" value="on">
                 </label>
               </div>
               <h3 class="text-xl font-bold text-[var(--dark-text-color)] mb-2">
@@ -740,3 +740,7 @@ useHead({
   title: 'Pricing',
 })
 </script>
+
+
+
+

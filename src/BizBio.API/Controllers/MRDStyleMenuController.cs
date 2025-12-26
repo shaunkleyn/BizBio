@@ -47,6 +47,13 @@ public class MRDStyleMenuController : ControllerBase
                             .ThenInclude(link => link.ExtraGroup)
                                 .ThenInclude(group => group.GroupItems)
                                     .ThenInclude(gi => gi.Extra)
+            .Include(c => c.Categories)
+                .ThenInclude(cat => cat.CatalogItemCategories)
+                    .ThenInclude(cic => cic.CatalogItem)
+                        .ThenInclude(item => item.OptionGroupLinks)
+                            .ThenInclude(link => link.OptionGroup)
+                                .ThenInclude(group => group.GroupItems)
+                                    .ThenInclude(gi => gi.Option)
             .FirstOrDefaultAsync(c => c.Id == catalogId);
 
         if (catalog == null)
@@ -82,6 +89,13 @@ public class MRDStyleMenuController : ControllerBase
                             .ThenInclude(link => link.ExtraGroup)
                                 .ThenInclude(group => group.GroupItems)
                                     .ThenInclude(gi => gi.Extra)
+            .Include(c => c.Categories)
+                .ThenInclude(cat => cat.CatalogItemCategories)
+                    .ThenInclude(cic => cic.CatalogItem)
+                        .ThenInclude(item => item.OptionGroupLinks)
+                            .ThenInclude(link => link.OptionGroup)
+                                .ThenInclude(group => group.GroupItems)
+                                    .ThenInclude(gi => gi.Option)
             .Where(c => c.ProfileId == profile.Id && c.IsPublic)
             .OrderByDescending(c => c.CreatedAt)
             .FirstOrDefaultAsync();
@@ -141,15 +155,26 @@ public class MRDStyleMenuController : ControllerBase
             // Validate and calculate options cost
             foreach (var optionSelection in cartItem.SelectedOptions)
             {
-                var option = await _context.CatalogItemExtras
-                    .FirstOrDefaultAsync(e => e.Id == optionSelection.OptionId);
+                // Try dedicated options table first
+                var option = await _context.CatalogItemOptions
+                    .FirstOrDefaultAsync(o => o.Id == optionSelection.OptionId);
 
-                if (option == null)
-                    return BadRequest(new { error = $"Option {optionSelection.OptionId} not found" });
+                if (option != null)
+                {
+                    // Options use PriceModifier (can be positive, negative, or zero)
+                    itemTotal += option.PriceModifier * cartItem.Quantity;
+                }
+                else
+                {
+                    // Legacy: Check extras table (for old option groups with MinRequired >= 1)
+                    var legacyOption = await _context.CatalogItemExtras
+                        .FirstOrDefaultAsync(e => e.Id == optionSelection.OptionId);
 
-                // Options are included in base price or add cost
-                // This depends on your business logic
-                itemTotal += option.BasePrice * cartItem.Quantity;
+                    if (legacyOption == null)
+                        return BadRequest(new { error = $"Option {optionSelection.OptionId} not found" });
+
+                    itemTotal += legacyOption.BasePrice * cartItem.Quantity;
+                }
             }
 
             // Calculate extras cost
