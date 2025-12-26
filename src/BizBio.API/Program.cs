@@ -83,6 +83,11 @@ builder.Services.AddCors(options =>
             "https://api.bizbio.co.za",
             "https://ui.bizbio.co.za"
         )
+        .SetIsOriginAllowed(origin =>
+        {
+            var uri = new Uri(origin);
+            return (uri.Host == "localhost" || uri.Host == "127.0.0.1" || uri.Host == "154.66.198.20") || (uri.Host.EndsWith(".bizbio.co.za") || uri.Host == "bizbio.co.za");
+        })
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials();

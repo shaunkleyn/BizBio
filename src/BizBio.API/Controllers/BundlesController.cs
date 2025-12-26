@@ -37,7 +37,7 @@ public class BundlesController : ControllerBase
     private async Task<bool> HasBundleFeature(int userId)
     {
         var subscriptions = await _subscriptionRepo.GetActiveSubscriptionsAsync(userId);
-        var menuSubscription = subscriptions.FirstOrDefault(s => s.Tier?.ProductLineId == 1); // 1 = Menu product line
+        var menuSubscription = subscriptions.FirstOrDefault(s => s.Tier.ProductLine.Name.Equals("menu", StringComparison.OrdinalIgnoreCase)); // 1 = Menu product line
         return menuSubscription?.Tier?.Bundles ?? false;
     }
 
@@ -129,8 +129,36 @@ public class BundlesController : ControllerBase
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             CreatedBy = userId.ToString(),
-            UpdatedBy = userId.ToString()
+            UpdatedBy = userId.ToString(),
+            Steps = new List<CatalogBundleStep>()
         };
+
+        foreach (var step in bundle.Steps)
+        {
+            var bundleStep = new CatalogBundleStep();
+            bundleStep.CreatedAt = DateTime.UtcNow;
+            bundleStep.UpdatedAt = DateTime.UtcNow;
+            bundleStep.CreatedBy = userId.ToString();
+            bundleStep.UpdatedBy = userId.ToString();
+            bundleStep.StepNumber = step.StepNumber;
+            bundleStep.Name = step.Name;
+            bundleStep.MinSelect = step.MinSelect;
+            bundleStep.MaxSelect = step.MaxSelect;
+            bundleStep.AllowedProducts = new List<CatalogBundleStepProduct>();
+            foreach (var product in step.AllowedProducts)
+            {
+                var stepProduct = new CatalogBundleStepProduct();
+                stepProduct.CreatedAt = DateTime.UtcNow;
+                stepProduct.UpdatedAt = DateTime.UtcNow;
+                stepProduct.CreatedBy = userId.ToString();
+                stepProduct.UpdatedBy = userId.ToString();
+                stepProduct.ProductId = product.ProductId;
+                stepProduct.IsActive = true;
+                stepProduct.StepId = bundleStep.Id;
+                bundleStep.AllowedProducts.Add(stepProduct);
+            }
+            bundle.Steps.Add(bundleStep);
+        }
 
         await _bundleRepo.AddAsync(bundle);
         await _bundleRepo.SaveChangesAsync();

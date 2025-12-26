@@ -1,36 +1,40 @@
 <template>
-  <div class="min-h-screen bg-[var(--light-background-color)]">
+  <div class="min-h-screen bg-gray-50">
     <!-- Loading State -->
-    <div v-if="loading" class="flex justify-center items-center h-screen">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--primary-color)]"></div>
+    <div v-if="loading" class="flex justify-center items-center h-screen bg-white">
+      <div class="text-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+        <p class="text-gray-600 font-medium">Loading menu...</p>
+      </div>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="flex flex-col justify-center items-center h-screen px-4">
+    <div v-else-if="error" class="flex flex-col justify-center items-center h-screen px-4 bg-white">
       <i class="fas fa-exclamation-circle text-6xl text-red-500 mb-4"></i>
-      <h2 class="text-2xl font-bold text-[var(--dark-text-color)] mb-2">Menu Not Found</h2>
-      <p class="text-[var(--gray-text-color)] text-center">{{ error }}</p>
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Menu Not Found</h2>
+      <p class="text-gray-600 text-center">{{ error }}</p>
     </div>
 
     <!-- Menu Content -->
     <div v-else>
       <!-- Hero Section with Restaurant Image -->
-      <div v-if="menuData?.coverImage" class="relative h-48 md:h-64 bg-gradient-to-br from-gray-300 to-gray-400">
+      <div v-if="menuData?.coverImage" class="relative h-56 md:h-72 bg-gradient-to-br from-gray-200 to-gray-300">
         <img
           :src="menuData.coverImage"
           :alt="menuData.name"
           class="w-full h-full object-cover"
         />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
         <button
           @click="goBack"
-          class="absolute top-4 left-4 w-10 h-10 bg-md-surface bg-opacity-90 rounded-full shadow-lg flex items-center justify-center hover:bg-opacity-100 transition-all"
+          class="absolute top-4 left-4 w-10 h-10 bg-white bg-opacity-95 rounded-full shadow-lg flex items-center justify-center hover:bg-opacity-100 transition-all"
         >
-          <i class="fas fa-arrow-left text-md-on-surface"></i>
+          <i class="fas fa-arrow-left text-gray-900"></i>
         </button>
         <button
           v-if="isAuthenticated"
           @click="toggleEditMode"
-          class="absolute top-4 right-4 px-4 py-2 bg-md-surface bg-opacity-90 rounded-full shadow-lg hover:bg-opacity-100 transition-all text-sm font-medium"
+          class="absolute top-4 right-4 px-4 py-2 bg-white bg-opacity-95 rounded-full shadow-lg hover:bg-opacity-100 transition-all text-sm font-semibold text-gray-900"
         >
           <i class="fas fa-edit mr-2"></i>
           {{ editMode ? 'Done' : 'Edit' }}
@@ -38,48 +42,68 @@
       </div>
 
       <!-- Restaurant Info Header -->
-      <div class="bg-md-surface shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 py-4">
-          <div class="flex items-start justify-between mb-2">
-            <div class="flex-1">
-              <h1 class="text-2xl md:text-3xl font-bold text-[var(--dark-text-color)] mb-1">
-                {{ menuData?.name || 'Menu' }}
-              </h1>
-              <p v-if="menuData?.businessName" class="text-sm text-[var(--gray-text-color)] mb-2">
-                {{ menuData.businessName }}
-              </p>
-              <div class="flex items-center gap-4 text-sm text-[var(--gray-text-color)] flex-wrap">
-                <div v-if="menuData?.rating" class="flex items-center gap-1">
-                  <i class="fas fa-star text-yellow-500"></i>
-                  <span class="font-semibold">{{ menuData.rating }}</span>
-                  <span v-if="menuData?.reviewCount">({{ menuData.reviewCount }})</span>
-                </div>
-                <div v-if="menuData?.deliveryTime">
-                  <i class="fas fa-clock mr-1"></i>
-                  {{ menuData.deliveryTime }}
-                </div>
-                <div v-if="menuData?.distance">
-                  <i class="fas fa-map-marker-alt mr-1"></i>
-                  {{ menuData.distance }}
+      <div class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <!-- Restaurant Name and Rating -->
+          <div class="mb-4">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+              {{ menuData?.name || 'Menu' }}
+            </h1>
+            <div v-if="menuData?.rating" class="flex items-center gap-2 mb-3">
+              <div class="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-full">
+                <i class="fas fa-star text-yellow-500 text-xs"></i>
+                <span class="font-bold text-gray-900">{{ menuData.rating }}</span>
+              </div>
+              <span v-if="menuData?.reviewCount" class="text-sm text-gray-600">
+                {{ menuData.reviewCount.toLocaleString() }} reviews
+              </span>
+            </div>
+          </div>
+
+          <!-- Operating Hours -->
+          <div v-if="menuData?.operatingHours" class="mb-4 pb-4 border-b border-gray-200">
+            <div class="flex items-start gap-3">
+              <i class="fas fa-clock text-gray-400 mt-1"></i>
+              <div class="flex-1">
+                <div class="text-sm text-gray-900 font-medium mb-2">Operating Hours</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                  <div v-for="(hours, day) in menuData.operatingHours" :key="day" class="flex justify-between">
+                    <span class="text-gray-600">{{ day }}</span>
+                    <span class="text-gray-900 font-medium">{{ hours }}</span>
+                  </div>
                 </div>
               </div>
             </div>
-            <button
-              @click="cartStore.toggleCart()"
-              class="relative ml-4 p-3 bg-[var(--primary-color)] text-white rounded-full hover:opacity-90 transition-opacity flex-shrink-0"
-            >
-              <i class="fas fa-search"></i>
-            </button>
           </div>
 
-          <p v-if="menuData?.description" class="text-sm text-[var(--gray-text-color)] mt-2">
-            {{ menuData.description }}
-          </p>
+          <!-- Address -->
+          <div v-if="menuData?.address" class="mb-4 pb-4 border-b border-gray-200">
+            <div class="flex items-start gap-3">
+              <i class="fas fa-map-marker-alt text-gray-400 mt-1"></i>
+              <div class="flex-1">
+                <div class="text-sm text-gray-900 font-medium mb-1">Address</div>
+                <div class="text-sm text-gray-600">{{ menuData.address }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cuisine Tags -->
+          <div v-if="menuData?.cuisineTags && menuData.cuisineTags.length > 0" class="mb-4">
+            <div class="flex flex-wrap gap-2">
+              <span
+                v-for="(tag, index) in menuData.cuisineTags"
+                :key="index"
+                class="px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-full"
+              >
+                {{ tag }}
+              </span>
+            </div>
+          </div>
 
           <!-- Delivery Info Banner -->
-          <div v-if="menuData?.deliveryInfo" class="mt-3 p-3 bg-red-50 border-l-4 border-red-500 rounded">
-            <div class="flex items-center gap-2 text-sm text-red-700">
-              <i class="fas fa-motorcycle"></i>
+          <div v-if="menuData?.deliveryInfo" class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div class="flex items-center gap-3 text-sm text-blue-900">
+              <i class="fas fa-motorcycle text-blue-600"></i>
               <span class="font-medium">{{ menuData.deliveryInfo }}</span>
             </div>
           </div>
@@ -87,117 +111,246 @@
       </div>
 
       <!-- Category Tabs (Sticky) -->
-      <div v-if="categories.length > 0" class="sticky top-16 z-30 bg-md-surface shadow-md border-b border-md-outline-variant">
-        <div class="overflow-x-auto hide-scrollbar">
-          <div class="flex space-x-1 px-4 py-3 min-w-max">
-            <button
-              v-for="category in categories"
-              :key="category.id"
-              :data-category-id="category.id"
-              @click="scrollToCategory(category.id)"
-              :class="[
-                'px-5 py-2.5 text-sm font-semibold whitespace-nowrap transition-all relative rounded-xl',
-                activeCategory === category.id
-                  ? 'bg-gradient-to-r from-md-primary to-md-secondary text-white shadow-md-2'
-                  : 'text-md-on-surface-variant hover:bg-md-surface-container-high hover:text-md-on-surface'
-              ]"
-            >
-              {{ category.name }}
-              <span
-                v-if="activeCategory === category.id"
-                class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-md-primary rounded-full"
-              ></span>
-            </button>
+      <div v-if="categories.length > 0" class="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto">
+          <div class="overflow-x-auto hide-scrollbar">
+            <div class="flex space-x-1 px-4 sm:px-6 lg:px-8 py-2 min-w-max">
+              <button
+                v-for="category in categories"
+                :key="category.id"
+                :data-category-id="category.id"
+                @click="scrollToCategory(category.id)"
+                :class="[
+                  'px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all relative',
+                  activeCategory === category.id
+                    ? 'text-gray-900 border-b-2 border-gray-900'
+                    : 'text-gray-600 hover:text-gray-900 border-b-2 border-transparent'
+                ]"
+              >
+                {{ category.name }}
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Menu Items by Category -->
-      <div class="max-w-7xl mx-auto pb-24">
-        <div
-          v-for="category in categories"
-          :key="category.id"
-          :id="`category-${category.id}`"
-          class="mb-6"
-        >
-          <h2 class="text-xl font-bold text-[var(--dark-text-color)] px-4 py-4 bg-[var(--light-background-color)] sticky top-14 z-10">
-            {{ category.name }}
-          </h2>
-
-          <div class="bg-md-surface divide-y divide-gray-100">
-            <div
-              v-for="item in getCategoryItems(category.id)"
-              :key="item.id"
-              @click="openItemDetail(item)"
-              class="px-4 py-4 hover:bg-md-surface-container transition-colors cursor-pointer relative"
-            >
-              <div class="flex gap-4">
-                <!-- Item Info -->
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-start gap-2 mb-1">
-                    <h3 class="text-base font-semibold text-[var(--dark-text-color)]">{{ item.name }}</h3>
-                    <span
-                      v-if="item.itemType === 1"
-                      class="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-semibold rounded flex-shrink-0"
-                    >
-                      BUNDLE
-                    </span>
-                  </div>
-                  <p v-if="item.description" class="text-sm text-[var(--gray-text-color)] line-clamp-2 mb-2">
-                    {{ item.description }}
-                  </p>
-                  <div class="flex items-center gap-2">
-                    <span class="text-base font-bold text-[var(--dark-text-color)]">
-                      From R{{ item.price.toFixed(2) }}
-                    </span>
-                  </div>
-                  <!-- Edit Button (when in edit mode) -->
-                  <button
-                    v-if="editMode"
-                    @click.stop="editItem(item)"
-                    class="mt-2 px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    <i class="fas fa-edit mr-1"></i>
-                    Edit Item
-                  </button>
-                </div>
-
+      <!-- Highlights Carousel -->
+      <div v-if="highlightedItems.length > 0" class="bg-white py-4 sm:py-6 border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Highlights</h2>
+          <div class="overflow-x-auto hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+            <div class="flex gap-3 sm:gap-4 pb-2">
+              <div
+                v-for="item in highlightedItems"
+                :key="item.id"
+                class="flex-shrink-0 w-56 sm:w-64 md:w-72 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden cursor-pointer"
+                @click="openItemDetail(item)"
+              >
                 <!-- Item Image -->
-                <div class="flex-shrink-0 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg overflow-hidden">
+                <div class="relative w-full h-36 sm:h-40 md:h-44 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden group">
                   <img
                     v-if="item.images && item.images.length > 0"
                     :src="item.images[0]"
                     :alt="item.name"
-                    class="w-full h-full object-cover"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div v-else class="w-full h-full flex items-center justify-center">
-                    <i class="fas fa-utensils text-2xl md:text-3xl text-md-on-surface-variant opacity-70"></i>
+                    <i class="fas fa-utensils text-4xl sm:text-5xl text-gray-300"></i>
+                  </div>
+                  <span
+                    v-if="item.badge"
+                    class="absolute top-2 left-2 px-2 py-0.5 bg-green-500 text-white text-xs font-bold rounded-full shadow-lg"
+                  >
+                    {{ item.badge }}
+                  </span>
+                </div>
+
+                <!-- Item Info -->
+                <div class="p-3 sm:p-4">
+                  <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-1 line-clamp-1">{{ item.name }}</h3>
+                  <p v-if="item.description" class="text-xs sm:text-sm text-gray-600 line-clamp-2 mb-2 sm:mb-3 leading-relaxed">
+                    {{ item.description }}
+                  </p>
+                  <div class="flex items-center justify-between">
+                    <div class="flex flex-col">
+                      <span class="text-xs text-gray-500 font-medium">From</span>
+                      <span class="text-base sm:text-lg font-bold text-gray-900">R{{ item.price.toFixed(2) }}</span>
+                    </div>
+                    <button
+                      @click.stop="openItemDetail(item)"
+                      class="px-4 sm:px-6 py-2 sm:py-2.5 bg-gray-900 text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors active:scale-95 transform"
+                    >
+                      Add
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <!-- Empty Category -->
-          <div v-if="getCategoryItems(category.id).length === 0" class="text-center py-12 text-[var(--gray-text-color)] bg-md-surface">
-            <i class="fas fa-box-open text-5xl mb-3 opacity-50"></i>
-            <p class="text-sm">No items in this category</p>
+      <!-- Most Ordered Carousel -->
+      <div v-if="mostOrderedItems.length > 0" class="bg-white py-4 sm:py-6 border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Most Ordered 💯</h2>
+          <div class="overflow-x-auto hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+            <div class="flex gap-3 sm:gap-4 pb-2">
+              <div
+                v-for="item in mostOrderedItems"
+                :key="item.id"
+                class="flex-shrink-0 w-56 sm:w-64 md:w-72 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden cursor-pointer"
+                @click="openItemDetail(item)"
+              >
+                <!-- Item Image -->
+                <div class="relative w-full h-36 sm:h-40 md:h-44 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden group">
+                  <img
+                    v-if="item.images && item.images.length > 0"
+                    :src="item.images[0]"
+                    :alt="item.name"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div v-else class="w-full h-full flex items-center justify-center">
+                    <i class="fas fa-utensils text-4xl sm:text-5xl text-gray-300"></i>
+                  </div>
+                  <span
+                    v-if="item.badge"
+                    class="absolute top-2 left-2 px-2 py-0.5 bg-orange-500 text-white text-xs font-bold rounded-full shadow-lg"
+                  >
+                    {{ item.badge }}
+                  </span>
+                </div>
+
+                <!-- Item Info -->
+                <div class="p-3 sm:p-4">
+                  <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-1 line-clamp-1">{{ item.name }}</h3>
+                  <p v-if="item.description" class="text-xs sm:text-sm text-gray-600 line-clamp-2 mb-2 sm:mb-3 leading-relaxed">
+                    {{ item.description }}
+                  </p>
+                  <div class="flex items-center justify-between">
+                    <div class="flex flex-col">
+                      <span class="text-xs text-gray-500 font-medium">From</span>
+                      <span class="text-base sm:text-lg font-bold text-gray-900">R{{ item.price.toFixed(2) }}</span>
+                    </div>
+                    <button
+                      @click.stop="openItemDetail(item)"
+                      class="px-4 sm:px-6 py-2 sm:py-2.5 bg-gray-900 text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors active:scale-95 transform"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Floating Cart Button (Mobile) -->
+      <!-- Menu Items by Category -->
+      <div class="max-w-7xl mx-auto pb-24 bg-gray-50">
+        <div
+          v-for="category in categories"
+          :key="category.id"
+          :id="`category-${category.id}`"
+          class="mb-8"
+        >
+          <h2 class="text-2xl font-bold text-gray-900 px-4 sm:px-6 lg:px-8 py-6 bg-white sticky top-[52px] z-10 border-b border-gray-100">
+            {{ category.name }}
+          </h2>
+
+          <!-- Grid Layout for Menu Items -->
+          <div class="px-4 sm:px-6 lg:px-8 pt-3 sm:pt-4 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            <div
+              v-for="item in getCategoryItems(category.id)"
+              :key="item.id"
+              class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-gray-200"
+            >
+              <!-- Item Image -->
+              <div
+                @click="openItemDetail(item)"
+                class="relative w-full h-32 sm:h-40 md:h-48 bg-gradient-to-br from-gray-100 to-gray-200 cursor-pointer overflow-hidden group"
+              >
+                <img
+                  v-if="item.images && item.images.length > 0"
+                  :src="item.images[0]"
+                  :alt="item.name"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div v-else class="w-full h-full flex items-center justify-center">
+                  <i class="fas fa-utensils text-3xl sm:text-4xl md:text-5xl text-gray-300"></i>
+                </div>
+                <span
+                  v-if="item.itemType === 1"
+                  class="absolute top-2 left-2 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-orange-500 text-white text-xs font-bold rounded-full shadow-lg"
+                >
+                  BUNDLE
+                </span>
+              </div>
+
+              <!-- Item Info -->
+              <div class="p-2 sm:p-3 md:p-4">
+                <div class="mb-2">
+                  <h3
+                    @click="openItemDetail(item)"
+                    class="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1 cursor-pointer hover:text-gray-700 transition-colors line-clamp-1"
+                  >
+                    {{ item.name }}
+                  </h3>
+                  <p v-if="item.description" class="text-xs sm:text-sm text-gray-600 line-clamp-2 leading-relaxed hidden sm:block">
+                    {{ item.description }}
+                  </p>
+                </div>
+
+                <!-- Price and Add Button -->
+                <div class="flex items-center justify-between mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-100">
+                  <div class="flex flex-col">
+                    <span class="text-xs text-gray-500 font-medium">From</span>
+                    <span class="text-sm sm:text-base md:text-lg font-bold text-gray-900">R{{ item.price.toFixed(2) }}</span>
+                  </div>
+                  <button
+                    @click="openItemDetail(item)"
+                    class="px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-2.5 bg-gray-900 text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors active:scale-95 transform"
+                  >
+                    Add
+                  </button>
+                </div>
+
+                <!-- Edit Button (when in edit mode) -->
+                <button
+                  v-if="editMode"
+                  @click.stop="editItem(item)"
+                  class="mt-2 sm:mt-3 w-full px-2 sm:px-3 py-1.5 sm:py-2 bg-blue-600 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <i class="fas fa-edit mr-1"></i>
+                  Edit Item
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty Category -->
+          <div v-if="getCategoryItems(category.id).length === 0" class="text-center py-16 text-gray-500 bg-white mx-4 sm:mx-6 lg:mx-8 rounded-lg">
+            <i class="fas fa-box-open text-6xl mb-4 opacity-30"></i>
+            <p class="text-base font-medium">No items in this category</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating Cart Button -->
       <div
         v-if="cartStore.itemCount > 0"
         @click="cartStore.openCart()"
-        class="fixed bottom-6 left-4 right-4 md:left-auto md:right-6 md:max-w-md z-30 bg-[var(--primary-color)] text-white rounded-2xl shadow-2xl px-6 py-4 cursor-pointer hover:opacity-95 transition-opacity"
+        class="fixed bottom-6 left-4 right-4 md:left-auto md:right-6 md:max-w-sm z-40 bg-gray-900 text-white rounded-xl shadow-2xl px-5 py-4 cursor-pointer hover:bg-gray-800 transition-all active:scale-95 transform"
       >
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-md-surface bg-opacity-20 rounded-full flex items-center justify-center">
-              <i class="fas fa-shopping-cart text-lg"></i>
+            <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+              <i class="fas fa-shopping-cart text-base"></i>
             </div>
-            <span class="font-semibold text-lg">{{ cartStore.itemCount }} {{ cartStore.itemCount === 1 ? 'item' : 'items' }}</span>
+            <div class="flex flex-col">
+              <span class="font-semibold text-base">{{ cartStore.itemCount }} {{ cartStore.itemCount === 1 ? 'item' : 'items' }}</span>
+              <span class="text-xs text-gray-300">View cart</span>
+            </div>
           </div>
           <div class="font-bold text-xl">R{{ cartStore.total.toFixed(2) }}</div>
         </div>
@@ -268,6 +421,22 @@ const categories = computed(() => {
   return menuData.value.categories.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
 })
 
+const highlightedItems = computed(() => {
+  // Get items marked as highlighted/featured
+  return items.value
+    .filter(item => item.isActive && item.isFeatured)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .slice(0, 5) // Limit to 5 items
+})
+
+const mostOrderedItems = computed(() => {
+  // Get items marked as most ordered or popular
+  return items.value
+    .filter(item => item.isActive && (item.isPopular || item.orderCount > 0))
+    .sort((a, b) => (b.orderCount || 0) - (a.orderCount || 0))
+    .slice(0, 5) // Limit to 5 items
+})
+
 // Watch active category and scroll tab into view
 watch(activeCategory, async (newCategoryId) => {
   if (newCategoryId) {
@@ -318,10 +487,9 @@ function getCategoryItems(categoryId: number) {
 function scrollToCategory(categoryId: number) {
   const element = document.getElementById(`category-${categoryId}`)
   if (element) {
-    // Account for both global header (64px) and sticky category tabs (~60px)
-    const headerHeight = 64 // Global header
-    const tabsHeight = 60 // Category tabs
-    const offset = headerHeight + tabsHeight + 10 // Extra padding
+    // Account for sticky category tabs (52px + border)
+    const tabsHeight = 52
+    const offset = tabsHeight + 5 // Extra padding
     const elementPosition = element.getBoundingClientRect().top
     const offsetPosition = elementPosition + window.pageYOffset - offset
 
@@ -329,7 +497,7 @@ function scrollToCategory(categoryId: number) {
       top: offsetPosition,
       behavior: 'smooth'
     })
-    
+
     // Update active category immediately for better UX
     activeCategory.value = categoryId
   }
@@ -344,8 +512,8 @@ function setupScrollSpy() {
       element: document.getElementById(`category-${cat.id}`)
     }))
 
-    // Account for headers when detecting active section
-    const headerOffset = 140 // Global header + category tabs
+    // Account for sticky category tabs when detecting active section
+    const headerOffset = 120 // Category tabs + category title
     const scrollPosition = window.scrollY + headerOffset
 
     for (let i = categoryElements.length - 1; i >= 0; i--) {

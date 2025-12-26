@@ -546,6 +546,7 @@ definePageMeta({
 })
 
 const bundlesApi = useBundlesApi()
+const libraryApi = useLibraryItemsApi();
 const toast = useToast()
 
 // Stats for sidebar
@@ -650,11 +651,14 @@ function getProductName(productId: number): string {
 }
 
 async function loadProducts() {
+  console.log('Loading products for bundle assignment...')
   try {
-    const { getLibraryItems } = useLibraryItemsApi()
-    const itemsResponse = await getLibraryItems()
+    const itemsResponse = await libraryApi.getItems()
+    console.log('Library items response:', itemsResponse)
+    console.log('Library items response data:', itemsResponse.data)
     if (itemsResponse.success && itemsResponse.data) {
-      availableProducts.value = itemsResponse.data.map((item: any) => ({
+      console.log(itemsResponse.data)
+      availableProducts.value = itemsResponse.data.items.map((item: any) => ({
         id: item.id,
         name: item.name
       }))

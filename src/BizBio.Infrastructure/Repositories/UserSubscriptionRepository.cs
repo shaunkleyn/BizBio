@@ -45,7 +45,7 @@ public class UserSubscriptionRepository : IUserSubscriptionRepository
     {
         return await _context.UserSubscriptions
             .Where(s => s.UserId == userId)// && s.StatusId == (int)SubscriptionStatus.Active)
-            .Include(s => s.Tier)
+            .Include(s => s.Tier).ThenInclude(s => s.ProductLine)
             .Include(s => s.User)
             .ToListAsync();
     }
