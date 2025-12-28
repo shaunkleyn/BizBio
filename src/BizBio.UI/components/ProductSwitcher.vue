@@ -60,7 +60,25 @@
           />
         </template>
 
-        <!-- Page actions (legacy) -->
+        <!-- Page action button (new simple approach) -->
+        <NuxtLink
+          v-if="pageActionButton && pageActionButton.to"
+          :to="pageActionButton.to"
+          :class="pageActionButton.class || 'px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors font-semibold'"
+        >
+          <i v-if="pageActionButton.icon" :class="pageActionButton.icon + ' mr-2'"></i>
+          {{ pageActionButton.label }}
+        </NuxtLink>
+        <button
+          v-else-if="pageActionButton && pageActionButton.onClick"
+          @click="pageActionButton.onClick"
+          :class="pageActionButton.class || 'px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors font-semibold'"
+        >
+          <i v-if="pageActionButton.icon" :class="pageActionButton.icon + ' mr-2'"></i>
+          {{ pageActionButton.label }}
+        </button>
+
+        <!-- Page actions (legacy render functions) -->
         <component v-if="pageActions" :is="pageActions()" />
       </div>
     </div>
@@ -71,7 +89,7 @@
 import { ref, nextTick, watch } from 'vue'
 
 // Use page metadata composable
-const { pageHeader, pageActions } = usePageMeta()
+const { pageHeader, pageActions, pageActionButton } = usePageMeta()
 
 // Inline editing state
 const isEditing = ref(false)

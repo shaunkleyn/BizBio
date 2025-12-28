@@ -9,6 +9,11 @@ public class Profile : BaseEntity
 
     public int UserId { get; set; }
 
+    /// <summary>
+    /// The restaurant this profile/menu belongs to
+    /// </summary>
+    public int RestaurantId { get; set; }
+
     [Required]
     [MaxLength(255)]
     public string Slug { get; set; } = null!;
@@ -55,6 +60,13 @@ public class Profile : BaseEntity
     // Navigation properties
     [JsonIgnore]
     public virtual User User { get; set; } = null!;
+
+    /// <summary>
+    /// The restaurant this profile/menu belongs to
+    /// </summary>
+    [JsonIgnore]
+    public virtual Restaurant Restaurant { get; set; } = null!;
+
     [JsonIgnore]
     public virtual ICollection<Catalog> Catalogs { get; set; } = new List<Catalog>();
     [JsonIgnore]

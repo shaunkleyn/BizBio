@@ -18,6 +18,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<SubscriptionAddon> SubscriptionAddons => Set<SubscriptionAddon>();
     public DbSet<SubscriptionTierAddon> SubscriptionTierAddons => Set<SubscriptionTierAddon>();
     public DbSet<UserSubscriptionAddon> UserSubscriptionAddons => Set<UserSubscriptionAddon>();
+    public DbSet<Restaurant> Restaurants => Set<Restaurant>();
     public DbSet<Profile> Profiles => Set<Profile>();
     public DbSet<Catalog> Catalogs => Set<Catalog>();
     public DbSet<CatalogCategory> Categories => Set<CatalogCategory>();
@@ -43,6 +44,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<CatalogItemOptionGroupItem> CatalogItemOptionGroupItems => Set<CatalogItemOptionGroupItem>();
     public DbSet<CatalogItemOptionGroupLink> CatalogItemOptionGroupLinks => Set<CatalogItemOptionGroupLink>();
     public DbSet<CatalogItemCategory> CatalogItemCategories => Set<CatalogItemCategory>();
+    public DbSet<CatalogItemInstance> CatalogItemInstances => Set<CatalogItemInstance>();
+    public DbSet<CatalogItemInstanceCategory> CatalogItemInstanceCategories => Set<CatalogItemInstanceCategory>();
     public DbSet<Bundle> Bundles => Set<Bundle>();
     public DbSet<BundleSection> BundleSections => Set<BundleSection>();
     public DbSet<BundleSectionItem> BundleSectionItems => Set<BundleSectionItem>();
@@ -223,6 +226,38 @@ public class ApplicationDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+        // Restaurant Configuration
+        modelBuilder.Entity<Restaurant>(entity =>
+        {
+            entity.ToTable("Restaurants");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.UserId);
+            entity.HasIndex(e => e.IsActive);
+            entity.HasIndex(e => new { e.UserId, e.SortOrder });
+
+            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+            entity.Property(e => e.Description).HasMaxLength(2000);
+            entity.Property(e => e.Logo).HasMaxLength(500);
+            entity.Property(e => e.Address).HasMaxLength(255);
+            entity.Property(e => e.City).HasMaxLength(100);
+            entity.Property(e => e.State).HasMaxLength(50);
+            entity.Property(e => e.PostalCode).HasMaxLength(20);
+            entity.Property(e => e.Country).HasMaxLength(2);
+            entity.Property(e => e.Phone).HasMaxLength(20);
+            entity.Property(e => e.Email).HasMaxLength(255);
+            entity.Property(e => e.Website).HasMaxLength(500);
+            entity.Property(e => e.Currency).HasMaxLength(3).HasDefaultValue("ZAR");
+            entity.Property(e => e.Timezone).HasMaxLength(50);
+
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
         // Profile Configuration
         modelBuilder.Entity<Profile>(entity =>
         {
@@ -230,6 +265,7 @@ public class ApplicationDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.HasIndex(e => e.Slug).IsUnique();
             entity.HasIndex(e => e.UserId);
+            entity.HasIndex(e => e.RestaurantId);
             entity.HasIndex(e => e.IsActive);
 
             entity.Property(e => e.Slug).HasMaxLength(100).IsRequired();
@@ -247,6 +283,11 @@ public class ApplicationDbContext : DbContext
             entity.HasOne(e => e.User)
                 .WithMany(u => u.Profiles)
                 .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Restaurant)
+                .WithMany(r => r.Profiles)
+                .HasForeignKey(e => e.RestaurantId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -918,6 +959,57 @@ public class ApplicationDbContext : DbContext
 
             entity.HasOne(e => e.Category)
                 .WithMany(c => c.CatalogItemCategories)
+                .HasForeignKey(e => e.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // CatalogItemInstance Configuration (Phase 2 - Live Sync)
+        modelBuilder.Entity<CatalogItemInstance>(entity =>
+        {
+            entity.ToTable("CatalogItemInstances");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => e.CatalogId);
+            entity.HasIndex(e => e.LibraryItemId);
+            entity.HasIndex(e => new { e.CatalogId, e.LibraryItemId });
+            entity.HasIndex(e => e.IsActive);
+            entity.HasIndex(e => e.IsVisible);
+
+            entity.Property(e => e.PriceOverride).HasPrecision(10, 2);
+            entity.Property(e => e.NameOverride).HasMaxLength(255);
+            entity.Property(e => e.DescriptionOverride).HasMaxLength(2000);
+
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
+            entity.HasOne(e => e.Catalog)
+                .WithMany()
+                .HasForeignKey(e => e.CatalogId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.LibraryItem)
+                .WithMany()
+                .HasForeignKey(e => e.LibraryItemId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        // CatalogItemInstanceCategory Configuration (Phase 2 - Category mapping for instances)
+        modelBuilder.Entity<CatalogItemInstanceCategory>(entity =>
+        {
+            entity.ToTable("CatalogItemInstanceCategories");
+            entity.HasKey(e => e.Id);
+            entity.HasIndex(e => new { e.InstanceId, e.CategoryId }).IsUnique();
+            entity.HasIndex(e => e.IsActive);
+
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
+            entity.HasOne(e => e.Instance)
+                .WithMany(i => i.Categories)
+                .HasForeignKey(e => e.InstanceId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Category)
+                .WithMany()
                 .HasForeignKey(e => e.CategoryId)
                 .OnDelete(DeleteBehavior.Cascade);
         });

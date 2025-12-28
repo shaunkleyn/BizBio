@@ -1,153 +1,87 @@
 <template>
   <div class="p-4 md:p-8">
     <div class="max-w-7xl mx-auto">
-      <!-- Quick Stats -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-md-surface rounded-2xl shadow-sm p-6 border border-md-outline-variant">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-md-on-surface-variant mb-1">Active Menus</p>
-              <p class="text-3xl font-bold text-md-on-surface">{{ stats.menus }}</p>
-            </div>
-            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <i class="fas fa-book-open text-blue-600 text-xl"></i>
-            </div>
-          </div>
-        </div>
+      <!-- Menu Creation Wizard (Inline) -->
+      <div v-if="showWizard">
+        <!-- Back Button -->
+        <button
+          @click="handleCancelWizard"
+          class="mb-6 text-md-on-surface-variant hover:text-md-on-surface transition-colors flex items-center gap-2"
+        >
+          <i class="fas fa-arrow-left"></i>
+          Back to Menus
+        </button>
 
-        <div class="bg-md-surface rounded-2xl shadow-sm p-6 border border-md-outline-variant">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-md-on-surface-variant mb-1">Total Items</p>
-              <p class="text-3xl font-bold text-md-on-surface">{{ stats.items }}</p>
-            </div>
-            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <i class="fas fa-utensils text-green-600 text-xl"></i>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-md-surface rounded-2xl shadow-sm p-6 border border-md-outline-variant">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-md-on-surface-variant mb-1">Categories</p>
-              <p class="text-3xl font-bold text-md-on-surface">{{ stats.categories }}</p>
-            </div>
-            <div class="w-12 h-12 bg-md-primary-container rounded-lg flex items-center justify-center">
-              <i class="fas fa-layer-group text-md-primary text-xl"></i>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-md-surface rounded-2xl shadow-sm p-6 border border-md-outline-variant">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm text-md-on-surface-variant mb-1">QR Scans</p>
-              <p class="text-lg font-bold text-md-on-surface">Coming Soon</p>
-            </div>
-            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-              <i class="fas fa-qrcode text-orange-600 text-xl"></i>
-            </div>
-          </div>
-        </div>
+        <!-- Include the full wizard here -->
+        <MenuCreationWizard
+          @created="handleMenuCreated"
+          @cancel="handleCancelWizard"
+        />
       </div>
 
-      <!-- Recent Menus -->
-      <div class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant mb-8">
-        <div class="p-6 border-b border-md-outline-variant">
-          <div class="flex items-center justify-between">
-            <h2 class="text-xl font-bold text-md-on-surface">Recent Menus</h2>
-            <NuxtLink to="/menu/menus" class="text-sm text-[var(--primary-color)] hover:underline">
-              View All
-            </NuxtLink>
-          </div>
+      <!-- Normal Menu List View -->
+      <div v-else>
+        <!-- Loading State -->
+        <div v-if="loading" class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant p-12 text-center">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--primary-color)] mx-auto"></div>
+          <p class="text-md-on-surface-variant mt-4">Loading menus...</p>
         </div>
-        <div class="p-6">
-          <div v-if="loading" class="text-center py-8">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary-color)] mx-auto"></div>
-          </div>
-          <div v-else-if="recentMenus.length === 0" class="text-center py-12">
-            <i class="fas fa-book-open text-4xl text-gray-300 mb-3"></i>
-            <p class="text-md-on-surface-variant">No menus yet. Create your first menu to get started!</p>
-          </div>
-          <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div
-              v-for="menu in recentMenus"
-              :key="menu.id"
-              class="border border-md-outline-variant rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
-              @click="navigateTo(`/menu/${menu.slug}`)"
-            >
-              <h3 class="font-semibold text-md-on-surface mb-1">{{ menu.name }}</h3>
-              <p class="text-sm text-md-on-surface-variant mb-2">{{ menu.description || 'No description' }}</p>
-              <div class="flex items-center justify-between text-xs text-gray-500">
-                <span>{{ menu.itemCount || 0 }} items</span>
-                <span>Updated {{ formatDate(menu.updatedAt) }}</span>
+
+        <!-- Empty State -->
+        <div v-else-if="menus.length === 0" class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant p-12 text-center">
+          <i class="fas fa-book-open text-6xl text-gray-300 mb-4"></i>
+          <h3 class="text-xl font-bold text-md-on-surface mb-2">No Menus Yet</h3>
+          <p class="text-md-on-surface-variant mb-6">Create your first menu to get started organizing your items.</p>
+          <button
+            @click="openWizard"
+            class="inline-block px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors font-semibold"
+          >
+            <i class="fas fa-plus mr-2"></i>
+            Create Your First Menu
+          </button>
+        </div>
+
+        <!-- Menus Grid -->
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div
+            v-for="menu in menus"
+            :key="menu.id"
+            class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant p-6 hover:shadow-md transition-shadow cursor-pointer"
+            @click="navigateTo(`/menu/${menu.slug}`)"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-bold text-md-on-surface">{{ menu.name }}</h3>
+              <div class="flex items-center gap-2" @click.stop>
+                <NuxtLink
+                  :to="`/menu/${menu.id}/edit`"
+                  class="text-md-on-surface-variant hover:text-[var(--primary-color)] transition-colors"
+                >
+                  <i class="fas fa-edit"></i>
+                </NuxtLink>
               </div>
             </div>
+            <p class="text-sm text-md-on-surface-variant mb-4">{{ menu.description || 'No description' }}</p>
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-gray-500">{{ menu.itemCount || 0 }} items</span>
+              <span class="text-xs text-gray-400">Updated {{ formatDate(menu.updatedAt) }}</span>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <NuxtLink
-          to="/menu/library/items"
-          class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant p-6 hover:shadow-md transition-shadow"
-        >
-          <div class="flex items-center gap-4">
-            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-              <i class="fas fa-utensils text-blue-600 text-xl"></i>
-            </div>
-            <div>
-              <h3 class="font-semibold text-md-on-surface">Library Items</h3>
-              <p class="text-sm text-md-on-surface-variant">Manage your item library</p>
-            </div>
-          </div>
-        </NuxtLink>
-
-        <NuxtLink
-          to="/menu/categories"
-          class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant p-6 hover:shadow-md transition-shadow"
-        >
-          <div class="flex items-center gap-4">
-            <div class="w-12 h-12 bg-md-primary-container rounded-lg flex items-center justify-center">
-              <i class="fas fa-layer-group text-md-primary text-xl"></i>
-            </div>
-            <div>
-              <h3 class="font-semibold text-md-on-surface">Categories</h3>
-              <p class="text-sm text-md-on-surface-variant">Organize your items</p>
-            </div>
-          </div>
-        </NuxtLink>
-
-        <NuxtLink
-          to="/menu/tables"
-          class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant p-6 hover:shadow-md transition-shadow"
-        >
-          <div class="flex items-center gap-4">
-            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-              <i class="fas fa-qrcode text-orange-600 text-xl"></i>
-            </div>
-            <div>
-              <h3 class="font-semibold text-md-on-surface">QR Codes</h3>
-              <p class="text-sm text-md-on-surface-variant">Generate table QR codes</p>
-            </div>
-          </div>
-        </NuxtLink>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, h } from 'vue'
+import { ref, onMounted } from 'vue'
 
 definePageMeta({
   layout: 'menu'
 })
 
-const loading = ref(false)
-const recentMenus = ref<any[]>([])
+const loading = ref(true)
+const menus = ref<any[]>([])
+const { showWizard, openWizard, closeWizard } = useMenuWizard()
 const stats = ref({
   menus: 0,
   items: 0,
@@ -159,69 +93,78 @@ const stats = ref({
 provide('menuStats', stats)
 
 // Use page metadata composable
-const { setPageHeader, setPageActions } = usePageMeta()
+const { setPageHeader, setPageActionButton } = usePageMeta()
 
 onMounted(async () => {
   // Set page metadata
   setPageHeader({
-    title: 'Menu Dashboard',
-    description: 'Manage your digital menus and menu items'
+    title: 'Menus',
+    description: 'Create and manage your digital menus'
   })
 
-  setPageActions(() => h('NuxtLink', {
-    to: '/dashboard/menu/create',
+  setPageActionButton({
+    onClick: () => openWizard(),
+    label: 'Create Menu',
+    icon: 'fas fa-plus',
     class: 'px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors font-semibold'
-  }, [
-    h('i', { class: 'fas fa-plus mr-2' }),
-    'Create Menu'
-  ]))
+  })
 
-  await loadDashboardData()
+  await Promise.all([loadMenus(), loadStats()])
+
+  // Check if we should auto-open the wizard (from query param)
+  const route = useRoute()
+  if (route.query.create === 'true') {
+    openWizard()
+    // Remove the query param from URL without page reload
+    const router = useRouter()
+    router.replace({ query: {} })
+  }
 })
 
-async function loadDashboardData() {
+const handleMenuCreated = async () => {
+  // Close wizard and reload menus
+  closeWizard()
+  await loadMenus()
+}
+
+const handleCancelWizard = () => {
+  closeWizard()
+}
+
+async function loadMenus() {
   loading.value = true
   try {
     const menusApi = useMenusApi()
+    const response = await menusApi.getMyMenus()
+
+    // Handle different response structures
+    menus.value = Array.isArray(response) ? response : (response?.data || [])
+    stats.value.menus = menus.value.length
+  } catch (error) {
+    console.error('Failed to load menus:', error)
+    menus.value = []
+  } finally {
+    loading.value = false
+  }
+}
+
+async function loadStats() {
+  try {
     const libraryItemsApi = useLibraryItemsApi()
     const categoriesApi = useLibraryCategoriesApi()
 
-    // Load all data in parallel
-    const [menusResponse, itemsResponse, categoriesResponse] = await Promise.all([
-      menusApi.getMyMenus(),
+    const [itemsResponse, categoriesResponse] = await Promise.all([
       libraryItemsApi.getItems(),
       categoriesApi.getCategories()
     ])
 
-    // Set recent menus
-    const menus = Array.isArray(menusResponse) ? menusResponse : (menusResponse?.data || [])
-    recentMenus.value = menus.slice(0, 5) // Get last 5 menus
-    stats.value.menus = menus.length
-
-    // Set items count
-    const items = (itemsResponse?.data || itemsResponse?.data?.items || [])
-
-    console.log('Library items response:', itemsResponse)
-    stats.value.items = items.length
-
-    // Set categories count
+    const items = Array.isArray(itemsResponse) ? itemsResponse : (itemsResponse?.data || [])
     const categories = Array.isArray(categoriesResponse) ? categoriesResponse : (categoriesResponse?.data || [])
-    stats.value.categories = categories.length
 
-    // TODO: Add API call for scans when available
-    stats.value.scans = '1243'
-  } catch (error) {
-    console.error('Error loading dashboard data:', error)
-    // Fallback to empty data on error
-    recentMenus.value = []
-    stats.value = {
-      menus: 0,
-      items: 0,
-      categories: 0,
-      scans: 0
-    }
-  } finally {
-    loading.value = false
+    stats.value.items = items.length
+    stats.value.categories = categories.length
+  } catch (err) {
+    console.error('Error loading stats:', err)
   }
 }
 
@@ -237,9 +180,8 @@ function formatDate(date: string) {
   if (diffDays < 7) return `${diffDays} days ago`
   return d.toLocaleDateString()
 }
+
+useHead({
+  title: 'Menus - Menu Dashboard',
+})
 </script>
-
-
-
-
-

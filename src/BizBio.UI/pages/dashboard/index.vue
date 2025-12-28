@@ -104,6 +104,90 @@
         </div>
       </div>
 
+      <!-- My Restaurants & Menus -->
+      <div class="mb-12">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-md-on-surface">My Restaurants & Menus</h2>
+          <NuxtLink
+            to="/menu/restaurants"
+            class="text-sm text-md-primary hover:text-md-primary-container font-semibold"
+          >
+            Manage All →
+          </NuxtLink>
+        </div>
+
+        <!-- Loading State -->
+        <div v-if="restaurantsLoading" class="text-center py-8">
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-md-primary"></div>
+          <p class="mt-2 text-sm text-md-on-surface-variant">Loading restaurants...</p>
+        </div>
+
+        <!-- No Restaurants State -->
+        <div v-else-if="restaurants.length === 0" class="mesh-card bg-md-surface rounded-2xl shadow-md-3 p-8 text-center">
+          <div class="bg-gradient-primary rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-glow-purple">
+            <i class="fas fa-store text-white text-2xl"></i>
+          </div>
+          <h3 class="text-lg font-bold text-md-on-surface mb-2">No Restaurants Yet</h3>
+          <p class="text-sm text-md-on-surface-variant mb-4">
+            Create your first restaurant to start managing menus
+          </p>
+          <NuxtLink
+            to="/menu/restaurants"
+            class="btn-gradient px-6 py-3 rounded-xl shadow-md-2 hover:shadow-md-4 transition-all font-semibold inline-block"
+          >
+            Create Restaurant
+          </NuxtLink>
+        </div>
+
+        <!-- Restaurants List -->
+        <div v-else class="space-y-4">
+          <div
+            v-for="restaurant in restaurants"
+            :key="restaurant.id"
+            class="mesh-card bg-md-surface rounded-2xl shadow-md-3 p-6"
+          >
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="bg-gradient-primary rounded-lg p-3 shadow-glow-purple">
+                  <i class="fas fa-store text-white text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-md-on-surface">{{ restaurant.name }}</h3>
+                  <p v-if="restaurant.description" class="text-sm text-md-on-surface-variant">
+                    {{ restaurant.description }}
+                  </p>
+                </div>
+              </div>
+              <NuxtLink
+                :to="`/menu?restaurant=${restaurant.id}`"
+                class="text-sm text-md-primary hover:text-md-primary-container font-semibold"
+              >
+                View All →
+              </NuxtLink>
+            </div>
+
+            <!-- Menus for this restaurant -->
+            <div v-if="restaurant.menus && restaurant.menus.length > 0" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <NuxtLink
+                v-for="menu in restaurant.menus.slice(0, 3)"
+                :key="menu.id"
+                :to="`/menu/${menu.id}/edit`"
+                class="flex items-center gap-3 p-3 rounded-lg bg-md-surface-container hover:bg-md-surface-container-high transition-colors"
+              >
+                <i class="fas fa-utensils text-md-primary"></i>
+                <div class="flex-1 min-w-0">
+                  <div class="font-medium text-md-on-surface text-sm truncate">{{ menu.name }}</div>
+                  <div class="text-xs text-md-on-surface-variant">Menu</div>
+                </div>
+              </NuxtLink>
+            </div>
+            <div v-else class="text-center py-4 text-sm text-md-on-surface-variant">
+              No menus yet for this restaurant
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Quick Info Cards -->
       <div class="grid md:grid-cols-3 gap-6">
         <div class="gradient-border mesh-card bg-md-surface shadow-md-3 p-6 card-hover">
@@ -158,8 +242,34 @@ definePageMeta({
 
 const authStore = useAuthStore()
 const profilesApi = useProfilesApi()
+const { $api } = useNuxtApp()
 
 const subscriptionInfo = ref(null)
+const restaurants = ref([])
+const restaurantsLoading = ref(true)
+
+const fetchRestaurantsWithMenus = async () => {
+  try {
+    restaurantsLoading.value = true
+    const restaurantsResponse = await $api.get('/restaurants')
+    const restaurantsList = restaurantsResponse.data.data || []
+
+    // Fetch menus for each restaurant
+    const profilesResponse = await profilesApi.getMyProfiles()
+    const allMenus = profilesResponse.data || []
+
+    // Group menus by restaurant
+    restaurants.value = restaurantsList.map(restaurant => ({
+      ...restaurant,
+      menus: allMenus.filter(menu => menu.restaurantId === restaurant.id)
+    }))
+  } catch (error) {
+    console.error('Failed to load restaurants:', error)
+    restaurants.value = []
+  } finally {
+    restaurantsLoading.value = false
+  }
+}
 
 onMounted(async () => {
   try {
@@ -170,6 +280,9 @@ onMounted(async () => {
     if (profiles.length > 0 && profiles[0].SubscriptionStatus) {
       subscriptionInfo.value = profiles[0].SubscriptionStatus
     }
+
+    // Fetch restaurants with their menus
+    await fetchRestaurantsWithMenus()
   } catch (error) {
     console.error('Failed to load subscription info:', error)
   }

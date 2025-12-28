@@ -46,6 +46,21 @@ public class SubscriptionTier : BaseEntity
 
     public int MaxImagesPerItem { get; set; }
 
+    /// <summary>
+    /// Maximum number of restaurants a user can create
+    /// </summary>
+    public int MaxRestaurants { get; set; } = 1;
+
+    /// <summary>
+    /// Maximum number of library items (shared across all restaurants)
+    /// </summary>
+    public int MaxLibraryItems { get; set; } = 50;
+
+    /// <summary>
+    /// Maximum number of profiles/menus per restaurant
+    /// </summary>
+    public int MaxProfilesPerRestaurant { get; set; } = 3;
+
     // Feature flags
     public bool CustomBranding { get; set; }
 

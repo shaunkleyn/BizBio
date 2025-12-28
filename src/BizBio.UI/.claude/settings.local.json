@@ -29,7 +29,19 @@
       "Bash(taskkill //F //PID 40628)",
       "Bash(dotnet run)",
       "Bash(taskkill //F //PID 58116)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(powershell -Command \"Stop-Process -Id 58268 -Force\")",
+      "Bash(powershell -Command \"Get-Process | Where-Object {$_ProcessName -like ''*node*'' -or $_ProcessName -like ''*nuxt*''} | Select-Object ProcessName, Id, CPU\")",
+      "Bash(powershell:*)",
+      "Bash(git mv:*)",
+      "Edit",
+      "Write(*)",
+      "Search(*)",
+      "Bash(mkdir:*)",
+      "Bash(find:*)",
+      "Bash(if exist node_modules rmdir /s /q node_modules)",
+      "Bash(if exist package-lock.json del package-lock.json)",
+      "Bash(npx nuxt:*)"
     ],
     "deny": [],
     "ask": []

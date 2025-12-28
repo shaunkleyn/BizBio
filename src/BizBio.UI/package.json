@@ -16,7 +16,11 @@
     "pm2:delete": "pm2 delete bizbio-frontend",
     "pm2:logs": "pm2 logs bizbio-frontend",
     "pm2:monit": "pm2 monit",
-    "deploy": "npm run build && npm run pm2:restart"
+    "deploy": "npm run build && npm run pm2:restart",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@microsoft/applicationinsights-web": "^3.0.7",
@@ -24,20 +28,26 @@
     "@pinia/nuxt": "^0.5.5",
     "@vueuse/core": "^14.1.0",
     "axios": "^1.7.9",
-    "nuxt": "3.15.0",
+    "nuxt": "^3.15.1",
     "pinia": "^2.2.8",
     "sortablejs": "^1.15.6",
     "vue": "^3.5.13",
     "vue-gtag": "^2.0.1",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.4.5",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@nookuio/nuxt": "^1.5.9",
+    "@nuxt/test-utils": "^3.21.0",
+    "@nuxtjs/color-mode": "^4.0.0",
     "@nuxtjs/tailwindcss": "^6.12.2",
     "@types/sortablejs": "^1.15.9",
+    "@vue/test-utils": "^2.4.6",
     "autoprefixer": "^10.4.20",
+    "happy-dom": "^15.11.7",
     "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.18"
+    "tailwindcss": "^3.4.18",
+    "vitest": "^3.2.4"
   }
 }

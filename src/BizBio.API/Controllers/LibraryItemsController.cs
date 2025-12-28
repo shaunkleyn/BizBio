@@ -615,6 +615,92 @@ public class LibraryItemsController : ControllerBase
         return Ok(new { success = true, data = new { catalogItemId = catalogItem.Id } });
     }
 
+    /// <summary>
+    /// Add library item to a catalog/menu as a reference (Phase 2 - Live Sync)
+    /// Creates a CatalogItemInstance that references the library item with optional overrides
+    /// </summary>
+    [HttpPost("{id}/add-to-catalog-ref")]
+    public async Task<IActionResult> AddToCatalogAsReference(int id, [FromBody] AddToCatalogRefDto dto)
+    {
+        var userId = GetUserId();
+
+        // Verify library item exists and user owns it
+        var libraryItem = await _context.CatalogItems
+            .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId && i.CatalogId == null);
+
+        if (libraryItem == null)
+            return NotFound(new { success = false, error = "Library item not found" });
+
+        // Verify user owns the catalog
+        var catalog = await _context.Catalogs
+            .Include(c => c.Profile)
+            .FirstOrDefaultAsync(c => c.Id == dto.CatalogId);
+
+        if (catalog == null || catalog.Profile.UserId != userId)
+            return NotFound(new { success = false, error = "Catalog not found" });
+
+        // Check if instance already exists
+        var existingInstance = await _context.CatalogItemInstances
+            .FirstOrDefaultAsync(i => i.CatalogId == dto.CatalogId && i.LibraryItemId == id);
+
+        if (existingInstance != null)
+            return BadRequest(new { success = false, error = "Item already added to this catalog" });
+
+        // Create instance reference
+        var instance = new CatalogItemInstance
+        {
+            CatalogId = dto.CatalogId,
+            LibraryItemId = id,
+            PriceOverride = dto.PriceOverride,
+            NameOverride = dto.NameOverride,
+            DescriptionOverride = dto.DescriptionOverride,
+            AvailabilityOverride = dto.AvailabilityOverride,
+            SortOrder = dto.SortOrder,
+            IsVisible = true,
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            CreatedBy = userId.ToString(),
+            UpdatedBy = userId.ToString()
+        };
+
+        _context.CatalogItemInstances.Add(instance);
+        await _context.SaveChangesAsync();
+
+        // Add category mappings if provided
+        if (dto.CategoryIds != null && dto.CategoryIds.Any())
+        {
+            foreach (var categoryId in dto.CategoryIds)
+            {
+                var categoryLink = new CatalogItemInstanceCategory
+                {
+                    InstanceId = instance.Id,
+                    CategoryId = categoryId,
+                    SortOrder = 0,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    CreatedBy = userId.ToString(),
+                    UpdatedBy = userId.ToString()
+                };
+                _context.CatalogItemInstanceCategories.Add(categoryLink);
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        return Ok(new {
+            success = true,
+            data = new {
+                instanceId = instance.Id,
+                libraryItemId = id,
+                hasOverrides = dto.PriceOverride.HasValue ||
+                               !string.IsNullOrEmpty(dto.NameOverride) ||
+                               !string.IsNullOrEmpty(dto.DescriptionOverride) ||
+                               dto.AvailabilityOverride.HasValue
+            }
+        });
+    }
+
     private static string[] ParseJsonArray(string? json)
     {
         if (string.IsNullOrEmpty(json))
@@ -683,5 +769,46 @@ public class AddToCatalogDto
 {
     public int CatalogId { get; set; }
     public int? CategoryId { get; set; }
+    public int SortOrder { get; set; } = 0;
+}
+
+/// <summary>
+/// DTO for adding library item to catalog as a reference (Phase 2 - Live Sync)
+/// </summary>
+public class AddToCatalogRefDto
+{
+    /// <summary>
+    /// The catalog/menu to add the item to
+    /// </summary>
+    public int CatalogId { get; set; }
+
+    /// <summary>
+    /// Category IDs for this item in this specific menu
+    /// </summary>
+    public List<int>? CategoryIds { get; set; }
+
+    /// <summary>
+    /// Optional price override for this menu (null = use library item price)
+    /// </summary>
+    public decimal? PriceOverride { get; set; }
+
+    /// <summary>
+    /// Optional name override for this menu (null = use library item name)
+    /// </summary>
+    public string? NameOverride { get; set; }
+
+    /// <summary>
+    /// Optional description override for this menu (null = use library item description)
+    /// </summary>
+    public string? DescriptionOverride { get; set; }
+
+    /// <summary>
+    /// Optional availability override for this menu (null = use library item IsActive)
+    /// </summary>
+    public bool? AvailabilityOverride { get; set; }
+
+    /// <summary>
+    /// Sort order within the catalog
+    /// </summary>
     public int SortOrder { get; set; } = 0;
 }

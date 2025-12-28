@@ -224,35 +224,47 @@ export const useBundlesApi = () => {
 
   return {
     // Bundle operations
-    getBundles: (catalogId: string) => api.get(`/dashboard/catalogs/${catalogId}/bundles`),
-    getBundle: (catalogId: string, bundleId: string) =>
-      api.get(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}`),
-    createBundle: (catalogId: string, data: any) =>
-      api.post(`/dashboard/catalogs/${catalogId}/bundles`, data),
-    updateBundle: (catalogId: string, bundleId: string, data: any) =>
-      api.put(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}`, data),
-    deleteBundle: (catalogId: string, bundleId: string) =>
-      api.delete(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}`),
+    getBundles: () => api.get(`/dashboard/bundles`),
+    getBundle: (bundleId: string) =>
+      api.get(`/dashboard/bundles/${bundleId}`),
+    createBundle: (data: any) =>
+      api.post(`/dashboard/bundles`, data),
+    updateBundle: (bundleId: string, data: any) =>
+      api.put(`/dashboard/bundles/${bundleId}`, data),
+    deleteBundle: (bundleId: string) =>
+      api.delete(`/dashboard/bundles/${bundleId}`),
 
     // Step operations
-    addStep: (catalogId: string, bundleId: string, data: any) =>
-      api.post(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}/steps`, data),
+    addStep: (bundleId: string, data: any) =>
+      api.post(`/dashboard/bundles/${bundleId}/steps`, data),
 
     // Product assignment
-    addProductToStep: (catalogId: string, bundleId: string, stepId: string, data: any) =>
-      api.post(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}/steps/${stepId}/products`, data),
+    addProductToStep: (bundleId: string, stepId: string, data: any) =>
+      api.post(`/dashboard/bundles/${bundleId}/steps/${stepId}/products`, data),
 
     // Option groups
-    addOptionGroup: (catalogId: string, bundleId: string, stepId: string, data: any) =>
-      api.post(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}/steps/${stepId}/option-groups`, data),
+    addOptionGroup: (bundleId: string, stepId: string, data: any) =>
+      api.post(`/dashboard/bundles/${bundleId}/steps/${stepId}/option-groups`, data),
 
     // Options
-    addOption: (catalogId: string, bundleId: string, optionGroupId: string, data: any) =>
-      api.post(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}/option-groups/${optionGroupId}/options`, data),
+    addOption: (bundleId: string, optionGroupId: string, data: any) =>
+      api.post(`/dashboard/bundles/${bundleId}/option-groups/${optionGroupId}/options`, data),
 
-    // Add bundle to category
-    addToCategory: (catalogId: string, bundleId: string, data: any) =>
-      api.post(`/dashboard/catalogs/${catalogId}/bundles/${bundleId}/add-to-category`, data)
+    // Add bundle to category (catalogId now passed in data object)
+    addToCategory: (bundleId: string, data: any) =>
+      api.post(`/dashboard/bundles/${bundleId}/add-to-category`, data),
+
+    // Step management
+    updateStep: (bundleId: string, stepId: string, data: any) =>
+      api.put(`/dashboard/bundles/${bundleId}/steps/${stepId}`, data),
+    deleteStep: (bundleId: string, stepId: string) =>
+      api.delete(`/dashboard/bundles/${bundleId}/steps/${stepId}`),
+    reorderSteps: (bundleId: string, data: any) =>
+      api.put(`/dashboard/bundles/${bundleId}/steps/reorder`, data),
+
+    // Product management in steps
+    removeProductFromStep: (bundleId: string, stepId: string, productId: string) =>
+      api.delete(`/dashboard/bundles/${bundleId}/steps/${stepId}/products/${productId}`)
   }
 }
 

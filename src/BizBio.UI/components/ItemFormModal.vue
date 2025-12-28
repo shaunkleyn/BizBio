@@ -286,7 +286,7 @@
               <p class="text-sm text-md-on-surface-variant mt-1">Select required customization options for this item</p>
             </div>
             <NuxtLink
-              to="/menu/library/option-groups"
+              to="/menu/options/groups"
               target="_blank"
               class="text-sm text-md-tertiary hover:text-md-on-tertiary-container"
             >
@@ -303,7 +303,7 @@
             <i class="fas fa-sliders-h text-3xl text-md-on-surface-variant opacity-50 mb-2"></i>
             <p class="text-md-on-surface-variant mb-2">No option groups available</p>
             <NuxtLink
-              to="/menu/library/option-groups"
+              to="/menu/options/groups"
               target="_blank"
               class="text-sm text-md-tertiary hover:text-md-on-tertiary-container"
             >
@@ -348,7 +348,7 @@
               <p class="text-sm text-md-on-surface-variant mt-1">Select optional extras available for this item</p>
             </div>
             <NuxtLink
-              to="/menu/library/extra-groups"
+              to="/menu/extras/groups"
               target="_blank"
               class="text-sm text-md-primary hover:text-md-on-primary-container"
             >
@@ -365,7 +365,7 @@
             <i class="fas fa-plus-circle text-3xl text-md-on-surface-variant opacity-50 mb-2"></i>
             <p class="text-md-on-surface-variant mb-2">No extra groups available</p>
             <NuxtLink
-              to="/menu/library/extra-groups"
+              to="/menu/extras/groups"
               target="_blank"
               class="text-sm text-md-primary hover:text-md-on-primary-container"
             >

@@ -76,6 +76,7 @@ export const useMenuCreation = () => {
       price: 99,
       description: 'Perfect for small cafes and food trucks',
       features: [
+        '1 menu',
         'Up to 3 categories',
         'Up to 20 menu items',
         'Basic customization',
@@ -83,6 +84,7 @@ export const useMenuCreation = () => {
         'Mobile responsive',
       ],
       limits: {
+        maxMenus: 1,
         categories: 3,
         itemsPerCategory: 20,
         totalItems: 20,
@@ -99,8 +101,9 @@ export const useMenuCreation = () => {
       price: 199,
       description: 'Ideal for restaurants and bistros',
       features: [
-        'Up to 10 categories',
-        'Up to 100 menu items',
+        'Up to 3 menus',
+        'Up to 10 categories per menu',
+        'Up to 100 menu items per menu',
         'Advanced customization',
         'QR code generation',
         'Mobile responsive',
@@ -108,6 +111,7 @@ export const useMenuCreation = () => {
         'Multi-language support',
       ],
       limits: {
+        maxMenus: 3,
         categories: 10,
         itemsPerCategory: 100,
         totalItems: 100,
@@ -124,6 +128,7 @@ export const useMenuCreation = () => {
       price: 399,
       description: 'For large restaurants and chains',
       features: [
+        'Unlimited menus',
         'Unlimited categories',
         'Unlimited menu items',
         'Full customization',
@@ -135,6 +140,7 @@ export const useMenuCreation = () => {
         'Priority support',
       ],
       limits: {
+        maxMenus: 999,
         categories: 999,
         itemsPerCategory: 999,
         totalItems: 999,

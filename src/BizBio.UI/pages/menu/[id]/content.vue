@@ -8,7 +8,7 @@
           <p class="text-md-on-surface-variant mt-1">Manage categories, items, and bundles</p>
         </div>
         <NuxtLink
-          :to="`/dashboard/menu/${catalogId}/edit`"
+          :to="`/menu/${catalogId}/edit`"
           class="px-4 py-2 text-md-on-surface border border-gray-300 rounded-lg hover:bg-md-surface-container"
         >
           <i class="fas fa-cog mr-2"></i>Menu Settings

@@ -154,6 +154,9 @@
       <slot />
     </main>
 
+    <!-- Cookie Consent Banner -->
+    <CookieConsent />
+
     <!-- Footer -->
     <footer class="bg-[var(--dark-background-color)] text-white py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -230,10 +233,16 @@
 const authStore = useAuthStore()
 const router = useRouter()
 const mobileMenuOpen = ref(false)
+const { initConsent } = useCookieConsent()
 
 const handleLogout = () => {
   authStore.logout()
   router.push('/login')
   mobileMenuOpen.value = false
 }
+
+// Initialize cookie consent on mount
+onMounted(() => {
+  initConsent()
+})
 </script>

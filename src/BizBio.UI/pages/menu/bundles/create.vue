@@ -119,7 +119,7 @@
           <!-- Navigation -->
           <div class="flex justify-between mt-8">
             <NuxtLink
-              to="/dashboard/bundles"
+              to="/menu/bundles"
               class="px-6 py-3 border border-[var(--light-border-color)] rounded-lg hover:bg-md-surface-container transition-colors"
             >
               Cancel
@@ -741,7 +741,7 @@ async function saveBundle() {
     }
 
     toast.success('Bundle created successfully!')
-    router.push('/dashboard/bundles')
+    router.push('/menu/bundles')
   } catch (error: any) {
     console.error('Error saving bundle:', error)
     if (error.response?.data?.error?.includes('not available')) {

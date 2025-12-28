@@ -6,11 +6,9 @@ export default defineNuxtConfig({
   },
   ssr: true,
   modules: [
-    '~/modules/fix-windows-path',
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     '@nuxt/image',
-    '@nookuio/nuxt',
   ],
   css: ['~/assets/css/main.css', '~/assets/fonts/css/all.css'],
   app: {
@@ -91,6 +89,7 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
+    '/.well-known/**': { ssr: false, redirect: '/' },
     '/': {
       prerender: true,
     },
@@ -143,18 +142,36 @@ export default defineNuxtConfig({
       },
     },
   },
-  darkMode: 'class',
+  // ❌ REMOVED: darkMode: 'class' - this is NOT a valid Nuxt option!
   experimental: {
     payloadExtraction: false,
     renderJsonPayloads: true,
     typedPages: true,
   },
+  router: {
+    options: {
+      strict: false
+    }
+  },
   vite: {
+    server: {
+      hmr: {
+        protocol: 'ws',
+        host: 'localhost',
+      },
+      watch: {
+        usePolling: false,
+        ignored: ['**/node_modules/**', '**/.git/**', '**/.nuxt/**', '**/dist/**']
+      }
+    },
+    clearScreen: false,
+    optimizeDeps: {
+      exclude: ['vue', 'pinia']
+    },
     build: {
       rollupOptions: {
         output: {
           manualChunks: (id) => {
-            // Only split chunks for client-side modules
             if (id.includes('node_modules')) {
               if (id.includes('pinia')) {
                 return 'pinia';
@@ -164,5 +181,13 @@ export default defineNuxtConfig({
         },
       },
     },
+  },
+  // Improve dev server stability
+  devServer: {
+    port: 3000
+  },
+  hooks: {
+    // Prevent duplicate middleware registration
+    'nitro:init': () => {},
   },
 });

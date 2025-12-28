@@ -104,7 +104,7 @@
             <div class="flex flex-col gap-2">
               <div class="flex gap-2">
                 <NuxtLink
-                  :to="`/dashboard/bundles/edit/${bundle.id}`"
+                  :to="`/menu/bundles/${bundle.id}/edit`"
                   class="flex-1 px-4 py-2 btn-gradient rounded-xl shadow-md-2 hover:shadow-md-3 transition-all text-center text-sm text-white"
                 >
                   <i class="fas fa-edit mr-1"></i>
@@ -184,18 +184,39 @@
         <div class="p-6 space-y-4">
           <div>
             <label class="block text-sm font-bold text-md-on-surface mb-2 flex items-center gap-2">
+              <i class="fas fa-book-open text-md-primary"></i>
+              Menu <span class="text-md-error">*</span>
+            </label>
+            <select
+              v-model="selectedMenuId"
+              @change="onMenuChange"
+              class="w-full px-4 py-2 bg-md-surface-container text-md-on-surface border border-md-outline-variant rounded-xl focus:outline-none focus:ring-2 focus:ring-md-primary"
+            >
+              <option :value="null" disabled>-- Select a menu --</option>
+              <option v-for="menu in menus" :key="menu.id" :value="menu.id.toString()">
+                {{ menu.name }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-bold text-md-on-surface mb-2 flex items-center gap-2">
               <i class="fas fa-layer-group text-md-primary"></i>
               Category
             </label>
             <select
               v-model="selectedCategoryId"
-              class="w-full px-4 py-2 bg-md-surface-container text-md-on-surface border border-md-outline-variant rounded-xl focus:outline-none focus:ring-2 focus:ring-md-primary"
+              :disabled="!selectedMenuId"
+              class="w-full px-4 py-2 bg-md-surface-container text-md-on-surface border border-md-outline-variant rounded-xl focus:outline-none focus:ring-2 focus:ring-md-primary disabled:opacity-50"
             >
               <option :value="null">No Category</option>
               <option v-for="category in categories" :key="category.id" :value="category.id">
                 {{ category.name }}
               </option>
             </select>
+            <p v-if="!selectedMenuId" class="text-xs text-md-on-surface-variant mt-1">
+              Select a menu first
+            </p>
           </div>
 
           <div>
@@ -221,7 +242,7 @@
             </button>
             <button
               @click="addToCategory"
-              :disabled="addingToCategory"
+              :disabled="addingToCategory || !selectedMenuId"
               class="flex-1 px-4 py-2 bg-md-success text-md-on-success rounded-xl hover:shadow-md-3 transition-all shadow-md-2 disabled:opacity-50 md-ripple flex items-center justify-center gap-2"
             >
               <i class="fas fa-check-circle"></i>
@@ -537,8 +558,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, h } from 'vue'
-import { useBundlesApi } from '~/composables/useApi'
+import { ref, onMounted, h, computed } from 'vue'
+import { useBundlesApi, useLibraryItemsApi, useCatalogsApi, useMenusApi } from '~/composables/useApi'
 import { useToast } from '~/composables/useToast'
 
 definePageMeta({
@@ -546,7 +567,9 @@ definePageMeta({
 })
 
 const bundlesApi = useBundlesApi()
-const libraryApi = useLibraryItemsApi();
+const libraryApi = useLibraryItemsApi()
+const catalogsApi = useCatalogsApi()
+const menusApi = useMenusApi()
 const toast = useToast()
 
 // Stats for sidebar
@@ -569,7 +592,9 @@ const sortOrder = ref(0)
 const addingToCategory = ref(false)
 const hasBundleFeature = ref(true) // TODO: Check from user subscription
 const catalogId = ref<string>('1') // TODO: Get from user's catalog
-const categories = ref<any[]>([]) // TODO: Load from API
+const categories = ref<any[]>([])
+const menus = ref<any[]>([])
+const selectedMenuId = ref<string | null>(null)
 const showCreateModal = ref(false)
 const currentStep = ref(1)
 const bundleData = ref({
@@ -604,8 +629,8 @@ onMounted(async () => {
     'Create Bundle'
   ]))
 
+  await loadMenus()
   await loadBundles()
-  await loadCategories()
   await loadProducts()
 })
 
@@ -677,38 +702,107 @@ async function createBundle() {
         .replace(/^-+|-+$/g, '')
     }
 
-    const response = await bundlesApi.createBundle(catalogId.value, bundleData.value)
+    // Create the bundle
+    const bundleResponse = await bundlesApi.createBundle({
+      name: bundleData.value.name,
+      description: bundleData.value.description,
+      basePrice: bundleData.value.basePrice,
+      slug: bundleData.value.slug,
+      images: '',
+      sortOrder: 0
+    })
 
-    if (response.success) {
-      toast.success('Bundle created successfully!')
-      showCreateModal.value = false
-      currentStep.value = 1
-      bundleData.value = {
-        name: '',
-        description: '',
-        basePrice: 0,
-        slug: '',
-        steps: []
-      }
-      await loadBundles()
-    } else {
-      toast.error(response.error || 'Failed to create bundle')
+    if (!bundleResponse.success) {
+      toast.error(bundleResponse.error || 'Failed to create bundle')
+      return
     }
-  } catch (error) {
+
+    const bundleId = bundleResponse.data.bundle.id
+
+    // Create steps and products
+    for (const step of bundleData.value.steps) {
+      const stepResponse = await bundlesApi.addStep(bundleId, {
+        stepNumber: step.stepNumber,
+        name: step.name,
+        minSelect: step.minSelect,
+        maxSelect: step.maxSelect
+      })
+
+      const stepId = stepResponse.data.step.id
+
+      // Add products to step
+      for (const productId of step.allowedProducts) {
+        await bundlesApi.addProductToStep(bundleId, stepId, {
+          productId
+        })
+      }
+    }
+
+    toast.success('Bundle created successfully!')
+    showCreateModal.value = false
+    currentStep.value = 1
+    bundleData.value = {
+      name: '',
+      description: '',
+      basePrice: 0,
+      slug: '',
+      steps: []
+    }
+    await loadBundles()
+  } catch (error: any) {
     console.error('Error creating bundle:', error)
-    toast.error('An error occurred while creating the bundle')
+    if (error.response?.data?.error?.includes('not available')) {
+      toast.error('Bundles feature is not available in your subscription tier')
+    } else {
+      toast.error('An error occurred while creating the bundle')
+    }
   }
 }
 
 async function loadBundles() {
   try {
     loading.value = true
-    const response = await bundlesApi.getBundles(catalogId.value)
-    // Ensure we always set an array
-    if (response.data && Array.isArray(response.data.bundles)) {
-      bundles.value = response.data.bundles
-    } else if (Array.isArray(response.data)) {
-      bundles.value = response.data
+
+    // Load bundles from library items (bundles are now stored as library items with ItemType=Bundle)
+    const response = await libraryApi.getItems()
+
+    if (response.success && response.data?.items) {
+      // Filter only bundle items
+      const bundleItems = response.data.items.filter((item: any) => item.itemType === 1)
+
+      // For each bundle, fetch full details including steps
+      const bundlePromises = bundleItems.map(async (item: any) => {
+        try {
+          const bundleId = item.bundleId || item.id
+          const detailsResponse = await bundlesApi.getBundle(bundleId)
+
+          return {
+            id: bundleId,
+            name: item.name,
+            description: item.description,
+            basePrice: item.price,
+            images: Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : null,
+            sortOrder: item.sortOrder,
+            isActive: true,
+            steps: detailsResponse.data?.bundle?.steps || []
+          }
+        } catch (error) {
+          console.error(`Error loading bundle ${item.bundleId} details:`, error)
+          // Return bundle without steps if details fail to load
+          return {
+            id: item.bundleId || item.id,
+            name: item.name,
+            description: item.description,
+            basePrice: item.price,
+            images: Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : null,
+            sortOrder: item.sortOrder,
+            isActive: true,
+            steps: []
+          }
+        }
+      })
+
+      bundles.value = await Promise.all(bundlePromises)
     } else {
       bundles.value = []
     }
@@ -728,33 +822,66 @@ function confirmDelete(bundle: any) {
   bundleToDelete.value = bundle
 }
 
-async function loadCategories() {
-  // TODO: Load categories from API
-  // For now, using mock data
-  categories.value = [
-    { id: 1, name: 'Specials' },
-    { id: 2, name: 'Combos' },
-    { id: 3, name: 'Family Meals' }
-  ]
+async function loadMenus() {
+  try {
+    const response = await menusApi.getMyMenus()
+    if (response.success && response.data) {
+      menus.value = response.data
+      if (menus.value.length > 0) {
+        catalogId.value = menus.value[0].id.toString()
+      }
+    }
+  } catch (error) {
+    console.error('Error loading menus:', error)
+    toast.error('Failed to load menus')
+  }
 }
 
-function showAddToCategory(bundle: any) {
+async function loadCategories(menuId: string) {
+  try {
+    const response = await catalogsApi.getCatalogDetail(parseInt(menuId))
+    if (response.success && response.data?.categories) {
+      categories.value = response.data.categories
+    }
+  } catch (error) {
+    console.error('Error loading categories:', error)
+    categories.value = []
+  }
+}
+
+async function showAddToCategory(bundle: any) {
   bundleToAdd.value = bundle
+  selectedMenuId.value = menus.value.length > 0 ? menus.value[0].id.toString() : null
   selectedCategoryId.value = null
   sortOrder.value = 0
+
+  // Load categories for the selected menu
+  if (selectedMenuId.value) {
+    await loadCategories(selectedMenuId.value)
+  }
+}
+
+async function onMenuChange() {
+  if (selectedMenuId.value) {
+    await loadCategories(selectedMenuId.value)
+    selectedCategoryId.value = null
+  }
 }
 
 async function addToCategory() {
-  if (!bundleToAdd.value) return
+  if (!bundleToAdd.value || !selectedMenuId.value) return
 
   try {
     addingToCategory.value = true
-    await bundlesApi.addToCategory(catalogId.value, bundleToAdd.value.id, {
+    await bundlesApi.addToCategory(bundleToAdd.value.id, {
+      catalogId: parseInt(selectedMenuId.value),
       categoryId: selectedCategoryId.value,
       sortOrder: sortOrder.value
     })
     toast.success('Bundle added to menu successfully!')
     bundleToAdd.value = null
+    selectedMenuId.value = null
+    selectedCategoryId.value = null
   } catch (error) {
     console.error('Error adding bundle to category:', error)
     toast.error('Failed to add bundle to menu')
@@ -767,7 +894,7 @@ async function deleteBundle() {
   if (!bundleToDelete.value) return
 
   try {
-    await bundlesApi.deleteBundle(catalogId.value, bundleToDelete.value.id)
+    await bundlesApi.deleteBundle(bundleToDelete.value.id)
     toast.success('Bundle deleted successfully')
     bundles.value = bundles.value.filter(b => b.id !== bundleToDelete.value.id)
     bundleToDelete.value = null

@@ -28,6 +28,20 @@
       </div>
 
       <form @submit.prevent="handleNext">
+        <!-- Restaurant Selection -->
+        <div class="mb-8">
+          <label class="block text-sm font-semibold text-md-on-surface mb-2">
+            Restaurant <span class="text-md-error">*</span>
+          </label>
+          <p class="text-xs text-md-on-surface-variant mb-3">
+            Select which restaurant this menu belongs to
+          </p>
+          <RestaurantSelector
+            v-model="menuData.menuProfile.restaurantId"
+            @change="handleRestaurantChange"
+          />
+        </div>
+
         <!-- Business Logo Upload -->
         <div class="mb-6">
           <label class="block text-sm font-semibold text-md-on-surface mb-2">
@@ -403,7 +417,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const emit = defineEmits(['next', 'previous'])
 const { menuData, generateSlug } = useMenuCreation()
 const toast = useToast()
@@ -457,8 +471,17 @@ watch(() => menuData.value.menuProfile.name, (newName) => {
   }
 })
 
+const handleRestaurantChange = (restaurant: any) => {
+  console.log('Selected restaurant:', restaurant)
+}
+
 const handleNext = () => {
   if (canProceed.value) {
+    // Validate restaurant selection
+    if (!menuData.value.menuProfile.restaurantId) {
+      alert('Please select a restaurant for this menu')
+      return
+    }
     emit('next')
   }
 }

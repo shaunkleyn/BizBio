@@ -18,54 +18,71 @@
       <!-- Navigation Links -->
       <nav class="space-y-1">
         <NuxtLink
-          to="/menu"
+          to="/menu/dashboard"
           :class="[
             'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
-            isActive('/menu') && !route.path.includes('/menu/')
+            route.path === '/menu/dashboard'
               ? 'bg-gradient-primary text-white shadow-glow-purple'
               : 'text-md-on-surface-variant hover:text-md-primary'
           ]"
         >
           <div :class="[
             'absolute inset-0 bg-md-primary-container opacity-0 group-hover:opacity-100 transition-opacity',
-            isActive('/menu') && !route.path.includes('/menu/') ? 'opacity-0' : ''
+            route.path === '/menu/dashboard' ? 'opacity-0' : ''
           ]"></div>
           <i class="fas fa-th-large w-5 relative z-10"></i>
           <span class="text-sm relative z-10">Overview</span>
         </NuxtLink>
 
         <NuxtLink
-          to="/menu/menus"
+          to="/menu"
           :class="[
             'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
-            isActive('/menu/menus')
+            route.path === '/menu' || route.path.startsWith('/menu/create') || route.path.match(/^\/menu\/\d+/)
               ? 'bg-gradient-secondary text-white shadow-glow-pink'
               : 'text-md-on-surface-variant hover:text-md-secondary'
           ]"
         >
           <div :class="[
             'absolute inset-0 bg-md-secondary-container opacity-0 group-hover:opacity-100 transition-opacity',
-            isActive('/menu/menus') ? 'opacity-0' : ''
+            route.path === '/menu' || route.path.startsWith('/menu/create') ? 'opacity-0' : ''
           ]"></div>
           <i class="fas fa-book-open w-5 relative z-10"></i>
           <span class="text-sm relative z-10">Menus</span>
         </NuxtLink>
 
         <NuxtLink
-            to="/dashboard/bundles"
+            to="/menu/bundles"
             :class="[
               'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
-              route.path === '/dashboard/bundles'
+              route.path.startsWith('/menu/bundles')
                 ? 'bg-gradient-tertiary text-white shadow-glow-teal'
                 : 'text-md-on-surface-variant hover:text-md-tertiary'
             ]"
           >
             <div :class="[
               'absolute inset-0 bg-md-tertiary-container opacity-0 group-hover:opacity-100 transition-opacity',
-              route.path === '/dashboard/bundles' ? 'opacity-0' : ''
+              route.path.startsWith('/menu/bundles') ? 'opacity-0' : ''
             ]"></div>
             <i class="fas fa-layer-group w-5 relative z-10"></i>
             <span class="text-sm relative z-10">Bundles</span>
+          </NuxtLink>
+
+        <NuxtLink
+            to="/menu/restaurants"
+            :class="[
+              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
+              route.path.startsWith('/menu/restaurants')
+                ? 'bg-gradient-accent text-white shadow-md-2'
+                : 'text-md-on-surface-variant hover:text-md-accent'
+            ]"
+          >
+            <div :class="[
+              'absolute inset-0 bg-md-accent-container opacity-0 group-hover:opacity-100 transition-opacity',
+              route.path.startsWith('/menu/restaurants') ? 'opacity-0' : ''
+            ]"></div>
+            <i class="fas fa-store w-5 relative z-10"></i>
+            <span class="text-sm relative z-10">Restaurants</span>
           </NuxtLink>
 
         <!-- Library Submenu -->
@@ -77,85 +94,85 @@
           </div>
 
           <NuxtLink
-            to="/menu/library/items"
+            to="/menu/items"
             :class="[
               'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
-              route.path === '/menu/library/items'
+              route.path.startsWith('/menu/items')
                 ? 'bg-gradient-accent text-white shadow-md-2'
                 : 'text-md-on-surface-variant hover:text-md-accent'
             ]"
           >
             <div :class="[
               'absolute inset-0 bg-md-accent-container opacity-0 group-hover:opacity-100 transition-opacity',
-              route.path === '/menu/library/items' ? 'opacity-0' : ''
+              route.path.startsWith('/menu/items') ? 'opacity-0' : ''
             ]"></div>
             <i class="fas fa-utensils w-5 relative z-10"></i>
             <span class="text-sm relative z-10">Items</span>
           </NuxtLink>
 
           <NuxtLink
-            to="/menu/library/extras"
+            to="/menu/extras"
             :class="[
               'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
-              route.path === '/menu/library/extras'
+              route.path === '/menu/extras'
                 ? 'bg-gradient-primary text-white shadow-glow-purple'
                 : 'text-md-on-surface-variant hover:text-md-primary'
             ]"
           >
             <div :class="[
               'absolute inset-0 bg-md-primary-container opacity-0 group-hover:opacity-100 transition-opacity',
-              route.path === '/menu/library/extras' ? 'opacity-0' : ''
+              route.path === '/menu/extras' ? 'opacity-0' : ''
             ]"></div>
             <i class="fas fa-plus-circle w-5 relative z-10"></i>
             <span class="text-sm relative z-10">Extras</span>
           </NuxtLink>
 
           <NuxtLink
-            to="/menu/library/extra-groups"
+            to="/menu/extras/groups"
             :class="[
               'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
-              route.path === '/menu/library/extra-groups'
+              route.path === '/menu/extras/groups'
                 ? 'bg-gradient-secondary text-white shadow-glow-pink'
                 : 'text-md-on-surface-variant hover:text-md-secondary'
             ]"
           >
             <div :class="[
               'absolute inset-0 bg-md-secondary-container opacity-0 group-hover:opacity-100 transition-opacity',
-              route.path === '/menu/library/extra-groups' ? 'opacity-0' : ''
+              route.path === '/menu/extras/groups' ? 'opacity-0' : ''
             ]"></div>
             <i class="fas fa-object-group w-5 relative z-10"></i>
             <span class="text-sm relative z-10">Extra Groups</span>
           </NuxtLink>
 
           <NuxtLink
-            to="/menu/library/options"
+            to="/menu/options"
             :class="[
               'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
-              route.path === '/menu/library/options'
+              route.path === '/menu/options'
                 ? 'bg-gradient-tertiary text-white shadow-glow-teal'
                 : 'text-md-on-surface-variant hover:text-md-tertiary'
             ]"
           >
             <div :class="[
               'absolute inset-0 bg-md-tertiary-container opacity-0 group-hover:opacity-100 transition-opacity',
-              route.path === '/menu/library/options' ? 'opacity-0' : ''
+              route.path === '/menu/options' ? 'opacity-0' : ''
             ]"></div>
             <i class="fas fa-sliders-h w-5 relative z-10"></i>
             <span class="text-sm relative z-10">Options</span>
           </NuxtLink>
 
           <NuxtLink
-            to="/menu/library/option-groups"
+            to="/menu/options/groups"
             :class="[
               'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
-              route.path === '/menu/library/option-groups'
+              route.path === '/menu/options/groups'
                 ? 'bg-gradient-accent text-white shadow-md-2'
                 : 'text-md-on-surface-variant hover:text-md-accent'
             ]"
           >
             <div :class="[
               'absolute inset-0 bg-md-accent-container opacity-0 group-hover:opacity-100 transition-opacity',
-              route.path === '/menu/library/option-groups' ? 'opacity-0' : ''
+              route.path === '/menu/options/groups' ? 'opacity-0' : ''
             ]"></div>
             <i class="fas fa-layer-group w-5 relative z-10"></i>
             <span class="text-sm relative z-10">Option Groups</span>

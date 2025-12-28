@@ -17,6 +17,7 @@ public class ProfilesController : ControllerBase
     private readonly IProfileRepository _profileRepo;
     private readonly ICatalogRepository _catalogRepo;
     private readonly IUserSubscriptionRepository _subscriptionRepo;
+    private readonly IRestaurantRepository _restaurantRepo;
     private readonly ILogger<ProfilesController> _logger;
     private readonly TelemetryClient _telemetryClient;
 
@@ -24,12 +25,14 @@ public class ProfilesController : ControllerBase
         IProfileRepository profileRepo,
         ICatalogRepository catalogRepo,
         IUserSubscriptionRepository subscriptionRepo,
+        IRestaurantRepository restaurantRepo,
         ILogger<ProfilesController> logger,
         TelemetryClient telemetryClient)
     {
         _profileRepo = profileRepo;
         _catalogRepo = catalogRepo;
         _subscriptionRepo = subscriptionRepo;
+        _restaurantRepo = restaurantRepo;
         _logger = logger;
         _telemetryClient = telemetryClient;
     }
@@ -61,6 +64,7 @@ public class ProfilesController : ControllerBase
             {
                 profile.Id,
                 profile.UserId,
+                profile.RestaurantId,
                 profile.Slug,
                 profile.Name,
                 profile.Description,
@@ -158,7 +162,37 @@ public class ProfilesController : ControllerBase
             }
 
             var userId = GetUserId();
-            _logger.LogInformation("Creating profile with slug {Slug} for user {UserId}", dto.Slug, userId);
+            _logger.LogInformation("Creating profile with slug {Slug} for user {UserId}, restaurant {RestaurantId}",
+                dto.Slug, userId, dto.RestaurantId);
+
+            // Verify user owns the restaurant
+            var restaurant = await _restaurantRepo.GetByIdAsync(dto.RestaurantId);
+            if (restaurant == null || restaurant.UserId != userId)
+            {
+                _logger.LogWarning("Restaurant {RestaurantId} not found or unauthorized for user {UserId}",
+                    dto.RestaurantId, userId);
+                return BadRequest(new { message = "Invalid restaurant" });
+            }
+
+            // Check subscription limits for profiles per restaurant
+            var restaurantWithProfiles = await _restaurantRepo.GetByIdWithProfilesAsync(dto.RestaurantId);
+            var subscriptions = await _subscriptionRepo.GetActiveSubscriptionsAsync(userId);
+            var activeSubscription = subscriptions.FirstOrDefault();
+
+            if (activeSubscription != null && restaurantWithProfiles != null)
+            {
+                var maxProfilesPerRestaurant = activeSubscription.Tier?.MaxProfilesPerRestaurant ?? 3;
+                var currentProfileCount = restaurantWithProfiles.Profiles.Count(p => p.IsActive);
+
+                if (currentProfileCount >= maxProfilesPerRestaurant)
+                {
+                    _logger.LogWarning("Restaurant {RestaurantId} has reached profile limit ({Current}/{Max})",
+                        dto.RestaurantId, currentProfileCount, maxProfilesPerRestaurant);
+                    return BadRequest(new {
+                        message = $"This restaurant has reached its profile limit ({maxProfilesPerRestaurant}). Please upgrade your subscription."
+                    });
+                }
+            }
 
             // Validate slug uniqueness
             var existingProfile = await _profileRepo.GetBySlugAsync(dto.Slug);
@@ -171,6 +205,7 @@ public class ProfilesController : ControllerBase
             var profile = new Profile
             {
                 UserId = userId,
+                RestaurantId = dto.RestaurantId,
                 Slug = dto.Slug,
                 Name = dto.Name,
                 Description = dto.Description ?? string.Empty,
@@ -229,6 +264,11 @@ public class ProfilesController : ControllerBase
 /// </summary>
 public class CreateProfileDto
 {
+    /// <summary>
+    /// The restaurant this profile/menu belongs to
+    /// </summary>
+    public int RestaurantId { get; set; }
+
     /// <summary>
     /// Unique slug for the profile URL
     /// </summary>

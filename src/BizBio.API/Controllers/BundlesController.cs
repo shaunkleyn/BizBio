@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using BizBio.Core.Interfaces;
 using BizBio.Core.Entities;
 using BizBio.Infrastructure.Data;
@@ -7,7 +8,7 @@ using System.Security.Claims;
 
 namespace BizBio.API.Controllers;
 
-[Route("api/v1/dashboard/catalogs/{catalogId}/bundles")]
+[Route("api/v1/dashboard/bundles")]
 [ApiController]
 [Authorize]
 public class BundlesController : ControllerBase
@@ -42,22 +43,29 @@ public class BundlesController : ControllerBase
     }
 
     /// <summary>
-    /// Get all bundles for a catalog
+    /// Get all bundles for the current user (from library items)
     /// </summary>
     [HttpGet]
-    public async Task<IActionResult> GetBundles(int catalogId)
+    public async Task<IActionResult> GetBundles()
     {
         var userId = GetUserId();
-        var catalog = await _catalogRepo.GetByIdAsync(catalogId);
 
-        if (catalog == null)
-            return NotFound(new { success = false, error = "Catalog not found" });
+        // Get bundles from CatalogItems where ItemType = Bundle and UserId matches
+        var bundleItems = await _context.CatalogItems
+            .Where(i => i.UserId == userId && i.ItemType == CatalogItemType.Bundle && i.BundleId != null)
+            .Select(i => i.BundleId!.Value)
+            .Distinct()
+            .ToListAsync();
 
-        var profile = await _profileRepo.GetByIdAsync(catalog.ProfileId);
-        if (profile == null || profile.UserId != userId)
-            return Forbid();
-
-        var bundles = await _bundleRepo.GetByCatalogIdAsync(catalogId);
+        var bundles = new List<CatalogBundle>();
+        foreach (var bundleId in bundleItems)
+        {
+            var bundle = await _bundleRepo.GetByIdAsync(bundleId);
+            if (bundle != null)
+            {
+                bundles.Add(bundle);
+            }
+        }
 
         return Ok(new { success = true, data = new { bundles } });
     }
@@ -66,22 +74,21 @@ public class BundlesController : ControllerBase
     /// Get a specific bundle by ID
     /// </summary>
     [HttpGet("{bundleId}")]
-    public async Task<IActionResult> GetBundle(int catalogId, int bundleId)
+    public async Task<IActionResult> GetBundle(int bundleId)
     {
         var userId = GetUserId();
-        var catalog = await _catalogRepo.GetByIdAsync(catalogId);
-
-        if (catalog == null)
-            return NotFound(new { success = false, error = "Catalog not found" });
-
-        var profile = await _profileRepo.GetByIdAsync(catalog.ProfileId);
-        if (profile == null || profile.UserId != userId)
-            return Forbid();
 
         var bundle = await _bundleRepo.GetByIdWithDetailsAsync(bundleId);
 
-        if (bundle == null || bundle.CatalogId != catalogId)
+        if (bundle == null)
             return NotFound(new { success = false, error = "Bundle not found" });
+
+        // Verify ownership through CatalogItems
+        var hasAccess = await _context.CatalogItems
+            .AnyAsync(i => i.BundleId == bundleId && i.UserId == userId);
+
+        if (!hasAccess)
+            return Forbid();
 
         return Ok(new { success = true, data = new { bundle } });
     }
@@ -91,7 +98,7 @@ public class BundlesController : ControllerBase
     /// Requires Bundles feature in subscription tier
     /// </summary>
     [HttpPost]
-    public async Task<IActionResult> CreateBundle(int catalogId, [FromBody] CreateBundleDto dto)
+    public async Task<IActionResult> CreateBundle([FromBody] CreateBundleDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -108,17 +115,9 @@ public class BundlesController : ControllerBase
             });
         }
 
-        var catalog = await _catalogRepo.GetByIdAsync(catalogId);
-        if (catalog == null)
-            return NotFound(new { success = false, error = "Catalog not found" });
-
-        var profile = await _profileRepo.GetByIdAsync(catalog.ProfileId);
-        if (profile == null || profile.UserId != userId)
-            return Forbid();
-
         var bundle = new CatalogBundle
         {
-            CatalogId = catalogId,
+            CatalogId = 0, // Not linked to a catalog directly
             Name = dto.Name,
             Slug = dto.Slug,
             Description = dto.Description,
@@ -133,62 +132,56 @@ public class BundlesController : ControllerBase
             Steps = new List<CatalogBundleStep>()
         };
 
-        foreach (var step in bundle.Steps)
-        {
-            var bundleStep = new CatalogBundleStep();
-            bundleStep.CreatedAt = DateTime.UtcNow;
-            bundleStep.UpdatedAt = DateTime.UtcNow;
-            bundleStep.CreatedBy = userId.ToString();
-            bundleStep.UpdatedBy = userId.ToString();
-            bundleStep.StepNumber = step.StepNumber;
-            bundleStep.Name = step.Name;
-            bundleStep.MinSelect = step.MinSelect;
-            bundleStep.MaxSelect = step.MaxSelect;
-            bundleStep.AllowedProducts = new List<CatalogBundleStepProduct>();
-            foreach (var product in step.AllowedProducts)
-            {
-                var stepProduct = new CatalogBundleStepProduct();
-                stepProduct.CreatedAt = DateTime.UtcNow;
-                stepProduct.UpdatedAt = DateTime.UtcNow;
-                stepProduct.CreatedBy = userId.ToString();
-                stepProduct.UpdatedBy = userId.ToString();
-                stepProduct.ProductId = product.ProductId;
-                stepProduct.IsActive = true;
-                stepProduct.StepId = bundleStep.Id;
-                bundleStep.AllowedProducts.Add(stepProduct);
-            }
-            bundle.Steps.Add(bundleStep);
-        }
-
         await _bundleRepo.AddAsync(bundle);
         await _bundleRepo.SaveChangesAsync();
 
-        return Ok(new { success = true, data = new { bundle } });
+        // Create a library item (CatalogItem) so the bundle appears in library items list
+        var libraryItem = new CatalogItem
+        {
+            UserId = userId,
+            CatalogId = null, // Library item, not assigned to catalog yet
+            ItemType = CatalogItemType.Bundle,
+            BundleId = bundle.Id,
+            Name = bundle.Name,
+            Description = bundle.Description,
+            Price = bundle.BasePrice,
+            Images = bundle.Images,
+            SortOrder = bundle.SortOrder,
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            CreatedBy = userId.ToString(),
+            UpdatedBy = userId.ToString()
+        };
+
+        _context.CatalogItems.Add(libraryItem);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { success = true, data = new { bundle, libraryItemId = libraryItem.Id } });
     }
 
     /// <summary>
     /// Update a bundle
     /// </summary>
     [HttpPut("{bundleId}")]
-    public async Task<IActionResult> UpdateBundle(int catalogId, int bundleId, [FromBody] UpdateBundleDto dto)
+    public async Task<IActionResult> UpdateBundle(int bundleId, [FromBody] UpdateBundleDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         var userId = GetUserId();
-        var catalog = await _catalogRepo.GetByIdAsync(catalogId);
-
-        if (catalog == null)
-            return NotFound(new { success = false, error = "Catalog not found" });
-
-        var profile = await _profileRepo.GetByIdAsync(catalog.ProfileId);
-        if (profile == null || profile.UserId != userId)
-            return Forbid();
 
         var bundle = await _bundleRepo.GetByIdAsync(bundleId);
 
-        if (bundle == null || bundle.CatalogId != catalogId)
+        if (bundle == null)
             return NotFound(new { success = false, error = "Bundle not found" });
+
+        // Verify ownership through CatalogItems
+        var hasAccess = await _context.CatalogItems
+            .AnyAsync(i => i.BundleId == bundleId && i.UserId == userId);
+
+        if (!hasAccess)
+            return Forbid();
 
         if (!string.IsNullOrEmpty(dto.Name))
             bundle.Name = dto.Name;
@@ -224,22 +217,21 @@ public class BundlesController : ControllerBase
     /// Delete a bundle
     /// </summary>
     [HttpDelete("{bundleId}")]
-    public async Task<IActionResult> DeleteBundle(int catalogId, int bundleId)
+    public async Task<IActionResult> DeleteBundle(int bundleId)
     {
         var userId = GetUserId();
-        var catalog = await _catalogRepo.GetByIdAsync(catalogId);
-
-        if (catalog == null)
-            return NotFound(new { success = false, error = "Catalog not found" });
-
-        var profile = await _profileRepo.GetByIdAsync(catalog.ProfileId);
-        if (profile == null || profile.UserId != userId)
-            return Forbid();
 
         var bundle = await _bundleRepo.GetByIdAsync(bundleId);
 
-        if (bundle == null || bundle.CatalogId != catalogId)
+        if (bundle == null)
             return NotFound(new { success = false, error = "Bundle not found" });
+
+        // Verify ownership through CatalogItems
+        var hasAccess = await _context.CatalogItems
+            .AnyAsync(i => i.BundleId == bundleId && i.UserId == userId);
+
+        if (!hasAccess)
+            return Forbid();
 
         await _bundleRepo.DeleteAsync(bundle.Id);
         await _bundleRepo.SaveChangesAsync();
@@ -251,25 +243,24 @@ public class BundlesController : ControllerBase
     /// Add a step to a bundle
     /// </summary>
     [HttpPost("{bundleId}/steps")]
-    public async Task<IActionResult> AddStep(int catalogId, int bundleId, [FromBody] CreateBundleStepDto dto)
+    public async Task<IActionResult> AddStep(int bundleId, [FromBody] CreateBundleStepDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         var userId = GetUserId();
-        var catalog = await _catalogRepo.GetByIdAsync(catalogId);
-
-        if (catalog == null)
-            return NotFound(new { success = false, error = "Catalog not found" });
-
-        var profile = await _profileRepo.GetByIdAsync(catalog.ProfileId);
-        if (profile == null || profile.UserId != userId)
-            return Forbid();
 
         var bundle = await _bundleRepo.GetByIdAsync(bundleId);
 
-        if (bundle == null || bundle.CatalogId != catalogId)
+        if (bundle == null)
             return NotFound(new { success = false, error = "Bundle not found" });
+
+        // Verify ownership through CatalogItems
+        var hasAccess = await _context.CatalogItems
+            .AnyAsync(i => i.BundleId == bundleId && i.UserId == userId);
+
+        if (!hasAccess)
+            return Forbid();
 
         var step = new CatalogBundleStep
         {
@@ -295,25 +286,24 @@ public class BundlesController : ControllerBase
     /// Add a product to a bundle step
     /// </summary>
     [HttpPost("{bundleId}/steps/{stepId}/products")]
-    public async Task<IActionResult> AddProductToStep(int catalogId, int bundleId, int stepId, [FromBody] AddProductToStepDto dto)
+    public async Task<IActionResult> AddProductToStep(int bundleId, int stepId, [FromBody] AddProductToStepDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         var userId = GetUserId();
-        var catalog = await _catalogRepo.GetByIdAsync(catalogId);
-
-        if (catalog == null)
-            return NotFound(new { success = false, error = "Catalog not found" });
-
-        var profile = await _profileRepo.GetByIdAsync(catalog.ProfileId);
-        if (profile == null || profile.UserId != userId)
-            return Forbid();
 
         var bundle = await _bundleRepo.GetByIdAsync(bundleId);
 
-        if (bundle == null || bundle.CatalogId != catalogId)
+        if (bundle == null)
             return NotFound(new { success = false, error = "Bundle not found" });
+
+        // Verify ownership through CatalogItems
+        var hasAccess = await _context.CatalogItems
+            .AnyAsync(i => i.BundleId == bundleId && i.UserId == userId);
+
+        if (!hasAccess)
+            return Forbid();
 
         var stepProduct = new CatalogBundleStepProduct
         {
@@ -336,25 +326,24 @@ public class BundlesController : ControllerBase
     /// Add an option group to a bundle step
     /// </summary>
     [HttpPost("{bundleId}/steps/{stepId}/option-groups")]
-    public async Task<IActionResult> AddOptionGroup(int catalogId, int bundleId, int stepId, [FromBody] CreateBundleOptionGroupDto dto)
+    public async Task<IActionResult> AddOptionGroup(int bundleId, int stepId, [FromBody] CreateBundleOptionGroupDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         var userId = GetUserId();
-        var catalog = await _catalogRepo.GetByIdAsync(catalogId);
-
-        if (catalog == null)
-            return NotFound(new { success = false, error = "Catalog not found" });
-
-        var profile = await _profileRepo.GetByIdAsync(catalog.ProfileId);
-        if (profile == null || profile.UserId != userId)
-            return Forbid();
 
         var bundle = await _bundleRepo.GetByIdAsync(bundleId);
 
-        if (bundle == null || bundle.CatalogId != catalogId)
+        if (bundle == null)
             return NotFound(new { success = false, error = "Bundle not found" });
+
+        // Verify ownership through CatalogItems
+        var hasAccess = await _context.CatalogItems
+            .AnyAsync(i => i.BundleId == bundleId && i.UserId == userId);
+
+        if (!hasAccess)
+            return Forbid();
 
         var optionGroup = new CatalogBundleOptionGroup
         {
@@ -381,13 +370,15 @@ public class BundlesController : ControllerBase
     /// Creates a CatalogItem reference to the bundle
     /// </summary>
     [HttpPost("{bundleId}/add-to-category")]
-    public async Task<IActionResult> AddBundleToCategory(int catalogId, int bundleId, [FromBody] AddBundleToCategoryDto dto)
+    public async Task<IActionResult> AddBundleToCategory(int bundleId, [FromBody] AddBundleToCategoryDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         var userId = GetUserId();
-        var catalog = await _catalogRepo.GetByIdAsync(catalogId);
+
+        // Verify the catalog exists and user has access
+        var catalog = await _catalogRepo.GetByIdAsync(dto.CatalogId);
 
         if (catalog == null)
             return NotFound(new { success = false, error = "Catalog not found" });
@@ -397,16 +388,24 @@ public class BundlesController : ControllerBase
             return Forbid();
 
         var bundle = await _bundleRepo.GetByIdAsync(bundleId);
-        if (bundle == null || bundle.CatalogId != catalogId)
+        if (bundle == null)
             return NotFound(new { success = false, error = "Bundle not found" });
+
+        // Verify ownership of bundle through CatalogItems
+        var hasAccess = await _context.CatalogItems
+            .AnyAsync(i => i.BundleId == bundleId && i.UserId == userId);
+
+        if (!hasAccess)
+            return Forbid();
 
         // Create a CatalogItem that references the bundle
         var catalogItem = new CatalogItem
         {
-            CatalogId = catalogId,
+            CatalogId = dto.CatalogId,
             CategoryId = dto.CategoryId,
             ItemType = CatalogItemType.Bundle,
             BundleId = bundleId,
+            UserId = userId,
             Name = bundle.Name,
             Description = bundle.Description,
             Price = bundle.BasePrice,
@@ -426,28 +425,164 @@ public class BundlesController : ControllerBase
     }
 
     /// <summary>
-    /// Add an option to an option group
+    /// Update a bundle step
     /// </summary>
-    [HttpPost("{bundleId}/option-groups/{optionGroupId}/options")]
-    public async Task<IActionResult> AddOption(int catalogId, int bundleId, int optionGroupId, [FromBody] CreateBundleOptionDto dto)
+    [HttpPut("{bundleId}/steps/{stepId}")]
+    public async Task<IActionResult> UpdateStep(int bundleId, int stepId, [FromBody] UpdateBundleStepDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         var userId = GetUserId();
-        var catalog = await _catalogRepo.GetByIdAsync(catalogId);
 
-        if (catalog == null)
-            return NotFound(new { success = false, error = "Catalog not found" });
+        var bundle = await _bundleRepo.GetByIdAsync(bundleId);
+        if (bundle == null)
+            return NotFound(new { success = false, error = "Bundle not found" });
 
-        var profile = await _profileRepo.GetByIdAsync(catalog.ProfileId);
-        if (profile == null || profile.UserId != userId)
+        // Verify ownership through CatalogItems
+        var hasAccess = await _context.CatalogItems
+            .AnyAsync(i => i.BundleId == bundleId && i.UserId == userId);
+
+        if (!hasAccess)
             return Forbid();
+
+        var step = await _context.CatalogBundleSteps.FindAsync(stepId);
+        if (step == null || step.BundleId != bundleId)
+            return NotFound(new { success = false, error = "Step not found" });
+
+        if (!string.IsNullOrEmpty(dto.Name))
+            step.Name = dto.Name;
+
+        if (dto.MinSelect.HasValue)
+            step.MinSelect = dto.MinSelect.Value;
+
+        if (dto.MaxSelect.HasValue)
+            step.MaxSelect = dto.MaxSelect.Value;
+
+        if (dto.StepNumber.HasValue)
+            step.StepNumber = dto.StepNumber.Value;
+
+        step.UpdatedAt = DateTime.UtcNow;
+        step.UpdatedBy = userId.ToString();
+
+        await _bundleRepo.UpdateStepAsync(step);
+        await _bundleRepo.SaveChangesAsync();
+
+        return Ok(new { success = true, data = new { step } });
+    }
+
+    /// <summary>
+    /// Delete a bundle step
+    /// </summary>
+    [HttpDelete("{bundleId}/steps/{stepId}")]
+    public async Task<IActionResult> DeleteStep(int bundleId, int stepId)
+    {
+        var userId = GetUserId();
+
+        var bundle = await _bundleRepo.GetByIdAsync(bundleId);
+        if (bundle == null)
+            return NotFound(new { success = false, error = "Bundle not found" });
+
+        // Verify ownership through CatalogItems
+        var hasAccess = await _context.CatalogItems
+            .AnyAsync(i => i.BundleId == bundleId && i.UserId == userId);
+
+        if (!hasAccess)
+            return Forbid();
+
+        await _bundleRepo.DeleteStepAsync(stepId);
+        await _bundleRepo.SaveChangesAsync();
+
+        return Ok(new { success = true, message = "Step deleted successfully" });
+    }
+
+    /// <summary>
+    /// Remove a product from a bundle step
+    /// </summary>
+    [HttpDelete("{bundleId}/steps/{stepId}/products/{productId}")]
+    public async Task<IActionResult> RemoveProductFromStep(int bundleId, int stepId, int productId)
+    {
+        var userId = GetUserId();
+
+        var bundle = await _bundleRepo.GetByIdAsync(bundleId);
+        if (bundle == null)
+            return NotFound(new { success = false, error = "Bundle not found" });
+
+        // Verify ownership through CatalogItems
+        var hasAccess = await _context.CatalogItems
+            .AnyAsync(i => i.BundleId == bundleId && i.UserId == userId);
+
+        if (!hasAccess)
+            return Forbid();
+
+        await _bundleRepo.DeleteStepProductAsync(stepId, productId);
+        await _bundleRepo.SaveChangesAsync();
+
+        return Ok(new { success = true, message = "Product removed from step successfully" });
+    }
+
+    /// <summary>
+    /// Reorder bundle steps
+    /// </summary>
+    [HttpPut("{bundleId}/steps/reorder")]
+    public async Task<IActionResult> ReorderSteps(int bundleId, [FromBody] ReorderStepsDto dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var userId = GetUserId();
+
+        var bundle = await _bundleRepo.GetByIdAsync(bundleId);
+        if (bundle == null)
+            return NotFound(new { success = false, error = "Bundle not found" });
+
+        // Verify ownership through CatalogItems
+        var hasAccess = await _context.CatalogItems
+            .AnyAsync(i => i.BundleId == bundleId && i.UserId == userId);
+
+        if (!hasAccess)
+            return Forbid();
+
+        // Update step numbers based on order
+        foreach (var stepOrder in dto.Steps)
+        {
+            var step = await _context.CatalogBundleSteps.FindAsync(stepOrder.StepId);
+            if (step != null && step.BundleId == bundleId)
+            {
+                step.StepNumber = stepOrder.StepNumber;
+                step.UpdatedAt = DateTime.UtcNow;
+                step.UpdatedBy = userId.ToString();
+                await _bundleRepo.UpdateStepAsync(step);
+            }
+        }
+
+        await _bundleRepo.SaveChangesAsync();
+
+        return Ok(new { success = true, message = "Steps reordered successfully" });
+    }
+
+    /// <summary>
+    /// Add an option to an option group
+    /// </summary>
+    [HttpPost("{bundleId}/option-groups/{optionGroupId}/options")]
+    public async Task<IActionResult> AddOption(int bundleId, int optionGroupId, [FromBody] CreateBundleOptionDto dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var userId = GetUserId();
 
         var bundle = await _bundleRepo.GetByIdAsync(bundleId);
 
-        if (bundle == null || bundle.CatalogId != catalogId)
+        if (bundle == null)
             return NotFound(new { success = false, error = "Bundle not found" });
+
+        // Verify ownership through CatalogItems
+        var hasAccess = await _context.CatalogItems
+            .AnyAsync(i => i.BundleId == bundleId && i.UserId == userId);
+
+        if (!hasAccess)
+            return Forbid();
 
         var option = new CatalogBundleOption
         {
@@ -541,6 +676,35 @@ public class CreateBundleOptionDto
 /// </summary>
 public class AddBundleToCategoryDto
 {
+    public int CatalogId { get; set; }
     public int? CategoryId { get; set; }
     public int SortOrder { get; set; } = 0;
+}
+
+/// <summary>
+/// Data transfer object for updating a bundle step
+/// </summary>
+public class UpdateBundleStepDto
+{
+    public string? Name { get; set; }
+    public int? MinSelect { get; set; }
+    public int? MaxSelect { get; set; }
+    public int? StepNumber { get; set; }
+}
+
+/// <summary>
+/// Data transfer object for reordering steps
+/// </summary>
+public class ReorderStepsDto
+{
+    public List<StepOrderDto> Steps { get; set; } = new List<StepOrderDto>();
+}
+
+/// <summary>
+/// Data transfer object for step order
+/// </summary>
+public class StepOrderDto
+{
+    public int StepId { get; set; }
+    public int StepNumber { get; set; }
 }
