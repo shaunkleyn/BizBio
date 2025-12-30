@@ -245,10 +245,18 @@ export const useBundlesApi = () => {
     // Option groups
     addOptionGroup: (bundleId: string, stepId: string, data: any) =>
       api.post(`/dashboard/bundles/${bundleId}/steps/${stepId}/option-groups`, data),
+    updateOptionGroup: (bundleId: string, stepId: string, optionGroupId: string, data: any) =>
+      api.put(`/dashboard/bundles/${bundleId}/steps/${stepId}/option-groups/${optionGroupId}`, data),
+    deleteOptionGroup: (bundleId: string, stepId: string, optionGroupId: string) =>
+      api.delete(`/dashboard/bundles/${bundleId}/steps/${stepId}/option-groups/${optionGroupId}`),
 
     // Options
-    addOption: (bundleId: string, optionGroupId: string, data: any) =>
-      api.post(`/dashboard/bundles/${bundleId}/option-groups/${optionGroupId}/options`, data),
+    addOption: (bundleId: string, stepId: string, optionGroupId: string, data: any) =>
+      api.post(`/dashboard/bundles/${bundleId}/steps/${stepId}/option-groups/${optionGroupId}/options`, data),
+    updateOption: (bundleId: string, stepId: string, optionGroupId: string, optionId: string, data: any) =>
+      api.put(`/dashboard/bundles/${bundleId}/steps/${stepId}/option-groups/${optionGroupId}/options/${optionId}`, data),
+    deleteOption: (bundleId: string, stepId: string, optionGroupId: string, optionId: string) =>
+      api.delete(`/dashboard/bundles/${bundleId}/steps/${stepId}/option-groups/${optionGroupId}/options/${optionId}`),
 
     // Add bundle to category (catalogId now passed in data object)
     addToCategory: (bundleId: string, data: any) =>

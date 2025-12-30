@@ -1,278 +1,181 @@
 <template>
-  <div class="p-4 md:p-8">
-    <div class="max-w-7xl mx-auto">
-      <!-- Loading State -->
-      <div v-if="loading" class="flex items-center justify-center py-20">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-md-primary"></div>
-      </div>
-
-      <!-- Error State -->
-      <div v-else-if="error" class="text-center py-20">
-        <i class="fas fa-exclamation-triangle text-6xl text-md-error mb-4"></i>
-        <h2 class="text-2xl font-bold text-md-on-surface mb-2">{{ error }}</h2>
-        <NuxtLink to="/menu/bundles" class="text-md-primary hover:underline">
-          <i class="fas fa-arrow-left mr-2"></i>
-          Back to Bundles
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="my-8">
+      <div class="flex items-center gap-3 mb-2">
+        <NuxtLink to="/menu/bundles"
+          class="flex flex-row gap-2 items-center text-[#4A90E2] hover:text-[#357ABD] transition-colors">
+          <i class="fas fa-arrow-left"></i>
+          <p class="text-sm font-medium text-[#4A90E2] tracking-wide uppercase">
+            Bundle Editor
+          </p>
         </NuxtLink>
       </div>
+    </div>
 
-      <!-- Edit Form -->
-      <div v-else>
-        <!-- Header with Actions -->
-        <div class="flex items-center justify-between mb-8">
+    <!-- Loading State -->
+    <div v-if="loading" class="text-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-md-primary mx-auto"></div>
+      <p class="text-md-on-surface-variant mt-4">Loading bundle...</p>
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="error" class="text-center py-12">
+      <i class="fas fa-exclamation-circle text-5xl text-md-error mb-4"></i>
+      <p class="text-md-error">{{ error }}</p>
+    </div>
+
+    <!-- Bundle Editor -->
+    <div v-else>
+      <!-- Basic Information -->
+      <BundleCard mesh-card title="Basic Information" icon="fas fa-info-circle">
+        <div class="space-y-6">
           <div>
-            <h1 class="text-3xl font-bold text-md-on-surface mb-2">Edit Bundle</h1>
-            <p class="text-md-on-surface-variant">Manage your bundle details, steps, and products</p>
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">Bundle Name *</label>
+            <input 
+              v-model="bundleData.name"
+              type="text" 
+              placeholder="e.g., Family Meal Deal"
+              class="w-full px-4 py-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E8E3E] focus:border-transparent"
+            />
           </div>
-          <div class="flex gap-3">
-            <NuxtLink
-              to="/menu/bundles"
-              class="px-6 py-3 bg-md-surface-container border border-md-outline-variant text-md-on-surface rounded-xl hover:bg-md-surface-container-high transition-all"
-            >
-              Cancel
-            </NuxtLink>
-            <button
-              @click="saveBundle"
-              :disabled="saving"
-              class="px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-all disabled:opacity-50"
-            >
-              <i v-if="!saving" class="fas fa-save mr-2"></i>
-              <i v-else class="fas fa-spinner fa-spin mr-2"></i>
-              {{ saving ? 'Saving...' : 'Save Changes' }}
-            </button>
-          </div>
-        </div>
 
-        <!-- Basic Information Card -->
-        <div class="mesh-card bg-md-surface rounded-2xl shadow-md-3 p-6 mb-6">
-          <h2 class="text-xl font-bold text-md-on-surface mb-6 flex items-center gap-2">
-            <i class="fas fa-info-circle text-md-primary"></i>
-            Basic Information
-          </h2>
-
-          <div class="grid md:grid-cols-2 gap-6">
-            <!-- Bundle Name -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-bold text-md-on-surface mb-2">
-                Bundle Name <span class="text-md-error">*</span>
-              </label>
-              <input
-                v-model="bundleData.name"
-                type="text"
-                class="w-full px-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary"
-                placeholder="e.g., Family Meal Deal"
-              />
-            </div>
-
-            <!-- Base Price -->
-            <div>
-              <label class="block text-sm font-bold text-md-on-surface mb-2">
-                Base Price <span class="text-md-error">*</span>
-              </label>
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">Base Price *</label>
               <div class="relative">
-                <span class="absolute left-4 top-3.5 text-md-on-surface-variant">R</span>
-                <input
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">R</span>
+                <input 
                   v-model.number="bundleData.basePrice"
                   type="number"
-                  step="0.01"
-                  class="w-full pl-10 pr-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary"
-                  placeholder="250.00"
+                  class="w-full pl-10 pr-4 py-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E8E3E] focus:border-transparent font-bold text-lg"
                 />
               </div>
             </div>
-
-            <!-- Description -->
-            <div class="md:col-span-2">
-              <label class="block text-sm font-bold text-md-on-surface mb-2">
-                Description
-              </label>
-              <textarea
-                v-model="bundleData.description"
-                rows="3"
-                class="w-full px-4 py-3 bg-md-surface-container border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary"
-                placeholder="Describe your bundle..."
-              ></textarea>
-            </div>
-
-            <!-- Image Upload -->
-            <div class="md:col-span-2">
-              <label class="block text-sm font-bold text-md-on-surface mb-2">
-                Bundle Image
-              </label>
-              <div class="flex items-start gap-4">
-                <!-- Current Image -->
-                <div v-if="bundleData.images" class="w-32 h-32 rounded-lg overflow-hidden border-2 border-md-outline-variant">
-                  <img :src="bundleData.images" alt="Bundle image" class="w-full h-full object-cover" />
-                </div>
-                <div v-else class="w-32 h-32 rounded-lg bg-md-surface-container flex items-center justify-center border-2 border-dashed border-md-outline-variant">
-                  <i class="fas fa-image text-4xl text-md-on-surface-variant opacity-50"></i>
-                </div>
-
-                <!-- Upload Button -->
-                <div class="flex-1">
-                  <input
-                    ref="fileInput"
-                    type="file"
-                    accept="image/*"
-                    @change="handleImageUpload"
-                    class="hidden"
-                  />
-                  <button
-                    @click="$refs.fileInput.click()"
-                    class="px-4 py-2 bg-md-primary-container text-md-on-primary-container rounded-xl hover:shadow-md-2 transition-all"
-                  >
-                    <i class="fas fa-upload mr-2"></i>
-                    Upload Image
-                  </button>
-                  <p class="text-xs text-md-on-surface-variant mt-2">
-                    Recommended: 800x600px, JPG or PNG
-                  </p>
-                </div>
-              </div>
+            <div>
+              <label class="block text-sm font-semibold text-md-on-surface mb-2">Bundle Type</label>
+              <input 
+                v-model="bundleData.slug"
+                type="text"
+                placeholder="meal-deal"
+                class="w-full px-4 py-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E8E3E] focus:border-transparent"
+              />
             </div>
           </div>
-        </div>
 
-        <!-- Steps Management Card -->
-        <div class="mesh-card bg-md-surface rounded-2xl shadow-md-3 p-6">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-bold text-md-on-surface flex items-center gap-2">
-              <i class="fas fa-layer-group text-md-primary"></i>
-              Bundle Steps
-            </h2>
-            <button
-              @click="addStep"
-              class="px-4 py-2 bg-md-success-container text-md-on-success-container rounded-xl hover:bg-md-success hover:text-md-on-success transition-colors"
-            >
-              <i class="fas fa-plus mr-2"></i>
-              Add Step
-            </button>
-          </div>
-
-          <!-- Empty State -->
-          <div v-if="bundleData.steps.length === 0" class="text-center py-12 bg-md-surface-container rounded-xl border-2 border-dashed border-md-outline-variant">
-            <i class="fas fa-layer-group text-5xl text-md-on-surface-variant opacity-50 mb-4"></i>
-            <p class="text-md-on-surface-variant mb-4">No steps added yet</p>
-            <button
-              @click="addStep"
-              class="px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2"
-            >
-              <i class="fas fa-plus mr-2"></i>
-              Add Your First Step
-            </button>
-          </div>
-
-          <!-- Steps List with Drag and Drop -->
-          <div v-else class="space-y-4">
-            <draggable
-              v-model="bundleData.steps"
-              :item-key="step => step.id"
-              handle=".drag-handle"
-              @end="onStepReorder"
-              class="space-y-4"
-            >
-              <template #item="{ element: step, index }">
-                <div class="bg-md-surface-container border border-md-outline-variant rounded-xl p-6">
-                  <!-- Step Header -->
-                  <div class="flex items-start gap-4 mb-4">
-                    <!-- Drag Handle -->
-                    <div class="drag-handle cursor-move p-2 hover:bg-md-surface-container-high rounded transition-colors">
-                      <i class="fas fa-grip-vertical text-md-on-surface-variant"></i>
-                    </div>
-
-                    <!-- Step Number Badge -->
-                    <div class="w-10 h-10 btn-gradient text-white rounded-full flex items-center justify-center font-bold text-sm shadow-md-2 flex-shrink-0">
-                      {{ index + 1 }}
-                    </div>
-
-                    <!-- Step Name Input -->
-                    <div class="flex-1">
-                      <input
-                        v-model="step.name"
-                        type="text"
-                        class="w-full px-4 py-2 bg-md-surface border border-md-outline-variant rounded-xl focus:ring-2 focus:ring-md-primary font-semibold"
-                        placeholder="Step name (e.g., Choose Your Pizza)"
-                      />
-                    </div>
-
-                    <!-- Delete Step Button -->
-                    <button
-                      @click="deleteStep(step, index)"
-                      class="p-2 text-md-error hover:bg-md-error-container rounded-xl transition-colors"
-                    >
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
-
-                  <!-- Products in Step -->
-                  <div class="ml-14">
-                    <div class="flex items-center justify-between mb-3">
-                      <label class="text-sm font-bold text-md-on-surface">
-                        Products in this step
-                      </label>
-                      <div class="relative">
-                        <select
-                          @change="addProductToStep(step, $event)"
-                          class="px-4 py-2 bg-md-surface-container-high border border-md-outline-variant rounded-xl text-sm focus:ring-2 focus:ring-md-primary"
-                        >
-                          <option value="">+ Add Product</option>
-                          <option
-                            v-for="product in availableProducts"
-                            :key="product.id"
-                            :value="product.id"
-                            :disabled="stepHasProduct(step, product.id)"
-                          >
-                            {{ product.name }}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <!-- Products List -->
-                    <div v-if="step.allowedProducts && step.allowedProducts.length > 0" class="space-y-2">
-                      <div
-                        v-for="(product, pIndex) in step.allowedProducts"
-                        :key="product.productId || product.id"
-                        class="flex items-center justify-between bg-md-surface p-3 rounded-lg border border-md-outline-variant"
-                      >
-                        <div class="flex items-center gap-3">
-                          <i class="fas fa-grip-vertical text-md-on-surface-variant text-sm"></i>
-                          <span class="text-md-on-surface font-medium">
-                            {{ getProductName(product.productId || product.id) }}
-                          </span>
-                        </div>
-                        <button
-                          @click="removeProductFromStep(step, product, pIndex)"
-                          class="p-2 text-md-error hover:bg-md-error-container rounded-lg transition-colors"
-                        >
-                          <i class="fas fa-times"></i>
-                        </button>
-                      </div>
-                    </div>
-
-                    <!-- Empty Products State -->
-                    <div v-else class="text-center py-6 bg-md-surface rounded-lg border border-dashed border-md-outline-variant">
-                      <p class="text-md-on-surface-variant text-sm">
-                        No products assigned to this step yet
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </template>
-            </draggable>
+          <div>
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">Description</label>
+            <textarea 
+              v-model="bundleData.description"
+              rows="2" 
+              placeholder="Describe this bundle..."
+              class="w-full px-4 py-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E8E3E] focus:border-transparent resize-none"
+            ></textarea>
           </div>
         </div>
+      </BundleCard>
+
+      <!-- Bundle Steps -->
+      <BundleCard 
+        title="Bundle Steps" 
+        description="Define the choices customers make"
+      >
+        <template #actions>
+          <button
+            @click="addStep"
+            class="inline-flex items-center gap-2 px-5 py-3 bg-[#1E8E3E] text-white rounded-full font-semibold hover:shadow-lg transition-all duration-200"
+          >
+            <i class="fas fa-plus"></i>
+            <span>Add Step</span>
+          </button>
+        </template>
+
+        <!-- Empty State -->
+        <div v-if="bundleData.steps.length === 0"
+          class="text-center py-12 bg-md-surface-container rounded-xl border-2 border-dashed border-md-outline-variant">
+          <i class="fas fa-layer-group text-5xl text-md-on-surface-variant opacity-50 mb-4"></i>
+          <p class="text-md-on-surface-variant mb-4">No steps added yet</p>
+          <button @click="addStep" class="px-6 py-3 bg-[#1E8E3E] text-white rounded-xl shadow-md-2">
+            <i class="fas fa-plus mr-2"></i>
+            Add Your First Step
+          </button>
+        </div>
+
+        <!-- Step List -->
+        <BundleStep
+          v-for="(step, index) in bundleData.steps"
+          :key="step.id"
+          :step-number="index + 1"
+          :name="step.name"
+          :description="step.description || ''"
+          :is-expanded="expandedStepId === step.id"
+          @update:name="updateStepName(step.id, $event)"
+          @delete="deleteStep(step.id)"
+          @move="moveStep(index)"
+        >
+          <!-- Allowed Products -->
+          <AllowedProductsList
+            :products="step.products ?? []"
+            :available-products="availableProducts"
+            @add-product="addProductToStep(step, $event)"
+            @remove-product="removeProductFromStep(step.id, $event)"
+            @reorder-product="reorderProduct(step.id, $event)"
+          />
+
+          <!-- Option Groups -->
+          <OptionGroupList
+            :option-groups="step.optionGroups ?? []"
+            @add-option-group="addOptionGroup(step.id)"
+            @delete-group="deleteOptionGroup(step.id, $event)"
+            @update-group-name="updateOptionGroupName($event)"
+            @update-group-min="updateOptionGroupMin($event)"
+            @update-group-max="updateOptionGroupMax($event)"
+            @update-group-required="updateOptionGroupRequired($event)"
+            @add-option="addOption($event)"
+            @remove-option="removeOption($event)"
+          />
+        </BundleStep>
+      </BundleCard>
+
+      <!-- Summary -->
+      <BundleSummaryCard
+        :base-price="bundleData.basePrice"
+        :steps-count="bundleData.steps.length"
+        :products-count="totalProductsCount"
+        :option-groups-count="totalOptionGroupsCount"
+      />
+
+      <!-- Save Actions -->
+      <div class="flex gap-4 justify-end mb-8">
+        <button
+          @click="$router.back()"
+          class="px-6 py-3 border-2 border-md-outline rounded-2xl font-semibold text-md-on-surface hover:bg-md-surface-container transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          @click="saveBundle"
+          :disabled="saving"
+          class="px-8 py-3 bg-[#1E8E3E] text-white rounded-2xl font-semibold hover:shadow-lg transition-all disabled:opacity-50"
+        >
+          {{ saving ? 'Saving...' : 'Save Bundle' }}
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useBundlesApi, useLibraryItemsApi, useUploadsApi } from '~/composables/useApi'
+import { useBundlesApi, useLibraryItemsApi, useLibraryCategoriesApi, useUploadsApi } from '~/composables/useApi'
 import { useToast } from '~/composables/useToast'
 import draggable from 'vuedraggable'
+import BundleCard from '~/components/bundles/BundleCard.vue'
+import BundleStep from '~/components/bundles/BundleStep.vue'
+import AllowedProductsList from '~/components/bundles/AllowedProductsList.vue'
+import OptionGroupList from '~/components/bundles/OptionGroupList.vue'
+import BundleSummaryCard from '~/components/bundles/BundleSummaryCard.vue'
 
 definePageMeta({
   layout: 'menu'
@@ -282,6 +185,7 @@ const route = useRoute()
 const router = useRouter()
 const bundlesApi = useBundlesApi()
 const libraryApi = useLibraryItemsApi()
+const categoriesApi = useLibraryCategoriesApi()
 const uploadsApi = useUploadsApi()
 const toast = useToast()
 
@@ -302,6 +206,7 @@ const bundleData = ref({
 })
 
 const availableProducts = ref<any[]>([])
+const categories = ref<any[]>([])
 const fileInput = ref<HTMLInputElement | null>(null)
 
 // Stats for sidebar
@@ -321,8 +226,8 @@ onMounted(async () => {
     description: 'Manage your bundle configuration'
   })
 
-  await loadBundle()
-  await loadProducts()
+  await loadProducts() // Load products FIRST
+  await loadBundle()   // Then load bundle (so products are available for transformation)
 })
 
 async function loadBundle() {
@@ -339,7 +244,14 @@ async function loadBundle() {
         slug: bundle.slug || '',
         images: bundle.images || '',
         sortOrder: bundle.sortOrder || 0,
-        steps: bundle.steps || []
+        steps: (bundle.steps || []).map((step: any) => ({
+          ...step,
+          // Transform allowedProducts to products array with full product objects
+          products: (step.allowedProducts || []).map((ap: any) => {
+            const product = availableProducts.value.find(p => p.id === ap.productId)
+            return product || { id: ap.productId, name: 'Loading...', productId: ap.productId }
+          })
+        }))
       }
     } else {
       error.value = 'Bundle not found'
@@ -352,16 +264,65 @@ async function loadBundle() {
   }
 }
 
+
+
+const openProductSelector = (stepId: number) => {
+  // Open product selection modal
+  console.log('Open product selector for step:', stepId)
+}
+
+const removeProduct = (stepId: number, productId: number) => {
+  const step = bundleData.value.steps.find(s => s.id === stepId)
+  if (step) {
+    step.products = step.products.filter(p => p.id !== productId)
+  }
+}
+
+const reorderProduct = (stepId: number, { from, to }: { from: number, to: number }) => {
+  const step = bundleData.value.steps.find(s => s.id === stepId)
+  if (step) {
+    const [removed] = step.products.splice(from, 1)
+    step.products.splice(to, 0, removed)
+  }
+}
+
 async function loadProducts() {
   try {
+    // Load categories first
+    const categoriesResponse = await categoriesApi.getCategories()
+    console.log('Categories Response:', categoriesResponse)
+    
+    if (categoriesResponse.success && categoriesResponse.data) {
+      categories.value = categoriesResponse.data || []
+      console.log('Loaded categories:', categories.value)
+    }
+    
+    // Load products
     const response = await libraryApi.getItems()
+    console.log('Products Response:', response)
+    
     if (response.success && response.data?.items) {
       availableProducts.value = response.data.items
         .filter((item: any) => item.itemType === 0) // Only regular items, not bundles
-        .map((item: any) => ({
-          id: item.id,
-          name: item.name
-        }))
+        .map((item: any) => {
+          // Find category name by categoryId
+          const category = categories.value.find(c => c.id === item.categoryId)
+          console.log(`Product: ${item.name}, CategoryId: ${item.categoryId}, Found Category:`, category)
+          
+          return {
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            categoryId: item.categoryId,
+            categoryName: category?.name || 'Uncategorized',
+            description: item.description,
+            icon: item.icon || 'fas fa-utensils',
+            iconBg: item.iconBg,
+            iconColor: item.iconColor
+          }
+        })
+      
+      console.log('Final products with categories:', availableProducts.value)
     }
   } catch (err) {
     console.error('Error loading products:', err)
@@ -386,12 +347,58 @@ function addStep() {
     minSelect: 1,
     maxSelect: 1,
     allowedProducts: [],
+    products: [],
+    optionGroups: [],
     isNew: true
   }
   bundleData.value.steps.push(newStep)
 }
 
-async function deleteStep(step: any, index: number) {
+function updateStepName(stepId: number, newName: string) {
+  const step = bundleData.value.steps.find(s => s.id === stepId)
+  if (step) {
+    step.name = newName
+  }
+}
+
+function moveStep(index: number, direction: 'up' | 'down') {
+  if (direction === 'up' && index > 0) {
+    const temp = bundleData.value.steps[index]
+    bundleData.value.steps[index] = bundleData.value.steps[index - 1]
+    bundleData.value.steps[index - 1] = temp
+  } else if (direction === 'down' && index < bundleData.value.steps.length - 1) {
+    const temp = bundleData.value.steps[index]
+    bundleData.value.steps[index] = bundleData.value.steps[index + 1]
+    bundleData.value.steps[index + 1] = temp
+  }
+
+  // Renumber steps after reorder
+  bundleData.value.steps.forEach((s, i) => {
+    s.stepNumber = i + 1
+  })
+}
+
+// Track expanded step for accordion
+const expandedStepId = ref<number | null>(null)
+
+// Computed properties for summary
+const totalProductsCount = computed(() => {
+  return bundleData.value.steps.reduce((sum, step) => {
+    return sum + (step.products?.length || 0)
+  }, 0)
+})
+
+const totalOptionGroupsCount = computed(() => {
+  return bundleData.value.steps.reduce((sum, step) => {
+    return sum + (step.optionGroups?.length || 0)
+  }, 0)
+})
+
+async function deleteStep(stepId: number) {
+  const index = bundleData.value.steps.findIndex(s => s.id === stepId)
+  if (index === -1) return
+
+  const step = bundleData.value.steps[index]
   if (!confirm(`Are you sure you want to delete "${step.name || 'this step'}"?`)) return
 
   try {
@@ -414,26 +421,48 @@ async function deleteStep(step: any, index: number) {
   }
 }
 
-function addProductToStep(step: any, event: Event) {
-  const target = event.target as HTMLSelectElement
-  const productId = parseInt(target.value)
-
+function addProductToStep(step: any, productId: number) {
   if (productId && !stepHasProduct(step, productId)) {
+    // Ensure arrays exist
     if (!step.allowedProducts) {
       step.allowedProducts = []
     }
+    if (!step.products) {
+      step.products = []
+    }
+    
+    // Add to allowedProducts (for backend)
     step.allowedProducts.push({
       productId,
       isNew: true
     })
+    
+    // Add to step.products for the component display
+    const product = availableProducts.value.find(p => p.id === productId)
+    if (product) {
+      step.products.push({ ...product })
+    }
+    
+    // Force reactivity by reassigning the arrays
+    step.allowedProducts = [...step.allowedProducts]
+    step.products = [...step.products]
+    
+    console.log('Product added:', { productId, step: step.name, products: step.products })
   }
-
-  target.value = '' // Reset select
 }
 
-async function removeProductFromStep(step: any, product: any, index: number) {
+async function removeProductFromStep(stepId: number, productId: number) {
+  const step = bundleData.value.steps.find(s => s.id === stepId)
+  if (!step) return
+
   try {
-    const productId = product.productId || product.id
+    // Find the product in allowedProducts
+    const productIndex = step.allowedProducts?.findIndex((p: any) =>
+      (p.productId || p.id) === productId
+    )
+    if (productIndex === undefined || productIndex === -1) return
+
+    const product = step.allowedProducts[productIndex]
 
     // If product exists in DB, delete it via API
     if (!product.isNew && step.id && !step.isNew) {
@@ -445,8 +474,16 @@ async function removeProductFromStep(step: any, product: any, index: number) {
       toast.success('Product removed from step')
     }
 
-    // Remove from local array
-    step.allowedProducts.splice(index, 1)
+    // Remove from allowedProducts array
+    step.allowedProducts.splice(productIndex, 1)
+
+    // Also remove from products array (for display)
+    if (step.products) {
+      const displayIndex = step.products.findIndex((p: any) => p.id === productId)
+      if (displayIndex !== -1) {
+        step.products.splice(displayIndex, 1)
+      }
+    }
   } catch (err) {
     console.error('Error removing product:', err)
     toast.error('Failed to remove product')
@@ -496,6 +533,119 @@ async function handleImageUpload(event: Event) {
   }
 }
 
+// Option Group Management Functions
+function addOptionGroup(stepId: number) {
+  const step = bundleData.value.steps.find(s => s.id === stepId)
+  if (!step) return
+  
+  if (!step.optionGroups) {
+    step.optionGroups = []
+  }
+  
+  const newOptionGroup = {
+    id: Date.now(), // Temporary ID
+    name: 'New Option Group',
+    minSelections: 0,
+    maxSelections: 1,
+    required: false,
+    options: [],
+    isNew: true
+  }
+  
+  step.optionGroups.push(newOptionGroup)
+  step.optionGroups = [...step.optionGroups] // Force reactivity
+  
+  console.log('Option group added:', { stepId, optionGroup: newOptionGroup })
+}
+
+function deleteOptionGroup(stepId: number, groupId: number) {
+  const step = bundleData.value.steps.find(s => s.id === stepId)
+  if (!step || !step.optionGroups) return
+  
+  step.optionGroups = step.optionGroups.filter(g => g.id !== groupId)
+  console.log('Option group deleted:', { stepId, groupId })
+}
+
+function updateOptionGroupName({ id, name }: { id: number, name: string }) {
+  bundleData.value.steps.forEach(step => {
+    if (step.optionGroups) {
+      const group = step.optionGroups.find(g => g.id === id)
+      if (group) {
+        group.name = name
+      }
+    }
+  })
+}
+
+function updateOptionGroupMin({ id, min }: { id: number, min: number }) {
+  bundleData.value.steps.forEach(step => {
+    if (step.optionGroups) {
+      const group = step.optionGroups.find(g => g.id === id)
+      if (group) {
+        group.minSelections = min
+        group.required = min > 0
+      }
+    }
+  })
+}
+
+function updateOptionGroupMax({ id, max }: { id: number, max: number }) {
+  bundleData.value.steps.forEach(step => {
+    if (step.optionGroups) {
+      const group = step.optionGroups.find(g => g.id === id)
+      if (group) {
+        group.maxSelections = max
+      }
+    }
+  })
+}
+
+function updateOptionGroupRequired({ id, required }: { id: number, required: boolean }) {
+  bundleData.value.steps.forEach(step => {
+    if (step.optionGroups) {
+      const group = step.optionGroups.find(g => g.id === id)
+      if (group) {
+        group.required = required
+      }
+    }
+  })
+}
+
+function addOption(groupId: number) {
+  bundleData.value.steps.forEach(step => {
+    if (step.optionGroups) {
+      const group = step.optionGroups.find(g => g.id === groupId)
+      if (group) {
+        const newOption = {
+          id: Date.now(),
+          name: 'New Option',
+          price: 0,
+          isNew: true
+        }
+        if (!group.options) {
+          group.options = []
+        }
+        group.options.push(newOption)
+        // Force reactivity
+        group.options = [...group.options]
+        console.log('Option added:', { groupId, option: newOption })
+      }
+    }
+  })
+}
+
+function removeOption({ groupId, optionId }: { groupId: number, optionId: number }) {
+  bundleData.value.steps.forEach(step => {
+    if (step.optionGroups) {
+      const group = step.optionGroups.find(g => g.id === groupId)
+      if (group && group.options) {
+        group.options = group.options.filter(o => o.id !== optionId)
+        console.log('Option removed:', { groupId, optionId })
+      }
+    }
+  })
+}
+
 async function saveBundle() {
   try {
     saving.value = true
@@ -510,8 +660,10 @@ async function saveBundle() {
       sortOrder: bundleData.value.sortOrder
     })
 
-    // Process new steps
+    // Process steps
     for (const step of bundleData.value.steps) {
+      let currentStepId = step.id
+
       if (step.isNew) {
         // Create new step
         const stepResponse = await bundlesApi.addStep(bundleId.value, {
@@ -521,8 +673,8 @@ async function saveBundle() {
           maxSelect: step.maxSelect
         })
 
-        const newStepId = stepResponse.data.step.id
-        step.id = newStepId
+        currentStepId = stepResponse.data.step.id
+        step.id = currentStepId
         step.isNew = false
 
         // Add products to the new step
@@ -530,7 +682,7 @@ async function saveBundle() {
           for (const product of step.allowedProducts) {
             await bundlesApi.addProductToStep(
               bundleId.value,
-              newStepId,
+              currentStepId,
               { productId: product.productId || product.id }
             )
           }
@@ -558,10 +710,69 @@ async function saveBundle() {
           }
         }
       }
+
+      // Process option groups for this step
+      if (step.optionGroups && step.optionGroups.length > 0) {
+        for (const group of step.optionGroups) {
+          if (group.isNew) {
+            // Create new option group
+            const groupResponse = await bundlesApi.addOptionGroup(bundleId.value, currentStepId.toString(), {
+              name: group.name,
+              minSelections: group.minSelections,
+              maxSelections: group.maxSelections,
+              required: group.required
+            })
+
+            const newGroupId = groupResponse.data?.optionGroup?.id
+            if (newGroupId) {
+              group.id = newGroupId
+              group.isNew = false
+
+              // Add options to the new group
+              if (group.options) {
+                for (const option of group.options) {
+                  await bundlesApi.addOption(bundleId.value, currentStepId.toString(), newGroupId.toString(), {
+                    name: option.name,
+                    price: option.price
+                  })
+                }
+              }
+            }
+          } else {
+            // Update existing option group
+            await bundlesApi.updateOptionGroup(bundleId.value, currentStepId.toString(), group.id.toString(), {
+              name: group.name,
+              minSelections: group.minSelections,
+              maxSelections: group.maxSelections,
+              required: group.required
+            })
+
+            // Add new options to existing group
+            if (group.options) {
+              for (const option of group.options) {
+                if (option.isNew) {
+                  await bundlesApi.addOption(bundleId.value, currentStepId.toString(), group.id.toString(), {
+                    name: option.name,
+                    price: option.price
+                  })
+                  option.isNew = false
+                }
+              }
+            }
+          }
+        }
+      }
     }
 
     toast.success('Bundle updated successfully!')
-    router.push('/menu/bundles')
+
+    // Reload the bundle data to show updated values
+    await loadBundle()
+
+    // Navigate to bundles list after a short delay
+    setTimeout(() => {
+      router.push('/menu/bundles')
+    }, 1000)
   } catch (err: any) {
     console.error('Error saving bundle:', err)
     toast.error(err.response?.data?.error || 'Failed to save bundle')

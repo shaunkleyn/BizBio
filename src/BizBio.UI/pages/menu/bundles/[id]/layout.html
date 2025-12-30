@@ -1,0 +1,475 @@
+<div class="mesh-card bg-md-surface rounded-3xl p-8 mb-6" style="box-shadow:0 1px 3px rgba(0,0,0,0.12),0 1px 2px rgba(0,0,0,0.24)">
+      <h2 class="text-xl font-bold text-md-on-surface mb-6 flex items-center gap-2">
+            <i class="fas fa-info-circle text-md-primary"></i>
+            Basic Information
+          </h2>
+      <div class="space-y-6">
+
+        <div>
+          <label class="block text-sm font-semibold text-md-on-surface mb-2">Bundle Name *</label>
+          <input type="text" placeholder="e.g., Family Meal Deal" value="Family Meal Deal"
+            class="w-full px-4 py-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E8E3E] focus:border-transparent">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">Base Price *</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold">R</span>
+              <input type="number" value="250"
+                class="w-full pl-10 pr-4 py-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E8E3E] focus:border-transparent font-bold text-lg">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-md-on-surface mb-2">Bundle Type</label>
+            <select
+              class="w-full px-4 py-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E8E3E] focus:border-transparent bg-md-surface">
+              <option selected="">Meal Deal</option>
+              <option>Family Package</option>
+              <option>Party Bundle</option>
+              <option>Custom</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-md-on-surface mb-2">Description</label>
+          <textarea rows="2" placeholder="Describe this bundle..."
+            class="w-full px-4 py-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#1E8E3E] focus:border-transparent resize-none">Perfect for families - includes 2 large pizzas, sides and drinks</textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-md-on-surface mb-3">Available In *</label>
+          <div class="flex gap-3 flex-wrap">
+            <label
+              class="flex items-center gap-2 px-4 py-2 border-[#1E8E3E] text-md-on-surface border border-md-outline-variant rounded-2xl cursor-pointer">
+              <input type="checkbox" checked="" class="w-4 h-4 rounded border text-[#1E8E3E]" value="on">
+              <span class="font-semibold text-md-on-surface text-sm">Grand Dining</span>
+            </label>
+            <label
+              class="flex items-center gap-2 px-4 py-2 text-md-on-surface border border-md-outline-variant rounded-2xl cursor-pointer hover:border-[#1E8E3E]">
+              <input type="checkbox" class="w-4 h-4 rounded border text-[#1E8E3E]" value="on">
+              <span class="font-semibold text-md-on-surface text-sm">Velvet Lounge</span>
+            </label>
+            <label
+              class="flex items-center gap-2 px-4 py-2 border-gray-200 rounded-2xl cursor-pointer hover:border-[#1E8E3E] text-md-on-surface border border-md-outline-variant">
+              <input type="checkbox" class="w-4 h-4 rounded border text-[#1E8E3E]" value="on">
+              <span class="font-semibold text-md-on-surface text-sm">Crystal Gardens</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-md-surface rounded-3xl p-8 mb-6" style="box-shadow:0 1px 3px rgba(0,0,0,0.12),0 1px 2px rgba(0,0,0,0.24)">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-2xl font-bold text-md-on-surface">Bundle Steps</h2>
+          <p class="text-sm text-gray-600 mt-1">
+            Define the choices customers make
+          </p>
+        </div>
+        <button
+          class="inline-flex items-center gap-2 px-5 py-3 bg-[#1E8E3E] text-white rounded-full font-semibold hover:shadow-lg transition-all duration-200">
+          <i class="fas fa-plus" aria-hidden="true"></i>
+          <span>Add Step</span>
+        </button>
+      </div>
+
+      <div class="border-[#1E8E3E] rounded-3xl p-6 mb-4" role="step">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-[#1E8E3E] text-white rounded-full flex items-center justify-center font-bold">
+              1
+            </div>
+            <div class="flex-1">
+              <input type="text" value="Choose First Pizza"
+                class="text-xl font-bold text-md-on-surface border-0 border-b-2 border-transparent hover:border-gray-300 focus:border-[#1E8E3E] focus:outline-none px-2 py-1 -ml-2">
+              <p class="text-sm text-gray-600 mt-1">
+                Customer selects one product from allowed list
+              </p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button class="w-8 h-8 rounded-lg hover:bg-[#F5F5F5] text-gray-600 flex items-center justify-center">
+              <i class="fas fa-arrows-alt text-sm" aria-hidden="true"></i>
+            </button>
+            <button
+              class="w-8 h-8 rounded-lg hover:bg-[#FCE8E6] text-gray-600 hover:text-[#C5221F] flex items-center justify-center">
+              <i class="fas fa-trash text-sm" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-md-surface-container border border-md-outline-variant rounded-2xl p-4 mb-4" role="allowed-products">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-semibold text-md-on-surface flex items-center gap-2">
+              <i class="fas fa-check-circle text-[#1E8E3E]" aria-hidden="true"></i>
+              Allowed Products (3)
+            </h4>
+            <button class="text-sm text-[#1E8E3E] hover:text-[#137a3c] font-semibold">
+              <i class="fas fa-plus mr-1" aria-hidden="true"></i>Add Products
+            </button>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between bg-md-surface p-3 rounded-xl border border-md-outline-variant gap-3">
+              <i class="fas fa-grip-vertical text-gray-400" aria-hidden="true"></i>
+              <div class="w-10 h-10 bg-[#FCE8E6] rounded-lg flex items-center justify-center">
+                <i class="fas fa-pizza-slice text-[#C5221F]" aria-hidden="true"></i>
+              </div>
+              <div class="flex-1">
+                <p class="font-semibold text-md-on-surface text-sm">
+                  Bacon, Avo &amp; Feta Pizza
+                </p>
+                <p class="text-xs text-gray-600">Large size included</p>
+              </div>
+              <button
+                class="w-6 h-6 rounded-full hover:bg-[#FCE8E6] text-gray-600 hover:text-[#C5221F] flex items-center justify-center">
+                <i class="fas fa-times text-xs" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="flex items-center justify-between bg-md-surface p-3 rounded-xl border border-md-outline-variant gap-3">
+              <i class="fas fa-grip-vertical text-gray-400" aria-hidden="true"></i>
+              <div class="w-10 h-10 bg-[#FEF7E0] rounded-lg flex items-center justify-center">
+                <i class="fas fa-pizza-slice text-[#F9AB00]" aria-hidden="true"></i>
+              </div>
+              <div class="flex-1">
+                <p class="font-semibold text-md-on-surface text-sm">
+                  Classic Cheese Pizza
+                </p>
+                <p class="text-xs text-gray-600">Large size included</p>
+              </div>
+              <button
+                class="w-6 h-6 rounded-full hover:bg-[#FCE8E6] text-gray-600 hover:text-[#C5221F] flex items-center justify-center">
+                <i class="fas fa-times text-xs" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="flex items-center justify-between bg-md-surface p-3 rounded-xl border border-md-outline-variant gap-3">
+              <i class="fas fa-grip-vertical text-gray-400" aria-hidden="true"></i>
+              <div class="w-10 h-10 bg-[#E8F0FE] rounded-lg flex items-center justify-center">
+                <i class="fas fa-pizza-slice text-[#1967D2]" aria-hidden="true"></i>
+              </div>
+              <div class="flex-1">
+                <p class="font-semibold text-md-on-surface text-sm">
+                  Pepperoni Deluxe Pizza
+                </p>
+                <p class="text-xs text-gray-600">Large size included</p>
+              </div>
+              <button
+                class="w-6 h-6 rounded-full hover:bg-[#FCE8E6] text-gray-600 hover:text-[#C5221F] flex items-center justify-center">
+                <i class="fas fa-times text-xs" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#E8F0FE] rounded-2xl p-4" role="option-group">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-semibold text-md-on-surface flex items-center gap-2">
+              <i class="fas fa-sliders-h text-[#4A90E2]" aria-hidden="true"></i>
+              Option Groups (2)
+            </h4>
+            <button class="text-sm text-[#4A90E2] hover:text-[#357ABD] font-semibold">
+              <i class="fas fa-plus mr-1" aria-hidden="true"></i>Add Option Group
+            </button>
+          </div>
+
+          <div class="bg-md-surface rounded-xl p-4 mb-3" role="option">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                  <input type="text" value="Choose Base"
+                    class="font-semibold text-md-on-surface border-0 border-b-2 border-transparent hover:border-gray-300 focus:border-[#4A90E2] focus:outline-none px-1 -ml-1">
+                  <span class="px-2 py-0.5 bg-[#FCE8E6] text-[#C5221F] text-xs font-bold rounded-full">REQUIRED</span>
+                </div>
+                <p class="text-xs text-gray-600 pl-1">Min: 1 • Max: 1</p>
+              </div>
+              <button
+                class="w-6 h-6 rounded-full hover:bg-[#FCE8E6] text-gray-600 hover:text-[#C5221F] flex items-center justify-center">
+                <i class="fas fa-trash text-xs" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center justify-between p-2 bg-[#F5F5F5] rounded-lg">
+                <span class="text-sm text-md-on-surface">Gluten Free</span>
+                <span class="text-sm font-semibold text-[#1E8E3E]">Free</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-[#F5F5F5] rounded-lg">
+                <span class="text-sm text-md-on-surface">Traditional</span>
+                <span class="text-sm font-semibold text-[#1E8E3E]">Free</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-[#F5F5F5] rounded-lg">
+                <span class="text-sm text-md-on-surface">Pan</span>
+                <span class="text-sm font-semibold text-[#1E8E3E]">Free</span>
+              </div>
+              <button class="w-full py-2 text-sm text-[#4A90E2] hover:text-[#357ABD] font-semibold">
+                + Add Option
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-md-surface rounded-xl p-4">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                  <input type="text" value="Extra Meat Toppings"
+                    class="font-semibold text-md-on-surface border-0 border-b-2 border-transparent hover:border-gray-300 focus:border-[#4A90E2] focus:outline-none px-1 -ml-1">
+                  <span class="px-2 py-0.5 bg-[#E6F4EA] text-[#1E8E3E] text-xs font-bold rounded-full">OPTIONAL</span>
+                </div>
+                <p class="text-xs text-gray-600 pl-1">Min: 0 • Max: 10</p>
+              </div>
+              <button
+                class="w-6 h-6 rounded-full hover:bg-[#FCE8E6] text-gray-600 hover:text-[#C5221F] flex items-center justify-center">
+                <i class="fas fa-trash text-xs" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center justify-between p-2 bg-[#F5F5F5] rounded-lg">
+                <span class="text-sm text-md-on-surface">Bacon</span>
+                <span class="text-sm font-semibold text-md-on-surface">+ R 28.90</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-[#F5F5F5] rounded-lg">
+                <span class="text-sm text-md-on-surface">Chicken</span>
+                <span class="text-sm font-semibold text-md-on-surface">+ R 28.90</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-[#F5F5F5] rounded-lg">
+                <span class="text-sm text-md-on-surface">Ham</span>
+                <span class="text-sm font-semibold text-md-on-surface">+ R 28.90</span>
+              </div>
+              <button class="w-full py-2 text-sm text-[#4A90E2] hover:text-[#357ABD] font-semibold">
+                + Add Option
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-gray-200 rounded-3xl p-6 mb-4 hover:border-[#1E8E3E] transition-all" role="step">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-gray-300 text-white rounded-full flex items-center justify-center font-bold">
+              2
+            </div>
+            <div class="flex-1">
+              <input type="text" value="Choose Second Pizza"
+                class="text-xl font-bold text-md-on-surface border-0 border-b-2 border-transparent hover:border-gray-300 focus:border-[#1E8E3E] focus:outline-none px-2 py-1 -ml-2">
+              <p class="text-sm text-gray-600 mt-1">Same structure as Step 1</p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button class="w-8 h-8 rounded-lg hover:bg-[#F5F5F5] text-gray-600 flex items-center justify-center">
+              <i class="fas fa-arrows-alt text-sm" aria-hidden="true"></i>
+            </button>
+            <button
+              class="w-8 h-8 rounded-lg hover:bg-[#FCE8E6] text-gray-600 hover:text-[#C5221F] flex items-center justify-center">
+              <i class="fas fa-trash text-sm" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+              <div class="bg-md-surface-container border border-md-outline-variant rounded-2xl p-4 mb-4" role="allowed-products">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-semibold text-md-on-surface flex items-center gap-2">
+              <i class="fas fa-check-circle text-[#1E8E3E]" aria-hidden="true"></i>
+              Allowed Products (3)
+            </h4>
+            <button class="text-sm text-[#1E8E3E] hover:text-[#137a3c] font-semibold">
+              <i class="fas fa-plus mr-1" aria-hidden="true"></i>Add Products
+            </button>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between bg-md-surface p-3 rounded-xl border border-md-outline-variant gap-3">
+              <i class="fas fa-grip-vertical text-gray-400" aria-hidden="true"></i>
+              <div class="w-10 h-10 bg-[#FCE8E6] rounded-lg flex items-center justify-center">
+                <i class="fas fa-pizza-slice text-[#C5221F]" aria-hidden="true"></i>
+              </div>
+              <div class="flex-1">
+                <p class="font-semibold text-md-on-surface text-sm">
+                  Bacon, Avo &amp; Feta Pizza
+                </p>
+                <p class="text-xs text-gray-600">Large size included</p>
+              </div>
+              <button
+                class="w-6 h-6 rounded-full hover:bg-[#FCE8E6] text-gray-600 hover:text-[#C5221F] flex items-center justify-center">
+                <i class="fas fa-times text-xs" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="flex items-center justify-between bg-md-surface p-3 rounded-xl border border-md-outline-variant gap-3">
+              <i class="fas fa-grip-vertical text-gray-400" aria-hidden="true"></i>
+              <div class="w-10 h-10 bg-[#FEF7E0] rounded-lg flex items-center justify-center">
+                <i class="fas fa-pizza-slice text-[#F9AB00]" aria-hidden="true"></i>
+              </div>
+              <div class="flex-1">
+                <p class="font-semibold text-md-on-surface text-sm">
+                  Classic Cheese Pizza
+                </p>
+                <p class="text-xs text-gray-600">Large size included</p>
+              </div>
+              <button
+                class="w-6 h-6 rounded-full hover:bg-[#FCE8E6] text-gray-600 hover:text-[#C5221F] flex items-center justify-center">
+                <i class="fas fa-times text-xs" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="flex items-center justify-between bg-md-surface p-3 rounded-xl border border-md-outline-variant gap-3">
+              <i class="fas fa-grip-vertical text-gray-400" aria-hidden="true"></i>
+              <div class="w-10 h-10 bg-[#E8F0FE] rounded-lg flex items-center justify-center">
+                <i class="fas fa-pizza-slice text-[#1967D2]" aria-hidden="true"></i>
+              </div>
+              <div class="flex-1">
+                <p class="font-semibold text-md-on-surface text-sm">
+                  Pepperoni Deluxe Pizza
+                </p>
+                <p class="text-xs text-gray-600">Large size included</p>
+              </div>
+              <button
+                class="w-6 h-6 rounded-full hover:bg-[#FCE8E6] text-gray-600 hover:text-[#C5221F] flex items-center justify-center">
+                <i class="fas fa-times text-xs" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#E8F0FE] rounded-2xl p-4" role="option-group">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-semibold text-md-on-surface flex items-center gap-2">
+              <i class="fas fa-sliders-h text-[#4A90E2]" aria-hidden="true"></i>
+              Option Groups (2)
+            </h4>
+            <button class="text-sm text-[#4A90E2] hover:text-[#357ABD] font-semibold">
+              <i class="fas fa-plus mr-1" aria-hidden="true"></i>Add Option Group
+            </button>
+          </div>
+
+          <div class="bg-md-surface rounded-xl p-4 mb-3" role="option">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                  <input type="text" value="Choose Base"
+                    class="font-semibold text-md-on-surface border-0 border-b-2 border-transparent hover:border-gray-300 focus:border-[#4A90E2] focus:outline-none px-1 -ml-1">
+                  <span class="px-2 py-0.5 bg-[#FCE8E6] text-[#C5221F] text-xs font-bold rounded-full">REQUIRED</span>
+                </div>
+                <p class="text-xs text-gray-600 pl-1">Min: 1 • Max: 1</p>
+              </div>
+              <button
+                class="w-6 h-6 rounded-full hover:bg-[#FCE8E6] text-gray-600 hover:text-[#C5221F] flex items-center justify-center">
+                <i class="fas fa-trash text-xs" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center justify-between p-2 bg-[#F5F5F5] rounded-lg">
+                <span class="text-sm text-md-on-surface">Gluten Free</span>
+                <span class="text-sm font-semibold text-[#1E8E3E]">Free</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-[#F5F5F5] rounded-lg">
+                <span class="text-sm text-md-on-surface">Traditional</span>
+                <span class="text-sm font-semibold text-[#1E8E3E]">Free</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-[#F5F5F5] rounded-lg">
+                <span class="text-sm text-md-on-surface">Pan</span>
+                <span class="text-sm font-semibold text-[#1E8E3E]">Free</span>
+              </div>
+              <button class="w-full py-2 text-sm text-[#4A90E2] hover:text-[#357ABD] font-semibold">
+                + Add Option
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-md-surface rounded-xl p-4">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                  <input type="text" value="Extra Meat Toppings"
+                    class="font-semibold text-md-on-surface border-0 border-b-2 border-transparent hover:border-gray-300 focus:border-[#4A90E2] focus:outline-none px-1 -ml-1">
+                  <span class="px-2 py-0.5 bg-[#E6F4EA] text-[#1E8E3E] text-xs font-bold rounded-full">OPTIONAL</span>
+                </div>
+                <p class="text-xs text-gray-600 pl-1">Min: 0 • Max: 10</p>
+              </div>
+              <button
+                class="w-6 h-6 rounded-full hover:bg-[#FCE8E6] text-gray-600 hover:text-[#C5221F] flex items-center justify-center">
+                <i class="fas fa-trash text-xs" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="space-y-1">
+              <div class="flex items-center justify-between p-2 bg-[#F5F5F5] rounded-lg">
+                <span class="text-sm text-md-on-surface">Bacon</span>
+                <span class="text-sm font-semibold text-md-on-surface">+ R 28.90</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-[#F5F5F5] rounded-lg">
+                <span class="text-sm text-md-on-surface">Chicken</span>
+                <span class="text-sm font-semibold text-md-on-surface">+ R 28.90</span>
+              </div>
+              <div class="flex items-center justify-between p-2 bg-[#F5F5F5] rounded-lg">
+                <span class="text-sm text-md-on-surface">Ham</span>
+                <span class="text-sm font-semibold text-md-on-surface">+ R 28.90</span>
+              </div>
+              <button class="w-full py-2 text-sm text-[#4A90E2] hover:text-[#357ABD] font-semibold">
+                + Add Option
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-gray-200 rounded-3xl p-6 hover:border-[#1E8E3E] transition-all" role="step">
+        <div class="flex items-start justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-gray-300 text-white rounded-full flex items-center justify-center font-bold">
+              3
+            </div>
+            <div class="flex-1">
+              <input type="text" value="Choose Cold Drink"
+                class="text-xl font-bold text-md-on-surface border-0 border-b-2 border-transparent hover:border-gray-300 focus:border-[#1E8E3E] focus:outline-none px-2 py-1 -ml-2">
+              <p class="text-sm text-gray-600 mt-1">
+                Simple product selection - no options needed
+              </p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button class="w-8 h-8 rounded-lg hover:bg-[#F5F5F5] text-gray-600 flex items-center justify-center">
+              <i class="fas fa-arrows-alt text-sm" aria-hidden="true"></i>
+            </button>
+            <button
+              class="w-8 h-8 rounded-lg hover:bg-[#FCE8E6] text-gray-600 hover:text-[#C5221F] flex items-center justify-center">
+              <i class="fas fa-trash text-sm" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <p class="text-sm text-gray-600 bg-[#F5F5F5] rounded-xl p-4">
+          <i class="fas fa-info-circle text-[#4A90E2] mr-2" aria-hidden="true"></i>
+          Click to expand and add drink options
+        </p>
+      </div>
+    </div>
+
+    <div class="bg-gradient-to-br from-[#E6F4EA] to-[#E8F0FE] rounded-3xl p-6 mb-6"
+      style="box-shadow:0 1px 3px rgba(0,0,0,0.12),0 1px 2px rgba(0,0,0,0.24)">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 bg-md-surface rounded-2xl flex items-center justify-center flex-shrink-0">
+          <i class="fas fa-check-circle text-[#1E8E3E] text-xl" aria-hidden="true"></i>
+        </div>
+        <div class="flex-1">
+          <h3 class="font-bold text-md-on-surface text-xl mb-2">Bundle Summary</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+            <div>
+              <p class="text-xs text-gray-600 mb-1">Base Price</p>
+              <p class="font-bold text-md-on-surface text-lg">R 250.00</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-600 mb-1">Steps</p>
+              <p class="font-bold text-md-on-surface text-lg">3</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-600 mb-1">Products</p>
+              <p class="font-bold text-md-on-surface text-lg">8</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-600 mb-1">Option Groups</p>
+              <p class="font-bold text-md-on-surface text-lg">4</p>
+            </div>
+          </div>
+          <p class="text-sm text-md-on-surface">
+            Customers will make 3 choices, with customization options available
+            for each selection
+          </p>
+        </div>
+      </div>
+    </div>

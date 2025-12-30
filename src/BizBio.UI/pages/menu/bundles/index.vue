@@ -763,47 +763,48 @@ async function loadBundles() {
   try {
     loading.value = true
 
-    // Load bundles from library items (bundles are now stored as library items with ItemType=Bundle)
-    const response = await libraryApi.getItems()
+    // Load bundles directly from bundles API instead of library items
+    const response = await bundlesApi.getBundles()
+    console.log('Bundles API response:', response)
 
-    if (response.success && response.data?.items) {
-      // Filter only bundle items
-      const bundleItems = response.data.items.filter((item: any) => item.itemType === 1)
-
-      // For each bundle, fetch full details including steps
-      const bundlePromises = bundleItems.map(async (item: any) => {
+    if (response.success && response.data?.bundles) {
+      // Map bundles with their details
+      const bundlePromises = response.data.bundles.map(async (bundle: any) => {
         try {
-          const bundleId = item.bundleId || item.id
-          const detailsResponse = await bundlesApi.getBundle(bundleId)
+          // Fetch full details for each bundle to get steps
+          const detailsResponse = await bundlesApi.getBundle(bundle.id)
+          console.log(`Bundle ${bundle.id} details:`, detailsResponse)
 
           return {
-            id: bundleId,
-            name: item.name,
-            description: item.description,
-            basePrice: item.price,
-            images: Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : null,
-            sortOrder: item.sortOrder,
-            isActive: true,
+            id: bundle.id,
+            name: bundle.name,
+            description: bundle.description,
+            basePrice: bundle.basePrice,
+            images: bundle.images,
+            sortOrder: bundle.sortOrder || 0,
+            isActive: bundle.isActive !== false,
             steps: detailsResponse.data?.bundle?.steps || []
           }
         } catch (error) {
-          console.error(`Error loading bundle ${item.bundleId} details:`, error)
+          console.error(`Error loading bundle ${bundle.id} details:`, error)
           // Return bundle without steps if details fail to load
           return {
-            id: item.bundleId || item.id,
-            name: item.name,
-            description: item.description,
-            basePrice: item.price,
-            images: Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : null,
-            sortOrder: item.sortOrder,
-            isActive: true,
+            id: bundle.id,
+            name: bundle.name,
+            description: bundle.description,
+            basePrice: bundle.basePrice,
+            images: bundle.images,
+            sortOrder: bundle.sortOrder || 0,
+            isActive: bundle.isActive !== false,
             steps: []
           }
         }
       })
 
       bundles.value = await Promise.all(bundlePromises)
+      console.log('Loaded bundles:', bundles.value)
     } else {
+      console.log('No bundles found in response')
       bundles.value = []
     }
   } catch (error: any) {

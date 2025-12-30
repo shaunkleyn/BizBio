@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-md-surface-container-low border-b border-md-outline-variant sticky top-16 z-40 py-4 px-4 md:px-8 shadow-md-1">
+  <div class="glass-effect border-b border-md-outline-variant sticky top-16 z-40 py-4 px-4 md:px-8 shadow-md-1">
     <!-- Page Header and Actions Section -->
     <div class="flex items-center justify-between flex-wrap gap-4">
       <!-- Page Title and Description (Left) -->

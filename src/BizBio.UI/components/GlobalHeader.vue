@@ -1,5 +1,5 @@
 <template>
-  <header class="glass-effect sticky top-0 z-50 border-b border-md-outline-variant">
+  <header class="glass-effect sticky top-0 z-50">
     <div class="mx-auto px-4 sm:px-6">
       <div class="flex justify-between items-center h-16">
         <!-- Logo with Gradient -->
