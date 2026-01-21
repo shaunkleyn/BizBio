@@ -530,10 +530,10 @@ public class LibraryItemsController : ControllerBase
 
         // Verify user owns the catalog
         var catalog = await _context.Catalogs
-            .Include(c => c.Profile)
+            .Include(c => c.Entity)
             .FirstOrDefaultAsync(c => c.Id == dto.CatalogId);
 
-        if (catalog == null || catalog.Profile.UserId != userId)
+        if (catalog == null || catalog.Entity.UserId != userId)
             return NotFound(new { success = false, error = "Catalog not found" });
 
         // Create a copy of the item for the catalog
@@ -633,10 +633,10 @@ public class LibraryItemsController : ControllerBase
 
         // Verify user owns the catalog
         var catalog = await _context.Catalogs
-            .Include(c => c.Profile)
+            .Include(c => c.Entity)
             .FirstOrDefaultAsync(c => c.Id == dto.CatalogId);
 
-        if (catalog == null || catalog.Profile.UserId != userId)
+        if (catalog == null || catalog.Entity.UserId != userId)
             return NotFound(new { success = false, error = "Catalog not found" });
 
         // Check if instance already exists

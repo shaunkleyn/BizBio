@@ -31,10 +31,12 @@ public class MenuMappingService
         menu.Extras = extraGroups;
 
         // Step 2: Map categories to sections
+        // Note: catalog.Categories now returns CatalogCategory junction records
+        // We need to navigate to the actual Category entity
         menu.Sections = catalog.Categories
-            .OrderBy(c => c.SortOrder)
-            .Select(category => MapCategoryToSection(
-                category,
+            .OrderBy(cc => cc.SortOrder)
+            .Select(catalogCategory => MapCategoryToSection(
+                catalogCategory,
                 optionGroupIndexMap,
                 extraGroupIndexMap))
             .ToList();
@@ -105,19 +107,23 @@ public class MenuMappingService
     }
 
     private MenuSectionDto MapCategoryToSection(
-        CatalogCategory category,
+        CatalogCategory catalogCategory,
         Dictionary<int, int> optionIndexMap,
         Dictionary<int, int> extraIndexMap)
     {
+        // CatalogCategory is now a junction table, access the actual Category entity
+        var category = catalogCategory.Category;
+
         return new MenuSectionDto
         {
             Id = category.Id,
             Name = category.Name,
             Description = category.Description,
-            OrderIndex = category.SortOrder,
+            OrderIndex = catalogCategory.SortOrder, // Use the sort order from the junction table
             Visible = true,
             Items = category.CatalogItemCategories
                 .Select(cic => cic.CatalogItem)
+                .Where(item => item.IsActive)
                 .OrderBy(item => item.SortOrder)
                 .Select(item => MapItemToMenuItemDto(item, optionIndexMap, extraIndexMap))
                 .ToList()

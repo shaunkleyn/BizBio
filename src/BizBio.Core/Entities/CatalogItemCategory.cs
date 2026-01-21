@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace BizBio.Core.Entities
 {
-    // NOTE: This junction table is actually NEEDED for many-to-many relationship
-    // between CatalogItem and CatalogCategory (items can appear in multiple categories)
-    // Will implement this properly
+    /// <summary>
+    /// Junction table for many-to-many relationship between CatalogItem and Category
+    /// Items can appear in multiple categories across different catalogs
+    /// </summary>
     [Table("CatalogItemCategory")]
     public class CatalogItemCategory : BaseEntity
     {
@@ -18,6 +19,9 @@ namespace BizBio.Core.Entities
 
         // Navigation properties
         public virtual CatalogItem CatalogItem { get; set; } = null!;
-        public virtual CatalogCategory Category { get; set; } = null!;
+        /// <summary>
+        /// Reference to the entity-level Category (not CatalogCategory which is now a junction table)
+        /// </summary>
+        public virtual Category Category { get; set; } = null!;
     }
 }

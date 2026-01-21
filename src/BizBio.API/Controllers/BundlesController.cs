@@ -383,8 +383,7 @@ public class BundlesController : ControllerBase
         if (catalog == null)
             return NotFound(new { success = false, error = "Catalog not found" });
 
-        var profile = await _profileRepo.GetByIdAsync(catalog.ProfileId);
-        if (profile == null || profile.UserId != userId)
+        if (catalog.Entity == null || catalog.Entity.UserId != userId)
             return Forbid();
 
         var bundle = await _bundleRepo.GetByIdAsync(bundleId);

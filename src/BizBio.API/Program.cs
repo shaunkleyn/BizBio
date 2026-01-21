@@ -38,7 +38,12 @@ builder.Services.AddControllers(options =>
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
-        mysqlOptions => mysqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+        mysqlOptions =>
+        {
+            mysqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+            // Configure timezone to UTC to prevent datetime offset issues
+            mysqlOptions.CommandTimeout(60);
+        }));
 
 // JWT Authentication Configuration
 var jwtSettings = builder.Configuration.GetSection("JWT");

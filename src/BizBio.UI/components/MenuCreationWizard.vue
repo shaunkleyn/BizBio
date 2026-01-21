@@ -77,7 +77,7 @@
     </div>
 
     <!-- Upgrade Plans Selection -->
-    <div v-else-if="showUpgradePlans" class="max-w-7xl mx-auto">
+    <div v-else-if="showUpgradePlans" class="mx-auto">
       <div class="text-center mb-8">
         <h2 class="text-3xl font-bold text-md-on-surface font-[var(--font-family-heading)] mb-2">
           Upgrade Your Plan
@@ -87,7 +87,7 @@
         </p>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-8">
+      <div class="grid md:grid-cols-2 gap-8 mx-auto mb-8">
         <div
           v-for="plan in upgradeOptions"
           :key="plan.id"
@@ -175,10 +175,8 @@
       </div>
     </div>
 
-    <!-- Normal Creation Flow -->
-    <div v-else>
       <!-- Trial Status Banner (shown when user has active trial) -->
-      <div v-if="hasActiveSubscription && currentSubscription" class="max-w-4xl mx-auto mb-8">
+      <div v-if="hasActiveSubscription && currentSubscription" class=" mx-auto mb-8">
         <div class="gradient-border mesh-card bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-4 flex items-center justify-between shadow-md-2">
           <div class="flex items-center gap-3">
             <div class="bg-gradient-primary rounded-full p-2 shadow-glow-purple">
@@ -200,7 +198,48 @@
       </div>
 
       <!-- Progress Steps (skip step 1 if user has subscription) -->
-      <div class="mb-12">
+
+          <!-- Normal Creation Flow -->
+      <div v-else>
+        <div class="bg-white rounded-3xl p-6 mb-6" style="box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);">
+        <div class="flex items-center justify-between">
+          <div  v-for="step in effectiveSteps" :key="step" :class="['flex flex-row' , effectiveSteps > step ? 'w-100 flex-1' : '',  'items-center']">
+            <div >
+            <div class="flex flex-col text-center items-center gap-2">
+            <div :class="['w-10 h-10 ', effectiveCurrentStep < step ? 'bg-gray-200 text-gray-500' : 'bg-[#4A90E2] text-white', 'rounded-full flex items-center justify-center font-bold']">
+              {{ step }}
+            </div>
+            <div>
+              <p class="font-semibold text-gray-900">
+                {{ getEffectiveStepLabel(step) }}
+              </p>
+              <p class="text-xs text-gray-500">Restaurant details</p>
+            </div>
+          </div>
+            </div>
+          <div :class="['h-px bg-gray-200 mx-4', effectiveSteps > step ? 'w-100 flex-1' : 'hidden']"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-3xl p-6 mb-6" style="box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);">
+      <div class="flex items-center justify-between">
+        <div v-for="step in effectiveSteps" :key="step" :class="['flex flex-row',  effectiveSteps > step ? 'flex-1 items-center' : '']">
+          <div :class="['flex items-center gap-3']">
+              <div :class="['w-10 h-10',effectiveCurrentStep < step ? 'bg-gray-200 text-gray-500' : 'bg-[#4A90E2] text-white', 'rounded-full flex items-center justify-center font-bold']">
+                {{ step }}
+              </div>
+              <div>
+                <p class="font-semibold text-gray-900">{{ getEffectiveStepLabel(step) }}</p>
+                <p class="text-xs text-gray-500">Restaurant details</p>
+            </div>
+          </div>
+            <div :class="['h-px bg-gray-200 mx-4', effectiveSteps > step ? 'w-100 flex-1' : 'hidden']"></div>
+        </div>
+      </div>
+    </div>
+
+     <div class="mb-12">
         <div class="flex items-center justify-center">
           <div v-for="step in effectiveSteps" :key="step" class="flex items-center">
             <!-- Step Circle -->
@@ -280,7 +319,7 @@
         </div>
 
         <!-- Pricing Cards -->
-        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-8">
+        <div class="grid md:grid-cols-3 gap-8  mx-auto mb-8">
           <div
             v-for="plan in menuPlans"
             :key="plan.id"

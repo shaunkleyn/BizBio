@@ -25,6 +25,11 @@ public interface IAuthService
     Task<AuthResult> VerifyEmailAsync(string token);
 
     /// <summary>
+    /// Verifies a user's email address using a 6-digit verification code.
+    /// </summary>
+    Task<AuthResult> VerifyEmailWithCodeAsync(string email, string code);
+
+    /// <summary>
     /// Resends the email verification link to the specified email address.
     /// </summary>
     Task<AuthResult> ResendVerificationEmailAsync(string email);
@@ -38,6 +43,16 @@ public interface IAuthService
     /// Resets a user's password using a reset token and new password.
     /// </summary>
     Task<AuthResult> ResetPasswordAsync(string token, string newPassword);
+
+    /// <summary>
+    /// Gets a user by email address (for development purposes).
+    /// </summary>
+    Task<User?> GetUserByEmailAsync(string email);
+
+    /// <summary>
+    /// Manually verifies a user's email address (for development purposes).
+    /// </summary>
+    Task ManuallyVerifyEmailAsync(string email);
 }
 
 /// <summary>

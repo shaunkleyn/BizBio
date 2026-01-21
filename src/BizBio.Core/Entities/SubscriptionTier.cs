@@ -10,6 +10,11 @@ public class SubscriptionTier : BaseEntity
 
     public int ProductLineId { get; set; }
 
+    /// <summary>
+    /// Product type this tier belongs to (Cards=0, Menu=1, Catalog=2)
+    /// </summary>
+    public ProductType ProductType { get; set; } = ProductType.Menu;
+
     [Required]
     [MaxLength(100)]
     public string TierName { get; set; } = null!;
@@ -52,14 +57,39 @@ public class SubscriptionTier : BaseEntity
     public int MaxRestaurants { get; set; } = 1;
 
     /// <summary>
+    /// Maximum number of entities (Restaurant/Store/Venue/Organization) a user can create for this product
+    /// </summary>
+    public int MaxEntities { get; set; } = 1;
+
+    /// <summary>
+    /// Maximum number of catalogs per entity
+    /// </summary>
+    public int MaxCatalogsPerEntity { get; set; } = 3;
+
+    /// <summary>
     /// Maximum number of library items (shared across all restaurants)
     /// </summary>
     public int MaxLibraryItems { get; set; } = 50;
 
     /// <summary>
+    /// Maximum number of categories per catalog
+    /// </summary>
+    public int MaxCategoriesPerCatalog { get; set; } = 10;
+
+    /// <summary>
+    /// Maximum number of bundles
+    /// </summary>
+    public int MaxBundles { get; set; } = 0;
+
+    /// <summary>
     /// Maximum number of profiles/menus per restaurant
     /// </summary>
     public int MaxProfilesPerRestaurant { get; set; } = 3;
+
+    /// <summary>
+    /// Trial period in days
+    /// </summary>
+    public int TrialDays { get; set; } = 7;
 
     // Feature flags
     public bool CustomBranding { get; set; }
@@ -135,6 +165,7 @@ public class SubscriptionTier : BaseEntity
 
     // Navigation properties
     public virtual ICollection<UserSubscription> Subscriptions { get; set; } = new List<UserSubscription>();
+    public virtual ICollection<ProductSubscription> ProductSubscriptions { get; set; } = new List<ProductSubscription>();
     public virtual ICollection<SubscriptionTierAddon> TierAddons { get; set; } = new List<SubscriptionTierAddon>();
     public virtual ProductLineLookup ProductLine { get; set; } = null!;
 }

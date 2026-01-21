@@ -138,6 +138,7 @@ export const useAuthApi = () => {
     register: (data: any) => api.post('/auth/register', data),
     login: (credentials: any) => api.post('/auth/login', credentials),
     verifyEmail: (token: string) => api.get(`/auth/verify-email?token=${token}`),
+    verifyEmailWithCode: (email: string, code: string) => api.post('/auth/verify-email-code', { email, code }),
     resendVerification: (email: string) => api.post('/auth/resend-verification', { email }),
     forgotPassword: (email: string) => api.post('/auth/forgot-password', { email }),
     resetPassword: (token: string, newPassword: string) =>

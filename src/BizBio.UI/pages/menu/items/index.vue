@@ -1,5 +1,20 @@
 <template>
+  
   <div class="p-4 md:p-8">
+    <div class="bg-white rounded-3xl p-2 mb-6 inline-flex gap-2" style="box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);">
+        <a href="/item-library" class="px-6 py-3 bg-[#4A90E2] text-white rounded-2xl font-semibold text-sm transition-all duration-200">
+          <i class="fas fa-utensils mr-2" aria-hidden="true"></i>Items (247)
+        </a>
+        <a href="/bundles" class="px-6 py-3 text-gray-700 hover:bg-[#F5F5F5] rounded-2xl font-semibold text-sm transition-all duration-200">
+          <i class="fas fa-layer-group mr-2" aria-hidden="true"></i>Bundles (18)
+        </a>
+        <a href="/extras" class="px-6 py-3 text-gray-700 hover:bg-[#F5F5F5] rounded-2xl font-semibold text-sm transition-all duration-200">
+          <i class="fas fa-plus-circle mr-2" aria-hidden="true"></i>Extras (56)
+        </a>
+        <a href="/options" class="px-6 py-3 text-gray-700 hover:bg-[#F5F5F5] rounded-2xl font-semibold text-sm transition-all duration-200">
+          <i class="fas fa-sliders-h mr-2" aria-hidden="true"></i>Options (32)
+        </a>
+      </div>
     <div class="w-100 mx-auto">
       <!-- Filters & View Toggle -->
       <div class="mb-8">

@@ -284,6 +284,9 @@ namespace BizBio.Infrastructure.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("varchar(2000)");
 
+                    b.Property<int>("EntityId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
@@ -295,20 +298,20 @@ namespace BizBio.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
-                    b.Property<int>("OwnerId")
+                    b.Property<int?>("ProfileId")
                         .HasColumnType("int");
 
-                    b.Property<int>("OwnerType")
-                        .HasColumnType("int");
+                    b.Property<string>("Slug")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProfileId")
-                        .HasColumnType("int");
+                    b.Property<int>("SortOrder")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -327,9 +330,13 @@ namespace BizBio.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EntityId");
+
                     b.HasIndex("IsActive");
 
                     b.HasIndex("ProfileId");
+
+                    b.HasIndex("EntityId", "SortOrder");
 
                     b.ToTable("Catalogs", (string)null);
                 });
@@ -682,7 +689,10 @@ namespace BizBio.Infrastructure.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CatalogId")
+                    b.Property<int>("CatalogId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -694,60 +704,34 @@ namespace BizBio.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(2000)
-                        .HasColumnType("varchar(2000)");
-
-                    b.Property<string>("Icon")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Images")
-                        .HasMaxLength(5000)
-                        .HasColumnType("varchar(5000)");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsValid")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int?>("ParentCategoryId")
-                        .HasColumnType("int");
-
                     b.Property<int>("SortOrder")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime(6)")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("UpdatedBy")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CatalogId");
 
-                    b.HasIndex("IsActive");
+                    b.HasIndex("CategoryId");
 
-                    b.HasIndex("ParentCategoryId");
+                    b.HasIndex("CatalogId", "CategoryId")
+                        .IsUnique();
 
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("CatalogId", "SortOrder");
-
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("CatalogCategories", (string)null);
                 });
 
             modelBuilder.Entity("BizBio.Core.Entities.CatalogItem", b =>
@@ -787,8 +771,8 @@ namespace BizBio.Infrastructure.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Images")
-                        .HasMaxLength(2000)
-                        .HasColumnType("varchar(2000)");
+                        .HasMaxLength(5000)
+                        .HasColumnType("varchar(5000)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("tinyint(1)");
@@ -803,10 +787,17 @@ namespace BizBio.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int?>("ParentCatalogItemId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(10, 2)
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal?>("PriceOverride")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
@@ -845,6 +836,8 @@ namespace BizBio.Infrastructure.Migrations
                     b.HasIndex("IsActive");
 
                     b.HasIndex("ItemType");
+
+                    b.HasIndex("ParentCatalogItemId");
 
                     b.HasIndex("UserId");
 
@@ -1764,6 +1757,185 @@ namespace BizBio.Infrastructure.Migrations
                     b.ToTable("CatalogVersion");
                 });
 
+            modelBuilder.Entity("BizBio.Core.Entities.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsValid")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Slug")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntityId");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("EntityId", "SortOrder");
+
+                    b.ToTable("CategoriesNew", (string)null);
+                });
+
+            modelBuilder.Entity("BizBio.Core.Entities.Entity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("City")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(3)
+                        .HasColumnType("varchar(3)")
+                        .HasDefaultValue("ZAR");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("varchar(2000)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("EntityType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsValid")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Logo")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("PostalCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Timezone")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Africa/Johannesburg");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Website")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntityType");
+
+                    b.HasIndex("IsActive");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId", "SortOrder");
+
+                    b.ToTable("Entities", (string)null);
+                });
+
             modelBuilder.Entity("BizBio.Core.Entities.Lookups.BillingCycleLookup", b =>
                 {
                     b.Property<int>("Id")
@@ -2068,6 +2240,92 @@ namespace BizBio.Infrastructure.Migrations
                     b.HasIndex("TableId", "ScannedAt");
 
                     b.ToTable("NFCScans", (string)null);
+                });
+
+            modelBuilder.Entity("BizBio.Core.Entities.ProductSubscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BillingCycle")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CancelledAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("CurrentPeriodEnd")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("CurrentPeriodStart")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsTrialActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsValid")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("NextBillingDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("ProductType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TierId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TrialEndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("TrialStartDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductType");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("TierId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId", "ProductType")
+                        .IsUnique();
+
+                    b.ToTable("ProductSubscriptions", (string)null);
                 });
 
             modelBuilder.Entity("BizBio.Core.Entities.Profile", b =>
@@ -2531,13 +2789,25 @@ namespace BizBio.Infrastructure.Migrations
                     b.Property<bool>("ItemVariants")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int>("MaxBundles")
+                        .HasColumnType("int");
+
                     b.Property<int>("MaxCatalogItems")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxCatalogsPerEntity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxCategoriesPerCatalog")
                         .HasColumnType("int");
 
                     b.Property<int>("MaxDocumentSizeMB")
                         .HasColumnType("int");
 
                     b.Property<int>("MaxDocuments")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxEntities")
                         .HasColumnType("int");
 
                     b.Property<int>("MaxImagesPerItem")
@@ -2589,6 +2859,9 @@ namespace BizBio.Infrastructure.Migrations
                     b.Property<int>("ProductLineId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ProductType")
+                        .HasColumnType("int");
+
                     b.Property<string>("RecommendedFor")
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
@@ -2611,6 +2884,9 @@ namespace BizBio.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
+
+                    b.Property<int>("TrialDays")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
@@ -2721,6 +2997,19 @@ namespace BizBio.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
+
+                    b.Property<int>("EmailResendAttempts")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EmailResendAttemptsResetAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("EmailVerificationCode")
+                        .HasMaxLength(6)
+                        .HasColumnType("varchar(6)");
+
+                    b.Property<DateTime?>("EmailVerificationCodeExpiry")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("EmailVerificationToken")
                         .HasMaxLength(255)
@@ -3053,13 +3342,17 @@ namespace BizBio.Infrastructure.Migrations
 
             modelBuilder.Entity("BizBio.Core.Entities.Catalog", b =>
                 {
-                    b.HasOne("BizBio.Core.Entities.Profile", "Profile")
+                    b.HasOne("BizBio.Core.Entities.Entity", "Entity")
                         .WithMany("Catalogs")
-                        .HasForeignKey("ProfileId")
+                        .HasForeignKey("EntityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Profile");
+                    b.HasOne("BizBio.Core.Entities.Profile", null)
+                        .WithMany("Catalogs")
+                        .HasForeignKey("ProfileId");
+
+                    b.Navigation("Entity");
                 });
 
             modelBuilder.Entity("BizBio.Core.Entities.CatalogBundle", b =>
@@ -3149,21 +3442,18 @@ namespace BizBio.Infrastructure.Migrations
                     b.HasOne("BizBio.Core.Entities.Catalog", "Catalog")
                         .WithMany("Categories")
                         .HasForeignKey("CatalogId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("BizBio.Core.Entities.CatalogCategory", "ParentCategory")
-                        .WithMany("SubCategories")
-                        .HasForeignKey("ParentCategoryId");
-
-                    b.HasOne("BizBio.Core.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                    b.HasOne("BizBio.Core.Entities.Category", "Category")
+                        .WithMany("CatalogCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Catalog");
 
-                    b.Navigation("ParentCategory");
-
-                    b.Navigation("User");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("BizBio.Core.Entities.CatalogItem", b =>
@@ -3178,6 +3468,11 @@ namespace BizBio.Infrastructure.Migrations
                         .HasForeignKey("CatalogId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("BizBio.Core.Entities.CatalogItem", "ParentCatalogItem")
+                        .WithMany("ChildCatalogItems")
+                        .HasForeignKey("ParentCatalogItemId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("BizBio.Core.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -3185,6 +3480,8 @@ namespace BizBio.Infrastructure.Migrations
                     b.Navigation("Bundle");
 
                     b.Navigation("Catalog");
+
+                    b.Navigation("ParentCatalogItem");
 
                     b.Navigation("User");
                 });
@@ -3197,7 +3494,7 @@ namespace BizBio.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BizBio.Core.Entities.CatalogCategory", "Category")
+                    b.HasOne("BizBio.Core.Entities.Category", "Category")
                         .WithMany("CatalogItemCategories")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3455,6 +3752,28 @@ namespace BizBio.Infrastructure.Migrations
                     b.Navigation("Catalog");
                 });
 
+            modelBuilder.Entity("BizBio.Core.Entities.Category", b =>
+                {
+                    b.HasOne("BizBio.Core.Entities.Entity", "Entity")
+                        .WithMany("Categories")
+                        .HasForeignKey("EntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Entity");
+                });
+
+            modelBuilder.Entity("BizBio.Core.Entities.Entity", b =>
+                {
+                    b.HasOne("BizBio.Core.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BizBio.Core.Entities.NFCScan", b =>
                 {
                     b.HasOne("BizBio.Core.Entities.Lookups.DeviceTypeLookup", "DeviceType")
@@ -3479,6 +3798,25 @@ namespace BizBio.Infrastructure.Migrations
                     b.Navigation("Profile");
 
                     b.Navigation("Table");
+                });
+
+            modelBuilder.Entity("BizBio.Core.Entities.ProductSubscription", b =>
+                {
+                    b.HasOne("BizBio.Core.Entities.SubscriptionTier", "Tier")
+                        .WithMany("ProductSubscriptions")
+                        .HasForeignKey("TierId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BizBio.Core.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tier");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BizBio.Core.Entities.Profile", b =>
@@ -3680,16 +4018,11 @@ namespace BizBio.Infrastructure.Migrations
                     b.Navigation("OptionGroups");
                 });
 
-            modelBuilder.Entity("BizBio.Core.Entities.CatalogCategory", b =>
-                {
-                    b.Navigation("CatalogItemCategories");
-
-                    b.Navigation("SubCategories");
-                });
-
             modelBuilder.Entity("BizBio.Core.Entities.CatalogItem", b =>
                 {
                     b.Navigation("CatalogItemCategories");
+
+                    b.Navigation("ChildCatalogItems");
 
                     b.Navigation("ExtraGroupLinks");
 
@@ -3732,6 +4065,20 @@ namespace BizBio.Infrastructure.Migrations
                     b.Navigation("Inventories");
 
                     b.Navigation("Prices");
+                });
+
+            modelBuilder.Entity("BizBio.Core.Entities.Category", b =>
+                {
+                    b.Navigation("CatalogCategories");
+
+                    b.Navigation("CatalogItemCategories");
+                });
+
+            modelBuilder.Entity("BizBio.Core.Entities.Entity", b =>
+                {
+                    b.Navigation("Catalogs");
+
+                    b.Navigation("Categories");
                 });
 
             modelBuilder.Entity("BizBio.Core.Entities.Lookups.BillingCycleLookup", b =>
@@ -3795,6 +4142,8 @@ namespace BizBio.Infrastructure.Migrations
 
             modelBuilder.Entity("BizBio.Core.Entities.SubscriptionTier", b =>
                 {
+                    b.Navigation("ProductSubscriptions");
+
                     b.Navigation("Subscriptions");
 
                     b.Navigation("TierAddons");

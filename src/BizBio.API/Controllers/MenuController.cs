@@ -87,19 +87,17 @@ public class MenuController : ControllerBase
         }
 
         // Get catalog and items
+        // Note: This endpoint still uses Profile-based lookup (legacy support)
+        // TODO: Migrate to Entity-based architecture
         var catalog = await _catalogRepo.GetByProfileIdAsync(profile.Id);
         var items = catalog?.Items.Where(i => i.IsActive).ToList() ?? new List<CatalogItem>();
- 
 
-        var categories = new Dictionary<CatalogCategory, CatalogItem>();
-        foreach (var item in items)
-        {   if (item.CategoryId == null) continue;
-            var category = await _context.Categories.FindAsync(item.CategoryId);
-            if (category != null && !categories.ContainsKey(category))
-            {
-                categories.Add(category, item);
-            }
-        }
+        // Get categories through catalog junction table
+        var catalogCategories = catalog?.Categories
+            .Where(cc => cc.IsActive)
+            .Select(cc => cc.Category)
+            .Distinct()
+            .ToList() ?? new List<Category>();
 
         // Filter by event mode if enabled
         if (profile.EventModeEnabled)
@@ -125,12 +123,15 @@ public class MenuController : ControllerBase
                         email = profile.ContactEmail,
                         website = profile.Website
                     },
-                    categories = categories.Keys.Select(cat => new
+                    categories = catalogCategories.Select(cat => new
                     {
                         id = cat.Id,
                         name = cat.Name,
                         description = cat.Description,
-                        items = items.Where(i => i.CategoryId == cat.Id).Select(i => i.Id).ToList(),
+                        items = cat.CatalogItemCategories
+                            .Where(cic => cic.CatalogItem.IsActive && items.Any(i => i.Id == cic.CatalogItemId))
+                            .Select(cic => cic.CatalogItemId)
+                            .ToList(),
                         icon = cat.Icon,
                         isActive = cat.IsActive,
                         sortOrder = cat.SortOrder
@@ -162,12 +163,15 @@ public class MenuController : ControllerBase
                         isActive = item.IsActive,
                         sortOrder = item.SortOrder
                 }),
-                categories = categories.Keys.Select(cat => new
+                categories = catalogCategories.Select(cat => new
                 {
                     id = cat.Id,
                     name = cat.Name,
                     description = cat.Description,
-                    items = items.Where(i => i.CategoryId == cat.Id).Select(i => i.Id).ToList(),
+                    items = cat.CatalogItemCategories
+                        .Where(cic => cic.CatalogItem.IsActive && items.Any(i => i.Id == cic.CatalogItemId))
+                        .Select(cic => cic.CatalogItemId)
+                        .ToList(),
                     icon = cat.Icon,
                     isActive = cat.IsActive,
                     sortOrder = cat.SortOrder
@@ -258,91 +262,21 @@ public class MenuController : ControllerBase
             _context.Profiles.Add(profile);
             await _context.SaveChangesAsync();
 
-            // Create Catalog (Menu)
-            var catalog = new Catalog
+            // TODO: This endpoint creates Profile-based menus (legacy)
+            // Should be migrated to create Entity-based catalogs instead
+            // For now, commenting out catalog creation as it requires Entity
+
+            return StatusCode(501, new
             {
-                ProfileId = profile.Id,
-                Name = dto.Name,
-                Description = dto.Description,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
-
-            _context.Catalogs.Add(catalog);
-            await _context.SaveChangesAsync();
-
-            // Create Categories and map temporary IDs to real IDs
-            var categoryIdMap = new Dictionary<string, int>();
-
-            foreach (var categoryDto in dto.Categories.OrderBy(c => c.Order))
-            {
-                var category = new CatalogCategory
-                {
-                    CatalogId = catalog.Id,
-                    Name = categoryDto.Name,
-                    Description = categoryDto.Description,
-                    Icon = categoryDto.Icon,
-                    SortOrder = categoryDto.Order,
-                    IsActive = true,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
-                };
-
-                _context.Categories.Add(category);
-                await _context.SaveChangesAsync();
-
-                // Map the frontend temporary ID to the actual database ID
-                var tempId = dto.Categories.IndexOf(categoryDto).ToString();
-                categoryIdMap[categoryDto.Name] = category.Id;
-            }
-
-            // Create Menu Items
-            foreach (var itemDto in dto.Items)
-            {
-                // Find the category ID by matching the category name
-                var category = dto.Categories.FirstOrDefault(c =>
-                    dto.Categories.IndexOf(c).ToString() == itemDto.CategoryId ||
-                    c.Name == itemDto.CategoryId);
-
-                if (category == null) continue;
-
-                var categoryId = categoryIdMap[category.Name];
-
-                var item = new CatalogItem
-                {
-                    CatalogId = catalog.Id,
-                    CategoryId = categoryId,
-                    Name = itemDto.Name,
-                    Description = itemDto.Description,
-                    Price = itemDto.Price,
-                    Images = !string.IsNullOrEmpty(itemDto.ImageUrl)
-                        ? JsonSerializer.Serialize(new[] { itemDto.ImageUrl })
-                        : null,
-                    IsActive = itemDto.Available,
-                    SortOrder = 0,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
-                };
-
-                _context.CatalogItems.Add(item);
-            }
-
-            await _context.SaveChangesAsync();
-
-            return Ok(new
-            {
-                success = true,
-                data = new
-                {
-                    profileId = profile.Id,
-                    slug = profile.Slug,
-                    catalogId = catalog.Id,
-                    categoriesCount = dto.Categories.Count,
-                    itemsCount = dto.Items.Count,
-                    url = $"/menu/{profile.Slug}"
-                }
+                success = false,
+                error = "Menu creation is deprecated. Please use Entity-based catalog creation.",
+                message = "This endpoint requires migration to the new Entity-based architecture."
             });
+
+            // Legacy code commented out - requires Entity-based architecture
+            // var catalog = new Catalog { EntityId = ???, ... };
+            // _context.Catalogs.Add(catalog);
+            // await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {
@@ -379,67 +313,12 @@ public class MenuController : ControllerBase
 
             foreach (var profile in profiles)
             {
-                // Get catalog with related data
-                var catalog = await _context.Catalogs
-                    .Where(c => c.ProfileId == profile.Id)
-                    .Select(c => new
-                    {
-                        CatalogId = c.Id,
-                        CatalogUpdatedAt = c.UpdatedAt
-                    })
-                    .FirstOrDefaultAsync();
-
+                // NOTE: Catalog.ProfileId no longer exists - catalogs now belong to Entities
+                // This endpoint cannot function with the new architecture
+                // Returning basic profile info without catalog details
                 int categoryCount = 0;
                 int itemCount = 0;
                 DateTime lastUpdated = profile.CreatedAt;
-
-                if (catalog != null)
-                {
-                    // Get category count and max updated date
-                    var categoryStats = await _context.Categories
-                        .Where(cat => cat.CatalogId == catalog.CatalogId && cat.IsActive)
-                        .GroupBy(cat => 1)
-                        .Select(g => new
-                        {
-                            Count = g.Count(),
-                            MaxUpdated = g.Max(cat => cat.UpdatedAt)
-                        })
-                        .FirstOrDefaultAsync();
-
-                    categoryCount = categoryStats?.Count ?? 0;
-
-                    // Get item count and max updated date
-                    var itemStats = await _context.CatalogItems
-                        .Where(i => i.CatalogId == catalog.CatalogId && i.IsActive)
-                        .GroupBy(i => 1)
-                        .Select(g => new
-                        {
-                            Count = g.Count(),
-                            MaxUpdated = g.Max(i => i.UpdatedAt)
-                        })
-                        .FirstOrDefaultAsync();
-
-                    itemCount = itemStats?.Count ?? 0;
-
-                    // Get extras max updated date
-                    var extraMaxUpdated = await _context.CatalogItemExtras
-                        .Where(e => e.CatalogId == catalog.CatalogId && e.IsActive)
-                        .MaxAsync(e => (DateTime?)e.UpdatedAt);
-
-                    // Calculate the most recent update
-                    var dates = new List<DateTime> { catalog.CatalogUpdatedAt };
-
-                    if (categoryStats != null)
-                        dates.Add(categoryStats.MaxUpdated);
-
-                    if (itemStats != null)
-                        dates.Add(itemStats.MaxUpdated);
-
-                    if (extraMaxUpdated.HasValue)
-                        dates.Add(extraMaxUpdated.Value);
-
-                    lastUpdated = dates.Max();
-                }
 
                 result.Add(new
                 {
@@ -490,30 +369,30 @@ public class MenuController : ControllerBase
             if (catalog == null)
                 return NotFound(new { success = false, error = "Menu not found" });
 
-            // Verify ownership via Profile
-            if (catalog.Profile?.UserId != userId)
+            // Verify ownership via Entity
+            if (catalog.Entity?.UserId != userId)
                 return Forbid();
 
             // Map to response DTO
             var response = new
             {
                 id = catalog.Id,
-                profileId = catalog.ProfileId,
+                entityId = catalog.EntityId,
                 name = catalog.Name,
                 description = catalog.Description,
-                slug = catalog.Profile?.Slug,
+                slug = catalog.Entity?.Slug,
+                // catalog.Categories is now CatalogCategory junction records
                 categories = catalog.Categories
-                    .Where(c => c.IsActive)
-                    .OrderBy(c => c.SortOrder)
-                    .Select(c => new
+                    .Where(cc => cc.IsActive)
+                    .OrderBy(cc => cc.SortOrder)
+                    .Select(cc => new
                     {
-                        id = c.Id,
-                        name = c.Name,
-                        description = c.Description,
-                        icon = c.Icon,
-                        sortOrder = c.SortOrder,
-                        itemCount = c.CatalogItemCategories.Count(cic => cic.CatalogItem.IsActive)
-                            + catalog.Items.Count(i => i.IsActive && i.CategoryId == c.Id && !i.CatalogItemCategories.Any())
+                        id = cc.Category.Id,
+                        name = cc.Category.Name,
+                        description = cc.Category.Description,
+                        icon = cc.Category.Icon,
+                        sortOrder = cc.SortOrder,
+                        itemCount = cc.Category.CatalogItemCategories.Count(cic => cic.CatalogItem.IsActive)
                     })
                     .ToList(),
                 items = catalog.Items
@@ -528,9 +407,7 @@ public class MenuController : ControllerBase
                         images = string.IsNullOrEmpty(i.Images)
                             ? new List<string>()
                             : System.Text.Json.JsonSerializer.Deserialize<List<string>>(i.Images) ?? new List<string>(),
-                        categoryIds = i.CatalogItemCategories.Any()
-                            ? i.CatalogItemCategories.Select(cic => cic.CategoryId).ToList()
-                            : (i.CategoryId.HasValue ? new List<int> { i.CategoryId.Value } : new List<int>()),
+                        categoryIds = i.CatalogItemCategories.Select(cic => cic.CategoryId).ToList(),
                         sortOrder = i.SortOrder,
                         variantCount = i.Variants.Count(v => v.IsActive),
                         hasOptions = i.OptionGroupLinks.Any(l => l.IsActive),

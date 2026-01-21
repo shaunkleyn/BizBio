@@ -1,15 +1,24 @@
 <template>
-  <div
-    v-if="modelValue"
-    class="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4 animate-fadeSlide"
-    @click.self="handleClose"
-  >
+  <Teleport to="body">
     <div
-      :class="[
-        'modal-content mesh-card bg-md-surface rounded-2xl shadow-md-5 w-full max-h-[85vh] flex flex-col overflow-hidden border border-md-outline-variant',
-        sizeClass
-      ]"
+      v-if="modelValue"
+      class="modal-overlay fixed inset-0 flex items-center justify-center p-4 animate-fadeSlide"
+      :style="{ zIndex: currentZIndex }"
+      @click.self="handleClose"
     >
+      <!-- Backdrop with dynamic opacity -->
+      <div
+        class="fixed inset-0 bg-black transition-opacity"
+        :style="{ opacity: backdropOpacity }"
+      ></div>
+
+      <!-- Modal Content (positioned above backdrop) -->
+      <div
+        :class="[
+          'modal-content mesh-card bg-md-surface rounded-2xl shadow-md-5 w-full max-h-[85vh] flex flex-col overflow-hidden border border-md-outline-variant relative',
+          sizeClass
+        ]"
+      >
       <!-- Header with Gradient -->
       <div class="modal-header p-6">
         <div class="flex justify-between items-center relative z-10">
@@ -65,11 +74,13 @@
         </div>
       </div>
     </div>
-  </div>
+    </div>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
+import { useModalStack } from '~/composables/useModalStack'
 
 interface Props {
   modelValue: boolean
@@ -111,6 +122,17 @@ const emit = defineEmits<{
   (e: 'close'): void
   (e: 'confirm'): void
 }>()
+
+const { currentZIndex, backdropOpacity, registerModal, unregisterModal } = useModalStack()
+
+// Register/unregister modal when it opens/closes
+watch(() => props.modelValue, (isOpen) => {
+  if (isOpen) {
+    registerModal(handleClose)
+  } else {
+    unregisterModal()
+  }
+})
 
 const sizeClass = computed(() => {
   const sizes = {

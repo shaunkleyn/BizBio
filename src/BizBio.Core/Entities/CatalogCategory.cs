@@ -1,52 +1,39 @@
+using System.Text.Json.Serialization;
+
 namespace BizBio.Core.Entities;
 
-using System.ComponentModel.DataAnnotations;
-
+/// <summary>
+/// Junction table linking Categories to Catalogs in a many-to-many relationship.
+/// Categories are entity-level and can be used across multiple catalogs within the same entity.
+/// </summary>
 public class CatalogCategory : BaseEntity
 {
-    //public int Id { get; set; }
+    /// <summary>
+    /// The catalog ID
+    /// </summary>
+    public int CatalogId { get; set; }
 
-    // Nullable CatalogId - null means it's a user library category
-    public int? CatalogId { get; set; }
+    /// <summary>
+    /// The category ID
+    /// </summary>
+    public int CategoryId { get; set; }
 
-    // UserId for library categories (categories owned by user but not in a specific catalog)
-    public int? UserId { get; set; }
-
-    // For hierarchical categories (e.g., Men > Shoes > Running Shoes)
-    public int? ParentCategoryId { get; set; }
-
-    [Required]
-    [MaxLength(255)]
-    public string Name { get; set; } = null!;
-
-    [MaxLength(2000)]
-    public string? Description { get; set; }
-
-    [MaxLength(100)]
-    public string? Icon { get; set; }
-
-    [MaxLength(5000)]
-    public string? Images { get; set; } // JSON array as string
-
+    /// <summary>
+    /// Display order for sorting categories within this catalog
+    /// </summary>
     public int SortOrder { get; set; } = 0;
 
-    //public bool IsActive { get; set; } = true;
-
-    //public DateTime CreatedAt { get; set; }
-
-    //public DateTime UpdatedAt { get; set; }
-
     // Navigation properties
-    public virtual Catalog? Catalog { get; set; }
-    public virtual User? User { get; set; }
 
-    public virtual ICollection<CatalogItem> Items { get; set; } = new List<CatalogItem>();
+    /// <summary>
+    /// The catalog this category belongs to
+    /// </summary>
+    [JsonIgnore]
+    public virtual Catalog Catalog { get; set; } = null!;
 
-
-    // Hierarchical navigation
-    public virtual CatalogCategory? ParentCategory { get; set; }
-    public virtual ICollection<CatalogCategory> SubCategories { get; set; } = new List<CatalogCategory>();
-
-    // Many-to-many with CatalogItem through CatalogItemCategory
-    public virtual ICollection<CatalogItemCategory> CatalogItemCategories { get; set; } = new List<CatalogItemCategory>();
+    /// <summary>
+    /// The category
+    /// </summary>
+    [JsonIgnore]
+    public virtual Category Category { get; set; } = null!;
 }

@@ -221,19 +221,12 @@ public class ProfilesController : ControllerBase
             await _profileRepo.AddAsync(profile);
             await _profileRepo.SaveChangesAsync();
 
-            // Create default catalog
-            var catalog = new Catalog
-            {
-                ProfileId = profile.Id,
-                Name = "Main Catalog",
-                Description = "Default catalog",
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
-
-            await _catalogRepo.AddAsync(catalog);
-            await _catalogRepo.SaveChangesAsync();
+            // TODO: Catalog creation now requires an Entity, not a Profile
+            // This ProfilesController is deprecated in favor of Entity-based architecture
+            // Legacy code commented out:
+            // var catalog = new Catalog { EntityId = ???, Name = "Main Catalog", ... };
+            // await _catalogRepo.AddAsync(catalog);
+            // await _catalogRepo.SaveChangesAsync();
 
             _logger.LogInformation("Profile {ProfileId} created successfully for user {UserId}", profile.Id, userId);
             _telemetryClient.TrackEvent("ProfileCreated", new Dictionary<string, string>

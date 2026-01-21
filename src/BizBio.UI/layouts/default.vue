@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col">
+  <div class="min-h-screen flex flex-col mesh-bg">
     <!-- Global Header -->
     <header id="global-header" class="bg-white bg-opacity-70 bg-blur-[10px] dark:bg-[var(--dark-bg)] shadow-md sticky top-0 z-50  transparent-navbar">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -158,7 +158,7 @@
     <CookieConsent />
 
     <!-- Footer -->
-    <footer class="bg-[var(--dark-background-color)] text-white py-16">
+    <footer class="bg-md-surface text-md-on-surface py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
           <!-- Company Info -->
@@ -174,17 +174,17 @@
             <h4 class="text-lg font-semibold mb-4 font-[var(--font-family-heading)]">Quick Links</h4>
             <ul class="space-y-2">
               <li>
-                <NuxtLink to="/pricing" class="text-gray-400 hover:text-white transition-colors">
+                <NuxtLink to="/pricing" class="text-gray-400 hover:text-md-on-surface transition-colors">
                   Pricing
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/categories" class="text-gray-400 hover:text-white transition-colors">
+                <NuxtLink to="/categories" class="text-gray-400 hover:text-md-on-surface transition-colors">
                   Categories
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/help" class="text-gray-400 hover:text-white transition-colors">
+                <NuxtLink to="/help" class="text-gray-400 hover:text-md-on-surface transition-colors">
                   Help Center
                 </NuxtLink>
               </li>
@@ -196,12 +196,12 @@
             <h4 class="text-lg font-semibold mb-4 font-[var(--font-family-heading)]">Legal</h4>
             <ul class="space-y-2">
               <li>
-                <NuxtLink to="/terms" class="text-gray-400 hover:text-white transition-colors">
+                <NuxtLink to="/terms" class="text-gray-400 hover:text-md-on-surface transition-colors">
                   Terms of Service
                 </NuxtLink>
               </li>
               <li>
-                <NuxtLink to="/privacy" class="text-gray-400 hover:text-white transition-colors">
+                <NuxtLink to="/privacy" class="text-gray-400 hover:text-md-on-surface transition-colors">
                   Privacy Policy
                 </NuxtLink>
               </li>
@@ -213,7 +213,7 @@
             <h4 class="text-lg font-semibold mb-4 font-[var(--font-family-heading)]">Contact</h4>
             <ul class="space-y-2">
               <li>
-                <NuxtLink to="/contact" class="text-gray-400 hover:text-white transition-colors">
+                <NuxtLink to="/contact" class="text-gray-400 hover:text-md-on-surface transition-colors">
                   Contact Us
                 </NuxtLink>
               </li>

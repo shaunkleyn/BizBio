@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-4xl mx-auto">
+  <div class="mx-auto">
     <div class="text-center mb-8">
       <h2 class="text-3xl font-bold text-md-on-background font-[var(--font-family-heading)] mb-4 gradient-text">
         Set Up Your Menu Profile

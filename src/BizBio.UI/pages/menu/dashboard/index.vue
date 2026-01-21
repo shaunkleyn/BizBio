@@ -82,7 +82,7 @@
               v-for="menu in recentMenus"
               :key="menu.id"
               class="border border-md-outline-variant rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
-              @click="navigateTo(`/menu/${menu.slug}`)"
+              @click="navigateTo(`/${menu.entitySlug}/${menu.slug}`)"
             >
               <h3 class="font-semibold text-md-on-surface mb-1">{{ menu.name }}</h3>
               <p class="text-sm text-md-on-surface-variant mb-2">{{ menu.description || 'No description' }}</p>
@@ -193,25 +193,46 @@ const handleCreateMenu = () => {
 async function loadDashboardData() {
   loading.value = true
   try {
-    const menusApi = useMenusApi()
+    const entityApi = useEntityApi()
     const libraryItemsApi = useLibraryItemsApi()
     const categoriesApi = useLibraryCategoriesApi()
 
-    // Load all data in parallel
-    const [menusResponse, itemsResponse, categoriesResponse] = await Promise.all([
-      menusApi.getMyMenus(),
+    // Get user's entities (which may have catalogs)
+    const entitiesResponse = await entityApi.getMyEntities()
+    const entities = entitiesResponse?.data?.entities || []
+
+    // For each entity, get its catalogs and build menu list
+    const menusList: any[] = []
+    for (const entity of entities) {
+      const catalogsResponse = await entityApi.getEntityCatalogs(entity.id)
+      const catalogs = catalogsResponse?.data?.catalogs || []
+
+      // Add each catalog as a "menu" with entity slug for routing
+      catalogs.forEach((catalog: any) => {
+        menusList.push({
+          id: catalog.id,
+          name: catalog.name,
+          slug: catalog.slug,
+          entitySlug: entity.slug,
+          description: catalog.description,
+          itemCount: catalog.itemCount || 0,
+          updatedAt: catalog.updatedAt
+        })
+      })
+    }
+
+    // Set recent menus
+    recentMenus.value = menusList.slice(0, 5) // Get last 5 menus
+    stats.value.menus = menusList.length
+
+    // Load items and categories in parallel
+    const [itemsResponse, categoriesResponse] = await Promise.all([
       libraryItemsApi.getItems(),
       categoriesApi.getCategories()
     ])
 
-    // Set recent menus
-    const menus = Array.isArray(menusResponse) ? menusResponse : (menusResponse?.data || [])
-    recentMenus.value = menus.slice(0, 5) // Get last 5 menus
-    stats.value.menus = menus.length
-
     // Set items count
     const items = (itemsResponse?.data || itemsResponse?.data?.items || [])
-
     console.log('Library items response:', itemsResponse)
     stats.value.items = items.length
 

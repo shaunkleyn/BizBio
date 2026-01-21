@@ -251,6 +251,8 @@
                       'hidden sm:block w-16 h-1 transition-all',
                       effectiveCurrentStep > step ? 'bg-md-primary' : 'bg-[var(--light-border-color)]'
                     ]"></div>
+                  <!-- Connector Line -->
+                    <div class="  sm:block w-16 h-1 transition-all bg-light"></div>
                   </div>
                 </div>
               </div>

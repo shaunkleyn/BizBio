@@ -20,6 +20,7 @@ public class EmailService : IEmailService
     private readonly string _smtpPassword;
     private readonly string _fromEmail;
     private readonly string _fromName;
+    private readonly string _websiteUrl;
 
     public EmailService(
         IConfiguration configuration,
@@ -35,6 +36,7 @@ public class EmailService : IEmailService
         _smtpPassword = configuration["Email:SmtpPassword"] ?? "";
         _fromEmail = configuration["Email:FromEmail"] ?? "";
         _fromName = configuration["Email:FromName"] ?? "BizBio";
+        _websiteUrl = configuration["Website:Url"] ?? "https://bizbio.co.za";
     }
 
     public async Task SendEmailAsync(string toEmail, string subject, string htmlBody)
@@ -127,7 +129,7 @@ public class EmailService : IEmailService
         }
     }
 
-    public async Task SendVerificationEmailAsync(string toEmail, string userName, string verificationToken)
+    public async Task SendVerificationEmailAsync(string toEmail, string userName, string verificationToken, string verificationCode)
     {
         var subject = "Verify Your BizBio Account";
 
@@ -141,7 +143,10 @@ public class EmailService : IEmailService
         .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }}
         .content {{ background: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }}
         .button {{ display: inline-block; background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }}
+        .code-box {{ background: white; padding: 20px; margin: 20px 0; text-align: center; border-radius: 8px; border: 2px dashed #667eea; }}
+        .code {{ font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #667eea; font-family: 'Courier New', monospace; }}
         .footer {{ text-align: center; margin-top: 30px; color: #666; font-size: 12px; }}
+        .divider {{ text-align: center; margin: 30px 0; color: #999; }}
     </style>
 </head>
 <body>
@@ -152,15 +157,30 @@ public class EmailService : IEmailService
         <div class='content'>
             <h2>Hi {userName},</h2>
             <p>Thank you for creating your BizBio account. We're excited to have you on board!</p>
-            <p>To complete your registration and verify your email address, please click the button below:</p>
+            <p>To complete your registration and verify your email address, you can use one of the following methods:</p>
+
+            <h3>Method 1: Enter Your Verification Code</h3>
+            <div class='code-box'>
+                <p style='margin: 0 0 10px 0; font-size: 14px; color: #666;'>Your 6-digit verification code:</p>
+                <div class='code'>{verificationCode}</div>
+            </div>
+            <p style='text-align: center;'><strong>This code will expire in 24 hours.</strong></p>
+
+            <div class='divider'>
+                <hr style='border: none; border-top: 1px solid #e0e0e0; margin: 10px 0;'>
+                <span style='background: #f9f9f9; padding: 0 10px;'>OR</span>
+                <hr style='border: none; border-top: 1px solid #e0e0e0; margin: 10px 0;'>
+            </div>
+
+            <h3>Method 2: Click the Verification Link</h3>
             <div style='text-align: center;'>
-                <a href='https://bizbio.co.za/verify-email?token={verificationToken}' class='button'>Verify Email Address</a>
+                <a href='{_websiteUrl}/verify-email?token={verificationToken}' class='button'>Verify Email Address</a>
             </div>
             <p>Or copy and paste this link into your browser:</p>
-            <p style='background: white; padding: 15px; border-radius: 5px; word-break: break-all;'>
-                https://bizbio.co.za/verify-email?token={verificationToken}
+            <p style='background: white; padding: 15px; border-radius: 5px; word-break: break-all; font-size: 12px;'>
+                {_websiteUrl}/verify-email?token={verificationToken}
             </p>
-            <p><strong>This link will expire in 24 hours.</strong></p>
+
             <p>If you didn't create a BizBio account, you can safely ignore this email.</p>
             <hr style='border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;'>
             <p style='font-size: 12px; color: #666;'>
@@ -206,11 +226,11 @@ public class EmailService : IEmailService
             <p>We received a request to reset your BizBio account password.</p>
             <p>Click the button below to reset your password:</p>
             <div style='text-align: center;'>
-                <a href='https://bizbio.co.za/reset-password?token={resetToken}' class='button'>Reset Password</a>
+                <a href='{_websiteUrl}/reset-password?token={resetToken}' class='button'>Reset Password</a>
             </div>
             <p>Or copy and paste this link into your browser:</p>
             <p style='background: white; padding: 15px; border-radius: 5px; word-break: break-all;'>
-                https://bizbio.co.za/reset-password?token={resetToken}
+                {_websiteUrl}/reset-password?token={resetToken}
             </p>
             <div class='warning'>
                 <strong>⚠️ Security Notice:</strong>
@@ -281,10 +301,10 @@ public class EmailService : IEmailService
             </div>
 
             <div style='text-align: center;'>
-                <a href='https://bizbio.co.za/dashboard' class='button'>Go to Dashboard</a>
+                <a href='{_websiteUrl}/dashboard' class='button'>Go to Dashboard</a>
             </div>
 
-            <p style='margin-top: 30px;'>Need help getting started? Check out our <a href='https://bizbio.co.za/help'>Help Center</a> or reply to this email.</p>
+            <p style='margin-top: 30px;'>Need help getting started? Check out our <a href='{_websiteUrl}/help'>Help Center</a> or reply to this email.</p>
         </div>
         <div class='footer'>
             <p>&copy; 2025 BizBio. All rights reserved.</p>

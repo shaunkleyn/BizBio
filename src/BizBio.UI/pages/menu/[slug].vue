@@ -449,15 +449,56 @@ watch(activeCategory, async (newCategoryId) => {
 })
 
 onMounted(async () => {
-  await loadMenu()
-  setupScrollSpy()
+  // Redirect to new entity/catalog routing structure
+  await redirectToNewRouting()
 })
 
 onUnmounted(() => {
   cleanupScrollSpy()
 })
 
+async function redirectToNewRouting() {
+  try {
+    loading.value = true
+    const slug = route.params.slug as string
+
+    // Try to find the catalog by slug and get its entity
+    const api = useApi()
+
+    // First, get the menu data to find entity information
+    const response = await menusApi.getMenuBySlug(slug)
+
+    if (response?.data?.restaurant && response.data.restaurant.entitySlug && response.data.restaurant.catalogSlug) {
+      // If backend provides entity and catalog slugs, use them
+      await router.replace(`/${response.data.restaurant.entitySlug}/${response.data.restaurant.catalogSlug}`)
+    } else if (response?.data?.restaurant?.catalogId) {
+      // Fallback: try to get catalog details
+      const catalogId = response.data.restaurant.catalogId
+      const catalogResponse = await api.get(`/api/v1/catalogs/${catalogId}`)
+
+      if (catalogResponse?.data?.catalog && catalogResponse.data.catalog.entity) {
+        const entitySlug = catalogResponse.data.catalog.entity.slug
+        const catalogSlug = catalogResponse.data.catalog.slug || slug
+        await router.replace(`/${entitySlug}/${catalogSlug}`)
+      } else {
+        // Can't determine new route, show error
+        error.value = 'This menu is using the old format. Please contact support to migrate.'
+      }
+    } else {
+      // Can't determine new route, show error
+      error.value = 'This menu is using the old format. Please contact support to migrate.'
+    }
+  } catch (err: any) {
+    console.error('Error redirecting to new routing:', err)
+    error.value = 'Failed to load menu. Please try again.'
+  } finally {
+    loading.value = false
+  }
+}
+
 async function loadMenu() {
+  // This function is now replaced by redirectToNewRouting
+  // Keeping it for reference, but it's no longer called
   try {
     loading.value = true
     const slug = route.params.slug as string

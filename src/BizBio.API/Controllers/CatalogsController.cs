@@ -44,8 +44,8 @@ public class CatalogsController : ControllerBase
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
 
-            // Verify ownership via Profile
-            if (catalog.Profile?.UserId != userId)
+            // Verify ownership via Entity
+            if (catalog.Entity?.UserId != userId)
                 return Forbid();
 
             // Map to DTO
@@ -54,17 +54,19 @@ public class CatalogsController : ControllerBase
                 Id = catalog.Id,
                 Name = catalog.Name,
                 Description = catalog.Description,
+                // Note: catalog.Categories is now CatalogCategory junction records
+                // Navigate to the actual Category entity
                 Categories = catalog.Categories
-                    .Where(c => c.IsActive)
-                    .OrderBy(c => c.SortOrder)
-                    .Select(c => new CategoryDetailDto
+                    .Where(cc => cc.IsActive)
+                    .OrderBy(cc => cc.SortOrder)
+                    .Select(cc => new CategoryDetailDto
                     {
-                        Id = c.Id,
-                        Name = c.Name,
-                        Description = c.Description,
-                        Icon = c.Icon,
-                        SortOrder = c.SortOrder,
-                        ItemCount = c.CatalogItemCategories.Count(cic => cic.CatalogItem.IsActive)
+                        Id = cc.Category.Id,
+                        Name = cc.Category.Name,
+                        Description = cc.Category.Description,
+                        Icon = cc.Category.Icon,
+                        SortOrder = cc.SortOrder, // Use sort order from junction table
+                        ItemCount = cc.Category.CatalogItemCategories.Count(cic => cic.CatalogItem.IsActive)
                     })
                     .ToList(),
                 Items = catalog.Items
@@ -119,14 +121,14 @@ public class CatalogsController : ControllerBase
         {
             var userId = GetUserId();
             var catalog = await _context.Catalogs
-                .Include(c => c.Profile)
+                .Include(c => c.Entity)
                 .Include(c => c.Categories)
                 .FirstOrDefaultAsync(c => c.Id == id && c.IsActive);
 
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
 
-            if (catalog.Profile?.UserId != userId)
+            if (catalog.Entity?.UserId != userId)
                 return Forbid();
 
             // Update sort orders
@@ -169,7 +171,7 @@ public class CatalogsController : ControllerBase
             var userId = GetUserId();
             var userIdString = userId.ToString();
             var catalog = await _context.Catalogs
-                .Include(c => c.Profile)
+                .Include(c => c.Entity)
                 .Include(c => c.Items)
                     .ThenInclude(i => i.CatalogItemCategories)
                 .FirstOrDefaultAsync(c => c.Id == id && c.IsActive);
@@ -177,7 +179,7 @@ public class CatalogsController : ControllerBase
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
 
-            if (catalog.Profile?.UserId != userId)
+            if (catalog.Entity?.UserId != userId)
                 return Forbid();
 
             // Update sort orders and handle category changes
@@ -236,8 +238,8 @@ public class CatalogsController : ControllerBase
     /// <summary>
     /// Add library item to catalog
     /// </summary>
-    [HttpPost("{id}/items")]
-    public async Task<IActionResult> AddItemToCatalog(int id, [FromBody] AddItemToCatalogDto dto)
+    [HttpPost("{id}/library-items")]
+    public async Task<IActionResult> AddLibraryItemToCatalog(int id, [FromBody] AddItemToCatalogDto dto)
     {
         try
         {
@@ -245,13 +247,13 @@ public class CatalogsController : ControllerBase
             var userIdString = userId.ToString();
 
             var catalog = await _context.Catalogs
-                .Include(c => c.Profile)
+                .Include(c => c.Entity)
                 .FirstOrDefaultAsync(c => c.Id == id && c.IsActive);
 
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
 
-            if (catalog.Profile?.UserId != userId)
+            if (catalog.Entity?.UserId != userId)
                 return Forbid();
 
             // Get the library item
@@ -387,13 +389,13 @@ public class CatalogsController : ControllerBase
             var userIdString = userId.ToString();
 
             var catalog = await _context.Catalogs
-                .Include(c => c.Profile)
+                .Include(c => c.Entity)
                 .FirstOrDefaultAsync(c => c.Id == id && c.IsActive);
 
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
 
-            if (catalog.Profile?.UserId != userId)
+            if (catalog.Entity?.UserId != userId)
                 return Forbid();
 
             // Get the bundle
@@ -446,9 +448,9 @@ public class CatalogsController : ControllerBase
     }
 
     /// <summary>
-    /// Remove item from catalog (soft delete)
+    /// Remove item from catalog (soft delete) - DEPRECATED: Use CatalogItemsController.DeleteItem instead
     /// </summary>
-    [HttpDelete("{id}/items/{itemId}")]
+    [HttpDelete("{id}/catalog-items/{itemId}")]
     public async Task<IActionResult> RemoveItemFromCatalog(int id, int itemId)
     {
         try
@@ -457,14 +459,14 @@ public class CatalogsController : ControllerBase
             var userIdString = userId.ToString();
 
             var catalog = await _context.Catalogs
-                .Include(c => c.Profile)
+                .Include(c => c.Entity)
                 .Include(c => c.Items)
                 .FirstOrDefaultAsync(c => c.Id == id && c.IsActive);
 
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
 
-            if (catalog.Profile?.UserId != userId)
+            if (catalog.Entity?.UserId != userId)
                 return Forbid();
 
             var item = catalog.Items.FirstOrDefault(i => i.Id == itemId);
@@ -496,7 +498,7 @@ public class CatalogsController : ControllerBase
     /// <summary>
     /// Remove bundle from catalog (soft delete)
     /// </summary>
-    [HttpDelete("{id}/bundles/{bundleId}")]
+    [HttpDelete("{id}/catalog-bundles/{bundleId}")]
     public async Task<IActionResult> RemoveBundleFromCatalog(int id, int bundleId)
     {
         try
@@ -505,14 +507,14 @@ public class CatalogsController : ControllerBase
             var userIdString = userId.ToString();
 
             var catalog = await _context.Catalogs
-                .Include(c => c.Profile)
+                .Include(c => c.Entity)
                 .Include(c => c.Bundles)
                 .FirstOrDefaultAsync(c => c.Id == id && c.IsActive);
 
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
 
-            if (catalog.Profile?.UserId != userId)
+            if (catalog.Entity?.UserId != userId)
                 return Forbid();
 
             var bundle = catalog.Bundles.FirstOrDefault(b => b.Id == bundleId);
@@ -553,7 +555,7 @@ public class CatalogsController : ControllerBase
             var userIdString = userId.ToString();
 
             var catalog = await _context.Catalogs
-                .Include(c => c.Profile)
+                .Include(c => c.Entity)
                 .Include(c => c.Items)
                     .ThenInclude(i => i.CatalogItemCategories)
                 .FirstOrDefaultAsync(c => c.Id == id && c.IsActive);
@@ -561,7 +563,7 @@ public class CatalogsController : ControllerBase
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
 
-            if (catalog.Profile?.UserId != userId)
+            if (catalog.Entity?.UserId != userId)
                 return Forbid();
 
             var item = catalog.Items.FirstOrDefault(i => i.Id == itemId);

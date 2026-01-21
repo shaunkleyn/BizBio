@@ -53,7 +53,7 @@ public class UserSubscriptionRepository : IUserSubscriptionRepository
     public async Task<UserSubscription?> GetActiveSubscriptionByProductLineAsync(int userId, ProductLine productLine)
     {
         return await _context.UserSubscriptions
-            .Where(s => s.UserId == userId && s.StatusId == (int)SubscriptionStatus.Active)
+            .Where(s => s.UserId == userId && s.StatusId == (int)BizBio.Core.Enums.SubscriptionStatus.Active)
             .Include(s => s.Tier)
             .FirstOrDefaultAsync(s => s.Tier.ProductLine.Id == (int)productLine);
     }
@@ -61,7 +61,7 @@ public class UserSubscriptionRepository : IUserSubscriptionRepository
     public async Task<IEnumerable<UserSubscription>> GetTrialsEndingBetweenAsync(DateTime start, DateTime end)
     {
         return await _context.UserSubscriptions
-            .Where(s => s.StatusId == (int)SubscriptionStatus.Trial &&
+            .Where(s => s.StatusId == (int)BizBio.Core.Enums.SubscriptionStatus.Trial &&
                         s.TrialEndsAt.HasValue &&
                         s.TrialEndsAt >= start &&
                         s.TrialEndsAt <= end)

@@ -45,38 +45,21 @@ public class MenuEditorController : ControllerBase
 
             // Verify catalog ownership
             var catalog = await _context.Catalogs
-                .Include(c => c.Profile)
-                .FirstOrDefaultAsync(c => c.Id == catalogId && c.Profile.UserId == userId);
+                .Include(c => c.Entity)
+                .FirstOrDefaultAsync(c => c.Id == catalogId && c.Entity.UserId == userId);
 
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
 
-            var category = new CatalogCategory
+            // TODO: This endpoint needs refactoring for new architecture
+            // Categories now belong to Entities, not Catalogs
+            // CatalogCategory is a junction table
+            // For now, returning not implemented
+            return StatusCode(501, new
             {
-                CatalogId = catalogId,
-                Name = dto.Name,
-                Description = dto.Description,
-                Icon = dto.Icon,
-                SortOrder = dto.SortOrder,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
-
-            _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
-
-            return Ok(new
-            {
-                success = true,
-                data = new
-                {
-                    id = category.Id,
-                    name = category.Name,
-                    description = category.Description,
-                    icon = category.Icon,
-                    sortOrder = category.SortOrder
-                }
+                success = false,
+                error = "Category creation requires Entity-based architecture",
+                message = "Please use CategoriesController to create entity-level categories"
             });
         }
         catch (UnauthorizedAccessException)
@@ -99,22 +82,24 @@ public class MenuEditorController : ControllerBase
         {
             var userId = GetUserId();
 
-            var category = await _context.Categories
+            // Note: CatalogCategories is the DbSet for catalog-category junction records
+            var category = await _context.CatalogCategories
                 .Include(c => c.Catalog)
-                    .ThenInclude(cat => cat.Profile)
-                .FirstOrDefaultAsync(c => c.Id == categoryId && c.Catalog.Profile.UserId == userId);
+                    .ThenInclude(cat => cat.Entity)
+                .FirstOrDefaultAsync(c => c.Id == categoryId && c.Catalog.Entity.UserId == userId);
 
             if (category == null)
                 return NotFound(new { success = false, error = "Category not found" });
 
-            category.Name = dto.Name ?? category.Name;
-            category.Description = dto.Description ?? category.Description;
-            category.Icon = dto.Icon ?? category.Icon;
-            category.UpdatedAt = DateTime.UtcNow;
-
-            await _context.SaveChangesAsync();
-
-            return Ok(new { success = true, message = "Category updated successfully" });
+            // TODO: CatalogCategory is now a junction table
+            // Need to update the actual Category entity through category.Category
+            // For now, returning not implemented
+            return StatusCode(501, new
+            {
+                success = false,
+                error = "Category update requires Entity-based architecture",
+                message = "Please use CategoriesController to update entity-level categories"
+            });
         }
         catch (UnauthorizedAccessException)
         {
@@ -136,10 +121,11 @@ public class MenuEditorController : ControllerBase
         {
             var userId = GetUserId();
 
-            var category = await _context.Categories
+            // Note: CatalogCategories is the DbSet for catalog-category junction records
+            var category = await _context.CatalogCategories
                 .Include(c => c.Catalog)
-                    .ThenInclude(cat => cat.Profile)
-                .FirstOrDefaultAsync(c => c.Id == categoryId && c.Catalog.Profile.UserId == userId);
+                    .ThenInclude(cat => cat.Entity)
+                .FirstOrDefaultAsync(c => c.Id == categoryId && c.Catalog.Entity.UserId == userId);
 
             if (category == null)
                 return NotFound(new { success = false, error = "Category not found" });
@@ -173,19 +159,21 @@ public class MenuEditorController : ControllerBase
 
             // Verify catalog ownership
             var catalog = await _context.Catalogs
-                .Include(c => c.Profile)
-                .FirstOrDefaultAsync(c => c.Id == catalogId && c.Profile.UserId == userId);
+                .Include(c => c.Entity)
+                .FirstOrDefaultAsync(c => c.Id == catalogId && c.Entity.UserId == userId);
 
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
 
+            // Update sort order in the CatalogCategory junction table
             foreach (var item in dto.Items)
             {
-                var category = await _context.Categories.FindAsync(item.Id);
-                if (category != null && category.CatalogId == catalogId)
+                var catalogCategory = await _context.CatalogCategories
+                    .FirstOrDefaultAsync(cc => cc.CategoryId == item.Id && cc.CatalogId == catalogId);
+                if (catalogCategory != null)
                 {
-                    category.SortOrder = item.SortOrder;
-                    category.UpdatedAt = DateTime.UtcNow;
+                    catalogCategory.SortOrder = item.SortOrder;
+                    catalogCategory.UpdatedAt = DateTime.UtcNow;
                 }
             }
 
@@ -219,8 +207,8 @@ public class MenuEditorController : ControllerBase
 
             // Verify catalog ownership
             var catalog = await _context.Catalogs
-                .Include(c => c.Profile)
-                .FirstOrDefaultAsync(c => c.Id == catalogId && c.Profile.UserId == userId);
+                .Include(c => c.Entity)
+                .FirstOrDefaultAsync(c => c.Id == catalogId && c.Entity.UserId == userId);
 
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
@@ -345,9 +333,9 @@ public class MenuEditorController : ControllerBase
 
             var item = await _context.CatalogItems
                 .Include(i => i.Catalog)
-                    .ThenInclude(c => c.Profile)
+                    .ThenInclude(c => c.Entity)
                 .Include(i => i.CatalogItemCategories)
-                .FirstOrDefaultAsync(i => i.Id == itemId && i.Catalog.Profile.UserId == userId);
+                .FirstOrDefaultAsync(i => i.Id == itemId && i.Catalog.Entity.UserId == userId);
 
             if (item == null)
                 return NotFound(new { success = false, error = "Item not found" });
@@ -396,8 +384,8 @@ public class MenuEditorController : ControllerBase
 
             // Verify catalog ownership
             var catalog = await _context.Catalogs
-                .Include(c => c.Profile)
-                .FirstOrDefaultAsync(c => c.Id == catalogId && c.Profile.UserId == userId);
+                .Include(c => c.Entity)
+                .FirstOrDefaultAsync(c => c.Id == catalogId && c.Entity.UserId == userId);
 
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
@@ -438,8 +426,8 @@ public class MenuEditorController : ControllerBase
 
             var item = await _context.CatalogItems
                 .Include(i => i.Catalog)
-                    .ThenInclude(c => c.Profile)
-                .FirstOrDefaultAsync(i => i.Id == itemId && i.Catalog.Profile.UserId == userId);
+                    .ThenInclude(c => c.Entity)
+                .FirstOrDefaultAsync(i => i.Id == itemId && i.Catalog.Entity.UserId == userId);
 
             if (item == null)
                 return NotFound(new { success = false, error = "Item not found" });
@@ -477,8 +465,8 @@ public class MenuEditorController : ControllerBase
 
             // Verify catalog ownership
             var catalog = await _context.Catalogs
-                .Include(c => c.Profile)
-                .FirstOrDefaultAsync(c => c.Id == catalogId && c.Profile.UserId == userId);
+                .Include(c => c.Entity)
+                .FirstOrDefaultAsync(c => c.Id == catalogId && c.Entity.UserId == userId);
 
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
@@ -549,9 +537,9 @@ public class MenuEditorController : ControllerBase
 
             var bundle = await _context.CatalogBundles
                 .Include(b => b.Catalog)
-                    .ThenInclude(c => c.Profile)
+                    .ThenInclude(c => c.Entity)
                 .Include(b => b.CatalogBundleCategories)
-                .FirstOrDefaultAsync(b => b.Id == bundleId && b.Catalog.Profile.UserId == userId);
+                .FirstOrDefaultAsync(b => b.Id == bundleId && b.Catalog.Entity.UserId == userId);
 
             if (bundle == null)
                 return NotFound(new { success = false, error = "Bundle not found" });
@@ -600,8 +588,8 @@ public class MenuEditorController : ControllerBase
 
             // Verify catalog ownership
             var catalog = await _context.Catalogs
-                .Include(c => c.Profile)
-                .FirstOrDefaultAsync(c => c.Id == catalogId && c.Profile.UserId == userId);
+                .Include(c => c.Entity)
+                .FirstOrDefaultAsync(c => c.Id == catalogId && c.Entity.UserId == userId);
 
             if (catalog == null)
                 return NotFound(new { success = false, error = "Catalog not found" });
@@ -642,8 +630,8 @@ public class MenuEditorController : ControllerBase
 
             var bundle = await _context.CatalogBundles
                 .Include(b => b.Catalog)
-                    .ThenInclude(c => c.Profile)
-                .FirstOrDefaultAsync(b => b.Id == bundleId && b.Catalog.Profile.UserId == userId);
+                    .ThenInclude(c => c.Entity)
+                .FirstOrDefaultAsync(b => b.Id == bundleId && b.Catalog.Entity.UserId == userId);
 
             if (bundle == null)
                 return NotFound(new { success = false, error = "Bundle not found" });
@@ -679,10 +667,11 @@ public class MenuEditorController : ControllerBase
         {
             var userId = GetUserId();
 
-            var category = await _context.Categories
+            // Note: CatalogCategories is the DbSet for catalog-category junction records
+            var category = await _context.CatalogCategories
                 .Include(c => c.Catalog)
-                    .ThenInclude(cat => cat.Profile)
-                .FirstOrDefaultAsync(c => c.Id == categoryId && c.Catalog.Profile.UserId == userId);
+                    .ThenInclude(cat => cat.Entity)
+                .FirstOrDefaultAsync(c => c.Id == categoryId && c.Catalog.Entity.UserId == userId);
 
             if (category == null)
                 return NotFound(new { success = false, error = "Category not found" });

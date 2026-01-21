@@ -33,6 +33,15 @@ public class User : BaseEntity
 
     public DateTime? EmailVerificationTokenExpiry { get; set; }
 
+    [MaxLength(6)]
+    public string? EmailVerificationCode { get; set; }
+
+    public DateTime? EmailVerificationCodeExpiry { get; set; }
+
+    public int EmailResendAttempts { get; set; } = 0;
+
+    public DateTime? EmailResendAttemptsResetAt { get; set; }
+
     [MaxLength(255)]
     public string? PasswordResetToken { get; set; }
 

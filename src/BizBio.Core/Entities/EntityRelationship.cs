@@ -44,7 +44,7 @@ namespace BizBio.Core.Entities
         public bool IsVisible { get; set; } = true; // Can hide relationships from public view
 
         // Navigation properties
-        public virtual Entity FromEntity { get; set; } = null!;
-        public virtual Entity ToEntity { get; set; } = null!;
+        public virtual RelationshipEntity FromEntity { get; set; } = null!;
+        public virtual RelationshipEntity ToEntity { get; set; } = null!;
     }
 }

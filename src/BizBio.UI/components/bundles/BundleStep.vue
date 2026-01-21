@@ -9,7 +9,7 @@
   >
     <!-- Step Header -->
     <div class="flex items-start justify-between mb-4">
-      <div class="flex items-center gap-3 flex-1">
+      <div class="flex items-center flex-col gap-1 text-center">
         <!-- Drag Handle -->
                     <div
                       class="drag-handle cursor-move p-2 hover:bg-md-surface-container-high rounded transition-colors">

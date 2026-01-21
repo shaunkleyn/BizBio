@@ -37,18 +37,21 @@ public class MRDStyleMenuController : ControllerBase
     {
         var catalog = await _context.Catalogs
             .Include(c => c.Categories)
-                .ThenInclude(cat => cat.CatalogItemCategories)
+                .ThenInclude(cc => cc.Category)
+                    .ThenInclude(cat => cat.CatalogItemCategories)
                     .ThenInclude(cic => cic.CatalogItem)
                         .ThenInclude(item => item.Variants)
             .Include(c => c.Categories)
-                .ThenInclude(cat => cat.CatalogItemCategories)
+                .ThenInclude(cc => cc.Category)
+                    .ThenInclude(cat => cat.CatalogItemCategories)
                     .ThenInclude(cic => cic.CatalogItem)
                         .ThenInclude(item => item.ExtraGroupLinks)
                             .ThenInclude(link => link.ExtraGroup)
                                 .ThenInclude(group => group.GroupItems)
                                     .ThenInclude(gi => gi.Extra)
             .Include(c => c.Categories)
-                .ThenInclude(cat => cat.CatalogItemCategories)
+                .ThenInclude(cc => cc.Category)
+                    .ThenInclude(cat => cat.CatalogItemCategories)
                     .ThenInclude(cic => cic.CatalogItem)
                         .ThenInclude(item => item.OptionGroupLinks)
                             .ThenInclude(link => link.OptionGroup)
@@ -71,41 +74,16 @@ public class MRDStyleMenuController : ControllerBase
     [HttpGet("by-slug/{slug}")]
     public async Task<ActionResult<MenuResponseDto>> GetMenuBySlug(string slug)
     {
-        var profile = await _context.Profiles
-            .FirstOrDefaultAsync(p => p.Slug == slug && p.IsActive);
+        // TODO: This endpoint uses Profile slugs which is deprecated
+        // Catalogs now belong to Entities, not Profiles
+        // Profile.ProfileId no longer exists on Catalog
+        // This endpoint needs to be migrated to use Entity slugs instead
 
-        if (profile == null)
-            return NotFound(new { error = "Profile not found" });
-
-        var catalog = await _context.Catalogs
-            .Include(c => c.Categories)
-                .ThenInclude(cat => cat.CatalogItemCategories)
-                    .ThenInclude(cic => cic.CatalogItem)
-                        .ThenInclude(item => item.Variants)
-            .Include(c => c.Categories)
-                .ThenInclude(cat => cat.CatalogItemCategories)
-                    .ThenInclude(cic => cic.CatalogItem)
-                        .ThenInclude(item => item.ExtraGroupLinks)
-                            .ThenInclude(link => link.ExtraGroup)
-                                .ThenInclude(group => group.GroupItems)
-                                    .ThenInclude(gi => gi.Extra)
-            .Include(c => c.Categories)
-                .ThenInclude(cat => cat.CatalogItemCategories)
-                    .ThenInclude(cic => cic.CatalogItem)
-                        .ThenInclude(item => item.OptionGroupLinks)
-                            .ThenInclude(link => link.OptionGroup)
-                                .ThenInclude(group => group.GroupItems)
-                                    .ThenInclude(gi => gi.Option)
-            .Where(c => c.ProfileId == profile.Id && c.IsPublic)
-            .OrderByDescending(c => c.CreatedAt)
-            .FirstOrDefaultAsync();
-
-        if (catalog == null)
-            return NotFound(new { error = "No active menu found for this profile" });
-
-        var menuDto = _menuMapper.MapCatalogToMenu(catalog);
-
-        return Ok(menuDto);
+        return StatusCode(501, new
+        {
+            error = "Endpoint deprecated",
+            message = "Profile-based menu lookup is deprecated. Use Entity-based lookup instead: /api/v2/menu/{catalogId}"
+        });
     }
 
     /// <summary>

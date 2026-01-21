@@ -65,7 +65,9 @@ public static class DbSeeder
                 DisplayOrder = 1,
                 IsActive = true,
                 CreatedAt = now,
-                UpdatedAt = now
+                UpdatedAt = now,
+                CreatedBy = "System",
+                UpdatedBy = "System"
             },
             new SubscriptionTier
             {
@@ -88,7 +90,9 @@ public static class DbSeeder
                 IsPopular = true,
                 RecommendedFor = "Consultants, Freelancers, Professionals",
                 CreatedAt = now,
-                UpdatedAt = now
+                UpdatedAt = now,
+                CreatedBy = "System",
+                UpdatedBy = "System"
             },
             new SubscriptionTier
             {
@@ -115,7 +119,9 @@ public static class DbSeeder
                 IsActive = true,
                 RecommendedFor = "Small to medium businesses",
                 CreatedAt = now,
-                UpdatedAt = now
+                UpdatedAt = now,
+                CreatedBy = "System",
+                UpdatedBy = "System"
             },
 
             // MENU TIERS
@@ -136,7 +142,9 @@ public static class DbSeeder
                 IsActive = true,
                 RecommendedFor = "Food trucks, Small cafes",
                 CreatedAt = now,
-                UpdatedAt = now
+                UpdatedAt = now,
+                CreatedBy = "System",
+                UpdatedBy = "System"
             },
             new SubscriptionTier
             {
@@ -165,7 +173,9 @@ public static class DbSeeder
                 IsPopular = true,
                 RecommendedFor = "Full-service restaurants",
                 CreatedAt = now,
-                UpdatedAt = now
+                UpdatedAt = now,
+                CreatedBy = "System",
+                UpdatedBy = "System"
             },
 
             // RETAIL TIERS
@@ -186,7 +196,9 @@ public static class DbSeeder
                 IsActive = true,
                 RecommendedFor = "Small shops, Online stores",
                 CreatedAt = now,
-                UpdatedAt = now
+                UpdatedAt = now,
+                CreatedBy = "System",
+                UpdatedBy = "System"
             },
             new SubscriptionTier
             {
@@ -213,7 +225,9 @@ public static class DbSeeder
                 IsPopular = true,
                 RecommendedFor = "Retail chains, E-commerce",
                 CreatedAt = now,
-                UpdatedAt = now
+                UpdatedAt = now,
+                CreatedBy = "System",
+                UpdatedBy = "System"
             }
         };
     }

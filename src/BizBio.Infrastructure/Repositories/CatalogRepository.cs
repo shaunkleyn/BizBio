@@ -37,7 +37,7 @@ public class CatalogRepository : ICatalogRepository
             return await _cacheService.GetOrSetAsync(cacheKey, async () =>
             {
                 return await _context.Catalogs
-                    .Include(c => c.Profile)
+                    .Include(c => c.Entity)
                     .Include(c => c.Items)
                     .FirstOrDefaultAsync(c => c.Id == id);
             }, TimeSpan.FromMinutes(15));
@@ -57,26 +57,43 @@ public class CatalogRepository : ICatalogRepository
 
     public async Task<Catalog?> GetByProfileIdAsync(int profileId)
     {
+        // DEPRECATED: Keeping for backward compatibility
+        // ProfileId no longer exists on Catalog - catalogs now belong to entities
+        // This method returns null and should be replaced with GetByEntityIdAsync
         try
         {
-            _logger.LogDebug("Fetching catalog by profile ID: {ProfileId} (with cache)", profileId);
-            var cacheKey = $"{CatalogProfileCacheKeyPrefix}{profileId}";
+            _logger.LogWarning("GetByProfileIdAsync is deprecated. Catalogs now belong to entities, not profiles. Returning null.");
+            return null;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in deprecated GetByProfileIdAsync method");
+            throw;
+        }
+    }
+
+    public async Task<Catalog?> GetByEntityIdAsync(int entityId)
+    {
+        try
+        {
+            _logger.LogDebug("Fetching catalog by entity ID: {EntityId} (with cache)", entityId);
+            var cacheKey = $"catalog_entity_{entityId}";
             return await _cacheService.GetOrSetAsync(cacheKey, async () =>
             {
                 return await _context.Catalogs
-                    .Include(c => c.Profile)
+                    .Include(c => c.Entity)
                     .Include(c => c.Items)
-                    .FirstOrDefaultAsync(c => c.ProfileId == profileId);
+                    .FirstOrDefaultAsync(c => c.EntityId == entityId && c.IsActive);
             }, TimeSpan.FromMinutes(15));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error fetching catalog by profile ID: {ProfileId}", profileId);
+            _logger.LogError(ex, "Error fetching catalog by entity ID: {EntityId}", entityId);
             _telemetryClient.TrackException(ex, new Dictionary<string, string>
             {
                 { "Repository", "CatalogRepository" },
-                { "Method", "GetByProfileIdAsync" },
-                { "ProfileId", profileId.ToString() }
+                { "Method", "GetByEntityIdAsync" },
+                { "EntityId", entityId.ToString() }
             });
             throw;
         }
@@ -89,8 +106,9 @@ public class CatalogRepository : ICatalogRepository
             _logger.LogDebug("Fetching catalog detail by ID: {CatalogId} (no cache for editing)", id);
             // No cache for editing - need fresh data
             return await _context.Catalogs
-                .Include(c => c.Profile)
-                .Include(c => c.Categories.Where(cat => cat.IsActive).OrderBy(cat => cat.SortOrder))
+                .Include(c => c.Entity)
+                .Include(c => c.Categories.Where(cc => cc.IsActive).OrderBy(cc => cc.SortOrder))
+                    .ThenInclude(cc => cc.Category) // CatalogCategory -> Category
                 .Include(c => c.Items.Where(i => i.IsActive).OrderBy(i => i.SortOrder))
                     .ThenInclude(i => i.Variants.Where(v => v.IsActive))
                 .Include(c => c.Items)
@@ -150,17 +168,17 @@ public class CatalogRepository : ICatalogRepository
     {
         try
         {
-            _logger.LogInformation("Adding new catalog for profile: {ProfileId}", catalog.ProfileId);
+            _logger.LogInformation("Adding new catalog for entity: {EntityId}", catalog.EntityId);
             await _context.Catalogs.AddAsync(catalog);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error adding catalog for profile: {ProfileId}", catalog.ProfileId);
+            _logger.LogError(ex, "Error adding catalog for entity: {EntityId}", catalog.EntityId);
             _telemetryClient.TrackException(ex, new Dictionary<string, string>
             {
                 { "Repository", "CatalogRepository" },
                 { "Method", "AddAsync" },
-                { "ProfileId", catalog.ProfileId.ToString() }
+                { "EntityId", catalog.EntityId.ToString() }
             });
             throw;
         }
@@ -174,7 +192,7 @@ public class CatalogRepository : ICatalogRepository
             _context.Catalogs.Update(catalog);
             // Invalidate cache when updating
             _cacheService.Remove($"{CatalogCacheKeyPrefix}{catalog.Id}");
-            _cacheService.Remove($"{CatalogProfileCacheKeyPrefix}{catalog.ProfileId}");
+            _cacheService.Remove($"catalog_entity_{catalog.EntityId}");
             return Task.CompletedTask;
         }
         catch (Exception ex)

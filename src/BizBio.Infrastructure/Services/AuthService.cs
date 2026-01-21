@@ -68,8 +68,9 @@ public class AuthService : IAuthService
             // Hash the password
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
-            // Generate email verification token
+            // Generate email verification token and code
             var verificationToken = GenerateSecureToken();
+            var verificationCode = Generate6DigitCode();
             var verificationTokenExpiry = DateTime.UtcNow.AddHours(24);
 
             // Create new user
@@ -83,8 +84,12 @@ public class AuthService : IAuthService
                 IsActive = true,
                 EmailVerificationToken = verificationToken,
                 EmailVerificationTokenExpiry = verificationTokenExpiry,
+                EmailVerificationCode = verificationCode,
+                EmailVerificationCodeExpiry = verificationTokenExpiry,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
+                CreatedBy = dto.Email, // User created themselves
+                UpdatedBy = dto.Email,
                 FailedLoginAttempts = 0
             };
 
@@ -96,7 +101,7 @@ public class AuthService : IAuthService
             _logger.LogInformation("About to send verification email to {Email}", user.Email);
             try
             {
-                await _emailService.SendVerificationEmailAsync(user.Email, user.FullName, verificationToken);
+                await _emailService.SendVerificationEmailAsync(user.Email, user.FullName, verificationToken, verificationCode);
                 _logger.LogInformation("Verification email sent successfully to {Email}", user.Email);
 
                 _telemetryClient.TrackEvent("UserRegistered", new Dictionary<string, string>
@@ -241,12 +246,38 @@ public class AuthService : IAuthService
             if (user.EmailVerified)
                 return AuthResult.FailureResult("Email is already verified");
 
-            // Generate new verification token
+            // Check rate limiting - 5 attempts per 24 hours
+            var now = DateTime.UtcNow;
+            if (user.EmailResendAttemptsResetAt.HasValue && user.EmailResendAttemptsResetAt.Value.AddHours(24) > now)
+            {
+                // Within 24-hour window, check attempt count
+                if (user.EmailResendAttempts >= 5)
+                {
+                    var timeRemaining = user.EmailResendAttemptsResetAt.Value.AddHours(24) - now;
+                    var hoursRemaining = (int)Math.Ceiling(timeRemaining.TotalHours);
+                    _logger.LogWarning("User {Email} has exceeded resend limit. {Hours} hours remaining", email, hoursRemaining);
+                    return AuthResult.FailureResult($"You have exceeded the maximum number of resend attempts. Please try again in {hoursRemaining} hour{(hoursRemaining != 1 ? "s" : "")}.");
+                }
+            }
+            else
+            {
+                // Reset counter if 24 hours have passed
+                user.EmailResendAttempts = 0;
+                user.EmailResendAttemptsResetAt = now;
+            }
+
+            // Increment resend attempts
+            user.EmailResendAttempts++;
+
+            // Generate new verification token and code
             var verificationToken = GenerateSecureToken();
+            var verificationCode = Generate6DigitCode();
             var verificationTokenExpiry = DateTime.UtcNow.AddHours(24);
 
             user.EmailVerificationToken = verificationToken;
             user.EmailVerificationTokenExpiry = verificationTokenExpiry;
+            user.EmailVerificationCode = verificationCode;
+            user.EmailVerificationCodeExpiry = verificationTokenExpiry;
             user.UpdatedAt = DateTime.UtcNow;
 
             await _userRepository.UpdateAsync(user);
@@ -256,7 +287,7 @@ public class AuthService : IAuthService
             _logger.LogInformation("About to resend verification email to {Email}", user.Email);
             try
             {
-                await _emailService.SendVerificationEmailAsync(user.Email, user.FullName, verificationToken);
+                await _emailService.SendVerificationEmailAsync(user.Email, user.FullName, verificationToken, verificationCode);
                 _logger.LogInformation("Verification email resent successfully to {Email}", user.Email);
             }
             catch (Exception emailEx)
@@ -303,6 +334,10 @@ public class AuthService : IAuthService
             user.EmailVerified = true;
             user.EmailVerificationToken = null;
             user.EmailVerificationTokenExpiry = null;
+            user.EmailVerificationCode = null;
+            user.EmailVerificationCodeExpiry = null;
+            user.EmailResendAttempts = 0;
+            user.EmailResendAttemptsResetAt = null;
             user.UpdatedAt = DateTime.UtcNow;
 
             await _userRepository.UpdateAsync(user);
@@ -328,6 +363,89 @@ public class AuthService : IAuthService
             }
 
             _telemetryClient.TrackEvent("EmailVerified", new Dictionary<string, string>
+            {
+                { "UserId", user.Id.ToString() },
+                { "Email", user.Email }
+            });
+
+            return AuthResult.SuccessResult(user);
+        }
+        catch (Exception ex)
+        {
+            return AuthResult.FailureResult($"Email verification failed: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Verifies a user's email address using a 6-digit verification code.
+    /// </summary>
+    /// <param name="email">User's email address</param>
+    /// <param name="code">6-digit verification code</param>
+    /// <returns>AuthResult with success status and user information</returns>
+    public async Task<AuthResult> VerifyEmailWithCodeAsync(string email, string code)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+            return AuthResult.FailureResult("Email is required");
+
+        if (string.IsNullOrWhiteSpace(code))
+            return AuthResult.FailureResult("Verification code is required");
+
+        // Validate code format (must be 6 digits)
+        if (code.Length != 6 || !code.All(char.IsDigit))
+            return AuthResult.FailureResult("Verification code must be 6 digits");
+
+        try
+        {
+            // Find user by email
+            var user = await _userRepository.GetByEmailAsync(email);
+            if (user == null)
+                return AuthResult.FailureResult("Invalid email or verification code");
+
+            // Check if email is already verified
+            if (user.EmailVerified)
+                return AuthResult.FailureResult("Email is already verified");
+
+            // Check if code matches
+            if (user.EmailVerificationCode != code)
+                return AuthResult.FailureResult("Invalid verification code");
+
+            // Check if code has expired
+            if (!user.EmailVerificationCodeExpiry.HasValue || user.EmailVerificationCodeExpiry < DateTime.UtcNow)
+                return AuthResult.FailureResult("Verification code has expired");
+
+            // Mark email as verified
+            user.EmailVerified = true;
+            user.EmailVerificationToken = null;
+            user.EmailVerificationTokenExpiry = null;
+            user.EmailVerificationCode = null;
+            user.EmailVerificationCodeExpiry = null;
+            user.EmailResendAttempts = 0;
+            user.EmailResendAttemptsResetAt = null;
+            user.UpdatedAt = DateTime.UtcNow;
+
+            await _userRepository.UpdateAsync(user);
+            await _userRepository.SaveChangesAsync();
+
+            // Send welcome email
+            _logger.LogInformation("About to send welcome email to {Email}", user.Email);
+            try
+            {
+                await _emailService.SendWelcomeEmailAsync(user.Email, user.FullName);
+                _logger.LogInformation("Welcome email sent successfully to {Email}", user.Email);
+            }
+            catch (Exception emailEx)
+            {
+                // Log email error but don't fail verification
+                _logger.LogError(emailEx, "Failed to send welcome email to {Email}", user.Email);
+                _telemetryClient.TrackException(emailEx, new Dictionary<string, string>
+                {
+                    { "Operation", "SendWelcomeEmail" },
+                    { "Email", user.Email },
+                    { "UserId", user.Id.ToString() }
+                });
+            }
+
+            _telemetryClient.TrackEvent("EmailVerifiedWithCode", new Dictionary<string, string>
             {
                 { "UserId", user.Id.ToString() },
                 { "Email", user.Email }
@@ -495,5 +613,53 @@ public class AuthService : IAuthService
             rng.GetBytes(tokenData);
             return Convert.ToBase64String(tokenData);
         }
+    }
+
+    /// <summary>
+    /// Generates a 6-digit verification code.
+    /// </summary>
+    /// <returns>6-digit verification code as string</returns>
+    private static string Generate6DigitCode()
+    {
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            var bytes = new byte[4];
+            rng.GetBytes(bytes);
+            var randomNumber = BitConverter.ToUInt32(bytes, 0);
+            var code = (randomNumber % 900000) + 100000; // Ensures 6-digit number (100000-999999)
+            return code.ToString();
+        }
+    }
+
+    /// <summary>
+    /// Gets a user by email address (for development purposes).
+    /// </summary>
+    public async Task<User?> GetUserByEmailAsync(string email)
+    {
+        return await _userRepository.GetByEmailAsync(email);
+    }
+
+    /// <summary>
+    /// Manually verifies a user's email address (for development purposes).
+    /// </summary>
+    public async Task ManuallyVerifyEmailAsync(string email)
+    {
+        var user = await _userRepository.GetByEmailAsync(email);
+        if (user == null)
+            throw new InvalidOperationException($"User with email {email} not found");
+
+        user.EmailVerified = true;
+        user.EmailVerificationToken = null;
+        user.EmailVerificationTokenExpiry = null;
+        user.EmailVerificationCode = null;
+        user.EmailVerificationCodeExpiry = null;
+        user.EmailResendAttempts = 0;
+        user.EmailResendAttemptsResetAt = null;
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _userRepository.UpdateAsync(user);
+        await _userRepository.SaveChangesAsync();
+
+        _logger.LogWarning("DEV ONLY: Email manually verified for {Email}", email);
     }
 }

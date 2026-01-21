@@ -1,7 +1,7 @@
 <template>
   <div>
     <section
-      class="min-h-screen bg-gradient-to-br from-[var(--light-background-color)] to-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      class="mesh-bg flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <!-- Decorative Background Blobs -->
       <div class="absolute top-20 right-10 w-72 h-72 bg-[var(--primary-color)] rounded-full opacity-10 blur-3xl"></div>
       <div class="absolute bottom-20 left-10 w-96 h-96 bg-[var(--accent3-color)] rounded-full opacity-10 blur-3xl">
@@ -30,10 +30,22 @@
         </div>
 
         <!-- Login Form -->
-        <div class="bg-white rounded-2xl shadow-2xl p-8">
+        <div class="bg-md-surface-container border border-md-outline-variant rounded-2xl shadow-2xl p-8">
+          <!-- Verification Success Message -->
+          <div v-if="verificationSuccess"
+            class="mb-6 bg-[var(--accent3-color)] bg-opacity-10 border-2 border-[var(--accent3-color)] rounded-lg p-4">
+            <div class="flex items-center gap-3">
+              <i class="fas fa-check-circle text-[var(--accent3-color)] text-2xl"></i>
+              <div>
+                <p class="font-semibold text-[var(--dark-text-color)]">Email Verified Successfully!</p>
+                <p class="text-sm text-[var(--gray-text-color)] mt-1">You can now sign in to your account.</p>
+              </div>
+            </div>
+          </div>
+
           <!-- Error Message -->
           <div v-if="error"
-            class="mb-6 bg-[var(--accent-color)] bg-opacity-10 border-2 border-[var(--accent-color)] rounded-lg p-4">
+            class="mb-6 bg-danger border-2 border-danger rounded-lg p-4 text-sm">
             <div class="flex items-center gap-3">
               <i class="fas fa-exclamation-circle text-[var(--accent-color)] text-xl"></i>
               <p class="text-[var(--dark-text-color)]">{{ error }}</p>
@@ -42,7 +54,7 @@
 
           <!-- Unverified Email Message -->
           <div v-if="showResendVerification"
-            class="mb-6 bg-[var(--accent4-color)] bg-opacity-10 border-2 border-[var(--accent4-color)] rounded-lg p-4">
+            class="mb-6 alert-warning border-2 border-warning rounded-lg p-4 text-sm">
             <div class="flex items-center gap-3 mb-3">
               <i class="fas fa-envelope text-[var(--accent4-color)] text-xl"></i>
               <p class="text-[var(--dark-text-color)] text-sm">Please verify your email address to continue.</p>
@@ -153,6 +165,16 @@ const error = ref(null)
 const showResendVerification = ref(false)
 const resendLoading = ref(false)
 const resendSuccess = ref(false)
+const verificationSuccess = ref(false)
+
+// Check if user comes from verification page
+onMounted(() => {
+  if (route.query.verified === 'true') {
+    verificationSuccess.value = true
+    // Remove the query parameter from URL
+    router.replace({ query: {} })
+  }
+})
 
 const handleLogin = async () => {
   error.value = null
@@ -190,9 +212,8 @@ const handleResendVerification = async () => {
   const result = await authStore.resendVerification(formData.value.email)
 
   if (result.success) {
-    resendSuccess.value = true
-    showResendVerification.value = false
-    error.value = null
+    // Redirect to verify-sent page after successful resend
+    router.push(`/verify-sent?email=${encodeURIComponent(formData.value.email)}&resend=true`)
   } else {
     error.value = result.error
   }

@@ -33,7 +33,22 @@
           <i class="fas fa-th-large w-5 relative z-10"></i>
           <span class="text-sm relative z-10">Overview</span>
         </NuxtLink>
-
+        <NuxtLink
+            to="/menu/restaurants"
+            :class="[
+              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
+              route.path.startsWith('/menu/restaurants')
+                ? 'bg-gradient-accent text-white shadow-md-2'
+                : 'text-md-on-surface-variant hover:text-md-accent'
+            ]"
+          >
+            <div :class="[
+              'absolute inset-0 bg-md-accent-container opacity-0 group-hover:opacity-100 transition-opacity',
+              route.path.startsWith('/menu/restaurants') ? 'opacity-0' : ''
+            ]"></div>
+            <i class="fas fa-store w-5 relative z-10"></i>
+            <span class="text-sm relative z-10">Restaurants</span>
+          </NuxtLink>
         <NuxtLink
           to="/menu"
           :class="[
@@ -68,22 +83,7 @@
             <span class="text-sm relative z-10">Bundles</span>
           </NuxtLink>
 
-        <NuxtLink
-            to="/menu/restaurants"
-            :class="[
-              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
-              route.path.startsWith('/menu/restaurants')
-                ? 'bg-gradient-accent text-white shadow-md-2'
-                : 'text-md-on-surface-variant hover:text-md-accent'
-            ]"
-          >
-            <div :class="[
-              'absolute inset-0 bg-md-accent-container opacity-0 group-hover:opacity-100 transition-opacity',
-              route.path.startsWith('/menu/restaurants') ? 'opacity-0' : ''
-            ]"></div>
-            <i class="fas fa-store w-5 relative z-10"></i>
-            <span class="text-sm relative z-10">Restaurants</span>
-          </NuxtLink>
+        
 
         <!-- Library Submenu -->
         <div class="mt-6">

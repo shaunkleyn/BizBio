@@ -4,7 +4,7 @@
       <!-- Progress Steps -->
       <div class="mb-12">
         <div class="flex items-center justify-center">
-          <div v-for="step in 4" :key="step" class="flex items-center">
+          <div v-for="step in 5" :key="step" class="flex items-center">
             <!-- Step Circle -->
             <div :class="[
               'flex items-center justify-center w-12 h-12 rounded-full font-bold transition-all',
@@ -27,7 +27,7 @@
             </div>
 
             <!-- Connector Line -->
-            <div v-if="step < 4" :class="[
+            <div v-if="step < 5" :class="[
               'hidden sm:block w-16 h-1 transition-all',
               currentStep > step ? 'bg-md-primary' : 'bg-[var(--light-border-color)]'
             ]"></div>
@@ -35,8 +35,17 @@
         </div>
       </div>
 
-      <!-- Step 1: Plan Selection -->
-      <div v-if="currentStep === 1">
+      <!-- Step 1: Entity Selection -->
+      <MenuEntitySelection
+        v-if="currentStep === 1"
+        :selected-entity="menuData.selectedEntity"
+        @entity-selected="handleEntitySelected"
+        @next="nextStep"
+        @previous="previousStep"
+      />
+
+      <!-- Step 2: Plan Selection -->
+      <div v-else-if="currentStep === 2">
         <div class="text-center mb-12">
           <h1 class="text-4xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-4">
             Choose Your Menu Plan
@@ -158,23 +167,23 @@
         </div>
       </div>
 
-      <!-- Step 2: Menu Profile Setup -->
+      <!-- Step 3: Menu Profile Setup -->
       <MenuProfileSetup
-        v-else-if="currentStep === 2"
-        @next="nextStep"
-        @previous="previousStep"
-      />
-
-      <!-- Step 3: Categories Setup -->
-      <MenuCategoriesSetup
         v-else-if="currentStep === 3"
         @next="nextStep"
         @previous="previousStep"
       />
 
-      <!-- Step 4: Menu Items Setup -->
-      <MenuItemsSetup
+      <!-- Step 4: Categories Setup -->
+      <MenuCategoriesSetup
         v-else-if="currentStep === 4"
+        @next="nextStep"
+        @previous="previousStep"
+      />
+
+      <!-- Step 5: Menu Items Setup -->
+      <MenuItemsSetup
+        v-else-if="currentStep === 5"
         :is-submitting="isSubmitting"
         @previous="previousStep"
         @complete="handleComplete"
@@ -193,6 +202,7 @@ const {
   menuData,
   currentStep,
   menuPlans,
+  selectEntity,
   selectPlan,
   nextStep,
   previousStep,
@@ -206,12 +216,17 @@ const isSubmitting = ref(false)
 
 const getStepLabel = (step) => {
   const labels = {
-    1: 'Choose Plan',
-    2: 'Menu Info',
-    3: 'Categories',
-    4: 'Menu Items'
+    1: 'Select Business',
+    2: 'Choose Plan',
+    3: 'Menu Info',
+    4: 'Categories',
+    5: 'Menu Items'
   }
   return labels[step]
+}
+
+const handleEntitySelected = (entity) => {
+  selectEntity(entity)
 }
 
 const handlePlanSelect = (plan) => {

@@ -53,12 +53,52 @@ public class CatalogItem : BaseEntity
     // Reference to source library item (when item is copied from library to catalog)
     public int? SourceLibraryItemId { get; set; }
 
+    /// <summary>
+    /// Reference to parent catalog item for item sharing within same entity.
+    /// Null = master/template item. If set = reference to master with optional price override.
+    /// </summary>
+    public int? ParentCatalogItemId { get; set; }
+
+    /// <summary>
+    /// Price override for referenced items. Null = use parent price.
+    /// Only applicable when ParentCatalogItemId is set.
+    /// </summary>
+    public decimal? PriceOverride { get; set; }
+
     //public DateTime CreatedAt { get; set; }
 
     //public DateTime UpdatedAt { get; set; }
 
+    /// <summary>
+    /// Computed property that returns the effective price based on override hierarchy.
+    /// Priority: PriceOverride > ParentCatalogItem.EffectivePrice > Price
+    /// </summary>
+    public decimal EffectivePrice
+    {
+        get
+        {
+            if (PriceOverride.HasValue)
+                return PriceOverride.Value;
+
+            if (ParentCatalogItemId.HasValue && ParentCatalogItem != null)
+                return ParentCatalogItem.EffectivePrice;
+
+            return Price;
+        }
+    }
+
     // Navigation properties
     public virtual Catalog? Catalog { get; set; }
+
+    /// <summary>
+    /// Parent catalog item for item sharing (self-referencing)
+    /// </summary>
+    public virtual CatalogItem? ParentCatalogItem { get; set; }
+
+    /// <summary>
+    /// Child catalog items that reference this item as parent
+    /// </summary>
+    public virtual ICollection<CatalogItem> ChildCatalogItems { get; set; } = new List<CatalogItem>();
     public virtual CatalogBundle? Bundle { get; set; }
     public virtual User? User { get; set; }
     public virtual ICollection<CatalogItemVariant> Variants { get; set; } = new List<CatalogItemVariant>();

@@ -8,7 +8,7 @@
       <MenuSidebar :stats="stats" />
 
       <!-- Main Content Area -->
-      <div class="flex-1">
+      <div class="flex-1 mesh-bg">
         <!-- Product Switcher with Page Header -->
         <ProductSwitcher />
 

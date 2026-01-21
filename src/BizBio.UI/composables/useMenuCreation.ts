@@ -1,9 +1,12 @@
 export const useMenuCreation = () => {
   const menuData = useState('menuCreation', () => ({
-    // Step 1: Plan Selection
+    // Step 1: Entity Selection
+    selectedEntity: null as any,
+
+    // Step 2: Plan Selection
     selectedPlan: null as any,
 
-    // Step 2: Menu Profile Info
+    // Step 3: Menu Profile Info
     menuProfile: {
       name: '',
       description: '',
@@ -33,7 +36,7 @@ export const useMenuCreation = () => {
       keywords: ''
     },
 
-    // Step 3: Categories
+    // Step 4: Categories
     categories: [] as Array<{
       id: string
       name: string
@@ -42,7 +45,7 @@ export const useMenuCreation = () => {
       order: number
     }>,
 
-    // Step 4: Menu Items
+    // Step 5: Menu Items
     menuItems: [] as Array<{
       id: string
       categoryId: string
@@ -152,6 +155,10 @@ export const useMenuCreation = () => {
     }
   ]
 
+  const selectEntity = (entity: any) => {
+    menuData.value.selectedEntity = entity
+  }
+
   const selectPlan = (plan: any) => {
     menuData.value.selectedPlan = plan
     menuData.value.trial.startDate = new Date()
@@ -210,7 +217,7 @@ export const useMenuCreation = () => {
   }
 
   const nextStep = () => {
-    if (currentStep.value < 4) {
+    if (currentStep.value < 5) {
       currentStep.value++
     }
   }
@@ -222,13 +229,14 @@ export const useMenuCreation = () => {
   }
 
   const goToStep = (step: number) => {
-    if (step >= 1 && step <= 4) {
+    if (step >= 1 && step <= 5) {
       currentStep.value = step
     }
   }
 
   const resetMenuCreation = () => {
     menuData.value = {
+      selectedEntity: null,
       selectedPlan: null,
       menuProfile: {
         name: '',
@@ -271,15 +279,21 @@ export const useMenuCreation = () => {
   const canProceedToNextStep = computed(() => {
     switch (currentStep.value) {
       case 1:
+        // Can proceed if plan is selected
         return menuData.value.selectedPlan !== null
       case 2:
+        // Can proceed if menu profile is filled
         return menuData.value.menuProfile.name &&
                menuData.value.menuProfile.businessName &&
                menuData.value.menuProfile.cuisine
       case 3:
+        // Can proceed if at least one category exists
         return menuData.value.categories.length > 0
       case 4:
-        return true // Can always proceed from step 4
+        // Can always complete from menu items step
+        return true
+      case 5:
+        return true // Can always proceed from step 5
       default:
         return false
     }
@@ -299,6 +313,7 @@ export const useMenuCreation = () => {
     menuData,
     currentStep,
     menuPlans,
+    selectEntity,
     selectPlan,
     addCategory,
     removeCategory,

@@ -109,15 +109,25 @@
               <label class="block text-sm font-medium text-md-on-surface mb-1">
                 Category
               </label>
-              <select
-                v-model="form.categoryId"
-                class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
-              >
-                <option :value="null">No Category</option>
-                <option v-for="category in categories" :key="category.id" :value="category.id">
-                  {{ category.name }}
-                </option>
-              </select>
+              <div class="flex gap-2">
+                <select
+                  v-model="form.categoryId"
+                  class="flex-1 px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                >
+                  <option :value="null">No Category</option>
+                  <option v-for="category in categories" :key="category.id" :value="category.id">
+                    {{ category.name }}
+                  </option>
+                </select>
+                <button
+                  type="button"
+                  @click="showInlineCategoryModal = true"
+                  class="px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[var(--primary-button-hover-bg-color)] transition-colors flex items-center gap-2"
+                  title="Create new category"
+                >
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
             </div>
 
             <div>
@@ -133,6 +143,73 @@
                 placeholder="0.00"
                 class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
               />
+            </div>
+          </div>
+        </div>
+
+        <!-- Item Sharing & Price Override -->
+        <div v-if="availableParentItems && availableParentItems.length > 0" class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-md-on-surface">Item Sharing</h3>
+            <span class="text-xs text-md-on-surface-variant">
+              Reference items from other catalogs
+            </span>
+          </div>
+
+          <!-- Parent Item Selection -->
+          <div>
+            <label class="block text-sm font-medium text-md-on-surface mb-1">
+              Reference Existing Item (Optional)
+            </label>
+            <select
+              v-model="form.parentCatalogItemId"
+              class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+            >
+              <option :value="null">Create New Item</option>
+              <optgroup v-for="catalog in availableParentItems" :key="catalog.id" :label="catalog.name">
+                <option v-for="item in catalog.items" :key="item.id" :value="item.id">
+                  {{ item.name }} - R{{ item.price }}
+                </option>
+              </optgroup>
+            </select>
+            <p class="text-xs text-md-on-surface-variant mt-1">
+              Select an existing item to share it in this catalog with an optional price override
+            </p>
+          </div>
+
+          <!-- Price Override (shown when parent item is selected) -->
+          <div v-if="form.parentCatalogItemId" class="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-3">
+            <div class="flex items-center gap-2">
+              <i class="fas fa-link text-blue-600"></i>
+              <span class="text-sm font-medium text-blue-900">Shared Item Configuration</span>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-md-on-surface mb-1">
+                Price Override (R)
+              </label>
+              <div class="flex gap-2 items-center">
+                <input
+                  v-model.number="form.priceOverride"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="Leave empty to use parent price"
+                  class="flex-1 px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                />
+                <button
+                  v-if="form.priceOverride"
+                  type="button"
+                  @click="form.priceOverride = null"
+                  class="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                  title="Reset to parent price"
+                >
+                  <i class="fas fa-undo"></i>
+                </button>
+              </div>
+              <p class="text-xs text-md-on-surface-variant mt-1">
+                {{ form.priceOverride ? `This catalog will show R${form.priceOverride}` : 'Will use the parent item\'s price' }}
+              </p>
             </div>
           </div>
         </div>
@@ -428,6 +505,14 @@
         </div>
       </div>
     </div>
+
+    <!-- Inline Category Creation Modal (Stacked Modal) -->
+    <InlineCategoryCreateModal
+      v-model="showInlineCategoryModal"
+      :entityId="entityId"
+      @close="showInlineCategoryModal = false"
+      @created="handleCategoryCreated"
+    />
   </div>
 </template>
 
@@ -435,10 +520,13 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useLibraryItemsApi, useUploadsApi } from '~/composables/useApi'
 import { useToast } from '~/composables/useToast'
+import InlineCategoryCreateModal from './InlineCategoryCreateModal.vue'
 
 const props = defineProps<{
   item?: any
   categories: any[]
+  entityId: number
+  catalogId?: number
 }>()
 
 const emit = defineEmits<{
@@ -458,6 +546,7 @@ const tagInput = ref('')
 const maxImages = ref(5) // TODO: Get from user's subscription
 const availableExtraGroups = ref<any[]>([])
 const availableOptionGroups = ref<any[]>([])
+const showInlineCategoryModal = ref(false)
 
 const commonTags = [
   'Gluten-Free',
@@ -481,8 +570,50 @@ const form = reactive({
   tags: [] as string[],
   variants: [] as any[],
   optionGroupIds: [] as number[],
-  extraGroupIds: [] as number[]
+  extraGroupIds: [] as number[],
+  parentCatalogItemId: null as number | null,
+  priceOverride: null as number | null
 })
+
+const availableParentItems = ref<any[]>([])
+
+async function loadAvailableParentItems() {
+  if (!props.entityId) return
+
+  try {
+    const api = useApi()
+    // Get all catalogs for this entity
+    const catalogsResponse = await api.get(`/api/v1/entities/${props.entityId}/catalogs`)
+
+    if (catalogsResponse.success && catalogsResponse.data?.catalogs) {
+      const catalogs = catalogsResponse.data.catalogs
+
+      // For each catalog (except current one), load its items
+      const catalogsWithItems = await Promise.all(
+        catalogs
+          .filter((c: any) => c.id !== props.catalogId) // Exclude current catalog
+          .map(async (catalog: any) => {
+            try {
+              const itemsResponse = await api.get(`/api/v1/catalogs/${catalog.id}/items`)
+              return {
+                id: catalog.id,
+                name: catalog.name,
+                items: itemsResponse.success ? itemsResponse.data?.items || [] : []
+              }
+            } catch (error) {
+              console.error(`Error loading items for catalog ${catalog.id}:`, error)
+              return { id: catalog.id, name: catalog.name, items: [] }
+            }
+          })
+      )
+
+      availableParentItems.value = catalogsWithItems.filter(c => c.items.length > 0)
+    }
+  } catch (error) {
+    console.error('Error loading available parent items:', error)
+    availableParentItems.value = []
+  }
+}
 
 onMounted(async () => {
   if (props.item) {
@@ -493,6 +624,8 @@ onMounted(async () => {
     form.images = props.item.images || []
     form.tags = props.item.tags || []
     form.variants = props.item.variants?.map((v: any) => ({ ...v })) || []
+    form.parentCatalogItemId = props.item.parentCatalogItemId || null
+    form.priceOverride = props.item.priceOverride || null
 
     // Load option groups
     form.optionGroupIds = props.item.optionGroups?.map((g: any) => {
@@ -507,10 +640,11 @@ onMounted(async () => {
     }).filter((id: any) => !isNaN(id)) || []
   }
 
-  // Fetch available groups in parallel
+  // Fetch available groups and parent items in parallel
   await Promise.all([
     fetchOptionGroups(),
-    fetchExtraGroups()
+    fetchExtraGroups(),
+    loadAvailableParentItems()
   ])
 })
 
@@ -602,6 +736,13 @@ function removeTag(tag: string) {
   }
 }
 
+function handleCategoryCreated(category: any) {
+  // Add new category to the list and select it
+  emit('saved') // Trigger parent to reload categories
+  form.categoryId = category.id
+  toast.success('Category created and selected')
+}
+
 async function handleImageUpload(event: Event) {
   const input = event.target as HTMLInputElement
   const file = input.files?.[0]
@@ -671,6 +812,8 @@ async function saveItem() {
       sortOrder: 0,
       availableInEventMode: true,
       eventModeOnly: false,
+      parentCatalogItemId: form.parentCatalogItemId || null,
+      priceOverride: form.priceOverride || null,
       variants: form.variants.length > 0 ? form.variants.map(v => ({
         title: v.title,
         price: v.price,

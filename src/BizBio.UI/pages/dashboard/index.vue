@@ -16,7 +16,7 @@
         <!-- Menu Product -->
         <NuxtLink
           to="/menu"
-          class="group mesh-card bg-md-surface rounded-2xl shadow-md-3 p-8 card-hover"
+          class="group mesh-card bg-md-surface rounded-2xl shadow-md-3 p-8 card-hover border border-md-outline-variant"
         >
           <div class="bg-gradient-primary rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-glow-purple">
             <i class="fas fa-utensils text-white text-3xl"></i>

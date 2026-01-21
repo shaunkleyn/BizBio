@@ -23,17 +23,6 @@
 
         <!-- Registration Form -->
         <div class="bg-white rounded-2xl shadow-2xl p-8 sm:p-10">
-          <!-- Success Message -->
-          <div v-if="successMessage" class="mb-6 bg-[var(--accent3-color)] bg-opacity-10 border-2 border-[var(--accent3-color)] rounded-lg p-4">
-            <div class="flex items-center gap-3">
-              <i class="fas fa-check-circle text-[var(--accent3-color)] text-2xl"></i>
-              <div>
-                <p class="font-semibold text-[var(--dark-text-color)]">{{ successMessage }}</p>
-                <p class="text-sm text-[var(--gray-text-color)] mt-1">Please check your email to verify your account.</p>
-              </div>
-            </div>
-          </div>
-
           <!-- Error Message -->
           <div v-if="error" class="mb-6 bg-[var(--accent-color)] bg-opacity-10 border-2 border-[var(--accent-color)] rounded-lg p-4">
             <div class="flex items-center gap-3">
@@ -214,11 +203,9 @@ const confirmPassword = ref('')
 const agreeToTerms = ref(false)
 const loading = ref(false)
 const error = ref(null)
-const successMessage = ref(null)
 
 const handleRegister = async () => {
   error.value = null
-  successMessage.value = null
 
   // Validate passwords match
   if (formData.value.password !== confirmPassword.value) {
@@ -237,22 +224,8 @@ const handleRegister = async () => {
   const result = await authStore.register(formData.value)
 
   if (result.success) {
-    successMessage.value = 'Registration successful!'
-    // Clear form
-    formData.value = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      phone: ''
-    }
-    confirmPassword.value = ''
-    agreeToTerms.value = false
-
-    // Optionally redirect to login after a delay
-    setTimeout(() => {
-      router.push('/login')
-    }, 3000)
+    // Redirect to verification sent page with email in query
+    router.push(`/verify-sent?email=${encodeURIComponent(formData.value.email)}`)
   } else {
     error.value = result.error
   }

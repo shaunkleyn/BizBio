@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[var(--light-background-color)]">
+  <div class="min-h-screen">
     <!-- Global Header -->
     <GlobalHeader />
 

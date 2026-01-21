@@ -47,7 +47,7 @@
             v-for="menu in menus"
             :key="menu.id"
             class="mesh-card bg-md-surface rounded-2xl shadow-md-3 border border-md-outline-variant p-6 hover:shadow-md transition-shadow cursor-pointer"
-            @click="navigateTo(`/menu/${menu.slug}`)"
+            @click="navigateTo(`/${menu.entitySlug}/${menu.slug}`)"
           >
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-lg font-bold text-md-on-surface">{{ menu.name }}</h3>
@@ -134,11 +134,34 @@ const handleCancelWizard = () => {
 async function loadMenus() {
   loading.value = true
   try {
-    const menusApi = useMenusApi()
-    const response = await menusApi.getMyMenus()
+    const api = useApi()
+    const entityApi = useEntityApi()
 
-    // Handle different response structures
-    menus.value = Array.isArray(response) ? response : (response?.data || [])
+    // Get user's entities (which may have catalogs)
+    const entitiesResponse = await entityApi.getMyEntities()
+    const entities = entitiesResponse?.data?.entities || []
+
+    // For each entity, get its catalogs and build menu list
+    const menusList: any[] = []
+    for (const entity of entities) {
+      const catalogsResponse = await entityApi.getEntityCatalogs(entity.id)
+      const catalogs = catalogsResponse?.data?.catalogs || []
+
+      // Add each catalog as a "menu" with entity slug for routing
+      catalogs.forEach((catalog: any) => {
+        menusList.push({
+          id: catalog.id,
+          name: catalog.name,
+          slug: catalog.slug,
+          entitySlug: entity.slug,
+          description: catalog.description,
+          itemCount: catalog.itemCount || 0,
+          updatedAt: catalog.updatedAt
+        })
+      })
+    }
+
+    menus.value = menusList
     stats.value.menus = menus.value.length
   } catch (error) {
     console.error('Failed to load menus:', error)
