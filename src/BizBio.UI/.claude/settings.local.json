@@ -57,7 +57,13 @@
       "Bash(timeout /t 10 /nobreak)",
       "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJ0ZXN0dXNlckB0ZXN0LmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJUZXN0IFVzZXIiLCJGaXJzdE5hbWUiOiJUZXN0IiwiTGFzdE5hbWUiOiJVc2VyIiwiZXhwIjoxNzY3ODE0Nzg0LCJpc3MiOiJCaXpCaW8iLCJhdWQiOiJCaXpCaW9Vc2VycyJ9.NVvX8rIj4qI97dVUSCE0UMjIVA9KOm7dlWICdyx_YtY\")",
       "Bash(set NODE_OPTIONS=--max-old-space-size=8192)",
-      "Bash(timeout /t 5 /nobreak)"
+      "Bash(timeout /t 5 /nobreak)",
+      "Bash(git rev-parse:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh api:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(gh workflow run:*)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": [],
     "ask": []

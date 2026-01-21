@@ -2,7 +2,7 @@ name: Push github directory to another azure devops repository
 on:
   push:
     branches:
-      - '*' # applies for all branches in github.
+      - '**' # applies for all branches in github, including those with slashes (e.g., feature/xxx)
   workflow_dispatch: # Manual trigger from GitHub UI
   
 jobs:
