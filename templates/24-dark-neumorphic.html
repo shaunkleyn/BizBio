@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>James Wilson - Digital Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #2d3748;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            max-width: 380px;
+            width: 100%;
+            background: #2d3748;
+            border-radius: 30px;
+            padding: 40px 30px;
+            box-shadow:
+                20px 20px 40px #232a38,
+                -20px -20px 40px #374458;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #4a5568;
+            box-shadow:
+                8px 8px 16px #232a38,
+                -8px -8px 16px #374458;
+            margin-bottom: 20px;
+        }
+        .name {
+            font-size: 22px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .title {
+            font-size: 13px;
+            color: #a0aec0;
+        }
+        .action-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .action-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s;
+            box-shadow:
+                6px 6px 12px #232a38,
+                -6px -6px 12px #374458;
+        }
+        .action-btn:hover {
+            transform: translateY(-3px);
+        }
+        .action-btn.whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); }
+        .action-btn.phone { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .action-btn.video { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .action-btn.email { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .info-section {
+            background: #323d4d;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow:
+                inset 4px 4px 8px #2a3444,
+                inset -4px -4px 8px #3a4656;
+        }
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 14px 0;
+            border-bottom: 1px solid #3d4a5c;
+            text-decoration: none;
+        }
+        .info-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .info-item:first-child {
+            padding-top: 0;
+        }
+        .info-icon {
+            color: #64748b;
+            font-size: 14px;
+            width: 20px;
+            margin-right: 14px;
+            margin-top: 2px;
+        }
+        .info-content {
+            flex: 1;
+        }
+        .info-label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+        .info-value {
+            font-size: 14px;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+        .map-preview {
+            margin-top: 16px;
+            height: 80px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d4a6f 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 12px;
+            gap: 8px;
+        }
+        .save-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 24px;
+            padding: 16px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            box-shadow:
+                6px 6px 12px #232a38,
+                -6px -6px 12px #374458;
+        }
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                8px 8px 16px #232a38,
+                -8px -8px 16px #374458,
+                0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <img src="https://randomuser.me/api/portraits/men/64.jpg" alt="James Wilson" class="avatar">
+            <h1 class="name">James Wilson</h1>
+            <p class="title">yesterday</p>
+        </div>
+
+        <div class="action-row">
+            <a href="https://wa.me/27681234567" class="action-btn whatsapp"><i class="fab fa-whatsapp"></i></a>
+            <a href="tel:+27681234567" class="action-btn phone"><i class="fas fa-phone"></i></a>
+            <a href="#" class="action-btn video"><i class="fas fa-video"></i></a>
+            <a href="mailto:james@techforge.co.za" class="action-btn email"><i class="fas fa-envelope"></i></a>
+        </div>
+
+        <div class="info-section">
+            <a href="tel:+27681234567" class="info-item">
+                <i class="fas fa-phone info-icon"></i>
+                <div class="info-content">
+                    <div class="info-label">Cellular</div>
+                    <div class="info-value">068 123 4567</div>
+                </div>
+            </a>
+            <a href="tel:+27119876543" class="info-item">
+                <i class="fas fa-building info-icon"></i>
+                <div class="info-content">
+                    <div class="info-label">Work</div>
+                    <div class="info-value">011 987 6543</div>
+                </div>
+            </a>
+            <a href="https://maps.google.com/?q=Rosebank,+Johannesburg" class="info-item">
+                <i class="fas fa-map-marker-alt info-icon"></i>
+                <div class="info-content">
+                    <div class="info-label">Location</div>
+                    <div class="info-value">Rosebank, Johannesburg</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="map-preview">
+            <i class="fas fa-map"></i>
+            <span>25.8 km away</span>
+        </div>
+
+        <a href="james_wilson.vcf" class="save-btn">
+            <i class="fas fa-user-plus"></i> Save Contact
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Willem Pretorius - Digital Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Libre Baskerville', serif;
+            background: #f4e9d8;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4c4a8' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .card {
+            max-width: 400px;
+            width: 100%;
+            background: #fffef5;
+            border: 3px solid #2c2c2c;
+            box-shadow: 8px 8px 0 #2c2c2c;
+            position: relative;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border: 1px solid #2c2c2c;
+            pointer-events: none;
+        }
+        .header {
+            padding: 40px 30px;
+            text-align: center;
+            border-bottom: 2px solid #2c2c2c;
+        }
+        .ornament {
+            font-size: 24px;
+            color: #8b4513;
+            margin-bottom: 16px;
+        }
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #2c2c2c;
+            margin-bottom: 20px;
+        }
+        .name {
+            font-family: 'Playfair Display', serif;
+            font-size: 30px;
+            font-weight: 800;
+            color: #2c2c2c;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+        .divider-line {
+            width: 60px;
+            height: 3px;
+            background: #8b4513;
+            margin: 0 auto 12px;
+        }
+        .title {
+            font-size: 14px;
+            color: #8b4513;
+            font-style: italic;
+            margin-bottom: 4px;
+        }
+        .company {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #2c2c2c;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::before,
+        .section-title::after {
+            content: '—';
+            margin: 0 10px;
+            color: #8b4513;
+        }
+        .info-list {
+            margin-bottom: 24px;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            margin-bottom: 10px;
+            background: #f9f6ed;
+            border: 1px solid #d4c4a8;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .info-item:hover {
+            background: #f0e8d8;
+            border-color: #8b4513;
+        }
+        .info-icon {
+            width: 36px;
+            color: #8b4513;
+            font-size: 16px;
+        }
+        .info-content { flex: 1; }
+        .info-label {
+            font-size: 10px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .info-value {
+            font-size: 14px;
+            color: #2c2c2c;
+        }
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #d4c4a8;
+        }
+        .action-btn {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #2c2c2c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #2c2c2c;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        .action-btn:hover {
+            background: #2c2c2c;
+            color: #fffef5;
+        }
+        .social-section {
+            text-align: center;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .social-link {
+            color: #2c2c2c;
+            font-size: 20px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .social-link:hover { color: #8b4513; }
+        .save-btn {
+            display: block;
+            margin-top: 30px;
+            padding: 16px;
+            background: #2c2c2c;
+            color: #fffef5;
+            text-align: center;
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            border: 2px solid #2c2c2c;
+        }
+        .save-btn:hover {
+            background: #8b4513;
+            border-color: #8b4513;
+        }
+        .footer-ornament {
+            text-align: center;
+            padding: 20px;
+            font-size: 20px;
+            color: #8b4513;
+            border-top: 2px solid #2c2c2c;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <div class="ornament">&#10022;</div>
+            <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Willem Pretorius" class="avatar">
+            <h1 class="name">Willem Pretorius</h1>
+            <div class="divider-line"></div>
+            <p class="title">Antique Dealer & Curator</p>
+            <p class="company">Heritage Treasures</p>
+        </div>
+
+        <div class="content">
+            <div class="section-header">
+                <span class="section-title">Contact</span>
+            </div>
+
+            <div class="actions">
+                <a href="tel:+27218765432" class="action-btn"><i class="fas fa-phone"></i></a>
+                <a href="mailto:willem@heritagetreasures.co.za" class="action-btn"><i class="fas fa-envelope"></i></a>
+                <a href="https://wa.me/27828765432" class="action-btn"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.heritagetreasures.co.za" class="action-btn"><i class="fas fa-globe"></i></a>
+            </div>
+
+            <div class="info-list">
+                <a href="tel:+27218765432" class="info-item">
+                    <div class="info-icon"><i class="fas fa-phone"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Telephone</div>
+                        <div class="info-value">021 876 5432</div>
+                    </div>
+                </a>
+                <a href="mailto:willem@heritagetreasures.co.za" class="info-item">
+                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Electronic Mail</div>
+                        <div class="info-value">willem@heritagetreasures.co.za</div>
+                    </div>
+                </a>
+                <a href="https://maps.google.com/?q=Franschhoek,+South+Africa" class="info-item">
+                    <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Address</div>
+                        <div class="info-value">Main Road, Franschhoek</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="social-section">
+                <div class="section-header">
+                    <span class="section-title">Social</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://linkedin.com/in/willempretorius" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://facebook.com/heritagetreasures" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/heritagetreasures" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/willempretorius" class="social-link"><i class="fab fa-x-twitter"></i></a>
+                </div>
+            </div>
+
+            <a href="willem_pretorius.vcf" class="save-btn"><i class="fas fa-download"></i> Save Contact</a>
+        </div>
+
+        <div class="footer-ornament">&#10022; &#10022; &#10022;</div>
+    </div>
+</body>
+</html>

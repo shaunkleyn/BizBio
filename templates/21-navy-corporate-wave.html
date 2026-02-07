@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nathan Brooks - Digital Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e8f4fc 0%, #d4e8f5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            max-width: 400px;
+            width: 100%;
+            background: #fff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(10, 36, 99, 0.15);
+        }
+        .header {
+            background: linear-gradient(135deg, #0a2463 0%, #1e3a8a 100%);
+            padding: 40px 30px 80px;
+            text-align: center;
+            position: relative;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #fff;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #00b4d8;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 10px 30px rgba(0, 180, 216, 0.3);
+        }
+        .name {
+            font-size: 26px;
+            font-weight: 600;
+            color: #fff;
+            margin-top: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .title {
+            font-size: 14px;
+            color: #00b4d8;
+            font-weight: 500;
+            margin-top: 4px;
+            position: relative;
+            z-index: 1;
+        }
+        .tagline {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            margin-top: 8px;
+            line-height: 1.5;
+            position: relative;
+            z-index: 1;
+        }
+        .social-row {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .social-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .social-btn:hover {
+            background: #00b4d8;
+            border-color: #00b4d8;
+            transform: translateY(-3px);
+        }
+        .content {
+            padding: 20px 30px 30px;
+        }
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .action-btn {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 14px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .action-btn:hover {
+            background: linear-gradient(135deg, #0a2463 0%, #1e3a8a 100%);
+        }
+        .action-btn:hover .action-icon {
+            background: #00b4d8;
+            color: #fff;
+        }
+        .action-btn:hover .action-text {
+            color: #fff;
+        }
+        .action-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #0a2463;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+            margin-right: 16px;
+            transition: all 0.3s;
+        }
+        .action-text {
+            font-size: 15px;
+            color: #1e293b;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .logo-section {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .company-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #0a2463, #1e3a8a);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00b4d8;
+            font-size: 20px;
+        }
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0a2463;
+            letter-spacing: 2px;
+        }
+        .logo-tagline {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 4px;
+            letter-spacing: 1px;
+        }
+        .save-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 24px;
+            padding: 16px;
+            background: linear-gradient(135deg, #0a2463 0%, #1e3a8a 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(10, 36, 99, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <img src="https://randomuser.me/api/portraits/men/46.jpg" alt="Nathan Brooks" class="avatar">
+            <h1 class="name">Nathan Brooks</h1>
+            <p class="title">CEO</p>
+            <p class="tagline">Certified Business Strategist,<br>Driving Growth</p>
+            <div class="social-row">
+                <a href="https://wa.me/27821234567" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://linkedin.com/in/nathanbrooks" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://instagram.com/nathanbrooks" class="social-btn"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="action-buttons">
+                <a href="mailto:nathan@vanguardgroup.co.za" class="action-btn">
+                    <div class="action-icon"><i class="fas fa-envelope"></i></div>
+                    <span class="action-text">Email</span>
+                </a>
+                <a href="tel:+27118765432" class="action-btn">
+                    <div class="action-icon"><i class="fas fa-phone"></i></div>
+                    <span class="action-text">Phone</span>
+                </a>
+                <a href="https://www.vanguardgroup.co.za" class="action-btn">
+                    <div class="action-icon"><i class="fas fa-globe"></i></div>
+                    <span class="action-text">Website</span>
+                </a>
+            </div>
+
+            <div class="logo-section">
+                <div class="company-logo">
+                    <div class="logo-icon"><i class="fas fa-chart-line"></i></div>
+                    <div>
+                        <div class="logo-text">VANGUARD</div>
+                        <div class="logo-tagline">GROUP</div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="nathan_brooks.vcf" class="save-btn">
+                <i class="fas fa-user-plus"></i> Save Contact
+            </a>
+        </div>
+    </div>
+</body>
+</html>

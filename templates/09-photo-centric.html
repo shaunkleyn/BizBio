@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryan Thompson - Digital Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #111;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            max-width: 400px;
+            width: 100%;
+            border-radius: 24px;
+            overflow: hidden;
+            background: #1a1a1a;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+        .hero {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 60px 24px 24px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.9));
+        }
+        .name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .title {
+            font-size: 14px;
+            color: #10b981;
+            font-weight: 500;
+        }
+        .actions {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            gap: 8px;
+        }
+        .action-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        .action-btn:hover {
+            background: #10b981;
+            transform: scale(1.1);
+        }
+        .content {
+            padding: 24px;
+        }
+        .bio {
+            color: #999;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #333;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .info-card {
+            background: #222;
+            border-radius: 14px;
+            padding: 16px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .info-card:hover {
+            background: #2a2a2a;
+            transform: translateY(-2px);
+        }
+        .info-card.full-width {
+            grid-column: span 2;
+        }
+        .info-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            color: #fff;
+            font-size: 14px;
+        }
+        .info-label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .info-value {
+            font-size: 13px;
+            color: #fff;
+            font-weight: 500;
+        }
+        .social-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        .social-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px;
+            background: #222;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .social-btn:hover {
+            background: #333;
+        }
+        .social-btn i { font-size: 16px; }
+        .btn-linkedin:hover { background: #0077b5; }
+        .btn-instagram:hover { background: #e4405f; }
+        .save-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px;
+            background: #10b981;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .save-btn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(16,185,129,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="hero">
+            <img src="https://randomuser.me/api/portraits/men/58.jpg" alt="Ryan Thompson" class="hero-image">
+            <div class="actions">
+                <a href="tel:+27815678901" class="action-btn"><i class="fas fa-phone"></i></a>
+                <a href="mailto:ryan@lenslightstudio.co.za" class="action-btn"><i class="fas fa-envelope"></i></a>
+                <a href="https://wa.me/27815678901" class="action-btn"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <div class="hero-overlay">
+                <h1 class="name">Ryan Thompson</h1>
+                <p class="title">Lead Photographer at Lens & Light Studio</p>
+            </div>
+        </div>
+
+        <div class="content">
+            <p class="bio">Capturing life's precious moments through a creative lens. Specializing in portraits, weddings, and commercial photography across KwaZulu-Natal.</p>
+
+            <div class="info-grid">
+                <a href="tel:+27815678901" class="info-card">
+                    <div class="info-icon"><i class="fas fa-phone"></i></div>
+                    <div class="info-label">Phone</div>
+                    <div class="info-value">081 567 8901</div>
+                </a>
+                <a href="mailto:ryan@lenslightstudio.co.za" class="info-card">
+                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info-label">Email</div>
+                    <div class="info-value">ryan@lenslightstudio.co.za</div>
+                </a>
+                <a href="https://www.lenslightstudio.co.za" class="info-card">
+                    <div class="info-icon"><i class="fas fa-globe"></i></div>
+                    <div class="info-label">Website</div>
+                    <div class="info-value">lenslightstudio.co.za</div>
+                </a>
+                <a href="https://maps.google.com/?q=Florida+Road,+Durban" class="info-card">
+                    <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="info-label">Location</div>
+                    <div class="info-value">Durban</div>
+                </a>
+            </div>
+
+            <div class="social-row">
+                <a href="https://linkedin.com/in/ryanthompsonphoto" class="social-btn btn-linkedin"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+                <a href="https://instagram.com/ryanthompsonphoto" class="social-btn btn-instagram"><i class="fab fa-instagram"></i> Instagram</a>
+            </div>
+
+            <a href="ryan_thompson.vcf" class="save-btn"><i class="fas fa-user-plus"></i> Save Contact</a>
+        </div>
+    </div>
+</body>
+</html>

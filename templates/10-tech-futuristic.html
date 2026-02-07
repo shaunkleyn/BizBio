@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aiden Kruger - Digital Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #050510;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(0, 200, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .card {
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        .card-inner {
+            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        .card-inner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00ff88, transparent);
+        }
+        .header {
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+        }
+        .avatar-frame {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+        }
+        .avatar-frame::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            background: linear-gradient(45deg, #00ff88, #00c8ff, #00ff88);
+            border-radius: 50%;
+            animation: rotate 3s linear infinite;
+        }
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            position: relative;
+            border: 3px solid #050510;
+        }
+        .name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .title {
+            font-size: 13px;
+            color: #00ff88;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+        }
+        .company {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 16px;
+            padding: 8px 16px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 20px;
+            font-size: 12px;
+            color: #00ff88;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: rgba(0, 255, 136, 0.1);
+        }
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 10px;
+            background: #0a0a15;
+            text-decoration: none;
+            color: #666;
+            transition: all 0.3s;
+        }
+        .action-btn:hover {
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+        }
+        .action-btn i {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        .action-btn span {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .info-section {
+            padding: 24px;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .info-item:hover {
+            border-color: rgba(0, 255, 136, 0.3);
+            background: rgba(0, 255, 136, 0.05);
+        }
+        .info-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(0, 255, 136, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: #00ff88;
+            font-size: 14px;
+        }
+        .info-content { flex: 1; }
+        .info-label {
+            font-size: 10px;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .info-value {
+            font-size: 13px;
+            color: #ccc;
+        }
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 0 24px 24px;
+        }
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 10px;
+            color: #666;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        .social-link:hover {
+            border-color: rgba(0, 255, 136, 0.5);
+            color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+        .save-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 24px 24px;
+            padding: 16px;
+            background: linear-gradient(135deg, #00ff88, #00c8ff);
+            color: #000;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .save-btn:hover {
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-inner">
+            <div class="header">
+                <div class="avatar-frame">
+                    <img src="https://randomuser.me/api/portraits/men/19.jpg" alt="Aiden Kruger" class="avatar">
+                </div>
+                <h1 class="name">Aiden Kruger</h1>
+                <p class="title">Full Stack Developer</p>
+                <p class="company">ByteForge Labs</p>
+                <div class="status">
+                    <span class="status-dot"></span>
+                    Available for work
+                </div>
+            </div>
+
+            <div class="actions">
+                <a href="tel:+27609876543" class="action-btn">
+                    <i class="fas fa-phone"></i>
+                    <span>Call</span>
+                </a>
+                <a href="mailto:aiden@byteforgelabs.co.za" class="action-btn">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email</span>
+                </a>
+                <a href="https://wa.me/27609876543" class="action-btn">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>Chat</span>
+                </a>
+                <a href="https://www.byteforgelabs.co.za" class="action-btn">
+                    <i class="fas fa-globe"></i>
+                    <span>Web</span>
+                </a>
+            </div>
+
+            <div class="info-section">
+                <a href="tel:+27609876543" class="info-item">
+                    <div class="info-icon"><i class="fas fa-phone"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Phone</div>
+                        <div class="info-value">060 987 6543</div>
+                    </div>
+                </a>
+                <a href="mailto:aiden@byteforgelabs.co.za" class="info-item">
+                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">aiden@byteforgelabs.co.za</div>
+                    </div>
+                </a>
+                <a href="https://maps.google.com/?q=Woodstock,+Cape+Town" class="info-item">
+                    <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Location</div>
+                        <div class="info-value">Woodstock, Cape Town</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="social-grid">
+                <a href="https://linkedin.com/in/aidenkruger" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://github.com/aidenkruger" class="social-link"><i class="fab fa-github"></i></a>
+                <a href="https://twitter.com/aidenkruger" class="social-link"><i class="fab fa-x-twitter"></i></a>
+                <a href="https://dribbble.com/aidenkruger" class="social-link"><i class="fab fa-dribbble"></i></a>
+            </div>
+
+            <a href="aiden_kruger.vcf" class="save-btn">
+                <i class="fas fa-download"></i>
+                Download vCard
+            </a>
+        </div>
+    </div>
+</body>
+</html>
