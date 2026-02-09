@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen">
     <!-- Global Header -->
-    <GlobalHeader />
+    <!-- <GlobalHeader /> -->
 
     <!-- Main Content -->
     <main class="py-8">

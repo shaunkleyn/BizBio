@@ -1,29 +1,61 @@
+<!-- <template>
+  <div>
+    <NuxtLayout name="LayoutA">
+      <div>
+        <Sidebar/>
+        <div>
+          <InnerMenuBar/>
+          <slot />
+        </div>
+      </div>
+    </NuxtLayout>
+  </div>
+</template> -->
+
 <template>
   <div class="min-h-screen bg-[var(--medium-background-color)]">
     <!-- Global Header -->
-    <GlobalHeader />
+    <Default>
+      <div class="flex">
+        <!-- Menu Sidebar -->
+        <MenuSidebar :stats="stats" />
 
-    <div class="flex">
-      <!-- Menu Sidebar -->
-      <MenuSidebar :stats="stats" />
+        <!-- Main Content Area -->
+        <div class="flex-1 mesh-bg">
+          <!-- Product Switcher with Page Header -->
+          <ProductSwitcher />
 
-      <!-- Main Content Area -->
-      <div class="flex-1 mesh-bg">
-        <!-- Product Switcher with Page Header -->
-        <ProductSwitcher />
-
-        <!-- Main Content -->
-        <main>
-          <slot />
-        </main>
+          <!-- Main Content -->
+          <!-- <main> -->
+            <div class="p-4 md:p-8">
+              <slot/>
+            </div>
+          <!-- </main> -->
+        </div>
       </div>
-    </div>
+    </Default>
+    
   </div>
 </template>
 
 <script setup lang="ts">
 import { inject, ref, type Ref } from 'vue'
+import Default from './default.vue'
+const authStore = useAuthStore()
+const router = useRouter()
+const mobileMenuOpen = ref(false)
+const { initConsent } = useCookieConsent()
 
+const handleLogout = () => {
+  authStore.logout()
+  router.push('/login')
+  mobileMenuOpen.value = false
+}
+
+// Initialize cookie consent on mount
+onMounted(() => {
+  initConsent()
+})
 // Provide navigation links for menu section
 provide('globalNavLinks', [
   { to: '/dashboard', label: 'Dashboard', icon: 'fas fa-home' },

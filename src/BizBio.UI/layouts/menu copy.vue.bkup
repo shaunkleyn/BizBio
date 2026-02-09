@@ -1,19 +1,9 @@
-
-<!-- <template>
-  <div>
-    <header id="global-header"></header>
-    <main>
-      <slot />
-    </main>
-    <CookieConsent />
-    <footer></footer>
-  </div>
-</template> -->
 <template>
-  <div class="min-h-screen flex flex-col mesh-bg">
+  <div class="min-h-screen bg-[var(--medium-background-color)]">
     <!-- Global Header -->
+    <!-- <GlobalHeader /> -->
     <header id="global-header" class="bg-white bg-opacity-70 bg-blur-[10px] dark:bg-[var(--dark-bg)] shadow-md sticky top-0 z-50 transparent-navbar">
-      <div class="mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-20">
           <!-- Logo -->
           <NuxtLink to="/" class="flex-shrink-0 justify-between items-center flex flex-row">
@@ -165,88 +155,26 @@
         </nav>
       </div>
     </header>
+    <div class="flex">
+      <!-- Menu Sidebar -->
+      <MenuSidebar :stats="stats" />
 
-    <!-- Main Content -->
-    <main class="flex-1">
-      <slot />
-    </main>
+      <!-- Main Content Area -->
+      <div class="flex-1 mesh-bg">
+        <!-- Product Switcher with Page Header -->
+        <ProductSwitcher />
 
-    <!-- Cookie Consent Banner -->
-    <CookieConsent />
-
-    <!-- Footer -->
-    <footer class="bg-md-surface text-md-on-surface py-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <!-- Company Info -->
-          <div>
-            <h3 class="text-xl font-bold mb-4 font-[var(--font-family-heading)]">BizBio</h3>
-            <p class="text-gray-400 mb-4">
-              Create and share your digital business profile effortlessly.
-            </p>
-          </div>
-
-          <!-- Quick Links -->
-          <div>
-            <h4 class="text-lg font-semibold mb-4 font-[var(--font-family-heading)]">Quick Links</h4>
-            <ul class="space-y-2">
-              <li>
-                <NuxtLink to="/pricing" class="text-gray-400 hover:text-md-on-surface transition-colors">
-                  Pricing
-                </NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/categories" class="text-gray-400 hover:text-md-on-surface transition-colors">
-                  Categories
-                </NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/help" class="text-gray-400 hover:text-md-on-surface transition-colors">
-                  Help Center
-                </NuxtLink>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Legal -->
-          <div>
-            <h4 class="text-lg font-semibold mb-4 font-[var(--font-family-heading)]">Legal</h4>
-            <ul class="space-y-2">
-              <li>
-                <NuxtLink to="/terms" class="text-gray-400 hover:text-md-on-surface transition-colors">
-                  Terms of Service
-                </NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/privacy" class="text-gray-400 hover:text-md-on-surface transition-colors">
-                  Privacy Policy
-                </NuxtLink>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Contact -->
-          <div>
-            <h4 class="text-lg font-semibold mb-4 font-[var(--font-family-heading)]">Contact</h4>
-            <ul class="space-y-2">
-              <li>
-                <NuxtLink to="/contact" class="text-gray-400 hover:text-md-on-surface transition-colors">
-                  Contact Us
-                </NuxtLink>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; {{ new Date().getFullYear() }} BizBio. All rights reserved.</p>
-        </div>
+        <!-- Main Content -->
+        <main>
+          <slot />
+        </main>
       </div>
-    </footer>
+    </div>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { inject, ref, type Ref } from 'vue'
 const authStore = useAuthStore()
 const router = useRouter()
 const mobileMenuOpen = ref(false)
@@ -262,4 +190,22 @@ const handleLogout = () => {
 onMounted(() => {
   initConsent()
 })
+// Provide navigation links for menu section
+provide('globalNavLinks', [
+  { to: '/dashboard', label: 'Dashboard', icon: 'fas fa-home' },
+  { to: '/menu', label: 'Menu', icon: 'fas fa-utensils' },
+  { to: '/dashboard/profile', label: 'Profile', icon: 'fas fa-user' },
+  { to: '/dashboard/subscription', label: 'Subscription', icon: 'fas fa-credit-card' }
+])
+
+// Inject stats from pages that provide them
+const stats = inject<Ref<{
+  menus?: number
+  items?: number
+  categories?: number
+}>>('menuStats', ref({
+  menus: 0,
+  items: 0,
+  categories: 0
+}))
 </script>

@@ -4,7 +4,7 @@
 :root {
   /* Vibrant & Elegant Color System - Light Theme */
   /* Better Purple: Deeper, more vibrant */
-  --md-primary: #8B5CF6;
+  --md-primary: #A274EA;
   --md-on-primary: #FFFFFF;
   --md-primary-container: #F3E8FF;
   --md-on-primary-container: #5B21B6;
@@ -153,7 +153,7 @@
 
 /* Dark mode variables */
 .dark {
-  --md-primary: #A78BFA;
+  --md-primary: #A274EA;
   --md-on-primary: #4C1D95;
   --md-primary-container: #5B21B6;
   --md-on-primary-container: #EDE9FE;
@@ -449,10 +449,10 @@ button {
   }
 }
 
-.btn-gradient:active,
+/* .btn-gradient:active,
 .md-ripple:active {
   animation: smoothPress 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
+} */
 
 /* ─────────────────────────────────────────────────────────────
    SHINE SWEEP - Elegant light sweep on hover
@@ -636,7 +636,10 @@ button:disabled,
 
 /* Regular buttons get simpler animation */
 button:active:not(.btn-gradient):not(.md-ripple) {
-  animation: smoothPress 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* animation: smoothPress 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); */
+    box-shadow: inset 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    transform: translateY(0.125rem) !important;
+
 }
 
 /* Sparkle effect on click - more subtle */
@@ -975,7 +978,7 @@ button:active:not(.btn-gradient):not(.md-ripple) {
 		}
 
 		.transparent-navbar {
-			background-color: var(--navbar-bg);
+			/* background-color: var(--navbar-bg); */
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
 			border-color: var(--navbar-border-color);

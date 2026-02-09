@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="dashboard">
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Welcome Header -->
       <div class="mb-12">
@@ -232,7 +232,7 @@
         </div>
       </div>
     </div>
-  </NuxtLayout>
+
 </template>
 
 <script setup>

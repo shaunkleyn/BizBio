@@ -1,5 +1,5 @@
 <template>
-  <div class="glass-effect border-b border-md-outline-variant sticky top-16 z-40 py-4 px-4 md:px-8 shadow-md-1">
+  <div class="sticky top-16 z-40 py-4 px-4 md:px-8">
     <!-- Page Header and Actions Section -->
     <div class="flex items-center justify-between flex-wrap gap-4">
       <!-- Page Title and Description (Left) -->
@@ -37,7 +37,7 @@
         <h1
           v-else
           :class="[
-            'text-2xl md:text-3xl font-heading font-bold text-md-on-surface',
+            'text-2xl md:text-2xl font-heading font-normal text-md-on-surface',
             pageHeader.editable ? 'cursor-pointer hover:text-primary transition-colors flex items-center gap-2 group' : ''
           ]"
           @click="handleStartEdit"
@@ -46,7 +46,7 @@
           <i v-if="pageHeader.editable" class="fas fa-edit text-lg opacity-0 group-hover:opacity-100 transition-opacity"></i>
         </h1>
 
-        <p class="text-sm md:text-base text-md-on-surface-variant mt-1 font-medium">{{ pageHeader.description }}</p>
+        <p class="text-sm md:text-base text-md-on-surface-variant mt-1 font-normal">{{ pageHeader.description }}</p>
       </div>
 
       <!-- Action Buttons (Right) -->
@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 
 // Use page metadata composable
 const { pageHeader, pageActions, pageActionButton } = usePageMeta()

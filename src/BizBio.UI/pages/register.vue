@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="min-h-screen bg-gradient-to-br from-[var(--light-background-color)] to-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <section class="mesh-bg  min-h-screen  flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <!-- Decorative Background Blobs -->
       <div class="absolute top-20 right-10 w-72 h-72 bg-[var(--accent3-color)] rounded-full opacity-10 blur-3xl"></div>
       <div class="absolute bottom-20 left-10 w-96 h-96 bg-[var(--primary-color)] rounded-full opacity-10 blur-3xl"></div>
@@ -9,8 +9,9 @@
         <!-- Header -->
         <div class="text-center mb-8">
           <div class="flex justify-center mb-6">
-            <div class="bg-[var(--accent3-color)] bg-opacity-10 rounded-full p-4">
-              <i class="fas fa-user-plus text-[var(--accent3-color)] text-5xl"></i>
+            <div class="bg-[var(--accent3-color)] bg-opacity-10 rounded-full p-4 relative">
+              <i class="fad fa-user-plus text-white size-14 w-14 h-14 text-5xl"></i>
+              <i class="fat fa-user-plus text-white size-14 w-14 h-14 text-5xl absolute left-0 right-0 mx-auto my-0"></i>
             </div>
           </div>
           <h1 class="text-3xl sm:text-4xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-2">

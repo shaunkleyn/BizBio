@@ -17,7 +17,7 @@
         </NuxtLink>
 
         <!-- Desktop Navigation -->
-        <nav class="hidden lg:flex items-center gap-1">
+        <!-- <nav class="hidden lg:flex items-center gap-1">
           <button
             v-for="link in navLinks"
             :key="link.to"
@@ -41,7 +41,7 @@
             </span>
             <div class="absolute inset-0 bg-md-error-container opacity-0 group-hover:opacity-100 rounded-xl transition-opacity"></div>
           </button>
-        </nav>
+        </nav> -->
 
         <!-- Mobile Menu Toggle -->
         <button

@@ -1,4 +1,91 @@
 <template>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <i class="fas fa-store text-white text-xl" aria-hidden="true"></i>
+              </div>
+            </div>
+            <h3 class="text-3xl font-bold text-[var(--dark-text-color)] mb-2">
+              3
+            </h3>
+            <p class="text-sm text-[var(--gray-text-color)] font-semibold">
+              Restaurants
+            </p>
+            <div class="mt-3 flex items-center gap-1 text-xs">
+              <span class="text-green-600 font-bold flex items-center gap-1">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                +12%
+              </span>
+              <span class="text-[var(--gray-text-color)]">vs last month</span>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <i class="fas fa-utensils text-white text-xl" aria-hidden="true"></i>
+              </div>
+            </div>
+            <h3 class="text-3xl font-bold text-[var(--dark-text-color)] mb-2">
+              18
+            </h3>
+            <p class="text-sm text-[var(--gray-text-color)] font-semibold">
+              Active Menus
+            </p>
+            <div class="mt-3 flex items-center gap-1 text-xs">
+              <span class="text-green-600 font-bold flex items-center gap-1">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                +8%
+              </span>
+              <span class="text-[var(--gray-text-color)]">vs last month</span>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <i class="fas fa-box text-white text-xl" aria-hidden="true"></i>
+              </div>
+            </div>
+            <h3 class="text-3xl font-bold text-[var(--dark-text-color)] mb-2">
+              247
+            </h3>
+            <p class="text-sm text-[var(--gray-text-color)] font-semibold">
+              Menu Items
+            </p>
+            <div class="mt-3 flex items-center gap-1 text-xs">
+              <span class="text-green-600 font-bold flex items-center gap-1">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                +25%
+              </span>
+              <span class="text-[var(--gray-text-color)]">vs last month</span>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <i class="fas fa-puzzle-piece text-white text-xl" aria-hidden="true"></i>
+              </div>
+            </div>
+            <h3 class="text-3xl font-bold text-[var(--dark-text-color)] mb-2">
+              42
+            </h3>
+            <p class="text-sm text-[var(--gray-text-color)] font-semibold">
+              Shared Items
+            </p>
+            <div class="mt-3 flex items-center gap-1 text-xs">
+              <span class="text-green-600 font-bold flex items-center gap-1">
+                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                +34%
+              </span>
+              <span class="text-[var(--gray-text-color)]">vs last month</span>
+            </div>
+          </div>
+        </div>
+
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Header -->
@@ -174,11 +261,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { useNuxtApp } from 'nuxt/app'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { usePageMeta } from '../../../composables/usePageMeta'
 
 const router = useRouter()
 const { $api } = useNuxtApp()
+
+definePageMeta({
+  layout: 'menu'
+})
+
 
 interface Restaurant {
   id: number
@@ -276,13 +370,30 @@ const viewRestaurantMenus = (restaurantId: number) => {
   router.push(`/dashboard/restaurants/${restaurantId}/menus`)
 }
 
-onMounted(() => {
+const { setPageHeader, setPageActionButton } = usePageMeta()
+
+
+onMounted(async () => {
+  // Set page metadata
+  setPageHeader({
+    title: 'Ressy',
+    description: 'Create special bundle deals like "Family Meal Deal" with multiple items and options'
+  })
+
+  setPageActions(() => h('button', {
+    onClick: () => {},
+    class: 'px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-md-4 transition-colors font-semibold'
+  }, [
+    h('i', { class: 'fas fa-plus mr-2' }),
+    'Create Bundle'
+  ]))
+
   fetchRestaurants()
   fetchSubscriptionInfo()
 })
 
 usePageMeta({
-  title: 'My Restaurants',
+  title: 'My 2Restaurants',
   description: 'Manage your restaurants'
 })
 </script>

@@ -1,3 +1,14 @@
+<!-- <template>
+  <div>
+    ....
+  </div>
+</template>
+<script setup lang="ts">
+  definePageMeta({
+    layout: 'LayoutB'
+  })
+</script> -->
+
 <template>
   <div class="p-4 md:p-8">
     <div class="max-w-7xl mx-auto">
@@ -73,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 
 definePageMeta({
   layout: 'menu'
