@@ -17,7 +17,7 @@ steps:
 
   - script: |
       cd src/BizBio.UI
-      npm ci
+      npm install
     displayName: 'Install Dependencies'
 
   - script: |
