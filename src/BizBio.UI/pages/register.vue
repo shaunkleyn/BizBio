@@ -28,7 +28,7 @@
           <div v-if="error" class="mb-6 bg-[var(--accent-color)] bg-opacity-10 border-2 border-[var(--accent-color)] rounded-lg p-4">
             <div class="flex items-center gap-3">
               <i class="fas fa-exclamation-circle text-[var(--accent-color)] text-2xl"></i>
-              <p class="text-[var(--dark-text-color)]">{{ error }}</p>
+              <p class="text-[var(--dark-text-color)]" v-html="error"></p>
             </div>
           </div>
 
@@ -228,7 +228,7 @@ const handleRegister = async () => {
     // Redirect to verification sent page with email in query
     router.push(`/verify-sent?email=${encodeURIComponent(formData.value.email)}`)
   } else {
-    error.value = result.error
+    error.value = result.error.join('<br>') || 'Registration failed'
   }
 
   loading.value = false
