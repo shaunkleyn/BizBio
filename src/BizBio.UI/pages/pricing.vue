@@ -106,7 +106,7 @@
                 </li>
                 <li class="flex items-start gap-2 text-sm">
                   <i class="fas fa-check text-[var(--accent3-color)] mt-1" aria-hidden="true"></i>
-                  <span>Basic customisation</span>
+                  <span>Basic customisation (Choose from 5 templates)</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm">
                   <i class="fas fa-check text-[var(--accent3-color)] mt-1" aria-hidden="true"></i>
@@ -181,7 +181,7 @@
                 </li>
                 <li class="flex items-start gap-2 text-sm">
                   <i class="fas fa-check text-md-primary mt-1" aria-hidden="true"></i>
-                  <span>Premium templates (15+ designs)</span>
+                  <span>Premium templates</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm">
                   <i class="fas fa-check text-md-primary mt-1" aria-hidden="true"></i>
@@ -235,7 +235,7 @@
                 <ul class="space-y-3 mb-8">
                 <li class="flex items-start gap-2 text-sm">
                   <i class="fas fa-check text-md-primary mt-1" aria-hidden="true"></i>
-                  <span>1 digital profile</span>
+                  <span>5 digital profiles</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm">
                   <i class="fas fa-check text-md-primary mt-1" aria-hidden="true"></i>
@@ -243,7 +243,7 @@
                 </li>
                 <li class="flex items-start gap-2 text-sm">
                   <i class="fas fa-check text-md-primary mt-1" aria-hidden="true"></i>
-                  <span>Premium templates (15+ designs)</span>
+                  <span>Premium templates</span>
                 </li>
                 <li class="flex items-start gap-2 text-sm">
                   <i class="fas fa-check text-md-primary mt-1" aria-hidden="true"></i>

@@ -1,12 +1,14 @@
 # BizBio Platform - Complete Pricing Structure (Final)
 
-**Version:** 3.0  
-**Date:** November 2025  
+**Version:** 4.0  
+**Date:** February 2026  
 **Status:** Final - Ready for Implementation
 
 ---
 
-## 1. BizBio Professional - Digital Business Cards
+## 1. Connect - Digital Business Cards
+
+> **Formerly:** BizBio Professional
 
 ### 1.1 Free Plan
 
@@ -14,18 +16,19 @@
 
 **Includes:**
 - ✅ 1 digital profile
-- ✅ Basic customization (3 templates)
+- ✅ Basic profile (choose from 5 templates)
 - ✅ QR code generation
 - ✅ Contact information (phone, email, website)
 - ✅ Social media links (up to 5)
+- ✅ vCard download
 - ✅ Mobile responsive
 
 **Limitations:**
-- ❌ No vCard download
 - ❌ No analytics
 - ❌ No custom branding
 - ❌ No document uploads
-- ❌ BizBio badge displayed
+- ❌ No profile sharing tracking
+- ❌ BizBio badge on profile
 
 ---
 
@@ -41,15 +44,12 @@
 
 **Premium Features:**
 - ✅ **Custom branding** (colors, fonts, logo)
-- ✅ **Premium templates** (15+ designs)
+- ✅ **Premium templates**
 - ✅ **Remove BizBio badge**
 - ✅ **Analytics dashboard** (views, clicks, geography, devices)
-- ✅ **Document uploads** (10 files, 5MB each)
 - ✅ **Custom profile slug** (bizbio.co.za/your-name)
 - ✅ **vCard download** (save to contacts)
-- ✅ **Contact form** on profile
-- ✅ **Email notifications** (when someone views your profile)
-- ✅ **Profile scheduling** (show/hide based on hours)
+- ✅ **Location map** (Google Maps integration)
 
 **Best For:**
 - Solo consultants
@@ -61,7 +61,7 @@
 
 ---
 
-### 1.3 Pro Plan
+### 1.3 Team Plan
 
 **Price:** R99/month
 
@@ -69,6 +69,13 @@
 
 **Everything in Solo, plus:**
 - ✅ **5 digital profiles** (vs. 1 in Solo)
+- ✅ Custom branding (colors, fonts, logo)
+- ✅ Premium templates
+- ✅ Remove BizBio badge
+- ✅ Analytics dashboard (views, clicks, geography, devices)
+- ✅ Custom profile slug (bizbio.co.za/your-name)
+- ✅ vCard download (save to contacts)
+- ✅ Location map (Google Maps integration)
 
 **Use Cases:**
 - Consultant with multiple specializations (Business Coach + Life Coach profiles)
@@ -86,16 +93,16 @@
 
 **Perfect for:** Teams and companies
 
-**Everything in Pro, plus:**
-- ✅ **20 digital profiles** (vs. 5 in Pro)
+**Everything in Team, plus:**
+- ✅ **20 digital profiles** (vs. 5 in Team)
 - ✅ **Team member management**
 - ✅ **Organizational structure** (simple hierarchy)
 - ✅ **Department grouping**
 - ✅ **Centralized team directory**
 - ✅ **Advanced analytics** (referrers, device types, trends)
-- ✅ **Document uploads** (50 files, 10MB each)
 - ✅ **Bulk team member import** (CSV)
 - ✅ **Admin dashboard** (manage all profiles)
+- ✅ **Location map** (Google Maps integration)
 
 **Best For:**
 - Small to medium businesses (5-20 employees)
@@ -116,14 +123,14 @@
 **Includes:**
 - ✅ **1 restaurant profile**
 - ✅ **Up to 50 menu items**
-- ✅ **Unlimited categories** (Appetizers, Mains, Desserts, Drinks, Specials, etc.)
+- ✅ **5 categories** (Appetizers, Mains, Desserts, Drinks, Specials, etc.)
 - ✅ **1 image per item**
 - ✅ **QR code generation** (downloadable for table standees)
 - ✅ **Basic item details** (name, description, price)
 - ✅ **Portion sizes/variants** (Small, Medium, Large, etc.)
 - ✅ **Mobile-optimized menu view**
 - ✅ **Basic search** for customers (search by item name)
-- ✅ **Daily specials section**
+- ✅ **1 featured section**
 - ✅ **Contact information**
 - ✅ **Operating hours**
 - ✅ **Location map** (Google Maps integration)
@@ -133,7 +140,6 @@
 - ❌ No allergen information
 - ❌ No dietary tags
 - ❌ No item add-ons
-- ❌ No featured items
 - ❌ No analytics
 - ❌ No cart functionality
 - ❌ Single location only
@@ -144,7 +150,6 @@
 - Small cafes
 - Pop-up restaurants
 - Single-location eateries
-- Testing the platform
 
 **ROI Example:**
 - Menu printing: R150 × 20 menus × 4 reprints/year = R12,000
@@ -153,15 +158,16 @@
 
 ---
 
-### 2.2 Restaurant Plan ⭐ Most Popular
+### 2.2 Entrée Plan ⭐ Most Popular
 
 **Price:** R299/month
 
 **Perfect for:** Established restaurants wanting full features
 
 **Everything in Starter, plus:**
-- ✅ **Up to 150 menu items** (vs. 50 in Starter)
-- ✅ **Featured items section** (Chef's recommendations, popular items)
+- ✅ **Up to 200 menu items** (vs. 50 in Starter)
+- ✅ **15 categories** (Appetizers, Mains, Desserts, Drinks, Specials, etc.)
+- ✅ **Featured items sections** (Chef's recommendations, popular items)
 - ✅ **Item add-ons/extras** (Extra cheese, bacon, etc.)
 - ✅ **Add to cart feature** (customers can build order and see total)
 - ✅ **Allergen information** (nuts, dairy, gluten, eggs, soy, etc.)
@@ -172,6 +178,9 @@
 - ✅ **Remove BizBio badge**
 - ✅ **Analytics dashboard** (popular items, peak view times, customer behavior)
 - ✅ **Menu scheduling** (breakfast/lunch/dinner menus, time-based)
+- ⭐ **Eligible for:**
+  - Menu Pro add-on
+  - WhatsApp add-ons: Waiter Call, Order Sending
 
 **Cart Feature Details:**
 - Customers tap items to add to cart
@@ -194,32 +203,35 @@
 
 ---
 
-### 2.3 Multi-Location Plan
+### 2.3 Banquet Plan
 
 **Price:** R599/month
 
 **Perfect for:** Restaurant chains and multi-location operations
 
-**Everything in Restaurant, plus:**
-- ✅ **5 restaurant profiles** (5 separate locations/menus)
-- ✅ **Up to 150 items per location** (750 items total)
+**Everything in Entrée, plus:**
+- ✅ **Unlimited restaurant profiles** (separate locations/menus)
+- ✅ **Unlimited items per location**
 - ✅ **Location-specific menus** (different menu per branch if needed)
-- ✅ **Centralized menu management** (copy menu between locations)
+- ✅ **Centralised menu management** (copy menu between locations)
 - ✅ **Advanced analytics** (compare performance between locations)
 - ✅ **Bulk menu updates** (change prices across all locations at once)
 - ✅ **Menu templates** (create master menu, copy to all)
 - ✅ **Staff accounts** (location managers can edit their own menu)
 - ✅ **Nutritional information** (calories, macros per item)
 - ✅ **Ingredient lists** (detailed ingredients for transparency)
+- ⭐ **Eligible for:**
+  - Menu Pro add-on
+  - WhatsApp add-ons: Waiter Call, Order Sending
 
 **Use Cases:**
-- Restaurant with 3-5 branches
+- Restaurant with multiple branches
 - Franchise locations (same brand, different menus)
 - Cloud kitchens with multiple concepts
 - Multi-location catering services
 
 **Best For:**
-- Restaurant chains (3-5 locations)
+- Restaurant chains
 - Growing restaurant groups
 - Franchises needing consistency
 - Multi-brand operations
@@ -254,14 +266,13 @@
 - ❌ No bulk operations (CSV import/export)
 - ❌ BizBio branding on catalog
 
-**Note:** This is a **product showcase**, NOT e-commerce. No shopping cart, no payment processing. For full e-commerce, use Shopify/WooCommerce.
+**Note:** This is a **product showcase**, NOT e-commerce. No shopping cart, no payment processing.
 
 **Best For:**
 - Small boutiques
 - Craft vendors
 - Service providers showcasing offerings
 - Wholesalers showing product range
-- Testing the platform
 
 ---
 
@@ -291,7 +302,6 @@
 - Retail stores with online presence
 - Multi-brand boutiques
 - Wholesalers with large product range
-- Service providers with multiple product lines
 
 ---
 
@@ -308,7 +318,7 @@
 - ✅ **Advanced analytics** (conversion tracking, best sellers, trends)
 - ✅ **Customer behavior insights** (what they view, when they view)
 - ✅ **Video support** (product videos up to 2 minutes)
-- ✅ **Enhanced product descriptions** (rich text formatting, bullet points)
+- ✅ **Enhanced product descriptions** (rich text formatting)
 - ✅ **Related products** (manual grouping: "Customers also viewed")
 - ✅ **Product badges** (Custom badges: "Handmade", "Organic", "Local")
 
@@ -316,15 +326,14 @@
 - Large retailers with extensive catalogs
 - Multi-location retail operations
 - Businesses with diverse product lines
-- Professional product showcasing
 
 ---
 
 ## 4. Bundle Packages (20% Discount)
 
-### 4.1 Complete Solo Bundle
+### 4.1 Connect Solo + Menu Starter Bundle
 
-**Includes:** Solo + Menu Starter  
+**Includes:** Connect Solo + Menu Starter  
 **Regular Price:** R59 + R149 = R208/month  
 **Bundle Price:** R167/month **(save R41, 20% off)**
 
@@ -332,9 +341,9 @@
 
 ---
 
-### 4.2 Complete Pro Bundle
+### 4.2 Connect Team + Menu Starter Bundle
 
-**Includes:** Pro + Menu Starter  
+**Includes:** Connect Team + Menu Starter  
 **Regular Price:** R99 + R149 = R248/month  
 **Bundle Price:** R199/month **(save R49, 20% off)**
 
@@ -342,9 +351,9 @@
 
 ---
 
-### 4.3 Complete Business Bundle
+### 4.3 Connect Business + Menu Entrée Bundle
 
-**Includes:** Business + Menu Restaurant  
+**Includes:** Connect Business + Menu Entrée  
 **Regular Price:** R249 + R299 = R548/month  
 **Bundle Price:** R438/month **(save R110, 20% off)**
 
@@ -352,9 +361,9 @@
 
 ---
 
-### 4.4 Complete Retail Solo Bundle
+### 4.4 Connect Solo + Retail Basic Bundle
 
-**Includes:** Solo + Retail Basic  
+**Includes:** Connect Solo + Retail Basic  
 **Regular Price:** R59 + R199 = R258/month  
 **Bundle Price:** R207/month **(save R51, 20% off)**
 
@@ -362,9 +371,9 @@
 
 ---
 
-### 4.5 Complete Retail Business Bundle
+### 4.5 Connect Business + Retail Growth Bundle
 
-**Includes:** Business + Retail Growth  
+**Includes:** Connect Business + Retail Growth  
 **Regular Price:** R249 + R399 = R648/month  
 **Bundle Price:** R518/month **(save R130, 20% off)**
 
@@ -374,9 +383,11 @@
 
 ## 5. WhatsApp Integration Add-Ons 🆕
 
+> **Requirements:** All WhatsApp add-ons require the Entrée plan or higher and a WhatsApp Business account (free).
+
 ### 5.1 WhatsApp Waiter Call (Menu Add-On)
 
-**Price:** R99/month (per restaurant location)
+**Price:** R39/month (per restaurant location)
 
 **What it does:**
 - Customers can call waiter to their table via WhatsApp
@@ -398,18 +409,14 @@
 - Modern, tech-forward establishments
 - Reducing wait times
 
-**Requirements:**
-- WhatsApp Business account (free)
-- Restaurant Plan or higher
-
 ---
 
 ### 5.2 WhatsApp Order Sending (Menu Add-On)
 
-**Price:** R149/month (per restaurant location)
+**Price:** R59/month (per restaurant location)
 
 **What it does:**
-- Customers build order in cart (Restaurant Plan feature)
+- Customers build order in cart (Entrée Plan feature)
 - Tap "Send to Kitchen" button
 - Order sent automatically via WhatsApp to restaurant
 - Order includes: Table number, items, quantities, special requests
@@ -434,14 +441,12 @@
 **Example Order Message:**
 ```
 🍕 NEW ORDER - Table 7
-Time: 19:35
 
+Time: 19:35
 2x Margherita Pizza (Large)
   - Extra cheese
   - No basil
-
 1x Hawaiian Pizza (Medium)
-
 1x Coca Cola (330ml)
 
 Special Request: Please make spicy
@@ -461,21 +466,20 @@ Reply to confirm order received.
 **Important Notes:**
 - This is **order notification**, NOT payment processing
 - Customer still pays at table/counter
-- Requires Restaurant Plan (for cart feature)
+- Requires Entrée Plan (for cart feature)
 - Requires WhatsApp Business account
 
 ---
 
 ### 5.3 WhatsApp Bundle (Both Add-Ons)
 
-**Price:** R199/month (per location)  
-**Regular:** R99 + R149 = R248  
-**Save:** R49/month (20% off)
+**Price:** R79/month (per location)  
+**Regular:** R39 + R59 = R98  
+**Save:** R19/month (20% off)
 
 **Includes:**
 - Waiter call feature
 - Order sending feature
-- Complete WhatsApp integration
 
 ---
 
@@ -494,7 +498,7 @@ Reply to confirm order received.
 - Premium PVC card (credit card size)
 - Embedded NFC chip (tap to view profile)
 - Custom design with your branding
-- Links to your BizBio profile
+- Links to your Connect profile
 - Works with all NFC-enabled phones
 - Durable and waterproof
 
@@ -516,13 +520,6 @@ Reply to confirm order received.
 - Links to restaurant menu
 - Customers tap waiter's wrist to view menu
 
-**Use Cases:**
-- Fast-paced restaurants (customers don't wait for menus)
-- Outdoor seating (no paper menus to blow away)
-- Beach/poolside restaurants
-- Modern, contactless experience
-- Reduces menu printing completely
-
 ---
 
 ### 6.3 QR Code Products
@@ -538,22 +535,21 @@ Reply to confirm order received.
 
 ## 7. Feature Comparison Matrices
 
-### 7.1 BizBio Professional
+### 7.1 Connect (Digital Business Cards)
 
-| Feature | Free | Solo | Pro | Business |
-|---------|------|------|-----|----------|
+| Feature | Free | Solo | Team | Business |
+|---------|------|------|------|----------|
 | **Monthly Price** | R0 | **R59** | R99 | R249 |
 | **Profiles** | 1 | **1** | 5 | 20 |
-| **Templates** | 3 basic | 15 premium | 15 premium | 15 premium |
+| **Templates** | 5 basic | Premium | Premium | Premium |
 | **Custom Branding** | ❌ | ✅ | ✅ | ✅ |
 | **Remove Badge** | ❌ | ✅ | ✅ | ✅ |
 | **Analytics** | ❌ | ✅ | ✅ | ✅ Advanced |
-| **Documents** | ❌ | 10 (5MB) | 10 (5MB) | 50 (10MB) |
 | **QR Code** | ✅ | ✅ | ✅ | ✅ |
-| **vCard Download** | ❌ | ✅ | ✅ | ✅ |
-| **Contact Form** | ❌ | ✅ | ✅ | ✅ |
+| **vCard Download** | ✅ | ✅ | ✅ | ✅ |
 | **Custom Slug** | ❌ | ✅ | ✅ | ✅ |
-| **Email Notifications** | ❌ | ✅ | ✅ | ✅ |
+| **Location Map** | ❌ | ✅ | ✅ | ✅ |
+| **Social Links** | 5 | ✅ | ✅ | ✅ |
 | **Team Management** | ❌ | ❌ | ❌ | ✅ |
 | **Org Structure** | ❌ | ❌ | ❌ | ✅ |
 | **Bulk Import** | ❌ | ❌ | ❌ | ✅ |
@@ -563,16 +559,15 @@ Reply to confirm order received.
 
 ### 7.2 BizBio Menu
 
-| Feature | Starter | Restaurant | Multi-Location |
-|---------|---------|------------|----------------|
+| Feature | Starter | Entrée | Banquet |
+|---------|---------|--------|---------|
 | **Monthly Price** | R149 | R299 | R599 |
-| **Restaurant Profiles** | 1 | 1 | 5 |
-| **Menu Items** | 50 | 150 | 150/location |
-| **Categories** | Unlimited | Unlimited | Unlimited |
+| **Restaurant Profiles** | 1 | 1 | Unlimited |
+| **Menu Items** | 50 | 200 | Unlimited |
+| **Categories** | 5 | 15 | Unlimited |
 | **Images/Item** | 1 | 1 | 1 |
 | **Portion Sizes** | ✅ | ✅ | ✅ |
-| **Daily Specials** | ✅ | ✅ | ✅ |
-| **Featured Items** | ❌ | ✅ | ✅ |
+| **Featured Section** | 1 | ✅ | ✅ |
 | **Item Add-ons** | ❌ | ✅ | ✅ |
 | **Allergen Info** | ❌ | ✅ | ✅ |
 | **Dietary Tags** | ❌ | ✅ | ✅ |
@@ -586,7 +581,8 @@ Reply to confirm order received.
 | **Central Management** | N/A | N/A | ✅ |
 | **Staff Accounts** | ❌ | ❌ | ✅ |
 | **QR Codes** | ✅ | ✅ | ✅ |
-| **WhatsApp Add-ons Available** | ✅ | ✅ | ✅ |
+| **WhatsApp Add-ons Available** | ❌ | ✅ | ✅ |
+| **Menu Pro Add-on Available** | ❌ | ✅ | ✅ |
 
 ---
 
@@ -632,40 +628,37 @@ A: Yes, all prices exclude VAT. We are not currently VAT registered.
 **Q: Can I try before I buy?**  
 A: Yes! All paid plans include a 14-day free trial. No credit card required to start.
 
-**Q: What's the difference between Solo and Pro?**  
-A: Solo gives you ALL premium features but only 1 profile (R59/month). Pro gives you 5 profiles (R99/month). If you only need one profile, Solo is perfect!
+**Q: What's the difference between Solo and Team?**  
+A: Solo gives you ALL premium features but only 1 profile (R59/month). Team gives you 5 profiles (R99/month). If you only need one profile, Solo is perfect!
 
 ---
 
-### Professional Plans
+### Connect Plans
 
-**Q: What if I need 2-3 profiles? Should I get Solo or Pro?**  
-A: For 2-3 profiles, get Pro (R99/month). It's better value than multiple Solo plans.
+**Q: What if I need 2-3 profiles? Should I get Solo or Team?**  
+A: For 2-3 profiles, get Team (R99/month). It's better value than multiple Solo plans.
 
-**Q: Can I upgrade from Solo to Pro later?**  
+**Q: Can I upgrade from Solo to Team later?**  
 A: Absolutely! Upgrade anytime. Your existing profile keeps all its data and settings.
-
-**Q: Do I lose my vCard when I downgrade from Solo to Free?**  
-A: Yes, vCard download is a premium feature. But your profile stays active and viewable.
 
 ---
 
 ### Menu Plans
 
-**Q: What's the cart feature in Restaurant plan?**  
+**Q: What's the cart feature in the Entrée plan?**  
 A: Customers can add items to a cart to see the running total. It's NOT online ordering - just a calculator to help them see their total before ordering at the table.
 
 **Q: Can customers actually order through the WhatsApp integration?**  
-A: Yes! With the WhatsApp Order Sending add-on (R149/month), customers can send their complete order via WhatsApp to your kitchen. However, payment still happens at the table/counter.
+A: Yes! With the WhatsApp Order Sending add-on (R59/month), customers can send their complete order via WhatsApp to your kitchen. However, payment still happens at the table/counter.
 
-**Q: Do the WhatsApp add-ons work on Starter plan?**  
-A: Waiter Call (R99/month) works on any plan. Order Sending (R149/month) requires Restaurant Plan because it uses the cart feature.
+**Q: Do the WhatsApp add-ons work on the Starter plan?**  
+A: No, WhatsApp add-ons require the Entrée plan or higher, as they depend on the cart and advanced menu features.
 
-**Q: What's the difference between 1 location in Restaurant vs Multi-Location plan?**  
-A: Restaurant plan = 1 menu. Multi-Location = 5 separate menus (for 5 branches). Multi-Location also has central management features to copy menus between locations.
+**Q: What's the difference between Entrée and Banquet?**  
+A: Entrée = 1 menu with up to 200 items. Banquet = unlimited separate menus for unlimited locations, plus central management features, staff accounts, and nutritional information.
 
 **Q: Can I have different menus per location?**  
-A: With Multi-Location plan, yes! Each location can have its own unique menu, or you can copy the same menu to all.
+A: With the Banquet plan, yes! Each location can have its own unique menu, or you can copy the same menu to all.
 
 ---
 
@@ -673,9 +666,6 @@ A: With Multi-Location plan, yes! Each location can have its own unique menu, or
 
 **Q: Do I need WhatsApp Business?**  
 A: Yes, you need a WhatsApp Business account (free from WhatsApp). We'll help you set it up.
-
-**Q: Does it work on my regular WhatsApp?**  
-A: It works with WhatsApp Business, which can run on the same phone as regular WhatsApp.
 
 **Q: Do customers need WhatsApp?**  
 A: Yes, but 90%+ of South Africans have WhatsApp, so it's rarely an issue.
@@ -688,10 +678,7 @@ A: Yes! Your WhatsApp Business can be connected to multiple devices (WhatsApp We
 ### Retail Plans
 
 **Q: Can customers buy products through BizBio?**  
-A: No, BizBio is a product **showcase**, not e-commerce. Customers contact you via the inquiry form. For full online shopping with payments, use Shopify or WooCommerce.
-
-**Q: Why would I use this instead of e-commerce?**  
-A: Much simpler! If you just want to show your products beautifully without the complexity of online payments, shipping, tax calculations, etc., BizBio is perfect. Great for wholesalers, B2B, or businesses that prefer phone/email orders.
+A: No, BizBio is a product **showcase**, not e-commerce. Customers contact you via the inquiry form.
 
 ---
 
@@ -740,7 +727,7 @@ A: They work with any NFC-enabled smartphone (iPhone 7 and newer, most Android p
 
 ### Example 1: Freelance Consultant
 **Need:** Professional digital business card  
-**Solution:** Solo (R59/month)  
+**Solution:** Connect Solo (R59/month)  
 **Annual Cost:** R708  
 **Replaces:** Business cards (R800/year)  
 **Savings:** R92/year + always up-to-date
@@ -758,20 +745,20 @@ A: They work with any NFC-enabled smartphone (iPhone 7 and newer, most Android p
 
 ### Example 3: Restaurant with Busy Service
 **Need:** Menu + order management  
-**Solution:** Menu Restaurant (R299) + WhatsApp Bundle (R199)  
-**Total:** R498/month  
-**Annual Cost:** R5,976  
-**Benefits:** 
+**Solution:** Menu Entrée (R299) + WhatsApp Bundle (R79)  
+**Total:** R378/month  
+**Annual Cost:** R4,536  
+**Benefits:**
 - Digital menu (replaces R20,000/year in printing)
 - Customers send orders via WhatsApp (reduces mistakes)
 - Call waiter feature (speeds up service)
-- **Net Savings:** R14,000+/year
+- **Net Savings:** R15,000+/year
 
 ---
 
 ### Example 4: Restaurant Owner + Personal Brand
 **Need:** Restaurant menu + personal business card  
-**Solution:** Solo + Menu Starter Bundle (R167/month)  
+**Solution:** Connect Solo + Menu Starter Bundle (R167/month)  
 **Annual Cost:** R2,004  
 **Regular Price:** R208/month  
 **Savings:** R492/year from bundle discount
@@ -784,45 +771,57 @@ A: They work with any NFC-enabled smartphone (iPhone 7 and newer, most Android p
 
 **Database Updates Needed:**
 ```sql
--- Add Solo tier to SubscriptionTiers
-INSERT INTO SubscriptionTiers (
-    ProductLine, TierName, TierCode, DisplayName, MonthlyPrice,
-    MaxProfiles, CustomBranding, RemoveBranding, Analytics, ...
-) VALUES (
-    'Professional', 'Solo', 'PROF_SOLO', 'Solo', 59.00,
-    1, true, true, true, ...
-);
+-- Rename Professional product line to Connect
+UPDATE ProductLines SET Name = 'Connect', DisplayName = 'Connect - Digital Business Cards'
+WHERE ProductLineCode = 'PROFESSIONAL';
 
--- Update Free tier to remove vCard
-UPDATE SubscriptionTiers 
-SET VCardDownload = false 
-WHERE TierCode = 'PROF_FREE';
+-- Rename Pro tier to Team
+UPDATE SubscriptionTiers SET TierName = 'Team', TierCode = 'CONNECT_TEAM', DisplayName = 'Team'
+WHERE TierCode = 'PROF_PRO';
 
--- Update Menu tiers with new limits
-UPDATE SubscriptionTiers 
-SET MaxCatalogItems = 150, UnlimitedCategories = true, DailySpecials = true
+-- Update Free tier - add vCard download
+UPDATE SubscriptionTiers SET VCardDownload = true
+WHERE TierCode = 'CONNECT_FREE';
+
+-- Update Solo tier - remove document uploads, add location map
+UPDATE SubscriptionTiers SET DocumentUploads = 0, LocationMap = true
+WHERE TierCode = 'CONNECT_SOLO';
+
+-- Rename Restaurant plan to Entrée
+UPDATE SubscriptionTiers SET TierName = 'Entree', DisplayName = 'Entrée'
 WHERE TierCode = 'MENU_RESTAURANT';
+
+-- Update Entrée item limit to 200 and categories to 15
+UPDATE SubscriptionTiers SET MaxCatalogItems = 200, MaxCategories = 15
+WHERE TierCode = 'MENU_ENTREE';
+
+-- Rename Multi-Location to Banquet, set unlimited
+UPDATE SubscriptionTiers SET TierName = 'Banquet', DisplayName = 'Banquet',
+    MaxProfiles = NULL, MaxCatalogItems = NULL  -- NULL = unlimited
+WHERE TierCode = 'MENU_MULTILOCATION';
+
+-- Update WhatsApp add-on prices
+UPDATE AddOns SET Price = 39.00 WHERE AddOnCode = 'WA_WAITER';
+UPDATE AddOns SET Price = 59.00 WHERE AddOnCode = 'WA_ORDER';
+UPDATE AddOns SET Price = 79.00 WHERE AddOnCode = 'WA_BUNDLE';
+
+-- WhatsApp add-ons now require Entrée or higher
+UPDATE AddOns SET MinimumTierCode = 'MENU_ENTREE' WHERE AddOnCode IN ('WA_WAITER','WA_ORDER','WA_BUNDLE');
 ```
 
-**New Features to Implement:**
-1. Cart functionality (Restaurant plan)
-2. WhatsApp integration API
-3. Portion sizes/variants UI
-4. Featured items section
-5. Daily specials management
-
 **Priority Order:**
-1. Solo plan (quick to add)
-2. Updated menu tiers (adjust limits)
-3. Cart feature (new functionality)
-4. WhatsApp integration (phase 2)
+1. Rename product lines and tiers in DB and frontend
+2. Update item/category limits for Entrée and Banquet
+3. Update WhatsApp pricing
+4. Update eligibility rules for add-ons
+5. Update all marketing copy and FAQs
 
 ---
 
 **End of Pricing Structure Document**
 
-**Version:** 3.0  
+**Version:** 4.0  
 **Status:** Final - Ready for Implementation  
-**Solo Plan:** R59/month - All features, 1 profile  
-**WhatsApp Add-ons:** R99-R199/month  
+**Connect Solo Plan:** R59/month - All features, 1 profile  
+**WhatsApp Add-ons:** R39-R79/month  
 **Bundle Discounts:** 20% off all combinations

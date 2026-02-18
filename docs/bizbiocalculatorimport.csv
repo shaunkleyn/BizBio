@@ -1,0 +1,260 @@
+BizBio Restaurant Menu Plans - Smart Calculator
+Import Instructions: 1) Open Google Sheets  2) File > Import > Upload this file  3) Replace current sheet
+
+SECTION 1: CLIENT INFORMATION
+Restaurant Name:
+Contact Person:
+Phone Number:
+Email Address:
+Consultation Date:
+Sales Representative:
+
+SECTION 2: DISCOVERY INPUTS (Fill in the yellow cells)
+Question,Your Answer,Helper Text
+Number of Locations,1,How many physical restaurant locations?
+Tables per Location,20,Average tables per location
+Total Menu Items,80,Total number of items across all categories
+Current Annual Printing Cost,12000,How much spent on menu printing per year (numbers only)
+Reprints per Year,4,How many times menus are reprinted annually
+Events per Month,0,Weddings/parties/corporate events per month
+
+Item Variants Needed?,No,"Enter Yes or No - Do you need sizes (Small, Medium, Large)?"
+Add-ons Needed?,No,Enter Yes or No - Extra cheese/toppings/modifications?
+Allergen Info Needed?,No,Enter Yes or No - Show allergen information?
+Dietary Tags Needed?,No,"Enter Yes or No - Vegan, Halal, Kosher tags?"
+Daily Specials?,No,Enter Yes or No - Change specials daily/weekly?
+
+Host Weddings?,No,Enter Yes or No
+Host Private Parties?,No,Enter Yes or No
+Corporate Events?,No,Enter Yes or No
+Historic or Unique Venue?,No,Enter Yes or No - Building with interesting history?
+Tourist Location?,No,Enter Yes or No - In tourist area?
+
+High Wait Times?,No,Enter Yes or No - Customers wait too long for service?
+Order Errors Common?,No,Enter Yes or No - Kitchen gets wrong orders frequently?
+Staff Stretched Thin?,No,Enter Yes or No - Not enough staff to handle demand?
+Outdoor Seating?,No,Enter Yes or No - Tables outside where waiters hard to see?
+
+SECTION 3: AUTOMATIC RECOMMENDATION
+Calculation Field,Result,Explanation
+Base Plan Recommended,"Formula: =IF(B10>1,""Banquet (R599)"",IF(B12>200,""Banquet (R599)"",IF(B12>50,""Entrée (R299)"",""Starter (R149)""))))",Automatically selects plan based on locations and items
+Base Plan Monthly Price,"Formula: =IF(B10>1,599,IF(B12>200,599,IF(B12>50,299,149)))",Monthly price for recommended base plan
+Menu Pro Recommended?,"Formula: =IF(OR(B21=""Yes"",B22=""Yes"",B23=""Yes"",B24=""Yes"",B25=""Yes""),""Yes"",""No"")",Checks if events or special features need Menu Pro
+Menu Pro Monthly Price,"Formula: =IF(B37=""Yes"",149,0)",Adds R149 if Menu Pro needed
+WhatsApp Recommendation,"Formula: =IF(B36<=149,""N/A - Requires Entrée plan"",IF(AND(B27=""Yes"",B28=""Yes""),""Bundle (R79/loc)"",IF(B27=""Yes"",""Waiter (R39/loc)"",IF(B28=""Yes"",""Order (R59/loc)"",""Optional""))))",Recommends WhatsApp based on operational needs (requires Entrée or higher)
+WhatsApp Price per Location,"Formula: =IF(B36<=149,0,IF(AND(B27=""Yes"",B28=""Yes""),79,IF(B27=""Yes"",39,IF(B28=""Yes"",59,0))))",Price per location for WhatsApp (Entrée plan required)
+Total WhatsApp Cost,Formula: =B40*B10,Multiply by number of locations
+
+MONTHLY TOTAL,Formula: =B36+B38+B41,Total monthly subscription
+ANNUAL TOTAL,Formula: =B43*12,Total annual subscription
+
+SECTION 4: ROI CALCULATION
+Current Annual Costs,Amount,Calculation
+Menu Printing,Formula: =B13,From your input above
+Design Updates Estimate,2000,Typical annual design costs
+Event Menu Printing,Formula: =B14*500,Events per month × R500 × 12 months
+Total Current Annual Cost,Formula: =B49+B50+B51,Sum of all current costs
+
+BizBio Annual Costs,Amount,Calculation
+Annual Subscription,Formula: =B44,From calculation above
+One-Time Setup Cost,0,"NFC tags, training, etc (if applicable)"
+Total BizBio Annual Cost,Formula: =B56+B57,Sum of BizBio costs
+
+SAVINGS ANALYSIS,Amount,Details
+Annual Savings,Formula: =B52-B58,How much you save per year
+Percentage Savings,Formula: =(B52-B58)/B52,Percentage cost reduction
+Payback Period (months),Formula: =B58/B43,Months until you break even
+ROI Ratio,Formula: =B52/B58,Return on investment
+
+SECTION 5: RECOMMENDATION SUMMARY
+Selected Package,Price,Details
+Base Plan,Formula: =B36,Your recommended base plan
+Menu Pro Add-On,Formula: =B38,If events/table stories needed
+WhatsApp Add-Ons,Formula: =B41,Based on operational needs
+TOTAL MONTHLY,Formula: =B43,Complete monthly cost
+TOTAL ANNUAL,Formula: =B44,Complete annual cost
+
+Value Proposition
+Annual Savings,Formula: =B61,"You save R" & B61 & " per year"
+ROI Achievement,Formula: =ROUND(B63,1) & " months",Break even in this timeframe
+Cost Reduction,Formula: =ROUND(B62*100,0) & "%",Percentage reduction in menu costs
+
+SECTION 6: REFERENCE TABLES
+
+PLAN COMPARISON TABLE
+Plan Name,Monthly Price,Best For,Items Included,Locations,Categories
+Starter,149,"Food trucks, small cafes",Up to 50,1,5
+Entrée,299,Full-service restaurants,Up to 200,1,15
+Banquet,599,"Chains, franchises",Unlimited,Unlimited,Unlimited
+
+ADD-ON COMPARISON TABLE
+Add-On,Price/Location,What It Does,Requirements
+Menu Pro,149,Event Mode + Table Personalities,Entrée or Banquet plan
+WhatsApp Waiter Call,39,Call waiter via WhatsApp,Entrée or Banquet plan
+WhatsApp Order Sending,59,Send orders to kitchen,Entrée or Banquet plan (has cart)
+WhatsApp Bundle,79,Both waiter + order (save R19),Entrée or Banquet plan
+
+SECTION 7: COMMON SCENARIOS
+
+Scenario A: Small Cafe
+Profile,"1 location, 35 items, simple menu"
+Recommended,Starter (R149/mo)
+Optional WhatsApp,Not available on Starter
+Total Range,R149/mo
+Annual Savings,"R8,000+"
+Best For,"Testing digital menus, tight budget"
+
+Scenario B: Busy Restaurant  
+Profile,"1 location, 100 items, complex menu"
+Recommended,Entrée (R299/mo)
+Add-ons,WhatsApp Bundle (R79/mo)
+Total,R378/mo
+Annual Savings,"R32,000+"
+Best For,"Full-service, want efficiency"
+
+Scenario C: Event Venue
+Profile,"1 location, 80 items, hosts weddings"
+Recommended,Entrée (R299) + Menu Pro (R149)
+Add-ons,WhatsApp Bundle (R79)
+Total,R527/mo
+Key Benefit,Event menus in 1 click
+Time Saved,30 min per event
+Annual Savings,"R20,000+"
+
+Scenario D: Fine Dining
+Profile,"1 location, historic venue with stories"
+Recommended,Entrée (R299) + Menu Pro (R149)
+Add-ons,WhatsApp Waiter (R39)
+Hardware,Premium NFC Discs (R3,499 one-time)
+Monthly Total,R487/mo
+Key Benefit,Table Personalities for memorable experience
+Target Market,"Tourist spots, upscale dining"
+
+Scenario E: Small Chain (3 locations)
+Profile,"3 locations, same menu, 200 items"
+Recommended,Banquet (R599) - covers all 3
+Add-ons,WhatsApp Bundle × 3 (R237 total)
+Total,R836/mo
+Per Location Cost,R279/mo
+Key Benefits,"Central control, bulk updates"
+Annual Savings,"R50,000+"
+
+Scenario F: Franchise (5 locations)
+Profile,"5 locations, different menus"
+Recommended,Banquet (R599) - covers all 5
+Add-ons,WhatsApp Bundle × 5 (R395 total)
+Total,"R994/mo"
+Per Location Cost,R199/mo
+Key Benefits,"Staff accounts, location-specific menus"
+Best For,Growing franchise with independent managers
+
+SECTION 8: OBJECTION RESPONSES
+
+Objection: "Too expensive"
+Calculate,Current printing costs
+Show,ROI typically 2-3 months
+Highlight,Annual savings R10k-R30k
+Alternative,Start with Starter plan (R149)
+Trial Offer,14 days free - no credit card required
+
+Objection: "We don't do events"
+Response,You don't need Menu Pro then!
+Recommend,Entrée plan only (R299)
+Savings,Save R149/month vs full package
+Still Get,"Variants, allergens, analytics, WhatsApp"
+
+Objection: "Can we start smaller?"
+Response,Yes! Try Starter (R149/mo)
+Trial,14-day free trial
+Upgrade,Easy upgrade path when ready
+Risk,None - cancel anytime
+
+Objection: "Multiple locations"
+Response,Banquet plan is perfect for you
+Math,R599 ÷ unlimited locations = decreasing cost per location
+Features,"Central management, staff accounts"
+WhatsApp,Add per location as needed (R39-R79)
+Flexibility,Each location can have unique menu
+
+Objection: "Staff not tech-savvy"
+Response,Designed for non-tech users
+Training,Video tutorials + live support
+Interface,Simple as WhatsApp
+Support,Email support included
+Trial,Test with staff during free trial
+
+Objection: "WhatsApp add-ons on Starter?"
+Response,WhatsApp requires the Entrée plan or higher
+Reason,WhatsApp Order Sending depends on the cart feature (Entrée+)
+Solution,Upgrade to Entrée (R299) to unlock WhatsApp add-ons
+Value,Extra R150/mo gets you 200 items + full features + WhatsApp capability
+
+SECTION 9: DECISION FLOWCHART
+
+START: How many locations?
+├─ 1 Location
+│  ├─ Items ≤ 50 → STARTER (R149)
+│  │  └─ Note: WhatsApp not available on Starter
+│  │
+│  ├─ Items 51-200 → ENTRÉE (R299)
+│  │  ├─ Do events? → +Menu Pro (R149)
+│  │  ├─ Want table stories? → +Menu Pro (R149)
+│  │  └─ Need efficiency? → +WhatsApp (R39-R79)
+│  │
+│  └─ Items 200+ → BANQUET (R599)
+│
+└─ 2+ Locations → BANQUET (R599)
+   ├─ Events? → +Menu Pro (R149)
+   ├─ WhatsApp? → +R39-R79 per location
+   └─ Staff accounts → Included ✓
+
+SECTION 10: FOLLOW-UP CHECKLIST
+
+Pre-Proposal Checklist
+☐,Confirmed number of locations
+☐,Confirmed total menu items
+☐,Confirmed event frequency (if any)
+☐,Calculated current printing costs
+☐,Identified key pain points
+☐,Selected correct base plan
+☐,Identified needed add-ons
+☐,Calculated ROI and annual savings
+☐,Addressed all objections
+☐,Explained 14-day free trial
+☐,Got verbal commitment
+☐,Set follow-up date
+
+Post-Consultation Actions
+☐,Send proposal email with summary
+☐,Send trial signup link
+☐,Schedule onboarding call
+☐,Send getting started guide
+☐,Quote NFC tags if needed
+☐,Add to CRM for follow-up (Day 3)
+☐,Check trial activation (Day 1)
+☐,Onboarding check-in (Day 7)
+☐,Pre-trial-end follow-up (Day 12)
+
+SECTION 11: CONTACT INFORMATION
+
+BizBio Digital Solutions
+Website: www.bizbio.co.za
+Email: sales@bizbio.co.za
+Phone: +27 XX XXX XXXX
+Support: support@bizbio.co.za
+
+Trial Signup: www.bizbio.co.za/trial
+Demo Video: www.bizbio.co.za/demo
+Pricing Page: www.bizbio.co.za/pricing/menu
+
+NOTES
+All prices exclude VAT
+14-day free trial on all paid plans
+No credit card required for trial
+Cancel anytime - no contracts
+WhatsApp add-ons are per location (requires Entrée or Banquet plan)
+Banquet plan covers unlimited locations
+Menu Pro required for Event Mode and Table Personalities
+
+CALCULATOR VERSION: 2.0
+LAST UPDATED: February 2026

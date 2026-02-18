@@ -29,29 +29,29 @@
                     <div class="feature-icon bg-blue-100">
                         <i class="fas fa-id-card text-blue-600 text-2xl"></i>
                     </div>
-                    <h3 class="text-2xl font-bold text-md-on-surface mb-3">BizBio Professional</h3>
+                    <h3 class="text-2xl font-bold text-md-on-surface mb-3">BizBio Connect</h3>
                     <p class="text-md-on-surface-variant mb-6">Digital business cards that leave a lasting impression. Share your contact info instantly via NFC or QR code.</p>
 
                     <div class="space-y-3 mb-6">
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                             <span class="text-md-on-surface">Custom branding & templates</span>
+                            <span class="text-yellow-600 ml-1">*</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                             <span class="text-md-on-surface">Real-time analytics</span>
+                            <span class="text-yellow-600 ml-1">*</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                             <span class="text-md-on-surface">Team management</span>
-                        </div>
-                        <div class="flex items-start">
-                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
-                            <span class="text-md-on-surface">Document uploads</span>
+                            <span class="text-yellow-600 ml-1">*</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                             <span class="text-md-on-surface">Social media integration</span>
+                            <span class="text-yellow-600 ml-1">*</span>
                         </div>
                     </div>
 
@@ -63,6 +63,7 @@
                     <a href="pricing.html" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
                         View Plans
                     </a>
+                    <sub><span class="text-yellow-600 mr-1">*</span> On selected plans only</sub>
                 </div>
 
                 <!-- Menu Product -->
@@ -80,22 +81,27 @@
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                             <span class="text-md-on-surface">Unlimited menu updates</span>
+                            <span class="text-yellow-600 ml-1">*</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                             <span class="text-md-on-surface">Food photography support</span>
+                            <span class="text-yellow-600 ml-1">*</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                             <span class="text-md-on-surface">Allergen & dietary info</span>
+                            <span class="text-yellow-600 ml-1">*</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                             <span class="text-md-on-surface">Daily specials section</span>
+                            <span class="text-yellow-600 ml-1">*</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                             <span class="text-md-on-surface">Multi-location support</span>
+                            <span class="text-yellow-600 ml-1">*</span>
                         </div>
                     </div>
 
@@ -107,6 +113,7 @@
                     <a href="pricing.html" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
                         View Plans
                     </a>
+                    <sub><span class="text-yellow-600 mr-1">*</span> On selected plans only</sub>
                 </div>
 
                 <!-- Retail Product -->
@@ -121,22 +128,27 @@
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                             <span class="text-md-on-surface">Beautiful product galleries</span>
+                            <span class="text-yellow-600 ml-1">*</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                             <span class="text-md-on-surface">Product variants & specs</span>
+                            <span class="text-yellow-600 ml-1">*</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                             <span class="text-md-on-surface">Bulk CSV import</span>
+                            <span class="text-yellow-600 ml-1">*</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                             <span class="text-md-on-surface">Product collections</span>
+                            <span class="text-yellow-600 ml-1">*</span>
                         </div>
                         <div class="flex items-start">
                             <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
                             <span class="text-md-on-surface">Video product demos</span>
+                            <span class="text-yellow-600 ml-1">*</span>
                         </div>
                     </div>
 
@@ -148,6 +160,7 @@
                     <a href="pricing.html" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
                         View Plans
                     </a>
+                    <sub><span class="text-yellow-600 mr-1">*</span> On selected plans only</sub>
                 </div>
             </div>
         </div>
