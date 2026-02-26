@@ -63,7 +63,8 @@
       "Bash(gh api:*)",
       "Bash(git ls-tree:*)",
       "Bash(gh workflow run:*)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [],
     "ask": []

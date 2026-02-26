@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkered Block Solutions - BizBio</title>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- Google Fonts: Cormorant Garamond (display) + Plus Jakarta Sans (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 Free -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+
+  <style>
+    /* ============================================================
+       CSS CUSTOM PROPERTIES
+       ============================================================ */
+    :root {
+      --brand-1: #6a278e;
+      --brand-2: #cb1fb6;
+      --gradient: linear-gradient(135deg, #6a278e 0%, #9e27b0 45%, #cb1fb6 100%);
+      --gradient-soft: linear-gradient(135deg, rgba(106,39,142,0.1), rgba(203,31,182,0.07));
+      --text-primary: #1e1e2e;
+      --text-secondary: #6b6b80;
+      --text-muted: #9898aa;
+      --bg-page: #f0ebf7;
+      --bg-card: #ffffff;
+      --bg-section: #fafafa;
+      --border-color: #ede8f5;
+      --radius-card: 24px;
+      --radius-icon: 13px;
+      --radius-btn: 50px;
+      --shadow-card: 0 4px 40px rgba(106,39,142,0.12), 0 1px 4px rgba(0,0,0,0.06);
+      --shadow-fab: 0 8px 30px rgba(106,39,142,0.45);
+      --shadow-btn: 0 4px 16px rgba(106,39,142,0.3);
+      --transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { height: 100%; scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      background: var(--bg-page);
+      min-height: 100%;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { text-decoration: none; color: inherit; transition: var(--transition); }
+    ul { list-style: none; }
+
+    /* ============================================================
+       OUTER PAGE BACKGROUND (desktop only)
+       ============================================================ */
+    @media (min-width: 560px) {
+      body {
+        background: linear-gradient(150deg, #ede5f8 0%, #f9edf8 50%, #f0ebf7 100%);
+        padding: 40px 20px 80px;
+      }
+    }
+
+    /* ============================================================
+       CARD WRAPPER
+       ============================================================ */
+    .card-wrapper {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--bg-card);
+      position: relative;
+    }
+
+    @media (min-width: 560px) {
+      .card-wrapper {
+        min-height: unset;
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+        overflow: hidden;
+      }
+    }
+
+    /* ============================================================
+       HEADER
+       ============================================================ */
+    .profile-header {
+      background: var(--gradient);
+      position: relative;
+      text-align: center;
+      padding: 36px 24px 0;
+      overflow: hidden;
+    }
+
+    /* Subtle noise texture overlay */
+    .profile-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.35;
+    }
+
+    /* Decorative blurred circle top-right */
+    .profile-header::after {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 200px;
+      height: 200px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+      animation: fadeInDown 0.55s cubic-bezier(0.4,0,0.2,1) both;
+    }
+
+    /* ---- Avatar ---- */
+    .profile-avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background-color: rgba(255,255,255,0.2);
+      background-size: cover;
+      background-position: center;
+      margin: 0 auto 18px;
+      border: 3px solid rgba(255,255,255,0.9);
+      box-shadow: 0 0 0 5px rgba(255,255,255,0.15), 0 8px 28px rgba(0,0,0,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Avatar initials fallback */
+    .profile-avatar::after {
+      content: 'CBS';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 1px;
+    }
+
+    .profile-avatar img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    /* ---- Name & Tagline ---- */
+    .profile-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 23px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.25;
+      letter-spacing: 0.2px;
+      padding: 0 16px;
+      margin-bottom: 8px;
+    }
+
+    .profile-tagline {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 28px;
+    }
+
+    /* ---- Quick Action Buttons ---- */
+    .quick-actions {
+      display: flex;
+      justify-content: center;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      position: relative;
+      z-index: 1;
+    }
+
+    .quick-action {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 15px 8px;
+      color: #fff;
+      transition: var(--transition);
+      border-right: 1px solid rgba(255,255,255,0.12);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .quick-action:last-child { border-right: none; }
+
+    .quick-action:hover { background: rgba(255,255,255,0.14); color: #fff; }
+    .quick-action:active { background: rgba(255,255,255,0.22); }
+
+    .quick-action i { font-size: 20px; }
+
+    .quick-action span {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      opacity: 0.88;
+    }
+
+    /* ---- Wave separator between header and body ---- */
+    .header-wave {
+      display: block;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+      margin-bottom: -1px; /* pixel-perfect connection */
+    }
+
+    /* ============================================================
+       CARD BODY
+       ============================================================ */
+    .card-body-content {
+      padding: 8px 20px 110px;
+      animation: fadeInUp 0.5s cubic-bezier(0.4,0,0.2,1) 0.15s both;
+    }
+
+    @media (min-width: 420px) {
+      .card-body-content { padding: 12px 24px 110px; }
+    }
+
+    /* ============================================================
+       CONTACT SECTION ROWS
+       ============================================================ */
+    .contact-section {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border-color);
+      transition: var(--transition);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .contact-section:last-child { border-bottom: none; }
+
+    /* Hover glow on the left icon */
+    .contact-section:hover .contact-icon {
+      background: var(--gradient);
+      color: #fff;
+      transform: scale(1.06);
+      box-shadow: 0 4px 16px rgba(106,39,142,0.3);
+    }
+
+    /* ---- Icon ---- */
+    .contact-icon {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-icon);
+      background: var(--gradient-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand-1);
+      font-size: 17px;
+      transition: var(--transition);
+    }
+
+    /* ---- Info ---- */
+    .contact-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .contact-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.3px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+
+    .contact-value {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.45;
+    }
+
+    .contact-value a {
+      color: var(--text-primary);
+    }
+
+    .contact-value a:hover { color: var(--brand-1); }
+
+    /* ---- Action Button ---- */
+    .contact-action { flex-shrink: 0; }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 34px;
+      padding: 0 15px;
+      border-radius: var(--radius-btn);
+      border: 1.5px solid var(--brand-1);
+      color: var(--brand-1);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      background: transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-action:hover {
+      background: var(--gradient);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: var(--shadow-btn);
+      transform: translateY(-1px);
+    }
+
+    .btn-action:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    /* ============================================================
+       SOCIAL MEDIA ICONS
+       ============================================================ */
+    .social-grid {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .social-link {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      color: #fff;
+      transition: var(--transition);
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+    }
+
+    .social-link::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: calc(100% + 7px);
+      left: 50%;
+      transform: translateX(-50%) scale(0.85);
+      background: rgba(20,10,35,0.88);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+      transform-origin: bottom center;
+    }
+
+    .social-link:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    .social-link:hover {
+      transform: translateY(-3px) scale(1.08);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.22);
+      color: #fff;
+    }
+
+    .social-link:active { transform: scale(0.96); }
+
+    .social-facebook  { background: #1877F2; }
+    .social-instagram { background: linear-gradient(135deg, #f09433, #e6683c 30%, #dc2743 55%, #cc2366 80%, #bc1888); }
+    .social-whatsapp  { background: #25D366; }
+    .social-linkedin  { background: #0A66C2; }
+    .social-website   { background: var(--gradient); }
+
+    /* ============================================================
+       FLOATING ACTION BUTTON (FAB) — pure CSS + minimal JS
+       ============================================================ */
+    .fab-container {
+      position: fixed;
+      bottom: 26px;
+      right: 22px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    /* Main button */
+    .fab-main {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--gradient);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-fab);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+      position: relative;
+      z-index: 2;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+    }
+
+    .fab-main:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 38px rgba(106,39,142,0.6);
+    }
+
+    .fab-main:active { transform: scale(0.96); }
+
+    .fab-main .fab-icon {
+      font-size: 20px;
+      color: #fff;
+      position: absolute;
+      transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    .fab-icon-open  { opacity: 1; transform: rotate(0deg) scale(1); }
+    .fab-icon-close { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+
+    .fab-container.is-open .fab-icon-open  { opacity: 0; transform: rotate(90deg) scale(0.5); }
+    .fab-container.is-open .fab-icon-close { opacity: 1; transform: rotate(0deg) scale(1); }
+
+    /* Child buttons stack */
+    .fab-children {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: flex-end;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .fab-container.is-open .fab-children { pointer-events: auto; }
+
+    .fab-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(14px) scale(0.88);
+      transition: opacity 0.24s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    .fab-container.is-open .fab-item { opacity: 1; transform: translateY(0) scale(1); }
+    .fab-container.is-open .fab-item:nth-child(1) { transition-delay: 0.04s; }
+    .fab-container.is-open .fab-item:nth-child(2) { transition-delay: 0.09s; }
+    .fab-container.is-open .fab-item:nth-child(3) { transition-delay: 0.14s; }
+
+    .fab-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #fff;
+      background: rgba(24,12,45,0.82);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 6px 11px;
+      border-radius: 8px;
+      white-space: nowrap;
+      letter-spacing: 0.2px;
+    }
+
+    .fab-child-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.22);
+      transition: var(--transition);
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+    }
+
+    .fab-child-btn:hover { transform: scale(1.1); color: #fff; }
+    .fab-child-btn:active { transform: scale(0.94); }
+
+    .fab-btn-download        { background: linear-gradient(135deg, #7065c9, #5a53b0); }
+    .fab-btn-share-contact   { background: linear-gradient(135deg, #c965c9, #a847a8); }
+    .fab-btn-share-profile   { background: linear-gradient(135deg, #6999dd, #4a7cc9); }
+
+    /* Backdrop */
+    .fab-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(20,8,40,0.25);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      z-index: 999;
+      animation: backdropIn 0.2s ease both;
+    }
+
+    .fab-container.is-open ~ .fab-backdrop { display: block; }
+
+    /* ============================================================
+       ANIMATIONS
+       ============================================================ */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes backdropIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ============================================================
+       RESPONSIVE FINE-TUNING
+       ============================================================ */
+
+    /* Very small phones */
+    @media (max-width: 360px) {
+      .profile-name { font-size: 19px; }
+      .btn-action   { padding: 0 11px; font-size: 11px; height: 32px; }
+      .contact-icon { width: 40px; height: 40px; font-size: 15px; border-radius: 11px; }
+      .contact-value { font-size: 13px; }
+      .social-link  { width: 40px; height: 40px; font-size: 16px; }
+    }
+
+    /* Tablet / desktop */
+    @media (min-width: 560px) {
+      .profile-header  { padding: 44px 32px 0; }
+      .profile-avatar  { width: 108px; height: 108px; }
+      .profile-name    { font-size: 26px; }
+      .card-body-content { padding: 12px 32px 110px; }
+    }
+
+    /* Ensure touch targets are large enough */
+    .quick-action,
+    .btn-action,
+    .social-link,
+    .fab-main,
+    .fab-child-btn {
+      min-height: 44px;
+    }
+
+    .btn-action { min-height: 34px; }
+  </style>
+</head>
+
+<body>
+
+  <!-- ================================================================
+       MAIN CARD
+       ================================================================ -->
+  <div class="card-wrapper">
+
+    <!-- ---- HEADER ---- -->
+    <header class="profile-header">
+      <div class="header-content">
+
+        <!-- Profile Avatar -->
+        <div class="profile-avatar">
+          <img
+            src="//qrcgcustomers.s3-eu-west-1.amazonaws.com/account16468716/21308981_1.png?0.9391094518761602"
+            alt="Checkered Block Solutions"
+            onerror="this.style.display='none'"
+          >
+        </div>
+
+        <h1 class="profile-name">Checkered Block Solutions (Pty) Ltd</h1>
+        <p class="profile-tagline">Diversify</p>
+      </div>
+
+      <!-- Quick Actions -->
+      <nav class="quick-actions" aria-label="Quick actions">
+        <a class="quick-action" href="tel:+27796762459" aria-label="Call us">
+          <i class="fa-solid fa-phone" aria-hidden="true"></i>
+          <span>Call</span>
+        </a>
+        <a class="quick-action" href="mailto:info@checkeredblock.co.za" target="_blank" rel="noopener" aria-label="Send email">
+          <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+          <span>Email</span>
+        </a>
+        <a class="quick-action" href="https://wa.me/+27796762459" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+          <span>WhatsApp</span>
+        </a>
+      </nav>
+
+      <!-- Wave curve transition -->
+      <svg class="header-wave" viewBox="0 0 480 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M0 36 C80 6 160 0 240 0 C320 0 400 6 480 36 L480 36 L0 36 Z" fill="#ffffff"/>
+      </svg>
+    </header>
+
+    <!-- ---- CARD BODY ---- -->
+    <main class="card-body-content">
+
+      <!-- Social Media -->
+      <section class="contact-section">
+        <div class="contact-icon" aria-hidden="true">
+          <i class="fa-solid fa-share-nodes"></i>
+        </div>
+        <div class="contact-info">
+          <div class="contact-label">Social Media</div>
+          <div class="social-grid" role="list">
+            <a
+              href="http://www.facebook.com/checkeredblock/"
+              target="_blank" rel="noopener"
+              class="social-link social-facebook"
+              aria-label="Facebook"
+              data-label="Facebook"
+              role="listitem"
+            ><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
+
+            <a
+              href="http://www.instagram.com/checkeredblock"
+              target="_blank" rel="noopener"
+              class="social-link social-instagram"
+              aria-label="Instagram"
+              data-label="Instagram"
+              role="listitem"
+            ><i class="fa-brands fa-instagram" aria-hidden="true"></i></a>
+
+            <a
+              href="https://wa.me/+27796762459"
+              target="_blank" rel="noopener"
+              class="social-link social-whatsapp"
+              aria-label="WhatsApp"
+              data-label="WhatsApp"
+              role="listitem"
+            ><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
+
+            <a
+              href="https://www.linkedin.com/company/checkered-block-solutions/"
+              target="_blank" rel="noopener"
+              class="social-link social-linkedin"
+              aria-label="LinkedIn"
+              data-label="LinkedIn"
+              role="listitem"
+            ><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></a>
+
+            <a
+              href="http://www.checkeredblock.co.za"
+              target="_blank" rel="noopener"
+              class="social-link social-website"
+              aria-label="Website"
+              data-label="Website"
+              role="listitem"
+            ><i class="fa-solid fa-globe" aria-hidden="true"></i></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Address -->
+      <section class="contact-section">
+        <div class="contact-icon" aria-hidden="true">
+          <i class="fa-solid fa-building"></i>
+        </div>
+        <div class="contact-info">
+          <div class="contact-label">Address</div>
+          <address class="contact-value" style="font-style: normal;">
+            Checkered Block Solutions (Pty) Ltd<br>
+            Heldervue, Somerset West<br>
+            Cape Town, 7130
+          </address>
+        </div>
+        <div class="contact-action">
+          <a href="https://maps.app.goo.gl/M66NYXqtnYioG1QE8" target="_blank" rel="noopener" class="btn-action">
+            Open Maps
+          </a>
+        </div>
+      </section>
+
+      <!-- Mobile -->
+      <section class="contact-section">
+        <div class="contact-icon" aria-hidden="true">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+        </div>
+        <div class="contact-info">
+          <div class="contact-label">Mobile</div>
+          <div class="contact-value">
+            <a href="tel:+27796762459">079 676 2459</a>
+          </div>
+        </div>
+        <div class="contact-action">
+          <a href="tel:+27796762459" class="btn-action">Call Now</a>
+        </div>
+      </section>
+
+      <!-- Email -->
+      <section class="contact-section">
+        <div class="contact-icon" aria-hidden="true">
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+        <div class="contact-info">
+          <div class="contact-label">Email</div>
+          <div class="contact-value">
+            <a href="mailto:info@checkeredblock.co.za">info@checkeredblock.co.za</a>
+          </div>
+        </div>
+        <div class="contact-action">
+          <a href="mailto:info@checkeredblock.co.za" class="btn-action">Mail Us</a>
+        </div>
+      </section>
+
+      <!-- Owner & Founder -->
+      <section class="contact-section">
+        <div class="contact-icon" aria-hidden="true">
+          <i class="fa-solid fa-briefcase"></i>
+        </div>
+        <div class="contact-info">
+          <div class="contact-label">Owner &amp; Founder</div>
+          <div class="contact-value">
+            <a href="https://www.linkedin.com/in/corl%C3%A9-ann-mccallaghan-1a965215/" target="_blank" rel="noopener">
+              Corlé-Ann McCallaghan
+            </a>
+          </div>
+        </div>
+        <div class="contact-action">
+          <a href="https://www.linkedin.com/in/corl%C3%A9-ann-mccallaghan-1a965215/" target="_blank" rel="noopener" class="btn-action">
+            Connect
+          </a>
+        </div>
+      </section>
+
+      <!-- Website -->
+      <section class="contact-section">
+        <div class="contact-icon" aria-hidden="true">
+          <i class="fa-solid fa-globe"></i>
+        </div>
+        <div class="contact-info">
+          <div class="contact-label">Website</div>
+          <div class="contact-value">
+            <a href="https://www.checkeredblock.co.za" target="_blank" rel="noopener">
+              www.checkeredblock.co.za
+            </a>
+          </div>
+        </div>
+        <div class="contact-action">
+          <a href="https://www.checkeredblock.co.za" target="_blank" rel="noopener" class="btn-action">
+            Visit Us
+          </a>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- /card-wrapper -->
+
+
+  <!-- ================================================================
+       FLOATING ACTION BUTTON
+       ================================================================ -->
+  <div class="fab-container" id="fabContainer">
+
+    <!-- Child Buttons (appear when open) -->
+    <div class="fab-children" aria-hidden="true">
+
+      <div class="fab-item">
+        <span class="fab-label">Download Contact</span>
+        <a href="Checkered_Block_Solutions.vcf" target="_blank" rel="noopener" class="fab-child-btn fab-btn-download" aria-label="Download Contact">
+          <i class="fa-solid fa-download" aria-hidden="true"></i>
+        </a>
+      </div>
+
+      <div class="fab-item">
+        <span class="fab-label">Share Contact Details</span>
+        <button id="shareContact" type="button" class="fab-child-btn fab-btn-share-contact" aria-label="Share Contact Details">
+          <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <div class="fab-item">
+        <span class="fab-label">Share BizBio Profile</span>
+        <button id="shareLink" type="button" class="fab-child-btn fab-btn-share-profile" aria-label="Share BizBio Profile">
+          <i class="fa-solid fa-link" aria-hidden="true"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Main Toggle Button -->
+    <button
+      class="fab-main"
+      id="fabToggle"
+      type="button"
+      aria-label="Share options"
+      aria-expanded="false"
+    >
+      <i class="fa-solid fa-share-alt fab-icon fab-icon-open"  aria-hidden="true"></i>
+      <i class="fa-solid fa-xmark      fab-icon fab-icon-close" aria-hidden="true"></i>
+    </button>
+
+  </div>
+
+  <!-- FAB backdrop overlay -->
+  <div class="fab-backdrop" id="fabBackdrop" role="presentation"></div>
+
+
+  <!-- ================================================================
+       SCRIPTS
+       ================================================================ -->
+  <script>
+    (function () {
+      'use strict';
+
+      var fab       = document.getElementById('fabContainer');
+      var toggle    = document.getElementById('fabToggle');
+      var backdrop  = document.getElementById('fabBackdrop');
+
+      function open() {
+        fab.classList.add('is-open');
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+
+      function close() {
+        fab.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+
+      function toggleFab() {
+        fab.classList.contains('is-open') ? close() : open();
+      }
+
+      toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        toggleFab();
+      });
+
+      backdrop.addEventListener('click', close);
+
+      // Escape key closes FAB
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') close();
+      });
+
+      // ---- Share Contact Details ----
+      var shareContactBtn = document.getElementById('shareContact');
+      shareContactBtn.addEventListener('click', function () {
+        close();
+        if (navigator.share) {
+          navigator.share({
+            title: 'Checkered Block Solutions — Contact Details',
+            text: 'Here are my contact details:',
+            url: 'Checkered_Block_Solutions.vcf'
+          }).catch(function () {});
+        }
+      });
+
+      // ---- Share BizBio Profile ----
+      var shareLinkBtn = document.getElementById('shareLink');
+      shareLinkBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        close();
+        if (navigator.share) {
+          navigator.share({
+            title: 'Checkered Block Solutions on BizBio',
+            text: 'Check out Checkered Block Solutions on BizBio!',
+            url: 'https://bizbio.co.za/checkeredblock'
+          }).catch(function () {});
+        } else {
+          // Fallback: copy to clipboard
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText('https://bizbio.co.za/checkeredblock')
+              .then(function () { alert('Profile link copied to clipboard!'); })
+              .catch(function () {});
+          } else {
+            alert('https://bizbio.co.za/checkeredblock');
+          }
+        }
+      });
+
+    })();
+  </script>
+
+</body>
+</html>

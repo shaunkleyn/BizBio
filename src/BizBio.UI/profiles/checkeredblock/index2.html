@@ -1,0 +1,825 @@
+<html lang="en" style=""><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Checkered Block Solutions</title>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+  <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/4.1.1/css/bootstrap.min.css" crossorigin="anonymous">
+  <!-- <link rel="stylesheet" type="text/css" href="https://appservice.azureedge.net/css/app-service/v3/main.css"> -->
+  <script src="https://appservice.azureedge.net/scripts/app-service/v3/loc.min.js" crossorigin="anonymous"></script>
+  <link href="./styles/site.css?v=1" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="../fonts/css/all.css">
+  <link rel="stylesheet" href="mfb/mfb.min.css">
+<style>
+      .mfb-component__child-icon, .mfb-component__icon, .mfb-component__main-icon--active, .mfb-component__main-icon--resting {
+    position: absolute;
+    /* font-size: 30px; */
+    text-align: center;
+    /* line-height: 54px !important; */
+    width: 100%;
+}
+    /* .mfb-component__button--child, .mfb-component__button--main {
+      background-color: #303030;
+      border: 2px solid #f1f1f1;
+    } */
+.btn-outline-dark:hover {
+    color: #fff;
+    background-color: #a05ac5;
+    border-color: #6b278f;
+}
+
+.btn-outline-dark {
+    color: #5a2d9a;
+    background-color: transparent;
+    background-image: none;
+    border-color: #7b2594;
+}
+
+
+ul.mfb-component__list li:nth-of-type(1) a {
+    background: #7065c9;
+}
+
+ul.mfb-component__list li:nth-of-type(2) a {
+    background: #c965c9;
+}
+
+ul.mfb-component__list li:nth-of-type(3) a, ul.mfb-component__list li:nth-of-type(3) button {
+    background: #6999dd;
+}
+
+    a.mfb-component__button--main:focus, a.mfb-component__button--main:active {
+      color: #f1f1f1;
+    }
+    a.mfb-component__button--main:hover, .mfb-component__button--child:hover
+ {
+    color: #ffffff;
+    text-decoration: underline;
+    box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28), inset 0px 0px 1px 2px #ffffff;
+    filter: brightness(1.1);
+}
+
+  .text-purple,.text-purple {
+    color: #6b278f !important;
+  }
+  .mfb-component__child-icon
+ {
+    line-height: 56px !important;
+    font-size: 18px !important;
+}
+
+.linkedin-btn {
+  display: inline-block;
+  vertical-align: middle;
+  top: -2px;
+  margin-right: 6px;
+  line-height: 0 !important;
+}
+
+[data-mfb-label]:after {
+  content: attr(data-mfb-label);
+  opacity: 0;
+  background: rgba(0, 0, 0, .7);
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: white;
+  font-size: 13px;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  margin-top: -10.5px;
+  transition: all .5s;
+}
+
+button {
+  outline: none;
+  outline-style: none;
+  outline-width: 0;
+}
+
+/* Dark mode override */
+@media (prefers-color-scheme: dark) {
+  button:focus, button:active  {
+    outline-color: green; /* custom outline color for dark mode */
+  }
+}
+
+button i {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.font-large {
+    font-size: 24px !important;
+}
+
+.border-bottom-radius {
+  border-radius: 0px 0px 20px 20px;
+}
+    </style>  
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="0d275040-aafc-4294-b80a-096b2df4bc87"></script>
+    <script type="text/javascript">window.onload = function () { try { var a = window.location.hostname; if (a.includes(".azurewebsites.net")) { a = a.replace(".azurewebsites.net", "") } var b = document.getElementById("depCenterLink1"); b.setAttribute("href", b.getAttribute("href") + "&sitename=" + a); loc(); } catch (d) { } }</script>
+    <script src="mfb/lib/modernizr.touch.js"></script>
+</head>
+
+<body>
+ 
+  <div>
+    <div class="loading-welcome active welcome-screen" ng-style="{'background-color': view.code.welcome_extra.background || view.welcome_extra.background}" style="background-color: rgb(255, 255, 255); display: none;">
+      <div class="progress">
+        <div class="loading-bar indeterminate" ng-style="{'background-color': view.code.color1 || view.color1}" style="background-color: rgb(106, 39, 142);"></div>
+      </div>
+      <div class="helper"></div>
+      <img id="welcomeImg" imageonload="" ng-src="//qrcgcustomers.s3-eu-west-1.amazonaws.com/account16468716/21309814_1.png?0.21710133167162549" ng-style="{
+                'max-width': view.code.welcome_extra.zoom *2 || view.welcome_extra.zoom *2 + 'px',
+                'max-height': view.code.welcome_extra.zoom *2 || view.welcome_extra.zoom *2 + 'px',
+                'animation-iteration-count' :  view.showPreview == 'infinite' ? 'infinite' : '',
+                'animation-direction' :  view.showPreview == 'infinite' ? 'alternate' : ''
+                }" src="//qrcgcustomers.s3-eu-west-1.amazonaws.com/account16468716/21309814_1.png?0.21710133167162549" style="max-width: 100px; max-height: 100px; display: inline;">
+    </div>
+    <div class="vcard-template style2" id="rootElement">
+      <div class="bgd-shadow"></div>
+      <div class="page-home page">
+        <ul id="menu" class="mfb-component--br mfb-zoomin" data-mfb-toggle="click" data-mfb-state="closed">
+            <li class="mfb-component__wrap">
+              <button href="#" class="mfb-component__button--main">
+                <i class="mfb-component__main-icon--resting fa fa-share-alt"></i>
+                <i class="mfb-component__main-icon--active fa fa-times"></i>
+              </button>
+              <ul class="mfb-component__list">
+                <li>
+                  <a href="Checkered_Block_Solutions.vcf" target="_blank" data-umami-event="Download Contact" data-mfb-label="Download Contact" class="mfb-component__button--child" style="
+    /* background: #7065c9; */
+">
+                    <i class="mfb-component__child-icon fa fa-download"></i>
+                  </a>
+                </li>
+                <li>
+                  <a href="Checkered_Block_Solutions.vcf" target="_blank" id="shareContact" data-umami-event="Share Contact" data-mfb-label="Share Contact Details" class="mfb-component__button--child">
+                    <i class="mfb-component__child-icon fa fa-share-alt"></i>
+                  </a>
+                </li>
+      
+                <li>
+                  <button id="shareLink" data-mfb-label="Share BizBio Profile" data-umami-event="Share Link"  class="mfb-component__button--child" type="button">
+                    <i class="mfb-component__child-icon fa fa-link" style="position: absolute; left: 0; top: 0;"></i>
+                  </button>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        <div class="vcard-header gradient-red-orange-bg" ng-style="getBackgroundColor();" style="background: linear-gradient(45deg, rgb(106, 39, 142) 0%, rgb(106, 39, 142) 1%, rgb(203, 31, 182) 100%);">
+          <div class="vcard-header-wrapper card-top">
+            <div class="vcard-top-info">
+              <h4 class="top"></h4>
+
+              <div class="img" ng-show="!loadDemo &amp;&amp; view.avatar" ng-style="{'background':view.avatar?'url('+view.avatar+')':'none'}" style="background: url(&quot;//qrcgcustomers.s3-eu-west-1.amazonaws.com/account16468716/21308981_1.png?0.9391094518761602&quot;);">
+              </div>
+              <h2 class="name dynamicTextColor ng-binding" ng-show="view.firstname || view.lastname">Checkered
+                Block Solutions (Pty) Ltd</h2>
+
+              <h6 class="title dynamicTextColor ng-binding">Diversify</h6>
+            </div>
+            <div class="vcard-functions" ng-show="view.numbers_mobile ||  view.numbers_phone ||  view.email || ((view.city ||view.street|| view.zip|| view.country) &amp;&amp; view.show_directions)">
+              <div class="vcard-functions-wrapper">
+                <a class="header-button" href="tel:+27796762459" data-umami-event="Clicked Phone In Header" style="transition: all 0.15s ease 0s;" ng-style="{'transition': loadDemo ? 'none' : 'all 0.15s ease'}">
+                  <i class="fal fa-phone"></i>
+                  <small class="mt-1">Call</small>
+                </a>
+
+                <a class="header-button"  data-umami-event="Clicked Email In Header" ng-show="loadDemo &amp;&amp; (view.email)" href="mailto:info@checkeredblock.co.za" target="_blank" ng-style="{'transition': loadDemo ? 'none' : 'all 0.15s ease'}" style="transition: all 0.15s ease 0s;">
+                  <i class="fal fa-envelope"></i> <small class="mt-1">Email</small>
+
+                </a>
+
+                <a class="" href="https://wa.me/+27796762459"  data-umami-event="Clicked WhatsApp In Header" target="”_blank”">
+                  <i class="fab fa-whatsapp"></i>
+
+                  <small class="mt-1">WhatsApp</small>
+                </a>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="vcard-body-wrapper pb-5">
+          <div class="container px-4 py-3 border bg-white shadow-lg  border-bottom-radius">
+    <section class="row">
+                  <div class="col-1 mx-3 font-large align-content-center" style="
+">
+                    <i class="text-purple fa fa-share-alt font-large"></i> 
+                  </div>
+                  <div class="col">
+                    <div class="row">
+                      <p class="title text-muted">Social Media</p>
+                    </div>
+                    <div class="row mt-2">
+                    <div class="col pl-0" style=""> <!-- ngRepeat: channel in view.code.channels track by $index --><a ng-repeat="channel in view.code.channels track by $index" ng-click="loadDemo ? callAction($event,'channelAction') : ''" id="channel-item-Facebook" class="channel-container ng-scope" target="_blank"  data-umami-event="Clicked Facebook Link" href="http://www.facebook.com/checkeredblock/">
+                        <div class="channel-bgd-facebook">
+                            <!-- ngIf: channel.name != 'Snapchat' --><i ng-if="channel.name != 'Snapchat'" class="fab fa-facebook-f"></i><!-- end ngIf: channel.name != 'Snapchat' -->
+                            <!-- ngIf: channel.name == 'Snapchat' -->
+                          </div><div class="">
+                          
+                        </div>
+                      </a><!-- end ngRepeat: channel in view.code.channels track by $index --><a href="http://www.instagram.com/checkeredblock" target="_blank" class="channel-container ng-scope" id="channel-item-Instagram"   data-umami-event="Clicked Instagram Link" ng-click="loadDemo ? callAction($event,'channelAction') : ''" ng-repeat="channel in view.code.channels track by $index">
+                        <div class="table-cell-middle pl-55 pos-relative">
+                          <div class="channel-bgd-instagram">
+                            <!-- ngIf: channel.name != 'Snapchat' --><i ng-if="channel.name != 'Snapchat'" class="fab fa-instagram"></i><!-- end ngIf: channel.name != 'Snapchat' -->
+                            <!-- ngIf: channel.name == 'Snapchat' -->
+                          </div>
+                        </div>
+                      </a><!-- end ngRepeat: channel in view.code.channels track by $index --><a href="https://wa.me/+27796762459"   data-umami-event="Clicked WhatsApp Link" target="_blank" class="channel-container ng-scope" id="channel-item-WhatsApp" ng-click="loadDemo ? callAction($event,'channelAction') : ''" ng-repeat="channel in view.code.channels track by $index">
+                        <div class="table-cell-middle pl-55 pos-relative">
+                          <div class="channel-bgd-whatsapp">
+                            <!-- ngIf: channel.name != 'Snapchat' --><i ng-if="channel.name != 'Snapchat'" class="fab fa-whatsapp"></i><!-- end ngIf: channel.name != 'Snapchat' -->
+                            <!-- ngIf: channel.name == 'Snapchat' -->
+                          </div>
+                        </div>
+                      </a><!-- end ngRepeat: channel in view.code.channels track by $index --><a href="https://www.linkedin.com/company/checkered-block-solutions/"   data-umami-event="Clicked LinkedIn Link" target="_blank" class="channel-container ng-scope" id="channel-item-LinkedIn" ng-click="loadDemo ? callAction($event,'channelAction') : ''" ng-repeat="channel in view.code.channels track by $index">
+                        <div class="table-cell-middle pl-55 pos-relative">
+                          <div class="channel-bgd-linkedin">
+                            <!-- ngIf: channel.name != 'Snapchat' --><i ng-if="channel.name != 'Snapchat'" class="fab fa-linkedin-in"></i><!-- end ngIf: channel.name != 'Snapchat' -->
+                            <!-- ngIf: channel.name == 'Snapchat' -->
+                          </div>
+                        </div>
+                      </a><!-- end ngRepeat: channel in view.code.channels track by $index --><a href="http://www.checkeredblock.co.za" target="_blank" class="channel-container ng-scope"   data-umami-event="Clicked Website Link" id="channel-item-Website" ng-click="loadDemo ? callAction($event,'channelAction') : ''" ng-repeat="channel in view.code.channels track by $index">
+                        <div class="table-cell-middle pl-55 pos-relative">
+                          <div class="channel-bgd-website">
+                            <!-- ngIf: channel.name != 'Snapchat' --><i ng-if="channel.name != 'Snapchat'" class="fa fa-globe"></i><!-- end ngIf: channel.name != 'Snapchat' -->
+                            <!-- ngIf: channel.name == 'Snapchat' -->
+                          </div>
+                        </div>
+                      </a><!-- end ngRepeat: channel in view.code.channels track by $index -->
+                    </div>
+                  </div>
+                  </div>
+                </section>
+<hr><section class="row">
+                  <div class="col-1 mx-3 align-content-center font-large">
+                    <i class="text-purple fa fa-building fs-1"></i> 
+                  </div>
+                  <div class="col">
+                    <div class="row">
+                      <p class="title">Address</p>
+                    </div>
+                    <div class="row">
+                      <a>
+Checkered Block Solutions (Pty) Ltd<br>Heldervue<br>Somerset West<br>Cape Town<br>7130</a>
+                    </div>
+                  </div>
+                  <div class="col-auto" style="align-content: space-around;">
+                      <a href="https://maps.app.goo.gl/M66NYXqtnYioG1QE8" target="_blank"   data-umami-event="Clicked Maps Link" class="btn btn-outline-dark" role="button">Open Maps</a>
+                  </div>
+                  
+                </section><hr><section class="row py-2">
+                  <div class="col-1 mx-3 align-content-center font-large" style="
+    font-size: large;
+">
+                    <i class="text-purple fa fa-phone"></i> 
+                  </div>
+                  <div class="col">
+                    <div class="row">
+                      <p class="title text-muted">Mobile</p>
+                    </div>
+                    <div class="row">
+                      <a href="tel:+27796762459" data-umami-event="Clicked Phone Number Link" class="text-dark">079 676 2459</a>
+                    </div>
+                  </div>
+                  <div class="col-auto" style="align-content: space-around;">
+                      <a href="tel:+27796762459" target="_newLink" class="btn btn-outline-dark"   data-umami-event="Clicked Call Now" role="button">Call Now</a>
+                  </div>
+                </section>
+<hr><section class="row py-2">
+                  <div class="col-1 mx-3 align-content-center font-large" style="
+    font-size: large;
+">
+                    <i class="material-icons text-purple">
+                  email
+                </i> 
+                  </div>
+                  <div class="col">
+                    <div class="row">
+                      <p class="title text-muted">Email</p>
+                    </div>
+                    <div class="row">
+                      <a href="mailto:info@checkeredblock.co.za" data-umami-event="Clicked Email Link" class="text-dark">info@checkeredblock.co.za</a>
+                    </div>
+                  </div>
+                  <div class="col-auto" style="align-content: space-around;">
+                      <a href="mailto:info@checkeredblock.co.za" target="_newLink"   data-umami-event="Clicked Mail Us Link" class="btn btn-outline-dark" role="button">Mail Us</a>
+                  </div>
+                </section><hr><section class="row py-2">
+                  <div class="col-1 mx-3 align-content-center font-large" style="
+    font-size: large;
+">
+                    <i class="material-icons text-purple">work</i> 
+                  </div>
+                  <div class="col">
+                    <div class="row">
+                      <p class="title text-muted">Owner &amp; Founder</p>
+                    </div>
+                    <div class="row">
+                      <a href="https://www.linkedin.com/in/corl%C3%A9-ann-mccallaghan-1a965215/"   data-umami-event="Clicked LinkedIn Link" target="_newLink" class="text-dark">Corlé-Ann McCallaghan</a>
+                    </div>
+                  </div>
+                  <div class="col-auto" style="align-content: space-around;">
+                      <a href="mailto:info@checkeredblock.co.za" target="_newLink" class="btn btn-outline-dark"   data-umami-event="Clicked Connect With Me Link" role="button">Connect With Me</a>
+                  </div>
+                </section><hr><section class="row py-2 mb-5 pb-5">
+                  <div class="col-1 mx-3 align-content-center font-large" style="
+    font-size: large;
+">
+                    <i class="material-icons text-purple">language</i> 
+                  </div>
+                  <div class="col">
+                    <div class="row">
+                      <p class="title text-muted">Website</p>
+                    </div>
+                    <div class="row">
+                      <a href="https://www.checkeredblock.co.za"  target="_blank"   data-umami-event="Clicked Website Link" class="text-dark">www.checkeredblock.co.za</a>
+                    </div>
+                  </div>
+                  <div class="col-auto" style="align-content: space-around;">
+                      <a href="https://www.checkeredblock.co.za" target="_blank"   data-umami-event="Clicked Visit Us Link"  class="btn btn-outline-dark" role="button">Visit Us</a>
+                  </div>
+                </section></div> 
+        </div>
+      </div>
+
+      <div class="page-maps page hidden">
+        <div class="devent-map-header">
+          <div class="event-section-title " ng-style="getBackgroundColor();" style="background: linear-gradient(45deg, rgb(106, 39, 142) 0%, rgb(106, 39, 142) 1%, rgb(203, 31, 182) 100%);">
+            <div class="event-content-container">
+              <i class="icon-event-back dynamicTextColor" ng-click="switchPages('page-maps','page-home', false)"></i>
+              <div class="event-title dynamicTextColor">Location</div>
+            </div>
+          </div>
+        </div>
+        <div class="event-body">
+          <div class="vcard-body-wrapper">
+            <div class="vcard-body">
+              <div id="dvcard-maps">
+                <div>
+                  <img>
+                  <div ng-show="resetMap &amp;&amp; (view.venue || view.city || view.state || view.zip)" ng-click="resetMap=false; setMapUrl()" class="reset-map ng-hide">Reset map</div>
+                </div>
+                <div class="vcard-row ng-hide" ng-show="view.venue || view.city || view.state || view.zip">
+                  <label>Where</label>
+                  <i class="icon icon-event-location"></i>
+                  <!--<h4>{{view.venue}}</h4>-->
+                  <h4 class="ng-binding"> </h4>
+                  <h4 class="ng-binding"><span ng-show="view.state || view.zip" class="ng-binding ng-hide"><span ng-show="view.city" class="ng-hide">,</span> </span>
+                  </h4>
+                  <h4 class="ng-binding"></h4>
+                  <input id="addressValue" type="hidden" ng-value="view.street + ','  + view.city + ',' + view.country " value=",,">
+                  <div class="floated-container">
+                    <a class="event-slim-button ripplelink left_20 mt-10" ng-style="{'color': isColorLight(view.color2) ? 'black' : view.color2}" ng-click="callAction($event, 'redirectToMap')" style="color: rgb(254, 39, 228);">
+                      Show directions </a>
+                  </div>
+                </div>
+              </div>
+              <div id="redirectToMaps">
+                <div class="fixed-blur-bgd">
+                  <div class="dialog-container">
+                    <div class="fab-body">
+                      <div class="event-title">
+                        Use Google Maps </div>
+                      <div class="dialog-body">
+                        Directions will open in Google Maps. Do you want to continue? </div>
+                      <a class="event-slim-button ripplelink mt-10 pull-right" ng-style="{'color': isColorLight(view.color2) ? 'black' : view.color2}" ng-click="dialogRedirectCallback(false)" style="color: rgb(254, 39, 228);">
+                        No </a>
+                      <a class="event-slim-button ripplelink mt-10 pull-right" ng-style="{'color': isColorLight(view.color2) ? 'black' : view.color2}" ng-click="dialogRedirectCallback(true, 'https://maps.google.com/maps?daddr='+getMapAddress())" style="color: rgb(254, 39, 228);">
+                        Yes </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--    -->
+    </div>
+  </div>
+
+  <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/4.1.1/bootstrap.min.js" crossorigin="anonymous"></script>
+  <script src="mfb/mfb.js"></script>
+<script>
+
+  var panel = document.getElementById('panel'),
+      menu = document.getElementById('menu'),
+      selectFx = document.getElementById('selections-fx'),
+      selectPos = document.getElementById('selections-pos'),
+      // demo defaults
+      effect = 'mfb-zoomin',
+      pos = 'mfb-component--br';
+
+
+  function _toggleCode() {
+    panel.classList.toggle('viewCode');
+  }
+
+  function switchEffect(e){
+    effect = this.options[this.selectedIndex].value;
+    renderMenu();
+  }
+
+  function switchPos(e){
+    pos = this.options[this.selectedIndex].value;
+    renderMenu();
+  }
+
+  function renderMenu() {
+    menu.style.display = 'none';
+    // ?:-)
+    setTimeout(function() {
+      menu.style.display = 'block';
+      menu.className = pos + effect;
+    },1);
+  }
+
+</script>
+<script>
+  document.getElementById("shareContact").addEventListener("click", async () => {
+    try {
+      await navigator.share({
+        title: "Checkered Block Solutions Contact Details",
+        text: "Here are my contact details:",
+        url: "Checkered_Block_Solutions.vcf" // your hosted VCF file
+      });
+    } catch (err) {
+      console.error("Sharing failed:", err);
+    }
+  });
+
+  document.getElementById("shareLink").addEventListener("click", async (event) => {
+    event.preventDefault(); // stop Safari from navigating to "#"  
+    try {
+      if (navigator.share) {
+      await navigator.share({
+        title: "Checkered Block Solutions Profile",
+        text: "Check out Checkered Block Solutions on BizBio!",
+        url: "https://bizbio.co.za/checkeredblock" // your hosted VCF file
+      }); } else {
+      alert("Your browser does not support sharing. Please copy the link manually.");
+    }
+    } catch (err) {
+      console.error("Sharing failed:", err);
+    }
+  });
+
+  $(document).on('click',function(e) {
+    $('.mfb-component--br').mouseenter().mouseleave();
+} );
+  </script>
+  <!-- Code injected by live-server -->
+  <script>
+    // <![CDATA[  <-- For SVG support
+    if ('WebSocket' in window) {
+      (function () {
+        function refreshCSS() {
+          var sheets = [].slice.call(document.getElementsByTagName("link"));
+          var head = document.getElementsByTagName("head")[0];
+          for (var i = 0; i < sheets.length; ++i) {
+            var elem = sheets[i];
+            var parent = elem.parentElement || head;
+            parent.removeChild(elem);
+            var rel = elem.rel;
+            if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+              var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+              elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+            }
+            parent.appendChild(elem);
+          }
+        }
+        var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+        var address = protocol + window.location.host + window.location.pathname + '/ws';
+        var socket = new WebSocket(address);
+        socket.onmessage = function (msg) {
+          if (msg.data == 'reload') window.location.reload();
+          else if (msg.data == 'refreshcss') refreshCSS();
+        };
+        if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+          console.log('Live reload enabled.');
+          sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+        }
+      })();
+    }
+    else {
+      console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+    }
+    // ]]>
+  </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<protonpass-root-d657 data-protonpass-role="root" data-protonpass-theme="os"></protonpass-root-d657></body></html>

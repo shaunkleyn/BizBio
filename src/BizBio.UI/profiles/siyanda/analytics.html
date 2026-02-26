@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Analytics</title>
+</head>
+<body>
+  <h1>Page Analytics</h1>
+  <div id="stats">Loading...</div>
+
+  <script>
+    const pageId = "user123";
+    const token = "user123-secret-token"; // only this user knows this
+    const endpoint = `https://analytics-beacon.shaun-kleyn.workers.dev/stats?pageId=${pageId}&token=${token}`;
+
+    fetch(endpoint)
+      .then(res => res.json())
+      .then(data => {
+        const div = document.getElementById("stats");
+        if (!data.length) {
+          div.innerText = "No analytics yet";
+          return;
+        }
+        div.innerHTML = "<ul>" + data.map(d => `<li>${d.page}: ${d.views} views (${d.unique_visitors} unique)</li>`).join("") + "</ul>";
+      })
+      .catch(err => {
+        document.getElementById("stats").innerText = "Error loading analytics";
+        console.error(err);
+      });
+  </script>
+</body>
+</html>

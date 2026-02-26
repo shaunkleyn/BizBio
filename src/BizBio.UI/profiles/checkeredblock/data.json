@@ -1,0 +1,60 @@
+{
+    "template": "35-gradient-card",
+
+    "name": "Checkered Block Solutions",
+    "title": "Diversify",
+    "company": "Checkered Block Solutions (Pty) Ltd",
+
+    "email": "corle@checkeredblock.co.za",
+    "phone": "+2779 676 2459",
+    "phoneDisplay": "079 676 2459",
+
+    "website": "https://www.checkeredblock.co.za",
+    "address": "Heldervue, Somerset West, Cape Town, 7130",
+
+    "googleReviewUrl": "https://g.page/r/REPLACE_WITH_REAL_PLACE_ID/review",
+    "facebookReviewUrl": "https://www.facebook.com/checkeredblock/reviews",
+
+    "photo": "../checkeredblock/logo.png",
+
+    "companyRegistrationNumber": "2020/473006/07",
+    "vatNumber": "1234567890",
+
+    "bio": "Branding is at the core of what we do. We work closely with you to understand your brand's essence and develop a comprehensive branding strategy that captures your vision. From logo design and brand identity development to packaging and promotional materials, we ensure that every element resonates with your target audience.",
+
+    "social": {
+        "facebook": "http://www.facebook.com/checkeredblock/",
+        "instagram": "http://www.instagram.com/checkeredblock",
+        "linkedin": "https://www.linkedin.com/in/corl%C3%A9-ann-mccallaghan-1a965215/",
+        "whatsapp": "https://wa.me/+27796762459",
+        "tiktok": "https://tiktok.com/@checkeredblock"
+    },
+
+    "info": [
+        { "type": "phone",   "value": "079 676 2459",                       "button": "Call Now"   },
+        { "type": "email",   "value": "info@checkeredblock.co.za",           "button": "Mail Us"    },
+        { "type": "address", "value": "Heldervue, Somerset West, Cape Town",
+          "href": "https://maps.app.goo.gl/M66NYXqtnYioG1QE8",              "button": "Open Maps"  },
+        { "type": "website", "value": "www.checkeredblock.co.za",            "button": "Visit Us"   },
+        { "type": "linkedin", "icon": "linkedin", "title": "Owner & Founder", "value": "Corle-Ann McCallaghan",
+          "href": "https://www.linkedin.com/in/corl%C3%A9-ann-mccallaghan-1a965215/", "button": "Connect With Me"   }
+    ],
+
+    "stats": [
+        { "value": "25M+", "label": "Albums Sold" },
+        { "value": "15+", "label": "Years Performing" },
+        { "value": "2", "label": "Grammy Nominations" }
+    ],
+
+    "wallet": {
+      "backgroundColor": "#6a278e",
+      "cardTitle":       "Checkered Block Solutions",
+      "logoImageUrl":    "https://bizbio.co.za/checkeredblock/logo.png",
+      "heroImageUrl":    "https://dummyimage.com/1032x336/961396/c9cdff.jpg",
+      "qrCode": "https://bizbio.co.za/checkeredblock",
+      "bodyImageUrl": "https://dummyimage.com/320x120/961396/c9cdff.jpg",
+      "groupingId": "bizbio-business-cards",
+      "appLinkUrl": "https://bizbio.co.za/checkeredblock",
+      "walletTitle": "Checkered Block Solutions222"
+  }
+}

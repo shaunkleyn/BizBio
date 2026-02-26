@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michael Chen - Digital Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Sora', sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card-container {
+            max-width: 400px;
+            width: 100%;
+        }
+        .profile-card {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+            border-radius: 24px;
+            padding: 32px 24px;
+            text-align: center;
+            color: #fff;
+            margin-bottom: -40px;
+            position: relative;
+            z-index: 3;
+            box-shadow: 0 20px 40px rgba(99,102,241,0.3);
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid rgba(255,255,255,0.3);
+            margin-bottom: 16px;
+        }
+        .name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .title {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        .quick-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+        .quick-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #fff;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        .quick-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+        .info-card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 60px 24px 24px;
+            margin-bottom: -30px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #f0f4f8;
+            text-decoration: none;
+        }
+        .info-item:last-child { border-bottom: none; }
+        .info-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+            color: #fff;
+            font-size: 16px;
+        }
+        .info-content { flex: 1; }
+        .info-label {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        .info-value {
+            font-size: 14px;
+            color: #1e293b;
+            font-weight: 500;
+        }
+        .social-card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 50px 24px 24px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        .social-title {
+            font-size: 12px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 8px;
+            background: #f8fafc;
+            border-radius: 14px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .social-link:hover {
+            background: #6366f1;
+        }
+        .social-link:hover i,
+        .social-link:hover span {
+            color: #fff;
+        }
+        .social-link i {
+            font-size: 20px;
+            color: #6366f1;
+            margin-bottom: 8px;
+            transition: color 0.3s;
+        }
+        .social-link span {
+            font-size: 10px;
+            color: #64748b;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .save-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99,102,241,0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <div class="profile-card">
+            <img src="https://randomuser.me/api/portraits/men/36.jpg" alt="Michael Chen" class="avatar">
+            <h1 class="name">Michael Chen</h1>
+            <p class="title">Data Analyst at Insight Analytics</p>
+            <div class="quick-actions">
+                <a href="tel:+27124567890" class="quick-btn"><i class="fas fa-phone"></i></a>
+                <a href="mailto:michael@insightanalytics.co.za" class="quick-btn"><i class="fas fa-envelope"></i></a>
+                <a href="https://wa.me/27794567890" class="quick-btn"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.insightanalytics.co.za" class="quick-btn"><i class="fas fa-globe"></i></a>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <a href="tel:+27124567890" class="info-item">
+                <div class="info-icon"><i class="fas fa-phone"></i></div>
+                <div class="info-content">
+                    <div class="info-label">Phone</div>
+                    <div class="info-value">012 456 7890</div>
+                </div>
+            </a>
+            <a href="mailto:michael@insightanalytics.co.za" class="info-item">
+                <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                <div class="info-content">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">michael@insightanalytics.co.za</div>
+                </div>
+            </a>
+            <a href="https://www.insightanalytics.co.za" class="info-item">
+                <div class="info-icon"><i class="fas fa-globe"></i></div>
+                <div class="info-content">
+                    <div class="info-label">Website</div>
+                    <div class="info-value">insightanalytics.co.za</div>
+                </div>
+            </a>
+            <a href="https://maps.google.com/?q=Brooklyn,+Pretoria" class="info-item">
+                <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="info-content">
+                    <div class="info-label">Address</div>
+                    <div class="info-value">Brooklyn, Pretoria</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="social-card">
+            <div class="social-title">Connect</div>
+            <div class="social-grid">
+                <a href="https://linkedin.com/in/michaelchen" class="social-link">
+                    <i class="fab fa-linkedin-in"></i>
+                    <span>LinkedIn</span>
+                </a>
+                <a href="https://facebook.com/insightanalytics" class="social-link">
+                    <i class="fab fa-facebook-f"></i>
+                    <span>Facebook</span>
+                </a>
+                <a href="https://instagram.com/michaelchendata" class="social-link">
+                    <i class="fab fa-instagram"></i>
+                    <span>Instagram</span>
+                </a>
+                <a href="https://twitter.com/michaelchendata" class="social-link">
+                    <i class="fab fa-x-twitter"></i>
+                    <span>Twitter</span>
+                </a>
+            </div>
+            <a href="michael_chen.vcf" class="save-btn"><i class="fas fa-user-plus"></i> Save Contact</a>
+        </div>
+    </div>
+    <script src="../vcard-generator.js"></script>
+</body>
+</html>

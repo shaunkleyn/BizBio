@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olivia Parker - Digital Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            max-width: 380px;
+            width: 100%;
+            background: #1e293b;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(30, 41, 59, 0.3);
+        }
+        .header {
+            padding: 30px 24px;
+            text-align: center;
+            position: relative;
+        }
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .header-btn {
+            color: #64748b;
+            font-size: 18px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .header-btn:hover {
+            color: #fff;
+        }
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #334155;
+        }
+        .verified-badge {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            background: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 12px;
+            border: 2px solid #1e293b;
+        }
+        .name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .title {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+        .bio {
+            font-size: 14px;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 32px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(34, 197, 94, 0.4);
+        }
+        .stats-section {
+            display: flex;
+            justify-content: space-around;
+            padding: 30px 20px;
+            background: #0f172a;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: #fff;
+            margin: 0 auto 10px;
+        }
+        .stat-icon.dribbble { background: linear-gradient(135deg, #ea4c89, #c73b6d); }
+        .stat-icon.behance { background: linear-gradient(135deg, #1769ff, #0050d8); }
+        .stat-icon.upwork { background: linear-gradient(135deg, #6fda44, #14a800); }
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .stat-label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .contact-section {
+            padding: 24px;
+            background: #1e293b;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            background: #0f172a;
+            border-radius: 14px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .contact-item:last-child {
+            margin-bottom: 0;
+        }
+        .contact-item:hover {
+            background: #1e3a5f;
+            transform: translateX(5px);
+        }
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+            margin-right: 14px;
+        }
+        .contact-text {
+            flex: 1;
+        }
+        .contact-label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .contact-value {
+            font-size: 14px;
+            color: #fff;
+            font-weight: 500;
+        }
+        .save-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 24px 24px;
+            padding: 16px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <div class="header-actions">
+                <a href="#" class="header-btn"><i class="fas fa-arrow-left"></i></a>
+                <a href="#" class="header-btn"><i class="fas fa-heart"></i></a>
+            </div>
+
+            <div class="avatar-container">
+                <img src="https://randomuser.me/api/portraits/women/57.jpg" alt="Olivia Parker" class="avatar">
+                <div class="verified-badge"><i class="fas fa-check"></i></div>
+            </div>
+
+            <h1 class="name">Olivia Parker</h1>
+            <p class="title">Senior Product Designer</p>
+            <p class="bio">Create usable interface and designs @GraficSpark</p>
+
+            <a href="mailto:olivia@graficspark.co.za" class="cta-btn">
+                <i class="fas fa-envelope"></i> Hire Me
+            </a>
+        </div>
+
+        <div class="stats-section">
+            <div class="stat-item">
+                <div class="stat-icon dribbble"><i class="fab fa-dribbble"></i></div>
+                <div class="stat-value">12.8k</div>
+                <div class="stat-label">Followers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon behance"><i class="fab fa-behance"></i></div>
+                <div class="stat-value">12.8k</div>
+                <div class="stat-label">Followers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon upwork"><i class="fas fa-briefcase"></i></div>
+                <div class="stat-value">12.8k</div>
+                <div class="stat-label">Followers</div>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <a href="tel:+27824567890" class="contact-item">
+                <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                <div class="contact-text">
+                    <div class="contact-label">Phone</div>
+                    <div class="contact-value">082 456 7890</div>
+                </div>
+            </a>
+            <a href="mailto:olivia@graficspark.co.za" class="contact-item">
+                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                <div class="contact-text">
+                    <div class="contact-label">Email</div>
+                    <div class="contact-value">olivia@graficspark.co.za</div>
+                </div>
+            </a>
+            <a href="https://www.graficspark.co.za" class="contact-item">
+                <div class="contact-icon"><i class="fas fa-globe"></i></div>
+                <div class="contact-text">
+                    <div class="contact-label">Website</div>
+                    <div class="contact-value">graficspark.co.za</div>
+                </div>
+            </a>
+        </div>
+
+        <a href="olivia_parker.vcf" class="save-btn">
+            <i class="fas fa-user-plus"></i> Save Contact
+        </a>
+    </div>
+    <script src="../vcard-generator.js"></script>
+</body>
+</html>

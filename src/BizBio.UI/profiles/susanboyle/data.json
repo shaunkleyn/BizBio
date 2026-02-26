@@ -1,0 +1,31 @@
+{
+    "template": "05-gradient-modern",
+
+    "name": "Susan Boyle",
+    "title": "Recording Artist & Vocalist",
+    "company": "SuBo Productions",
+
+    "email": "bookings@susanboyle.com",
+    "phone": "+44 131 555 0123",
+    "phoneDisplay": "0131 555 0123",
+
+    "website": "https://www.susanboyle.com",
+    "address": "West Lothian, Scotland",
+
+    "photo": "../susanboyle/photo.jpeg",
+
+    "bio": "Grammy-nominated singer who captured hearts worldwide with a voice that proves dreams can come true at any age.",
+
+    "social": {
+        "facebook": "https://facebook.com/susanboyle",
+        "instagram": "https://instagram.com/susanboylemusic",
+        "twitter": "https://twitter.com/susanboyle",
+        "youtube": "https://youtube.com/@SusanBoyleMusic"
+    },
+
+    "stats": [
+        { "value": "25M+", "label": "Albums Sold" },
+        { "value": "15+", "label": "Years Performing" },
+        { "value": "2", "label": "Grammy Nominations" }
+    ]
+}

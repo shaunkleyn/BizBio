@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andrew Peters - Digital Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #2563eb;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .phone-frame {
+            max-width: 380px;
+            width: 100%;
+            background: #fff;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            border: 8px solid #1e293b;
+        }
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            background: #2563eb;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-icons {
+            display: flex;
+            gap: 6px;
+            font-size: 12px;
+        }
+        .header {
+            background: #2563eb;
+            padding: 20px 24px 100px;
+            position: relative;
+        }
+        .header-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header-btn {
+            color: #fff;
+            font-size: 18px;
+            text-decoration: none;
+        }
+        .header-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .profile-card {
+            position: relative;
+            background: #fff;
+            border-radius: 20px;
+            margin: -80px 20px 0;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #2563eb;
+            margin-bottom: 12px;
+        }
+        .name {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 2px;
+        }
+        .title {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+        .bio {
+            font-size: 13px;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+        .content {
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .contact-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+            text-decoration: none;
+        }
+        .contact-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .contact-item:first-child {
+            padding-top: 0;
+        }
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #eff6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563eb;
+            font-size: 16px;
+            margin-right: 14px;
+        }
+        .contact-text {
+            flex: 1;
+        }
+        .contact-label {
+            font-size: 11px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .contact-value {
+            font-size: 14px;
+            color: #1e293b;
+            font-weight: 600;
+        }
+        .menu-section {
+            margin-bottom: 16px;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: #fff;
+            border-radius: 14px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        .menu-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+        .menu-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .menu-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #eff6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563eb;
+            font-size: 14px;
+        }
+        .menu-label {
+            font-size: 14px;
+            color: #1e293b;
+            font-weight: 600;
+        }
+        .menu-arrow {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+        .save-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px;
+            background: #2563eb;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .save-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span>9:41</span>
+            <div class="status-icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+
+        <div class="header">
+            <div class="header-nav">
+                <a href="#" class="header-btn"><i class="fas fa-arrow-left"></i></a>
+                <span class="header-title">Profile</span>
+                <a href="#" class="header-btn"><i class="fas fa-edit"></i></a>
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="Andrew Peters" class="avatar">
+            <h1 class="name">Andrew Peters</h1>
+            <p class="title">Senior Software Engineer</p>
+            <p class="bio">Building scalable solutions and leading high-performance development teams.</p>
+        </div>
+
+        <div class="content">
+            <div class="contact-card">
+                <a href="tel:+27117654321" class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                    <div class="contact-text">
+                        <div class="contact-label">Phone</div>
+                        <div class="contact-value">011 765 4321</div>
+                    </div>
+                </a>
+                <a href="mailto:andrew@techleaders.co.za" class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="contact-text">
+                        <div class="contact-label">Email</div>
+                        <div class="contact-value">andrew@techleaders.co.za</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <a href="https://www.techleaders.co.za" class="menu-item">
+                    <div class="menu-left">
+                        <div class="menu-icon"><i class="fas fa-globe"></i></div>
+                        <span class="menu-label">Website</span>
+                    </div>
+                    <i class="fas fa-chevron-right menu-arrow"></i>
+                </a>
+                <a href="https://linkedin.com/in/andrewpeters" class="menu-item">
+                    <div class="menu-left">
+                        <div class="menu-icon"><i class="fab fa-linkedin-in"></i></div>
+                        <span class="menu-label">LinkedIn</span>
+                    </div>
+                    <i class="fas fa-chevron-right menu-arrow"></i>
+                </a>
+                <a href="https://github.com/andrewpeters" class="menu-item">
+                    <div class="menu-left">
+                        <div class="menu-icon"><i class="fab fa-github"></i></div>
+                        <span class="menu-label">GitHub</span>
+                    </div>
+                    <i class="fas fa-chevron-right menu-arrow"></i>
+                </a>
+            </div>
+
+            <a href="andrew_peters.vcf" class="save-btn">
+                <i class="fas fa-user-plus"></i> Save Contact
+            </a>
+        </div>
+    </div>
+    <script src="../vcard-generator.js"></script>
+</body>
+</html>

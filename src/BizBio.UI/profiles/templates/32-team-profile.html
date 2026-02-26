@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acme Engineering - Digital Business Card</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Acme Engineering - Your Trusted Partner">
+    <meta property="og:description" content="Contact us today to learn more about our services.">
+    <meta property="og:image" content="logo.jpg">
+    <meta property="og:type" content="website">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Condensed:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary:      #0d1b3e;
+            --primary-dark: #080f24;
+            --accent:       #e63946;
+            --accent-hover: #c1121f;
+            --highlight:    #4a90e2;
+            --highlight-2:  #2ecc71;
+            --text-light:   #ffffff;
+            --text-muted:   rgba(255,255,255,0.70);
+            --card-bg:      #ffffff;
+            --card-radius:  16px;
+            --shadow-md:    0 8px 24px rgba(0,0,0,0.18);
+            --shadow-lg:    0 16px 40px rgba(0,0,0,0.25);
+            --transition:   all 0.25s ease;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--primary);
+            min-height: 100vh;
+            color: #1a1a2e;
+        }
+
+        /* ==============================
+           LAYOUT WRAPPER
+        ============================== */
+        .page-wrapper {
+            width: 100%;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        /* ==============================
+           HEADER
+        ============================== */
+        .site-header {
+            background: var(--primary-dark);
+            padding: 28px 24px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .header-title-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-title-block .line1 {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: clamp(2rem, 8vw, 3.2rem);
+            font-weight: 900;
+            color: var(--text-light);
+            line-height: 1;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .header-title-block .line2 {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: clamp(1.6rem, 6vw, 2.6rem);
+            font-weight: 700;
+            color: var(--highlight);
+            line-height: 1;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header-tagline {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+
+        .header-badge {
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* ==============================
+           PROFILE CARD (white section)
+        ============================== */
+        .profile-card {
+            background: var(--card-bg);
+            padding: 28px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avatar-wrap {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            flex-shrink: 0;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .job-title {
+            font-size: 0.85rem;
+            color: #666;
+            text-align: center;
+            margin-top: -10px;
+        }
+
+        .company {
+            font-size: 0.82rem;
+            color: var(--accent);
+            font-weight: 600;
+            text-align: center;
+            margin-top: -10px;
+        }
+
+        .profile-divider {
+            width: 100%;
+            height: 1px;
+            background: #e8eaf0;
+            margin: 4px 0;
+        }
+
+        /* Quick-link icon row */
+        .quick-links {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .quick-link-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.1rem;
+            color: #fff;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+            flex-shrink: 0;
+        }
+        .quick-link-btn:hover {
+            transform: translateY(-3px) scale(1.08);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+
+        .ql-phone    { background: #2ecc71; }
+        .ql-whatsapp { background: #25d366; }
+        .ql-facebook { background: #1877f2; }
+        .ql-linkedin { background: #0a66c2; }
+        .ql-maps     { background: var(--accent); }
+
+        .website-link {
+            color: var(--highlight);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            transition: var(--transition);
+        }
+        .website-link:hover { color: var(--primary); text-decoration: underline; }
+
+        /* ==============================
+           DARK SECTION (contact + map + team)
+        ============================== */
+        .dark-section {
+            background: var(--primary);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        /* Menu rows */
+        .menu-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .menu-row {
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            gap: 12px;
+            overflow: hidden;
+        }
+
+        .menu-row-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--highlight);
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .menu-row-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .menu-row-label {
+            font-size: 0.7rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+        }
+
+        .menu-row-value {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1a1a2e;
+            text-decoration: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        .menu-row-value:hover { color: var(--highlight); }
+
+        .address { font-size: 0.9rem; font-weight: 500; color: #1a1a2e; }
+
+        .menu-row-action {
+            background: var(--accent);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 8px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: var(--transition);
+            letter-spacing: 0.3px;
+        }
+        .menu-row-action:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Map */
+        .map-container {
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+            height: 220px;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+        }
+
+        /* Meet The Team */
+        .team-section { margin-top: 4px; }
+
+        .section-heading {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-heading::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .team-card {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 14px 8px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .team-card:hover {
+            background: rgba(255,255,255,0.13);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .team-avatar-wrap {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid var(--highlight);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .team-avatar-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .team-member-name {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .team-member-role {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .team-card-tap {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.55rem;
+        }
+
+        /* ==============================
+           BIO SECTION
+        ============================== */
+        .bio-section {
+            background: #f4f6fb;
+            padding: 20px;
+        }
+
+        .bio {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: #444;
+            text-align: center;
+        }
+
+        /* ==============================
+           SAVE BUTTON
+        ============================== */
+        .save-wrap {
+            background: #fff;
+            padding: 16px 20px;
+        }
+
+        .save-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            box-shadow: 0 4px 14px rgba(13,27,62,0.35);
+        }
+        .save-btn:hover {
+            background: var(--highlight);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(74,144,226,0.45);
+        }
+
+        /* ==============================
+           SOCIAL ROW
+        ============================== */
+        .social-row {
+            background: #fff;
+            padding: 0 20px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .social-icon-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #f0f2f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        .social-icon-btn:hover {
+            background: var(--highlight);
+            color: #fff;
+            transform: translateY(-3px);
+        }
+        .social-icon-btn[href*="facebook.com"] { color: #1877f2; }
+        .social-icon-btn[href*="instagram.com"] { color: #e1306c; }
+        .social-icon-btn[href*="linkedin.com"]  { color: #0a66c2; }
+        .social-icon-btn[href*="twitter.com"]   { color: #1da1f2; }
+        .social-icon-btn[href*="youtube.com"]   { color: #ff0000; }
+        .social-icon-btn[href*="tiktok.com"]    { color: #010101; }
+
+        /* ==============================
+           FOOTER
+        ============================== */
+        .bizbio-footer {
+            background: var(--primary-dark);
+            color: var(--text-muted);
+            text-align: center;
+            padding: 16px;
+            font-size: 0.75rem;
+        }
+        .bizbio-footer a {
+            color: var(--highlight);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .bizbio-footer a:hover { text-decoration: underline; }
+
+        /* ==============================
+           FAB
+        ============================== */
+        .fab-container {
+            position: fixed;
+            bottom: 24px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .fab-menu {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .fab-menu.open {
+            max-height: 260px;
+            opacity: 1;
+        }
+
+        .fab-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .fab-item-label {
+            background: var(--primary-dark);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+
+        .fab-item-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--highlight);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            flex-shrink: 0;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+        .fab-item-btn:hover { background: var(--primary); transform: scale(1.08); }
+
+        .fab-main {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 6px 20px rgba(230,57,70,0.5);
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+        }
+        .fab-main:hover { background: var(--accent-hover); transform: scale(1.05); }
+        .fab-main .fa-times { display: none; }
+        .fab-main.open .fa-share-alt { display: none; }
+        .fab-main.open .fa-times { display: block; }
+
+        /* ==============================
+           MODAL (team member)
+        ============================== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 2000;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-sheet {
+            background: #fff;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 24px 24px 0 0;
+            padding: 0 0 32px;
+            animation: slideUp 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to   { transform: translateY(0); }
+        }
+
+        .modal-handle {
+            width: 40px;
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            margin: 12px auto 0;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #f0f2f8;
+            border: none;
+            color: #666;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        .modal-close-btn:hover { background: var(--accent); color: #fff; }
+
+        .modal-header-band {
+            background: var(--primary);
+            padding: 20px 20px 50px;
+        }
+
+        .modal-member-name {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .modal-member-title {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .modal-photo-wrap {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            margin: -45px auto 16px;
+            display: block;
+        }
+
+        .modal-photo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .modal-contact-rows {
+            padding: 0 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 16px;
+        }
+
+        .modal-contact-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+        }
+
+        .modal-contact-row + .modal-contact-row {
+            border-top: 1px solid #f0f2f8;
+        }
+
+        .modal-contact-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #f0f4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--highlight);
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .modal-contact-value {
+            font-size: 0.9rem;
+            color: #1a1a2e;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .modal-contact-value:hover { color: var(--highlight); }
+
+        .modal-action-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .modal-action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .modal-action-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: var(--transition);
+        }
+        .modal-action-icon:hover { transform: scale(1.1); }
+
+        .modal-action-label {
+            font-size: 0.7rem;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .modal-btn-call     .modal-action-icon { background: #2ecc71; }
+        .modal-btn-whatsapp .modal-action-icon { background: #25d366; }
+        .modal-btn-linkedin .modal-action-icon { background: #0a66c2; }
+
+        /* ==============================
+           RESPONSIVE - TABLET (768px+)
+        ============================== */
+        @media (min-width: 768px) {
+            .menu-rows {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            /* Let last row span full if odd count */
+            .menu-row:last-child:nth-child(odd) {
+                grid-column: 1 / -1;
+            }
+
+            .dark-section {
+                padding: 28px 24px;
+            }
+
+            .profile-card {
+                padding: 32px 24px 24px;
+            }
+        }
+
+        /* ==============================
+           RESPONSIVE - DESKTOP (1024px+)
+        ============================== */
+        @media (min-width: 1024px) {
+            .dark-section-inner {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                align-items: start;
+            }
+
+            .dark-section-left {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .dark-section-right {}
+
+            .map-container {
+                height: 280px;
+                margin-bottom: 0;
+            }
+
+            .menu-rows {
+                grid-template-columns: 1fr;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .menu-row:last-child:nth-child(odd) {
+                grid-column: auto;
+            }
+
+            .site-header {
+                padding: 32px 40px;
+            }
+
+            .profile-card {
+                padding: 36px 40px 28px;
+            }
+
+            .profile-card-inner {
+                max-width: 700px;
+                margin: 0 auto;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+            }
+
+            .team-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
+                margin-top: 16px;
+            }
+
+            .team-section {
+                margin-top: 24px;
+            }
+
+            .save-wrap,
+            .social-row,
+            .bio-section {
+                padding-left: 40px;
+                padding-right: 40px;
+            }
+
+            .bizbio-footer {
+                padding: 20px 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================
+         FLOATING ACTION BUTTON
+    ============================= -->
+    <div class="fab-container">
+        <div class="fab-menu" id="fabMenu">
+            <a href="contact.vcf" target="_blank" class="fab-item" title="Download Contact">
+                <span class="fab-item-label">Download Contact</span>
+                <div class="fab-item-btn"><i class="fas fa-download"></i></div>
+            </a>
+            <a href="contact.vcf" class="fab-item" id="fabShareContact" title="Share Contact">
+                <span class="fab-item-label">Share Contact</span>
+                <div class="fab-item-btn"><i class="fas fa-address-card"></i></div>
+            </a>
+            <button class="fab-item" id="fabShareProfile" title="Share Profile" style="background:none;border:none;padding:0;">
+                <span class="fab-item-label">Share Profile</span>
+                <div class="fab-item-btn"><i class="fas fa-link"></i></div>
+            </button>
+        </div>
+        <button class="fab-main" id="fabMain" aria-label="Share options">
+            <i class="fas fa-share-alt"></i>
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- ============================
+         TEAM MEMBER MODAL
+    ============================= -->
+    <div class="modal-overlay" id="teamModal" role="dialog" aria-modal="true" aria-label="Team member details">
+        <div class="modal-sheet" id="teamModalSheet">
+            <div class="modal-handle"></div>
+            <button class="modal-close-btn" id="teamModalClose" aria-label="Close">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header-band">
+                <div class="modal-member-name" id="modalName">Name Here</div>
+                <div class="modal-member-title" id="modalTitle">Title Here</div>
+            </div>
+            <div class="modal-photo-wrap" id="modalPhotoWrap">
+                <img id="modalPhoto" src="" alt="Team member photo">
+            </div>
+            <div class="modal-contact-rows">
+                <div class="modal-contact-row">
+                    <div class="modal-contact-icon"><i class="fas fa-envelope"></i></div>
+                    <a class="modal-contact-value" id="modalEmailLink" href="#">email@example.com</a>
+                </div>
+                <div class="modal-contact-row">
+                    <div class="modal-contact-icon"><i class="fas fa-phone-alt"></i></div>
+                    <a class="modal-contact-value" id="modalPhoneLink" href="#">000 000 0000</a>
+                </div>
+            </div>
+            <div class="modal-action-row">
+                <a href="#" class="modal-action-btn modal-btn-call" id="modalCallBtn">
+                    <div class="modal-action-icon"><i class="fas fa-phone-alt"></i></div>
+                    <span class="modal-action-label">Call</span>
+                </a>
+                <a href="#" class="modal-action-btn modal-btn-whatsapp" id="modalWhatsappBtn">
+                    <div class="modal-action-icon"><i class="fab fa-whatsapp"></i></div>
+                    <span class="modal-action-label">WhatsApp</span>
+                </a>
+                <a href="https://www.linkedin.com/company/placeholder" target="_blank" class="modal-action-btn modal-btn-linkedin" id="modalLinkedinBtn">
+                    <div class="modal-action-icon"><i class="fab fa-linkedin-in"></i></div>
+                    <span class="modal-action-label">LinkedIn</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================
+         MAIN CARD
+    ============================= -->
+    <div class="page-wrapper">
+
+        <!-- Header -->
+        <header class="site-header">
+            <div class="header-title-block">
+                <span class="line1 card-name">Acme</span>
+                <span class="line2 job-title">Engineering</span>
+                <span class="header-tagline">Your Trusted Engineering Partner</span>
+            </div>
+            <span class="header-badge">Est. 2010</span>
+        </header>
+
+        <!-- White Profile Card -->
+        <section class="profile-card">
+            <div class="profile-card-inner">
+                <div class="avatar-wrap">
+                    <img src="https://placehold.co/220x220/0d1b3e/ffffff?text=LOGO" alt="Company Logo" class="avatar">
+                </div>
+
+                <div class="profile-divider"></div>
+
+                <!-- Quick-link icon row -->
+                <div class="quick-links">
+                    <a href="tel:+27000000000" class="quick-link-btn ql-phone" title="Call Us" aria-label="Call Us">
+                        <i class="fas fa-phone-alt"></i>
+                    </a>
+                    <a href="https://wa.me/27000000000" class="quick-link-btn ql-whatsapp" target="_blank" title="WhatsApp" aria-label="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://www.facebook.com/placeholder" class="quick-link-btn ql-facebook" target="_blank" title="Facebook" aria-label="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/placeholder" class="quick-link-btn ql-linkedin" target="_blank" title="LinkedIn" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://maps.google.com/?q=placeholder" class="quick-link-btn ql-maps" target="_blank" title="Find Us" aria-label="Find Us">
+                        <i class="fas fa-map-location-dot"></i>
+                    </a>
+                </div>
+
+                <a href="https://www.acmeengineering.co.za" class="website-link" target="_blank">
+                    www.acmeengineering.co.za
+                </a>
+            </div>
+        </section>
+
+        <!-- Dark Contact + Map + Team Section -->
+        <section class="dark-section">
+            <div class="dark-section-inner">
+                <!-- Left: menu rows -->
+                <div class="dark-section-left">
+                    <div class="menu-rows">
+                        <!-- Phone row -->
+                        <div class="menu-row">
+                            <div class="menu-row-icon"><i class="fas fa-phone-alt"></i></div>
+                            <div class="menu-row-text">
+                                <div class="menu-row-label">Phone</div>
+                                <a href="tel:+27000000000" class="menu-row-value">000 000 0000</a>
+                            </div>
+                            <a href="tel:+27000000000" class="menu-row-action">Call Us</a>
+                        </div>
+
+                        <!-- Email row -->
+                        <div class="menu-row">
+                            <div class="menu-row-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="menu-row-text">
+                                <div class="menu-row-label">Email</div>
+                                <a href="mailto:info@acmeengineering.co.za" class="menu-row-value">info@acmeengineering.co.za</a>
+                            </div>
+                            <a href="mailto:info@acmeengineering.co.za" class="menu-row-action">Email Us</a>
+                        </div>
+
+                        <!-- Address row -->
+                        <div class="menu-row">
+                            <div class="menu-row-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="menu-row-text">
+                                <div class="menu-row-label">Address</div>
+                                <span class="menu-row-value address">1 Industry Road, Cityville, 1000</span>
+                            </div>
+                            <a href="https://maps.google.com/?q=placeholder" target="_blank" class="menu-row-action">Visit Us</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: map -->
+                <div class="dark-section-right">
+                    <div class="map-container">
+                        <!-- Replace the src with your actual Google Maps embed URL -->
+                        <iframe
+                            src="https://maps.google.com/maps?q=Johannesburg,South+Africa&output=embed"
+                            title="Company Location"
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meet The Team -->
+            <div class="team-section">
+                <h3 class="section-heading">Meet The Team</h3>
+                <div class="team-grid">
+
+                    <!-- Team member 1 -->
+                    <div class="team-card"
+                         data-name="James Mitchell"
+                         data-title="Chief Executive Officer"
+                         data-phone="011 000 0001"
+                         data-phone-tel="+27110000001"
+                         data-email="james@acmeengineering.co.za"
+                         data-image="https://randomuser.me/api/portraits/men/32.jpg"
+                         tabindex="0"
+                         role="button"
+                         aria-label="View James Mitchell profile">
+                        <div class="team-avatar-wrap">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="James Mitchell" loading="lazy">
+                        </div>
+                        <div class="team-member-name">James Mitchell</div>
+                        <div class="team-member-role">CEO</div>
+                        <span class="team-card-tap"><i class="fas fa-chevron-up"></i></span>
+                    </div>
+
+                    <!-- Team member 2 -->
+                    <div class="team-card"
+                         data-name="Priya Naidoo"
+                         data-title="Sales Director"
+                         data-phone="083 000 0002"
+                         data-phone-tel="+27830000002"
+                         data-email="priya@acmeengineering.co.za"
+                         data-image="https://randomuser.me/api/portraits/women/44.jpg"
+                         tabindex="0"
+                         role="button"
+                         aria-label="View Priya Naidoo profile">
+                        <div class="team-avatar-wrap">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Priya Naidoo" loading="lazy">
+                        </div>
+                        <div class="team-member-name">Priya Naidoo</div>
+                        <div class="team-member-role">Sales Director</div>
+                        <span class="team-card-tap"><i class="fas fa-chevron-up"></i></span>
+                    </div>
+
+                    <!-- Team member 3 -->
+                    <div class="team-card"
+                         data-name="Luca Ferreira"
+                         data-title="General Manager"
+                         data-phone="072 000 0003"
+                         data-phone-tel="+27720000003"
+                         data-email="luca@acmeengineering.co.za"
+                         data-image="https://randomuser.me/api/portraits/men/61.jpg"
+                         tabindex="0"
+                         role="button"
+                         aria-label="View Luca Ferreira profile">
+                        <div class="team-avatar-wrap">
+                            <img src="https://randomuser.me/api/portraits/men/61.jpg" alt="Luca Ferreira" loading="lazy">
+                        </div>
+                        <div class="team-member-name">Luca Ferreira</div>
+                        <div class="team-member-role">General Manager</div>
+                        <span class="team-card-tap"><i class="fas fa-chevron-up"></i></span>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Bio -->
+        <section class="bio-section">
+            <p class="bio about">We deliver world-class engineering solutions with precision, reliability and innovation. With over a decade of experience, our dedicated team serves clients across South Africa and beyond.</p>
+        </section>
+
+        <!-- Save Contact -->
+        <div class="save-wrap">
+            <a href="contact.vcf" class="save-btn">
+                <i class="fas fa-user-plus"></i> Save Contact
+            </a>
+        </div>
+
+        <!-- Social Icons -->
+        <div class="social-row">
+            <a href="https://www.facebook.com/placeholder" class="social-icon-btn" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/placeholder" class="social-icon-btn" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/company/placeholder" class="social-icon-btn" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://twitter.com/placeholder" class="social-icon-btn" target="_blank" aria-label="Twitter / X"><i class="fab fa-x-twitter"></i></a>
+            <a href="https://www.youtube.com/@placeholder" class="social-icon-btn" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bizbio-footer">
+            <div>Created &amp; Hosted by <a href="https://www.bizbio.co.za" target="_blank">BizBio</a></div>
+            <div style="margin-top:4px;font-size:0.68rem;opacity:0.6;">&copy; 2025 BizBio. All rights reserved.</div>
+        </footer>
+
+    </div><!-- /.page-wrapper -->
+
+
+
+    <script>
+    (function() {
+        'use strict';
+
+        /* ============================
+           TEAM MEMBER MODAL
+        ============================ */
+        var modal   = document.getElementById('teamModal');
+        var sheet   = document.getElementById('teamModalSheet');
+        var closeBtn = document.getElementById('teamModalClose');
+
+        function openTeamModal(card) {
+            var name     = card.dataset.name     || '';
+            var title    = card.dataset.title    || '';
+            var phone    = card.dataset.phone    || '';
+            var phoneTel = card.dataset.phoneTel || '';
+            var email    = card.dataset.email    || '';
+            var image    = card.dataset.image    || '';
+
+            document.getElementById('modalName').textContent  = name;
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalPhoto').src         = image;
+            document.getElementById('modalPhoto').alt         = name;
+
+            var emailLink = document.getElementById('modalEmailLink');
+            emailLink.textContent = email;
+            emailLink.href = 'mailto:' + email;
+
+            var phoneLink = document.getElementById('modalPhoneLink');
+            phoneLink.textContent = phone;
+            phoneLink.href = 'tel:' + phoneTel;
+
+            document.getElementById('modalCallBtn').href     = 'tel:' + phoneTel;
+            document.getElementById('modalWhatsappBtn').href = 'https://wa.me/' + phoneTel.replace(/\D/g, '');
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTeamModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Attach to all team cards
+        document.querySelectorAll('.team-card').forEach(function(card) {
+            card.addEventListener('click', function() { openTeamModal(this); });
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openTeamModal(this);
+                }
+            });
+        });
+
+        // Close on backdrop click (outside sheet)
+        modal.addEventListener('click', function(e) {
+            if (!sheet.contains(e.target)) closeTeamModal();
+        });
+
+        closeBtn.addEventListener('click', closeTeamModal);
+
+        // Close on Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeTeamModal();
+        });
+
+        /* ============================
+           FAB
+        ============================ */
+        var fabMain    = document.getElementById('fabMain');
+        var fabMenu    = document.getElementById('fabMenu');
+        var fabOpen    = false;
+
+        fabMain.addEventListener('click', function() {
+            fabOpen = !fabOpen;
+            fabMenu.classList.toggle('open', fabOpen);
+            fabMain.classList.toggle('open', fabOpen);
+        });
+
+        // Share contact
+        document.getElementById('fabShareContact').addEventListener('click', async function(e) {
+            e.preventDefault();
+            try {
+                var response = await fetch('contact.vcf');
+                var blob     = await response.blob();
+                var file     = new File([blob], 'contact.vcf', { type: 'text/vcard' });
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({ title: 'Contact Details', files: [file] });
+                } else if (navigator.share) {
+                    await navigator.share({ title: 'Contact Details', url: window.location.href });
+                } else {
+                    window.location.href = 'contact.vcf';
+                }
+            } catch (err) {
+                if (err.name !== 'AbortError') window.location.href = 'contact.vcf';
+            }
+        });
+
+        // Share profile
+        document.getElementById('fabShareProfile').addEventListener('click', async function() {
+            try {
+                if (navigator.share) {
+                    await navigator.share({
+                        title: document.title,
+                        text: 'Check out this BizBio profile!',
+                        url: window.location.href
+                    });
+                } else {
+                    navigator.clipboard.writeText(window.location.href)
+                        .then(function() { alert('Profile link copied to clipboard!'); });
+                }
+            } catch (err) {
+                if (err.name !== 'AbortError') console.warn('Share failed:', err);
+            }
+        });
+
+    })();
+    </script>
+
+    <script src="../vcard-generator.js"></script>
+</body>
+</html>

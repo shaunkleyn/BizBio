@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarah Mitchell - Digital Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            background: #fff;
+            max-width: 400px;
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .header {
+            padding: 40px 30px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 3px solid #f0f0f0;
+        }
+        .name {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+        .title {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+        }
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .action-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #fff;
+            font-size: 18px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .btn-call { background: #10b981; }
+        .btn-email { background: #3b82f6; }
+        .btn-whatsapp { background: #25d366; }
+        .btn-web { background: #1a1a1a; }
+        .info-section {
+            padding: 20px 30px;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .info-item:last-child { border-bottom: none; }
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+            color: #666;
+        }
+        .info-content {
+            flex: 1;
+        }
+        .info-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-value {
+            font-size: 14px;
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+        .info-value:hover { color: #3b82f6; }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            padding: 20px;
+            background: #fafafa;
+        }
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            background: #fff;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid #eee;
+        }
+        .social-link:hover {
+            color: #fff;
+            background: #1a1a1a;
+            border-color: #1a1a1a;
+        }
+        .save-btn {
+            display: block;
+            margin: 20px 30px 30px;
+            padding: 14px;
+            background: #1a1a1a;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .save-btn:hover { background: #333; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Mitchell" class="avatar">
+            <h1 class="name">Sarah Mitchell</h1>
+            <p class="title">Marketing Director at Bloom Agency</p>
+        </div>
+
+        <div class="actions">
+            <a href="tel:+27821234567" class="action-btn btn-call"><i class="fas fa-phone"></i></a>
+            <a href="mailto:sarah@bloomagency.co.za" class="action-btn btn-email"><i class="fas fa-envelope"></i></a>
+            <a href="https://wa.me/27821234567" class="action-btn btn-whatsapp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.bloomagency.co.za" class="action-btn btn-web"><i class="fas fa-globe"></i></a>
+        </div>
+
+        <div class="info-section">
+            <div class="info-item">
+                <div class="info-icon"><i class="fas fa-phone"></i></div>
+                <div class="info-content">
+                    <div class="info-label">Phone</div>
+                    <a href="tel:+27821234567" class="info-value">082 123 4567</a>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                <div class="info-content">
+                    <div class="info-label">Email</div>
+                    <a href="mailto:sarah@bloomagency.co.za" class="info-value">sarah@bloomagency.co.za</a>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="info-content">
+                    <div class="info-label">Address</div>
+                    <span class="info-value">42 Long Street, Cape Town, 8001</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="social-links">
+            <a href="https://linkedin.com/in/sarahmitchell" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://facebook.com/bloomagency" class="social-link"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://instagram.com/sarahmitchell" class="social-link"><i class="fab fa-instagram"></i></a>
+            <a href="https://twitter.com/sarahmitchell" class="social-link"><i class="fab fa-x-twitter"></i></a>
+        </div>
+
+        <a href="sarah_mitchell.vcf" class="save-btn"><i class="fas fa-download"></i> Save Contact</a>
+    </div>
+    <script src="../vcard-generator.js"></script>
+</body>
+</html>

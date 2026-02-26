@@ -63,6 +63,11 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    // Private keys — only available server-side
+    googleWalletIssuerId: process.env.GOOGLE_WALLET_ISSUER_ID || '',
+    googleWalletServiceAccountEmail: process.env.GOOGLE_WALLET_SERVICE_ACCOUNT_EMAIL || '',
+    googleWalletServiceAccountKey: process.env.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY || '',
+
     public: {
       apiUrl:
         process.env.NUXT_PUBLIC_API_URL || 'https://localhost:5001/api/v1',
