@@ -4,93 +4,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon.png" sizes="32x32">
+        <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Siyanda Engineering - Your Trusted Engineering Partner">
+    <meta property="og:description" content="Discover the difference that Siyanda Engineering can make for your business. Contact us today to learn more about our services.">
+    <meta property="og:image" content="logo.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:url" content="https://siyandaengineering.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SIYANDA ENGINEERING">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Siyanda Engineering - Your Trusted Engineering Partner">
+    <meta name="twitter:description" content="Discover the difference that Siyanda Engineering can make for your business.">
+    <meta name="twitter:image" content="logo.jpg">
+
+    <!-- Additional Image Meta -->
+    <meta name="thumbnail" content="logo.jpg">
+    <link rel="image_src" href="logo.jpg">
+    <meta name="description" content="Discover the difference that Siyanda Engineering can make for your business. Contact us today to learn more about our services.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Siyanda Engineering">
+    <meta name="twitter:description" content="Discover the difference that Siyanda Engineering can make for your business. Contact us today to learn more about our services.">
+    <meta name="twitter:image" content="logo.jpg">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
     <title>Siyanda Engineering</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com/ajax/libs">
+    
+    <!-- CSS Libraries -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <link rel="stylesheet" href="mfb/mfb.min.css">
-    <link href="site.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
-
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="jquery.autoScrollTextTape.css">
+    <link rel="stylesheet" href="jquery.contextpopup.css">
+    <link href="./font/roboto/fonts.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="site.css?v=1.9.1" rel="stylesheet">
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="236552e8-1cca-4ee4-85c2-54a945404cbf"></script>
 </head>
 
-<!-- <script>
-(function() {
-  const pageId = "user123"; // unique per user/page
-  const payload = {
-    event: "pageview",
-    path: window.location.pathname,
-    pageId: pageId,
-    referrer: document.referrer || null,
-    timestamp: Date.now()
-  };
-  const workerUrl = "https://analytics-beacon.shaun-kleyn.workers.dev";
-
-  if (navigator.sendBeacon) {
-    const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
-    navigator.sendBeacon(workerUrl, blob);
-  } else {
-    fetch(workerUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      keepalive: true
-    }).catch(console.warn);
-  }
-})();
-</script> -->
-
-
-
-
 <body>
-    <ul id="menu" class="mfb-component--br mfb-zoomin" data-mfb-toggle="click" data-mfb-state="closed">
+    <!-- Floating Action Button -->
+    <ul id="menu" class="mfb-component--br mfb-zoomin"  data-umami-event="Clicked FAB" data-mfb-toggle="click" data-mfb-state="closed">
         <li class="mfb-component__wrap">
-            <button href="#" class="mfb-component__button--main">
+            <button href="#" class="mfb-component__button--main" aria-label="Share options">
                 <i class="mfb-component__main-icon--resting fa fa-share-alt"></i>
                 <i class="mfb-component__main-icon--active fa fa-times"></i>
             </button>
             <ul class="mfb-component__list">
                 <li>
-                    <a href="Siyanda_Engineering.vcf" target="_blank" data-mfb-label="Download Contact"
-                        class="mfb-component__button--child">
-                        <i class="mfb-component__child-icon fa fa-download"></i>
+                    <a href="Siyanda_Engineering.vcf" target="_blank" data-mfb-label="Download Contact"  data-umami-event="Clicked Download Contact" class="mfb-component__button--child">
+                        <i class="mfb-component__child-icon fa fa-download text-white"></i>
                     </a>
                 </li>
                 <li>
-                    <a href="Siyanda_Engineering.vcf" target="_blank" id="shareContact"
-                        data-mfb-label="Share Contact Details" class="mfb-component__button--child">
-                        <i class="mfb-component__child-icon fa fa-share-alt"></i>
+                    <a href="Siyanda_Engineering.vcf" target="_blank" id="shareContact"  data-umami-event="Clicked Share Contact" data-mfb-label="Share Contact Details" class="mfb-component__button--child">
+                        <i class="mfb-component__child-icon fa fa-share-alt text-white"></i>
                     </a>
                 </li>
-
                 <li>
-                    <button id="shareLink" data-mfb-label="Share BizBio Profile" class="mfb-component__button--child"
-                        type="button">
-                        <i class="mfb-component__child-icon fa fa-link"
-                            style="position: absolute; left: 0; top: 0;"></i>
+                    <button id="shareLink" data-mfb-label="Share BizBio Profile"  data-umami-event="Clicked Share Profile" class="mfb-component__button--child" type="button">
+                        <i class="mfb-component__child-icon fa fa-link text-white"></i>
                     </button>
                 </li>
             </ul>
         </li>
     </ul>
+
+    <!-- Main Content -->
     <div class="business-card">
         <!-- Header -->
         <div class="header">
-            <div class="header-left1">
-
-                <span class="header-title albert-sans d-flex flex-column">
-                    <span style="font-size: clamp(4.05rem, 0.4375rem + 1vw, 1rem)">Siyanda</span>
+            <div class="header-left1 w-75">
+                <span class="header-title d-flex flex-column mx-3">
+                    <span>Siyanda</span>
                     <span>Engineering</span>
                 </span>
             </div>
@@ -102,204 +99,339 @@
             <!-- Profile Card -->
             <div class="profile-card p-3 mb-4">
                 <div class="profile-image">
-                    <img src="logo.jpg" alt="Siyanda Engineering Logo">
+                    <img src="logo.jpg" alt="Siyanda Engineering Logo" loading="lazy">
                 </div>
                 <hr class="w-100">
                 <div class="w-100 d-flex justify-content-between gap-3">
-                    <a class="profile-social-button" href="tel:0119790204" target="_blank">
+                    <a class="profile-social-button" href="tel:0119790204" target="_blank" aria-label="Call us">
                         <i class="fa fa-phone-alt text-white"></i>
                     </a>
-                    <a class="profile-social-button protected-link" href="https://wa--dot--me/--plus----two----seven--837287100" target="_blank">
+                    <a class="profile-social-button protected-link" href="https://wa--dot--me/--plus----two----seven--837287100"  data-umami-event="Clicked WhatsApp Icon" data-umami-event-section="Header" target="_blank" aria-label="WhatsApp us">
                         <i class="fab fa-whatsapp text-white"></i>
                     </a>
-                    <a class="profile-social-button" href="https://www.facebook.com/siyandaeng/" target="_blank">
+                    <a class="profile-social-button" href="https://www.facebook.com/siyandaeng/" target="_blank" aria-label="Visit our Facebook"  data-umami-event="Clicked Facebook Icon" data-umami-event-section="Header">
                         <i class="fab fa-facebook-f text-white"></i>
                     </a>
-                    <a class="profile-social-button" href="https://za.linkedin.com/company/siyanda-engineering" target="_blank">
+                    <a class="profile-social-button" href="https://za.linkedin.com/company/siyanda-engineering" target="_blank" aria-label="Visit our LinkedIn"  data-umami-event="Clicked LinkedIn Icon" data-umami-event-section="Header">
                         <i class="fab fa-linkedin-in text-white"></i>
                     </a>
-                    <a class="profile-social-button" href="https://maps.app.goo.gl/7qKf3bij7Kwjsiby9" target="_blank">
+                    <a class="profile-social-button" href="https://maps.app.goo.gl/7qKf3bij7Kwjsiby9" target="_blank" aria-label="Find us on map" data-umami-event="Clicked Map Icon" data-umami-event-section="Header">
                         <i class="fas fa-map-location-dot text-white"></i>
                     </a>
                 </div>
-                <a class="mt-3 protected-link" href="https://siyandaengineering--dot--com"  target="_blank">www--dot--siyandaengineering--dot--com</a>
+                <a class="mt-3 protected-link" href="https://siyandaengineering--dot--com" target="_blank"  data-umami-event="Clicked Email Address"  data-umami-event-section="Header">www--dot--siyandaengineering--dot--com</a>
             </div>
 
-
+            <!-- Contact Options -->
             <div class="card shadow border-whitem rounded-4 mb-4" style="background: var(--primary-blue-darker);">
-                <div class="card-body">
-
-                </div>
+                <div class="card-body"></div>
 
                 <!-- Menu Grid -->
                 <div class="menu-grid mt-0">
-                    <div class="menu-item justify-content-start p-1 m-3  mb-0 mt-0 flex-row bg-white rounded-3">
+                    <div class="menu-item justify-content-start p-1 m-3 mb-0 mt-0 flex-row bg-white rounded-3">
                         <div class="menu-icon-container bg-white border-0">
                             <i class="fa fa-phone-alt text-lg color-primary-blue"></i>
                         </div>
-                        <div class="js-conveyor menu-label">
-                            <span class="menu-label">011 979 0204</span>
+                        <div class="js-conveyor1 menu-label">
+                            <a class="menu-label context-link" href="tel:0119790204" target="_blank"  data-umami-event="Clicked Phone Number"  data-umami-event-section="Details">011 979 0204</a>
                         </div>
                         <div class="menu-icon-container ms-auto rounded-2 color-custom-red">
-                            <a class=" menu-go-button" href="tel:0119790204" target="_blank">Call Us</a>
-                            <i class="fa fa-arrow-right me-2 d-none"></i>
+                            <a class="menu-go-button" href="tel:0119790204" target="_blank" data-umami-event="Clicked Call Us Button"  data-umami-event-section="Details">Call Us</a>
                         </div>
                     </div>
-                    <div class="menu-item justify-content-start p-1 m-3  mb-0 mt-0 flex-row bg-white rounded-3">
+                    
+                    <div class="menu-item justify-content-start p-1 m-3 mb-0 mt-0 flex-row bg-white rounded-3">
                         <div class="menu-icon-container bg-white border-0">
                             <i class="fa fa-envelope text-lg color-primary-blue"></i>
                         </div>
                         <div class="js-conveyor menu-label">
-                            <span class="menu-label bb-eaddress">sales--at--siyandaengineering--dot--com</span>
+                            <a class="menu-label protected-link context-link" href="mailto:sales--at--siyandaengineering--dot--com" target="_blank" data-umami-event="Clicked Email Address"  data-umami-event-section="Details">sales--at--siyandaengineering--dot--com</a>
                         </div>
                         <div class="menu-icon-container ms-auto rounded-2 color-custom-red">
-                            <a class=" menu-go-button" href="mailto:sales--at--siyandaengineering--dot--com" target="_blank">Email Us</a>
-                            <i class="fa fa-arrow-right me-2 d-none"></i>
+                            <a class="menu-go-button protected-link" href="mailto:sales--at--siyandaengineering--dot--com" target="_blank" data-umami-event="Clicked Email Us Button"  data-umami-event-section="Details">Email Us</a>
                         </div>
                     </div>
-                    <div class="menu-item justify-content-start p-1 m-3  mb-0 mt-0 flex-row bg-white rounded-3">
+                    
+                    <div class="menu-item justify-content-start p-1 m-3 mb-0 mt-0 flex-row bg-white rounded-3">
                         <div class="menu-icon-container bg-white border-0">
                             <i class="fa fa-map text-lg color-primary-blue"></i>
                         </div>
                         <div class="js-conveyor menu-label">
-                            <span class="menu-label">10 Gerhardus Rd, Henville, Germiston, 1426</span>
+                            <span class="menu-label">10 Gerhardus Rd, Henville, Germiston, 1429</span>
                         </div>
                         <div class="menu-icon-container ms-auto rounded-2 color-custom-red">
-                            <a class=" menu-go-button" href="https://maps.app.goo.gl/7qKf3bij7Kwjsiby9" target="_blank">Visit Us</a>
-                            <i class="fa fa-arrow-right me-2 d-none"></i>
+                            <a class="menu-go-button" href="https://maps.app.goo.gl/7qKf3bij7Kwjsiby9" target="_blank" data-umami-event="Clicked Visit Us Button"  data-umami-event-section="Details">Visit Us</a>
                         </div>
                     </div>
-<div class="mapouter"><div class="gmap_canvas"><iframe class="gmap_iframe" width="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=600&amp;height=300&amp;hl=en&amp;q=siyanda engineering&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe><a href="https://embedgooglemap.xyz/">add google map in html</a></div><style>.mapouter{position:relative;text-align:right;width:100%;height:300px;}.gmap_canvas {overflow:hidden;background:none!important;width:100%;height:300px;}.gmap_iframe {height:300px!important;}</style></div>                </div>
-                <div class="menu-grid grid-2x1 mx-3 d-none">
-                    <div class="menu-item">
-                        <div class="menu-icon-container border-0" style="
-    height: 110px;
-">
-                            <img src="https://siyandaengineering.com/wp-content/uploads/2024/08/IMG-20240814-WA0008.jpg"
-                                style="
-    height: 210px;
-">
-
+                    
+                    <!-- Map -->
+                    <div class="mapouter">
+                        <div class="gmap_canvas">
+                            <iframe class="gmap_iframe" width="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
+                                    src="https://maps.google.com/maps?width=600&amp;height=300&amp;hl=en&amp;q=siyanda engineering&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed" 
+                                    title="Siyanda Engineering Location" loading="lazy"></iframe>
                         </div>
-                        <span class="menu-label">David Slabbert</span>
                     </div>
-
-
-
-
                 </div>
 
-                <!-- employees Section -->
+                <!-- Employees Section -->
                 <div class="employee-section m-3">
-                    <h3 class="employee-title text-white">The Team</h3>
-                    <div class="employee-list d-flex mb-4">
-                        <div class="employee">
+                    <h3 class="section-title text-white mt-4 mb-3">Meet The Team</h3>
+                    <div class="employee-list d-flex mb-4 row">
+                        <div class="employee emp1 show-detail col-4" data-name="David Slabbert" data-title="CEO" data-email="david--at--siyandaengineering--dot--co--dot--za" data-phone-tel="+27119790204" data-phone="011 979 0204" data-image="https://siyandaengineering.com/wp-content/uploads/2024/08/IMG-20240814-WA0008.jpg" data-umami-event="Clicked User Profile"  data-umami-event-user="David Slabbert">
                             <div class="employee-avatar">
-                                <img src="https://siyandaengineering.com/wp-content/uploads/2024/08/IMG-20240814-WA0008.jpg"
-                                    alt="employee 1">
+                                <img src="https://siyandaengineering.com/wp-content/uploads/2024/08/IMG-20240814-WA0008.jpg" alt="David Slabbert" loading="lazy">
                             </div>
+                            <i class="contact-icon fa fa-phone-alt"></i>
                             <div class="employee-name">David Slabbert</div>
                         </div>
-                        <div class="employee">
+
+                        <div class="employee show-detail col-4" data-name="KG Mogoale" data-title="Sales Director" data-email="sales--at--siyandaengineering--dot--co--dot--za" data-phone-tel="+27837287100" data-phone="083 728 7100" data-image="https://siyandaengineering.com/wp-content/uploads/2024/08/IMG-20240814-WA0007.jpg"  data-umami-event="Clicked User Profile"  data-umami-event-user="KG Mogoale">
                             <div class="employee-avatar">
-                                <img src="https://siyandaengineering.com/wp-content/uploads/2024/08/IMG-20240814-WA0007.jpg"
-                                    alt="employee 2">
+                                <img src="https://siyandaengineering.com/wp-content/uploads/2024/08/IMG-20240814-WA0007.jpg" alt="KG Mogoale" loading="lazy">
                             </div>
+                            <i class="contact-icon fa fa-phone-alt"></i>
                             <div class="employee-name">KG Mogoale</div>
                         </div>
-                        <div class="employee">
+                        
+                        <div class="employee show-detail col-4" data-name="Ludwig Scheepers" data-title="General Manager" data-email="ludwig--at--siyandaengineering--dot--co--dot--za" data-phone-tel="+27119790204" data-phone="011 979 0204" data-image="https://siyandaengineering.com/wp-content/uploads/2024/08/IMG-20240814-WA0003.jpg" data-umami-event="Clicked User Profile"  data-umami-event-user="Ludwig Scheepers">
                             <div class="employee-avatar">
-                                <img src="https://siyandaengineering.com/wp-content/uploads/2024/08/IMG-20240814-WA0003.jpg"
-                                    alt="employee 3">
+                                <img src="https://siyandaengineering.com/wp-content/uploads/2024/08/IMG-20240814-WA0003.jpg" alt="Ludwig Scheepers" loading="lazy">
                             </div>
+                            <i class="contact-icon fa fa-phone-alt"></i>
                             <div class="employee-name">Ludwig Scheepers</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <script src="jquery.autoScrollTextTape.min.js"></script>
-        <script src="mfb/mfb.js"></script>
-        <script src="site.js?v2"></script>
-        <script>
-        $(document).ready(function(){
-            $('.js-conveyor').autoTextTape();
-        });
-    </script>
-    <script>
-        // Simple version - add this before closing body tag
-        document.addEventListener('DOMContentLoaded', function() {
-            const links = document.querySelectorAll('link[rel="stylesheet"]');
-            links.forEach(link => {
-                const href = link.href.split('?')[0];
-                link.href = href + '?v=' + Date.now();
-            });
-        });
-    </script>
-        <script>
-            var initialMouse = 0;
-            var slideMovementTotal = 0;
-            var mouseIsDown = false;
-            var slider = $('.slider');
-
-            slider.on('mousedown touchstart', function (event) {
-                mouseIsDown = true;
-                slideMovementTotal = $('#button-background').width() - $(this).width() + 1;
-                initialMouse = event.clientX || event.originalEvent.touches[0].pageX;
-            });
-
-            $(document.body, '.slider').on('mouseup touchend', function (event) {
-                if (!mouseIsDown)
-                    return;
-                mouseIsDown = false;
-                var currentMouse = event.clientX || event.changedTouches[0].pageX;
-                var relativeMouse = currentMouse - initialMouse;
-
-                if (relativeMouse < slideMovementTotal) {
-                    $('.slide-text').fadeTo(300, 1);
-                    slider.animate({
-                        left: "0px"
-                    }, 300);
-                    return;
-                }
-                slider.addClass('unlocked');
-                //$('#locker').text('lock_outline');
-                setTimeout(function () {
-                    slider.on('click tap', function (event) {
-                        if (!slider.hasClass('unlocked'))
-                            return;
-                        slider.removeClass('unlocked');
-                        //$('#locker').text('lock_open');
-                        slider.off('click tap');
-                    });
-                }, 0);
-            });
-
-            $(document.body).on('mousemove touchmove', function (event) {
-                if (!mouseIsDown)
-                    return;
-
-                var currentMouse = event.clientX || event.originalEvent.touches[0].pageX;
-                var relativeMouse = currentMouse - initialMouse;
-                var slidePercent = 1 - (relativeMouse / slideMovementTotal);
-
-                $('.slide-text').fadeTo(0, slidePercent);
-
-                if (relativeMouse <= 0) {
-                    slider.css({ 'left': '0px' });
-                    return;
-                }
-                if (relativeMouse >= slideMovementTotal + 0) {
-                    slider.css({ 'left': slideMovementTotal + 'px' });
-                    return;
-                }
-                slider.css({ 'left': relativeMouse - 0 });
-            });
-
-        </script>
-
-
+        
+        <!-- Footer -->
+        <div class="bizbio-signature mb-3">
+            <div>Created and Hosted by <a href="https://www.bizbio.co.za"  data-umami-event="Clicked BizBio Link"  data-umami-event-section="Footer">BizBio</a></div>
+            <div>© 2025 <a href="https://www.bizbio.co.za"  data-umami-event="Clicked BizBio Link"  data-umami-event-section="Footer">BizBio</a>. All rights reserved.</div>
+        </div>
     </div>
+   
+    <!-- Employee Detail Modal Template -->
+    <div id="employee-detail-modal-content" class="d-none">
+        <div class="business-card employee-details">
+            <div class="header">
+                <div class="header-left1">
+                    <span class="header-title d-flex flex-column mx-3">
+                        <span>__name__</span>
+                        <span class="roboto employee-title text-white">__title__</span>
+                    </span>
+                </div>
+            </div>
+            <div class="profile-card p-0 m-3 shadow-none border-0 radius-3">
+                <div class="profile-image">
+                    <img src="__image__" alt="Employee photo" loading="lazy">
+                </div>
+                <div class="contact-details-card">
+                    <div class="align-items-center justify-content-start d-flex flex-row">
+                        <i class="fa fa-envelope text-lg color-primary-blue ms-2 me-3"></i>
+                        <a class="protected-link text-no-underline js-conveyor context-link" href="mailto:__email__" target="_blank"  data-umami-event="Clicked Email Address"  data-umami-event-section="Popup" data-umami-event-profile="__name__">__email__</a>                  
+                    </div>
+                    <hr class="">
+                    <div class="align-items-center justify-content-start d-flex flex-row">
+                        <i class="fa fa-phone-alt text-lg color-primary-blue ms-2 me-3"></i>
+                        <a class="protected-link text-no-underline js-conveyor" href="tel:__phone-tel__" target="_blank"  data-umami-event="Clicked Phone Number"  data-umami-event-section="Popup" data-umami-event-profile="__name__">__phone__</a>
+                    </div>
+                </div>
+                <div class="w-100 d-flex justify-content-around gap-3 py-4">
+                    <a class="profile-social-button" href="tel:__phone-tel__" target="_blank" aria-label="Call employee"  data-umami-event="Clicked Phone Icon"  data-umami-event-section="Popup" data-umami-event-profile="__name__">
+                        <i class="fa fa-phone-alt text-white"></i>
+                    </a>
+                    <a class="profile-social-button protected-link" href="https://wa.me/+27837287100" target="_blank" aria-label="WhatsApp employee"   data-umami-event="Clicked WhatsApp Icon"  data-umami-event-section="Popup" data-umami-event-profile="__name__">
+                        <i class="fab fa-whatsapp text-white"></i>
+                    </a>
+                    <a class="profile-social-button" href="https://za.linkedin.com/company/siyanda-engineering" target="_blank" aria-label="LinkedIn" data-umami-event="Clicked LinkedIn Icon"  data-umami-event-section="Popup" data-umami-event-profile="__name__">
+                        <i class="fab fa-linkedin-in text-white"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/6.0.4/bootbox.all.min.js" integrity="sha512-OlpYkeP4LOQBnLKOE0N+ERpnTW7H8MZTK0+QURB5nt/emQnvahiKJ5VFg8MfDuuixMmDukAroF3pfzhB9dGUug==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="jquery.autoScrollTextTape.js?v1"></script>
+    <script src="mfb/mfb.js"></script>
+    <script src="site.js?v1.9"></script>
+    <script src="jquery.contextpopup.js"></script>
+    
+    <script>
+          
+        document.getElementById("shareContact").addEventListener("click", async () => {
+    try {
+        // First try file sharing (mobile)
+        if (navigator.share && navigator.canShare) {
+            try {
+                const response = await fetch('Siyanda_Engineering.vcf');
+                const vcfBlob = await response.blob();
+                const vcfFile = new File([vcfBlob], 'Siyanda_Engineering.vcf', {
+                    type: 'text/vcard'
+                });
+
+                if (navigator.canShare({ files: [vcfFile] })) {
+                    await navigator.share({
+                        title: "Siyanda Engineering Contact Details",
+                        text: "Here are my contact details. Get yours on BizBio.co.za today:",
+                        files: [vcfFile]
+                    });
+                    return; // Success, exit function
+                }
+            } catch (fileShareError) {
+                console.log('File sharing failed, falling back to URL sharing');
+            }
+        }
+
+        // Fallback to URL sharing
+        await navigator.share({
+            title: "Siyanda Engineering Contact Details",
+            text: "Here are my contact details. Get yours on BizBio.co.za today:",
+            url: window.location.href
+        });
+
+    } catch (err) {
+        if (err.name !== 'AbortError') {
+            console.error("Sharing failed:", err);
+            // Ultimate fallback - direct download
+            window.location.href = 'Siyanda_Engineering.vcf';
+        }
+    }
+});
+
+        // Initialize components
+        $(document).ready(function(){
+            $('.js-conveyor').autoTextTape({
+                tapePause: 1000,
+            });
+
+            // $('a.context-link').contextPopup({
+            //     // Customizing for a generic link
+            //     copyText: 'Copy Link Text',
+            //     proceedText: 'Go to Link Target',
+            //     toastMessage: 'Link text copied!'
+            // });
+            
+            $(document).on("click", "#shareLink", async (event) => {
+                event.preventDefault();  
+                try {
+                if (navigator.share) {
+                await navigator.share({
+                    title: "Siyanda Engineering Profile",
+                    text: "Check out Siyanda Engineering on BizBio!",
+                    url: window.location.href
+                }); } else {
+                alert("Your browser does not support sharing. Please copy the link manually.");
+                }
+                } catch (err) {
+                console.error("Sharing failed:", err);
+                }
+            });
+
+//             $(document).on('click', "#shareContact", async (e) => {
+//     e.preventDefault(); // Prevent default behavior if it's a link
+    
+//     try {
+//         // Check if Web Share API is supported
+//         if (!navigator.share) {
+//             throw new Error('Web Share API not supported in this browser');
+//         }
+        
+//         const shareResult = await navigator.share({
+//             title: "Siyanda Engineering Contact Details",
+//             text: "Here are my contact details. Create yours on BizBio:",
+//             url: window.location.href,
+//             files: ["Siyanda_Engineering.vcf"] // Optional: if you want to share files
+//         });
+        
+//         bootbox.alert({
+//                 size: 'small',
+//                 title: 'Share Successful',
+//                 message: 'Your contact details have been shared successfully.',
+//                 callback: function () { 
+//                     /* your callback code */ 
+//                 }
+//             });
+        
+//         // Optional: Show success message to user
+//         // showNotification('Contact shared successfully!');
+        
+//     } catch (err) {
+//         console.error("Sharing failed:", err);
+        
+//         // Fallback for browsers that don't support Web Share API
+//         if (err.name === 'AbortError') {
+//             console.log('User cancelled the share');
+//         } else if (err.message.includes('not supported')) {
+//             // Fallback to traditional download
+//             //fallbackShareMethod();
+//             bootbox.alert({
+//                 size: 'small',
+//                 title: 'Sharing Failed',
+//                 message: 'Your browser does not support the Web Share API. Please copy the link manually.',
+//                 callback: function () { 
+//                     /* your callback code */ 
+//                 }
+//             });
+//         }
+//     }
+// });
+
+            // Employee detail modal
+            $(document).on('click', '.show-detail', function(e) {
+                bootbox.dialog({ 
+                    title: null,
+                    backdrop: true,
+                    message: $('#employee-detail-modal-content').html()
+                        .replaceAll('__name__', $(this).data('name'))
+                        .replaceAll('__title__', $(this).data('title'))
+                        .replaceAll('__email__', $(this).data('email'))
+                        .replaceAll('__phone-tel__', $(this).data('phone-tel'))
+                        .replaceAll('__phone__', $(this).data('phone'))
+                        .replaceAll('__image__', $(this).data('image')),
+                    onShow: function() {
+                        $(this).html(replaceProtectedLinks('.modal-dialog-centered'));
+                        
+                    },
+                    onShown: function() {
+                        $('.modal-dialog-centered .js-conveyor').autoTextTape(
+                            {
+                                tapePause: 1000,
+                            }
+                        );
+
+                        // $('a.context-link').contextPopup({
+                        //     // Customizing for a generic link
+                        //     copyText: 'Copy Link Text',
+                        //     proceedText: 'Go to Link Target',
+                        //     toastMessage: 'Link text copied!'
+                        // });
+                    },
+                    onEscape: true,
+                    centerVertical: true,
+                    backdrop: false,
+                    className: 'employee-detail-modal',
+                    relatedTarget: $(this),
+                    buttons: {
+                        close: {
+                            label: 'Close',
+                            className: 'btn-secondary',
+                            callback: function() {}
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

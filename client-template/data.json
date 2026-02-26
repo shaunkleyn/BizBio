@@ -1,0 +1,45 @@
+{
+    "template": "01-minimalist-clean",
+
+    "name": "Your Full Name",
+    "title": "Your Job Title",
+    "company": "Your Company Name",
+    "tagline": "Company Tagline (optional)",
+
+    "email": "email@example.com",
+    "phone": "+27 82 123 4567",
+    "phoneDisplay": "082 123 4567",
+    "whatsapp": "+27821234567",
+
+    "website": "https://www.yourwebsite.com",
+    "address": "123 Main Street, City, 1234",
+    "mapsUrl": "https://maps.google.com/?q=your+address",
+
+    "photo": "photo.jpg",
+    "logo": "logo.png",
+
+    "bio": "A brief description about yourself or your business. Keep it concise and impactful.",
+
+    "social": {
+        "linkedin": "https://linkedin.com/in/yourprofile",
+        "facebook": "https://facebook.com/yourpage",
+        "instagram": "https://instagram.com/yourhandle",
+        "twitter": "https://twitter.com/yourhandle",
+        "github": "https://github.com/yourusername",
+        "youtube": "https://youtube.com/@yourchannel",
+        "tiktok": "https://tiktok.com/@yourhandle"
+    },
+
+    "stats": [
+        { "value": "10+", "label": "Years Experience" },
+        { "value": "500+", "label": "Projects" },
+        { "value": "50+", "label": "Clients" }
+    ],
+
+    "theme": {
+        "primaryColor": "#3b82f6",
+        "accentColor": "#10b981",
+        "backgroundColor": "#ffffff",
+        "textColor": "#1a1a1a"
+    }
+}

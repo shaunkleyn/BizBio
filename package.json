@@ -1,5 +1,27 @@
 {
   "dependencies": {
     "vcard-creator": "^0.7.2"
-  }
+  },
+  "name": "bizbio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bizbio-engine.js",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shaunkleyn/bizbio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/shaunkleyn/bizbio/issues"
+  },
+  "homepage": "https://github.com/shaunkleyn/bizbio#readme"
 }

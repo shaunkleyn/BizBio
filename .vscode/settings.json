@@ -4,6 +4,8 @@
     },
     "liveServer.settings.port": 5501,
     "cSpell.words": [
+        "normalised",
         "vcard"
-    ]
+    ],
+    "jira-plugin.workingProject": ""
 }

@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siyanda Engineering</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+
+        :root {
+            --primary-blue: #2A76BB;
+            --primary-blue-dark: #2B7BC5;
+            --primary-blue-darker: #1D3F68;
+            --secondary: #969698;
+            --secondary-dark: #88898A;
+            --secondary-darker: #747476;
+            --custom-red: #C41E1C;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .bg-primary-blue {
+            background: var(--primary-blue) !important;
+            background-color: var(--primary-blue) !important;
+        }
+
+        .bg-primary-blue-dark {
+            background: var(--primary-blue-dark) !important;
+            background-color: var(--primary-blue-dark) !important;
+        }
+
+        .bg-primary-blue-darker {
+            background: var(--primary-blue-darker) !important;
+            background-color: var(--primary-blue-darker) !important;
+        }
+
+        .bg-custom-red {
+            background: var(--custom-red) !important;
+            background-color: var(--custom-red) !important;
+        }
+
+        .color-primary-blue {
+            color: var(--primary-blue) !important;
+        }
+
+        .color-primary-blue-dark {
+            color: var(--primary-blue-dark) !important;
+        }
+
+        .color-primary-blue-darker {
+            color: var(--primary-blue-darker) !important;
+        }
+
+        .color-custom-red {
+            color: var(--custom-red) !important;
+        }
+
+        .albert-sans {
+        font-family: "Albert Sans", sans-serif;
+        font-optical-sizing: auto;
+        }
+
+        .text-md {
+            font-size: 20px !important;
+        }
+
+        .text-16 {
+            font-size: 16px !important;
+        }
+
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .business-card {
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: visible;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(182deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            padding: 30px 15px 100px;
+            display: flex
+        ;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 24px 24px 0 0;
+            position: relative;
+        }
+
+        .header::after {
+    content: '';
+    position: absolute;
+    bottom: -70px;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background: var(--primary-blue-dark);
+    border-radius: 0 0 50% 50%;
+}
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-icon {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        .header-title {
+    color: white;
+    font-weight: 600;
+    font-size: 48px;
+    letter-spacing: -2px;
+    line-height: 51px;
+}
+
+        .bell-icon {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        .content {
+            padding: 0 24px 24px;
+            position: relative;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #f3f4f6;
+            position: relative;
+            margin-top: -70px;
+            z-index: 10;
+        }
+
+        .profile-card .menu-icon-container1 {
+            min-width: 60px;
+            height: 60px;
+            background: var(--primary-blue-dark);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            border: none;
+        }
+
+        .profile-card .menu-icon-container {
+    /* min-width: 60px; */
+    /* height: 60px; */
+    background: var(--primary-blue-dark);
+    border-radius: 12px;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: white;
+    border: none;
+    max-width: 20%;
+    width: 17%;
+    aspect-ratio: 1;
+    padding: 5%;
+}
+
+        .gap-10 {
+            gap: 10px !important;
+        }
+        
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 12px;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .profile-id {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .menu-grid {
+            display: grid;
+            /* grid-template-columns: repeat(2, 1fr); */
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .grid-2x1 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-1x1 {
+            grid-template-columns: repeat(1, 1fr);
+        }
+
+        .menu-item {
+            background: #f9fafb;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid #f3f4f6;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .menu-item:hover {
+            background: #f3f4f6;
+        }
+
+        .menu-icon-container {
+    min-width: 48px;
+    height: 48px;
+    /* background: #dbeafe; */
+    border-radius: 12px;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    border-color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+}
+
+        .menu-icon-container svg {
+            width: 24px;
+            height: 24px;
+            color: #2563eb;
+        }
+
+        .menu-label {
+            color: #374151;
+            font-size: 14px;
+            font-weight: 500;
+            word-break: break-word;
+        }
+
+        .teachers-section {
+            margin-top: 24px;
+        }
+
+        .teachers-title {
+            color: #374151;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .teachers-list {
+    display: flex
+;
+    /* gap: 12px; */
+    /* overflow-x: auto; */
+    /* padding-bottom: 8px; */
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+        .teacher-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 2px white, 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+        .teacher-avatar img {
+    width: 200%;
+    height: 200%;
+    object-fit: cover;
+    margin-left: -50%;
+    margin-top: -25%;
+}
+
+        .contact-item {
+            align-items: center;
+        }
+
+        .contact-item i{
+            font-size: 20px;
+        }
+
+        .contact-item p {
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 0;
+        }
+
+        #button-background {
+  position: relative;
+  background-color: rgba(3, 112, 94, 0.3);
+  width: 400px;
+  height: 80px;
+  border: white;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#slider {
+  transition: width 0.3s, border-radius 0.3s, height 0.3s;
+  position: absolute;
+  left: 0px;
+  background-color: white;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#slider.unlocked {
+  transition: all 0.3s;
+  width: inherit;
+  left: 0 !important;
+  height: inherit;
+  border-radius: inherit;
+}
+
+.material-icons {
+  color: black;
+  font-size: 50px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+.slide-text {
+  color: #3a3d55;
+  font-size: 24px;
+  text-transform: uppercase;
+  font-family: "Roboto", sans-serif;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+    </style>
+</head>
+<body>
+    <div class="business-card">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <svg class="menu-icon opacity-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+                <span class="header-title albert-sans">Siyanda Engineering</span>
+            </div>
+            <svg class="bell-icon opacity-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+            </svg>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Profile Card -->
+            <div class="profile-card p-3 mb-5" style="
+    position: relative;
+">
+                <div class="profile-image">
+                    <img src="logo.jpg" alt="Siyanda Engineering Logo">
+                </div>
+                <hr class="w-100">
+                <div class="w-100 d-flex justify-content-between">
+                
+
+                <div class="menu-icon-container bg-custom-red">
+                        <i class="fa fa-phone-alt text-white"></i>
+                    </div><div class="menu-icon-container bg-custom-red">
+                        <i class="fab fa-whatsapp"></i>
+                    </div><div class="menu-icon-container bg-custom-red">
+                        <i class="fab fa-facebook-f"></i>
+                    </div><div class="menu-icon-container bg-custom-red">
+                        <i class="fab fa-linkedin-in"></i>
+                    </div>
+
+                
+            <div class="menu-icon-container bg-custom-red">
+                        <i class="fas fa-map-location-dot "></i>
+                    </div></div>
+            </div>
+            
+
+            <div class="card shadow border-whitem rounded-4" style="
+    background: var(--primary-blue-darker);
+">
+                <div class="card-body">
+                    
+            </div>
+
+            <!-- Menu Grid -->
+            <div class="menu-grid gap-10 mt-0">
+                <div class="menu-item justify-content-start p-1 m-3  mb-0 mt-0 flex-row bg-white rounded-3">
+                    <div class="menu-icon-container bg-white text-md border-0">
+                        <i class="fa fa-phone-alt text-lg color-primary-blue"></i>
+                    </div>
+                    <span class="menu-label text-16">
+011 979 0204</span>
+                    <div class="menu-icon-container ms-auto px-4 rounded-2 text-md border-0 color-custom-red">
+                        <i class="fa fa-arrow-right"></i>
+                    </div>
+                </div>
+            <div class="menu-item justify-content-start p-1 m-3  mb-0 mt-0 flex-row bg-white rounded-3">
+                    <div class="menu-icon-container bg-white text-md border-0">
+                        <i class="fa fa-envelope text-lg color-primary-blue"></i>
+                    </div>
+                    <span class="menu-label text-16">sales@siyandaengineering.com</span>
+                    <div class="menu-icon-container ms-auto px-4 rounded-2 text-md border-0 color-custom-red">
+                        <i class="fa fa-arrow-right"></i>
+                    </div>
+                </div><div class="menu-item justify-content-start p-1 m-3  mb-0 mt-0 flex-row bg-white rounded-3">
+                    <div class="menu-icon-container bg-white text-md border-0">
+                        <i class="fa fa-map text-lg color-primary-blue"></i>
+                    </div>
+                    <span class="menu-label text-16">10 Gerhardus Rd, Henville, Germiston, 1426</span>
+                    <div class="menu-icon-container ms-auto px-4 rounded-2 text-md border-0 color-custom-red">
+                        <i class="fa fa-arrow-right"></i>
+                    </div>
+                </div></div>
+            <div class="menu-grid grid-2x1 mx-3 d-none">
+                <div class="menu-item">
+                    <div class="menu-icon-container border-0" style="
+    height: 110px;
+">
+                        <img src="https://siyandaengineering.com/wp-content/uploads/2024/08/IMG-20240814-WA0008.jpg" style="
+    height: 210px;
+">
+
+                    </div>
+                    <span class="menu-label">David Slabbert</span>
+                </div>
+
+                
+
+                
+            </div>
+
+            <!-- Teachers Section -->
+            <div class="teachers-section mx-3">
+                <h3 class="teachers-title text-white">The Team</h3>
+                <div class="teachers-list d-flex mb-4">
+                    <div class="teacher-avatar">
+                        <img src="https://siyandaengineering.com/wp-content/uploads/2024/08/IMG-20240814-WA0008.jpg" alt="Teacher 1">
+                    </div>
+                    <div class="teacher-avatar">
+                        <img src="https://siyandaengineering.com/wp-content/uploads/2024/08/IMG-20240814-WA0007.jpg" alt="Teacher 2">
+                    </div>
+                    <div class="teacher-avatar">
+                        <img src="https://siyandaengineering.com/wp-content/uploads/2024/08/IMG-20240814-WA0003.jpg" alt="Teacher 3">
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var initialMouse = 0;
+var slideMovementTotal = 0;
+var mouseIsDown = false;
+var slider = $('.slider');
+
+slider.on('mousedown touchstart', function(event){
+	mouseIsDown = true;
+	slideMovementTotal = $('#button-background').width() - $(this).width() + 1;
+	initialMouse = event.clientX || event.originalEvent.touches[0].pageX;
+});
+
+$(document.body, '.slider').on('mouseup touchend', function (event) {
+	if (!mouseIsDown)
+		return;
+	mouseIsDown = false;
+	var currentMouse = event.clientX || event.changedTouches[0].pageX;
+	var relativeMouse = currentMouse - initialMouse;
+
+	if (relativeMouse < slideMovementTotal) {
+		$('.slide-text').fadeTo(300, 1);
+		slider.animate({
+			left: "0px"
+		}, 300);
+		return;
+	}
+	slider.addClass('unlocked');
+	//$('#locker').text('lock_outline');
+	setTimeout(function(){
+		slider.on('click tap', function(event){
+			if (!slider.hasClass('unlocked'))
+				return;
+			slider.removeClass('unlocked');
+			//$('#locker').text('lock_open');
+			slider.off('click tap');
+		});
+	}, 0);
+});
+
+$(document.body).on('mousemove touchmove', function(event){
+	if (!mouseIsDown)
+		return;
+
+	var currentMouse = event.clientX || event.originalEvent.touches[0].pageX;
+	var relativeMouse = currentMouse - initialMouse;
+	var slidePercent = 1 - (relativeMouse / slideMovementTotal);
+	
+	$('.slide-text').fadeTo(0, slidePercent);
+
+	if (relativeMouse <= 0) {
+		slider.css({'left': '0px'});
+		return;
+	}
+	if (relativeMouse >= slideMovementTotal + 0) {
+		slider.css({'left': slideMovementTotal + 'px'});
+		return;
+	}
+	slider.css({'left': relativeMouse - 0});
+});
+
+    </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+</div>
+    <script>
+        var initialMouse = 0;
+var slideMovementTotal = 0;
+var mouseIsDown = false;
+var slider = $('.slider');
+
+slider.on('mousedown touchstart', function(event){
+	mouseIsDown = true;
+	slideMovementTotal = $('#button-background').width() - $(this).width() + 1;
+	initialMouse = event.clientX || event.originalEvent.touches[0].pageX;
+});
+
+$(document.body, '.slider').on('mouseup touchend', function (event) {
+	if (!mouseIsDown)
+		return;
+	mouseIsDown = false;
+	var currentMouse = event.clientX || event.changedTouches[0].pageX;
+	var relativeMouse = currentMouse - initialMouse;
+
+	if (relativeMouse < slideMovementTotal) {
+		$('.slide-text').fadeTo(300, 1);
+		slider.animate({
+			left: "0px"
+		}, 300);
+		return;
+	}
+	slider.addClass('unlocked');
+	//$('#locker').text('lock_outline');
+	setTimeout(function(){
+		slider.on('click tap', function(event){
+			if (!slider.hasClass('unlocked'))
+				return;
+			slider.removeClass('unlocked');
+			//$('#locker').text('lock_open');
+			slider.off('click tap');
+		});
+	}, 0);
+});
+
+$(document.body).on('mousemove touchmove', function(event){
+	if (!mouseIsDown)
+		return;
+
+	var currentMouse = event.clientX || event.originalEvent.touches[0].pageX;
+	var relativeMouse = currentMouse - initialMouse;
+	var slidePercent = 1 - (relativeMouse / slideMovementTotal);
+	
+	$('.slide-text').fadeTo(0, slidePercent);
+
+	if (relativeMouse <= 0) {
+		slider.css({'left': '0px'});
+		return;
+	}
+	if (relativeMouse >= slideMovementTotal + 0) {
+		slider.css({'left': slideMovementTotal + 'px'});
+		return;
+	}
+	slider.css({'left': relativeMouse - 0});
+});
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+AddType text/html .menu
+AddType text/vcard .vcf
+
+# ========== WILDCARD SUBDOMAIN HANDLING ==========
+# Enable rewrite engine
+RewriteEngine On
+
+# Handle wildcard subdomains (e.g., susanboyle.bizbio.co.za)
+RewriteCond %{HTTP_HOST} ^(?!www\.)([^.]+)\.bizbio\.co\.za(:[0-9]+)?$ [NC]
+RewriteCond %{REQUEST_URI} !^/%1/ [NC]
+# Check if subdomain folder exists
+RewriteCond %{DOCUMENT_ROOT}/bizbio.co.za/%1 -d
+# Rewrite all requests to subdomain folder
+RewriteRule ^(.*)$ /bizbio.co.za/%1/$1 [L]
+
+# ========== PATH-BASED ACCESS (bizbio.co.za/username) ==========
+# This won't affect your VPS Vue app since cPanel only handles subdomain requests
+# Handle path-based access for digital business cards
+RewriteCond %{HTTP_HOST} ^(www\.)?bizbio\.co\.za(:[0-9]+)?$ [NC]
+RewriteCond %{REQUEST_URI} ^/([^/]+)(/.*)?$ [NC]
+RewriteCond %{DOCUMENT_ROOT}/bizbio.co.za/%1 -d
+RewriteRule ^([^/]+)(/.*)?$ /bizbio.co.za/$1$2 [L]
+
+# ========== ADDITIONAL HELPER RULES ==========
+# Redirect www.subdomain to subdomain (clean URLs)
+RewriteCond %{HTTP_HOST} ^www\.([^.]+)\.bizbio\.co\.za(:[0-9]+)?$ [NC]
+RewriteRule ^(.*)$ https://%1.bizbio.co.za/$1 [R=301,L]
+
+# Remove .html extension from all pages in customer folders
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.+)$ $1.html [L]
+
+# Optional: Redirect path-based to subdomain (uncomment if you want automatic redirects)
+# RewriteCond %{HTTP_HOST} ^(www\.)?bizbio\.co\.za(:[0-9]+)?$ [NC]
+# RewriteCond %{REQUEST_URI} ^/([^/]+)/?$ [NC]
+# RewriteCond %{DOCUMENT_ROOT}/bizbio.co.za/%1 -d
+# RewriteRule ^([^/]+)/?$ https://%1.bizbio.co.za/ [R=301,L]

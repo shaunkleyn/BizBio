@@ -6,10 +6,14 @@
     <title>James Anderson - Digital Business Card</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/02.css">
+    <link rel="stylesheet" href="./css/theme-tweaker.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@latest/dist/cdn.min.js"></script>
     <style>
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-family);
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             min-height: 100vh;
             display: flex;
@@ -18,7 +22,7 @@
             padding: 20px;
         }
         .card {
-            background: #fff;
+            background: var(--card-bg-color);
             max-width: 420px;
             width: 100%;
             border-radius: 20px;
@@ -26,7 +30,7 @@
             box-shadow: 0 25px 50px rgba(0,0,0,0.3);
         }
         .header {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             padding: 40px 30px 60px;
             position: relative;
         }
@@ -44,18 +48,20 @@
             font-weight: 700;
         }
         .header h1 {
-            color: #fff;
+            color: var(--header-color);
             font-size: 28px;
             font-weight: 700;
             margin-bottom: 6px;
         }
         .header .title {
-            color: rgba(255,255,255,0.8);
+            color: var(--header-color);
+            opacity: 0.8;
             font-size: 16px;
             font-weight: 500;
         }
         .header .company {
-            color: rgba(255,255,255,0.6);
+            color: var(--header-color);
+            opacity: 0.6;
             font-size: 14px;
             margin-top: 4px;
         }
@@ -69,7 +75,7 @@
             height: 100px;
             border-radius: 16px;
             object-fit: cover;
-            border: 4px solid #fff;
+            border: 4px solid var(--avatar-border-color);
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         .content {
@@ -89,26 +95,29 @@
             align-items: center;
             text-decoration: none;
             padding: 16px 8px;
-            border-radius: 12px;
-            background: #f8fafc;
+            border-radius: var(--button-radius);
+            background: var(--action-button-bg-color);
+            color: var(--action-button-text-color);
             transition: all 0.2s;
+            aspect-ratio: 1;
+            justify-content: center;
         }
         .quick-action:hover {
-            background: #1e40af;
+            background: var(--action-button-text-color);
         }
         .quick-action:hover i,
         .quick-action:hover span {
-            color: #fff;
+            color: var(--action-button-bg-color);
         }
         .quick-action i {
             font-size: 20px;
-            color: #1e40af;
+            color: var(--action-button-text-color);
             margin-bottom: 8px;
             transition: color 0.2s;
         }
         .quick-action span {
             font-size: 11px;
-            color: #64748b;
+            color: var(--action-button-text-color);
             font-weight: 500;
             transition: color 0.2s;
         }
@@ -119,28 +128,59 @@
             display: flex;
             align-items: center;
             padding: 16px;
-            background: #f8fafc;
-            border-radius: 12px;
+            /* background: #f8fafc; */
+            border-radius: var(--button-radius);
             margin-bottom: 10px;
             text-decoration: none;
             transition: all 0.2s;
+            position: relative;
         }
         .info-item:hover {
-            background: #e2e8f0;
+            /* background: #e2e8f0; */
             transform: translateX(4px);
+        }
+
+        .info-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--card-bg-color);
+            transform: translateX(4px);
+            border-radius: 15px;
+            opacity: 0.15;
+            margin: 0px -4px;
+            filter: brightness(0.9);
+            transition: 0.3s all;
+        }
+        .info-item:hover::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--info-item-icon-bg-color);
+            transform: translateX(4px);
+            border-radius: 15px;
+            opacity: 0.15;
+            margin: 0px -4px;
+            transition: 0.3s all;
         }
         .info-icon {
             width: 44px;
             height: 44px;
-            border-radius: 10px;
-            background: #1e40af;
+            border-radius: var(--button-radius);
+            background: var(--info-item-icon-bg-color);
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 14px;
         }
         .info-icon i {
-            color: #fff;
+            color: var(--info-item-icon-text-color);
             font-size: 16px;
         }
         .info-text {
@@ -148,12 +188,12 @@
         }
         .info-label {
             font-size: 12px;
-            color: #64748b;
+            color: var(--info-item-label-color);
             margin-bottom: 2px;
         }
         .info-value {
             font-size: 14px;
-            color: #1e293b;
+            color: var(--info-item-text-color);
             font-weight: 500;
         }
         .info-arrow {
@@ -167,7 +207,7 @@
         }
         .social-title {
             font-size: 12px;
-            color: #94a3b8;
+            color: var(--info-item-label-color);
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 16px;
@@ -200,18 +240,69 @@
             gap: 10px;
             margin-top: 24px;
             padding: 16px;
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            color: #fff;
+            /* background: var(--cta-button-bg-color); */
+            color: var(--cta-button-text-color);
             text-decoration: none;
-            border-radius: 12px;
+            border-radius: var(--button-radius);
             font-weight: 600;
             transition: all 0.2s;
+            position: relative;
+            z-index: 0;
         }
+        .save-contact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 70%;
+    background: var(--cta-button-bg-color);
+    z-index: -2;
+    border-radius: var(--button-radius);
+    display: flex;
+    transition: all 0.3s;
+    right: 0;
+    margin: 0 auto;
+    transition: 0.3s all;
+}
+        .save-contact:hover::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            width: 95%;
+            height: 100%;
+            background-color: var(--cta-button-bg-color);
+            /* z-index: -1; */
+            filter: blur(14px) saturate(2) opacity(0.3);
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+            opacity: 1;
+            transition: 0.3s all;
+        }
+        .save-contact:hover::after{
+            filter: brightness(0.8);
+        }
+        .save-contact::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--cta-button-bg-color);
+    z-index: -1;
+    opacity: 1;
+    border-radius: var(--button-radius);
+    transition: all 0.3s;
+}
         .save-contact:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(30,64,175,0.3);
+            /* box-shadow: 0 10px 30px rgba(30,64,175,0.3); */
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script defer src="./js/theme-tweaker.js"></script>
 </head>
 <body>
     <div class="card">
@@ -275,10 +366,10 @@
             <div class="social-section">
                 <div class="social-title">Connect with me</div>
                 <div class="social-links">
-                    <a href="https://linkedin.com/in/jamesanderson" class="social-link social-linkedin"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://facebook.com/nexusholdings" class="social-link social-facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://instagram.com/nexusholdings" class="social-link social-instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://twitter.com/jamesanderson" class="social-link social-twitter"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://linkedin.com/in/jamesanderson" class="tt-social social-link social-linkedin"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://facebook.com/nexusholdings" class="tt-social social-link social-facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/nexusholdings" class="tt-social social-link social-instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/jamesanderson" class="tt-social social-link social-twitter"><i class="fab fa-x-twitter"></i></a>
                 </div>
             </div>
 
@@ -288,5 +379,6 @@
             </a>
         </div>
     </div>
+    <script src="../vcard-generator.js"></script>
 </body>
 </html>

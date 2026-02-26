@@ -31,8 +31,6 @@
     <link rel="stylesheet" href="../fonts/css/all.css">
     <link rel="stylesheet" href="mfb/mfb.min.css">
     <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
-    <script type="text/javascript" src="../node_modules/vcard-creator/dist/vcard-creator.js"></script>
-    
 
     <style>
       .mfb-component__child-icon, .mfb-component__icon, .mfb-component__main-icon--active, .mfb-component__main-icon--resting {
@@ -109,6 +107,7 @@ button i {
     <!-- <link rel="stylesheet" href="mfb/index.css"> -->
     <script src="mfb/lib/modernizr.touch.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="c7c77ab5-79b2-4b3c-b03e-b8c937859635"></script>
 </head>
 
 <body>
@@ -136,7 +135,7 @@ button i {
               </button>
               <ul class="mfb-component__list">
                 <li>
-                  <a href="Six_Door_Innovations.vcf" target="_blank" data-mfb-label="Download Contact" class="mfb-component__button--child">
+                  <a href="Six_Door_Innovations.vcf" id="downloadContact" data-mfb-label="Save Contact" class="mfb-component__button--child">
                     <i class="mfb-component__child-icon fal fa-download"></i>
                   </a>
                 </li>
@@ -163,7 +162,7 @@ button i {
               <div class="vcard-top-info">
                 <h4 class="top"></h4>
                 <img src="./images/Logo.png" style="height: 120px">
-                <h1 class="text-white mt-4 mb-2" data-vcard="company">Six Door Innovations</h1>
+                <h1 class="text-white mt-4 mb-2">Six Door Innovations</h1>
     
                 <h5 class="mb-3 text-white">Innovation Has a Key — We've Got Six</h5>
                 <p class="text-white-50 mb-1 small">Company Reg: 2024/136195/07</p>
@@ -233,12 +232,12 @@ button i {
                       <small class="title">Address</small>
                     </div>
                     <div class="row">
-                      <p data-vcard="address" data-vcard-prop="adr" data-vcard-type="WORK">
-                        <span data-vcard="address" data-vcard-type="WORK" data-vcard-prop="name">Six Door innovations (Pty) Ltd</span><br>
-                        <span data-vcard="address" data-vcard-type="WORK" data-vcard-prop="street">23 Pulsar Place</span><br>
-                        <span data-vcard="address" data-vcard-type="WORK" data-vcard-prop="worktown">Sunward Park</span><br>
-                        <span data-vcard="address" data-vcard-type="WORK" data-vcard-prop="state">Boksburg</span><br>
-                        <span data-vcard="address" data-vcard-type="WORK" data-vcard-prop="workpostcode">1470</span>
+                      <p>
+                        Six Door innovations (Pty) Ltd<br>
+                        23 Pulsar Place<br>
+                        Sunward Park<br>
+                        Boksburg<br>
+                        1470
                       </p>
                     </div>
                   </div>
@@ -288,7 +287,7 @@ button i {
                       <small class="title">Mobile</small>
                     </div>
                     <div class="row">
-                      <a href="tel:0824622692" class="" data-vcard="tel" data-vcard-prop="tel" data-vcard-type="CELL;WORK" data-vcard-value="0824622692">082 462 2692</a>
+                      <a href="tel:0824622692" class="">082 462 2692</a>
                     </div>
                   </div>
                   <div class="col-auto" style="align-content: space-around;">
@@ -305,7 +304,7 @@ button i {
                       <small class="title">Email</small>
                     </div>
                     <div class="row">
-                      <a href="mailto:Info@sixdoor.co.za" target="_newLink" class="" data-vcard="email" data-vcard-type="INTERNET;WORK">info@sixdoor.co.za</a>
+                      <a href="mailto:Info@sixdoor.co.za" target="_newLink" class="">info@sixdoor.co.za</a>
                     </div>
                   </div>
                   <div class="col-auto" style="align-content: space-around;">
@@ -319,10 +318,10 @@ button i {
                   </div>
                   <div class="col">
                     <div class="row">
-                      <small class="title" data-vcard="role" data-vcard="jobtitle">Managing Director</small>
+                      <small class="title">Managing Director</small>
                     </div>
                     <div class="row">
-                      <a href="mailto:Info@sixdoor.co.za" target="_newLink" class=""><span data-vcard="firstname">Megan</span> <span data-vcard="surname">Scrimgeour Ackerman</span></a>
+                      <a href="mailto:Info@sixdoor.co.za" target="_newLink" class="">Megan Scrimgeour Ackerman</a>
                     </div>
                   </div>
                   <div class="col-auto" style="align-content: space-around;">
@@ -394,35 +393,40 @@ button i {
   }
 
 </script>
-<script type="module">
-      import VCard from 'https://cdn.skypack.dev/vcard-creator'
-      function createVCard() {
-          var vCard = new VCard();
-        vCard.addName($('[data-vcard="surname"]').text(), $('[data-vcard="firstname"]').text(), '', '', '')
-        .addCompany($('[data-vcard="company"]').text())
-        .addEmail($('[data-vcard="email"]').text(), 'WORK')
-        .addPhoneNumber($('[data-vcard="tel"]').data('vcard-value'), $('[data-vcard="tel"]').data('vcard-type'))
-        .addAddress(
-          $('[data-vcard="address"][data-vcard-prop="name"]').text(),
-          $('[data-vcard="address"][data-vcard-prop="street"]').text(),
-          $('[data-vcard="address"][data-vcard-prop="town"]').text(),
-          $('[data-vcard="address"][data-vcard-prop="state"]').text(),
-          $('[data-vcard="address"][data-vcard-prop="postcode"]').text(),
-          'South Africa'
-        , 'WORK')
-      }
-    </script>
 <script>
 
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  // Adjust download button behavior for iOS
+  if (isIOS) {
+    const downloadBtn = document.getElementById("downloadContact");
+    // iOS Safari prefers a direct link; don't use target="_blank"
+    downloadBtn.setAttribute("href", "Six_Door_Innovations.vcf");
+    downloadBtn.addEventListener("click", () => {
+      // No extra JS needed; MIME type ensures Contacts app opens
+      console.log("iOS: Opening VCF in Contacts app");
+    });
+  }
+
+  // Share button logic (Web Share API with file)
   document.getElementById("shareContact").addEventListener("click", async () => {
     try {
-      await navigator.share({
-        title: "Six Door Innovations Contact Details",
-        text: "Here are my contact details:",
-        url: "Six_Door_Innovations.vcf" // your hosted VCF file
-      });
+      const response = await fetch('Six_Door_Innovations.vcf');
+      const blob = await response.blob();
+      const file = new File([blob], "Six_Door_Innovations.vcf", { type: "text/vcard" });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: "Six Door Innovations Contact",
+          text: "Here are my contact details!",
+          files: [file]
+        });
+      } else {
+        alert("Sharing not supported on this device/browser. Please use the Save Contact button.");
+      }
     } catch (err) {
       console.error("Sharing failed:", err);
+      alert("Sharing failed. Please use the Save Contact button instead.");
     }
   });
 

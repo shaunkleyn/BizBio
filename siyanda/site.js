@@ -1,12 +1,20 @@
   $(function() {
     // email protection
-    $('.bb-eaddress, .protected-link').each(function(){
+    $('.protected-link').each(function(){
       var mAddress = $(this).html().replaceAll('--at--','@').replaceAll('--dot--','.');
-      $(this).html(mAddress).attr('href', 'mailto:' + mAddress);
+      $(this).html(mAddress);
     });
     
 
-    const replacementMap = {
+
+  });
+
+$(document).ready(function(){
+  replaceProtectedLinks('body');
+});
+
+function replaceProtectedLinks(element) {
+  const replacementMap = {
     '--dot--': '.',
     '--at--': '@',
     '--dash--': '-',
@@ -17,16 +25,17 @@
 
     };
 
-    // Create a regex pattern from all aliases
-    const aliasPattern = new RegExp(Object.keys(replacementMap).join('|'), 'g');
-
-    function replaceAliases(text) {
-        return text.replace(aliasPattern, (match) => replacementMap[match]);
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('a, span, div, p').forEach(element => {
-            element.innerHTML = replaceAliases(element.innerHTML);
-        });
+    $(element).find('.protected-link').each(function(){
+      try {
+    var el = $(this);
+    $.each(replacementMap, function(i,e) {
+        var mAddress = $(el).html().replaceAll(i,e);
+      $(el).html(mAddress);
+        var mAddress = $(el).attr('href').replaceAll(i,e);
+      $(el).attr('href', mAddress);
+    })
+      } catch (error) {
+        console.error("Error processing element:", el, error);
+      }
     });
-  });
+  }

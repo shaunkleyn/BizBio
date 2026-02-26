@@ -1,88 +1,204 @@
 /* theme-tweaker.js
- *
- * Drop-in floating UI to tweak theme tokens on ANY static HTML page.
- * - primary color
- * - secondary color
- * - background color
- * - text color
- * - light/dark mode toggle
- * - font picker (auto-loads Google Fonts when needed)
- *
- * Usage:
- *   <script defer src="./js/theme-tweaker.js"></script>
- *
- * Optional config (before including script):
- *   <script>
- *     window.ThemeTweakerConfig = { enabled: true, defaultOpen: false, position: "right" };
- *   </script>
+ * - Injects ./css/theme-tweaker.css
+ * - Fetches ./partials/theme-tweaker.html and mounts after DOM ready
+ * - Uses Alpine to render standard fields from a 1-line registry
+ * - Keeps your gradient controls (BG + CTA) with dial controls
  */
 
 (() => {
+  if (window.__ThemeTweakerMounted) return;
+  window.__ThemeTweakerMounted = true;
+
+  const BASE_STORAGE_KEY = "themeTweaker:v3";
+
   const CFG = {
     enabled: true,
     defaultOpen: false,
     position: "right", // "right" | "left"
-    storageKey: "themeTweaker:v1",
-    // CSS variables we manage:
-    vars: {
-      primary: "--primary-color",
-      secondary: "--secondary-color",
-      background: "--bg-color",
-      text: "--text-color",
-      font: "--font-family"
-    },
-    // Reasonable defaults
-    defaults: {
-      mode: "light", // "light" | "dark"
-      primary: "#0A66C2",
-      secondary: "#E4405F",
-      background: "#FFFFFF",
-      text: "#111827",
-      font: "system-ui"
-    },
-    // Fonts (includes system + google)
+
+    cssUrl: "./css/theme-tweaker.css",
+    htmlTemplateUrl: "./partials/theme-tweaker.html",
+
+    storageKey: null,
+
     fonts: [
-      { label: "System UI", value: "system-ui" },
       { label: "Inter", value: "Inter", google: true },
+      { label: "System UI", value: "system-ui" },
       { label: "Roboto", value: "Roboto", google: true },
       { label: "Open Sans", value: "Open Sans", google: true },
       { label: "Poppins", value: "Poppins", google: true },
       { label: "Montserrat", value: "Montserrat", google: true },
       { label: "Source Sans 3", value: "Source Sans 3", google: true },
       { label: "Merriweather", value: "Merriweather", google: true }
-    ]
+    ],
+
+    socialBrandHex: {
+      whatsapp: "#25D366",
+      linkedin: "#0A66C2",
+      instagram: "#E4405F",
+      facebook: "#1877F2",
+      x: "#000000",
+      twitter: "#1DA1F2",
+      youtube: "#FF0000",
+      tiktok: "#000000",
+      github: "#181717",
+      stackoverflow: "#F58025",
+      website: "#2563EB",
+      email: "#6B7280",
+      phone: "#10B981",
+      map: "#EA4335",
+      link: "#6B7280"
+    }
   };
 
-  // Merge user config if present
-  const userCfg = window.ThemeTweakerConfig && typeof window.ThemeTweakerConfig === "object"
-    ? window.ThemeTweakerConfig
-    : {};
+  // allow overrides
+  const userCfg =
+    window.ThemeTweakerConfig && typeof window.ThemeTweakerConfig === "object"
+      ? window.ThemeTweakerConfig
+      : {};
   Object.assign(CFG, userCfg);
 
   if (!CFG.enabled) return;
 
   const $ = (sel, root = document) => root.querySelector(sel);
 
+  // ----------------------------
+  // 1-LINE REGISTRATION HERE
+  // ----------------------------
+  const TT_FIELDS = [
+    // selects
+    { key: "mode", kind: "select", label: "Mode", options: ["light", "dark"], default: "light" },
+    { key: "font", kind: "select", label: "Font", optionsFromCfg: "fonts", default: "Inter" },
+    { key: "buttonShape", kind: "select", label: "Button shape", options: ["square","rounded-sm","rounded-md","rounded-lg","pill","circle"], default: "pill" },
+    { key: "socialColorMode", kind: "select", label: "Social colors", options: ["brand","unified"], default: "brand" },
+
+    // colors
+    { key: "text", cssVar: "--text-color", kind: "color", label: "Text color", default: "#1e293b", derive: true },
+    { key: "primary", cssVar: "--primary-color", kind: "color", label: "Primary", default: "#1e40af", derive: true },
+    { key: "secondary", cssVar: "--secondary-color", kind: "color", label: "Secondary", default: "#3b82f6", derive: true },
+    { key: "cardBg", cssVar: "--card-bg-color", kind: "color", label: "Card BG", default: "#ffffff", derive: true },
+    { key: "avatarBorder", cssVar: "--avatar-border-color", kind: "color", label: "Avatar border", default: "#ffffff", derive: true },
+
+    { key: "actionBtnBg", cssVar: "--action-button-bg-color", kind: "color", label: "Action btn BG", default: "#1e40af", derive: true },
+    { key: "actionBtnText", cssVar: "--action-button-text-color", kind: "color", label: "Action btn text", default: "#ffffff", derive: true },
+
+    { key: "infoIconBg", cssVar: "--info-item-icon-bg-color", kind: "color", label: "Info icon BG", default: "#1e40af", derive: true },
+    { key: "infoIconText", cssVar: "--info-item-icon-text-color", kind: "color", label: "Info icon text", default: "#ffffff", derive: true },
+
+    { key: "headerColor", cssVar: "--header-color", kind: "color", label: "Header color", default: "#ffffff", derive: true },
+
+    { key: "socialUnifiedColor", cssVar: "--social-unified-color", kind: "color", label: "Unified social color", default: "#1e40af" },
+
+    // ✅ your new variable (add more like this = batch add)
+    { key: "taglineText", cssVar: "--tagline-text-color", kind: "color", label: "Tagline text", default: "#ffffff", derive: true }
+  ];
+
+  const TT_SECTIONS = [
+  {
+    section: "Global",
+    rows: [
+      {
+        layout: "single",
+        fields: [
+          { key: "mode", kind: "select", label: "Mode", options: ["light", "dark"], default: "light" },
+        ]
+      },
+      {
+        layout: "single",
+        fields: [
+          { key: "font", kind: "select", label: "Font", optionsFromCfg: "fonts", default: "Inter" },
+        ]
+      },
+      {
+        layout: "single",
+        fields: [
+          { key: "bg", cssVar: "--page-background-color", kind: "color", label: "Page Background", default: "#111827", derive: true },
+        ]
+      },
+      
+      {
+        layout: "pair",
+        fields: [
+          { key: "primary", cssVar: "--primary-color", kind: "color", label: "Primary Colour", default: "#111827", derive: true },
+          { key: "secondary", cssVar: "--secondary-color", kind: "color", label: "Secondary Color", default: "#111827", derive: true },
+        ]
+      },
+      
+      
+    ]
+  },
+
+  {
+    section: "Card",
+    rows: [
+      {
+        layout: "single",
+        fields: [
+          { key: "cardRadius", cssVar: "--card-radius", kind: "select", label: "Card Radius", 
+            options: [
+              {key: "none", label: "None", value: "0px"}, 
+              {key: "sm", label: "Small", value: "5px"}, 
+              {key: "md", label: "Medium", value: "10px"}, 
+              {key: "lg", label: "Large", value: "20px"}, 
+              {key: "xl", label: "Extra Large", value: "30px"}
+            ], default: "md" },
+        ]
+      },
+      {
+        // BG + text next to each other
+        layout: "pair",
+        fields: [
+          { key: "cardBg", cssVar: "--card-bg-color", kind: "color", label: "Background", default: "#ffffff", derive: true },
+          { key: "cardText", cssVar: "--card-text-color", kind: "color", label: "Text", default: "#111827", derive: true },
+          
+        ]
+      },
+      {
+        layout: "single",
+        fields: [
+          { key: "taglineText", cssVar: "--tagline-text-color", kind: "color", label: "Tagline text", default: "#ffffff", derive: true },
+        ]
+      }
+    ]
+  },
+
+  {
+    section: "Header",
+    rows: [
+      {
+        layout: "pair",
+        fields: [
+          { key: "headerBg", cssVar: "--header-bg-color", kind: "color", label: "Background", default: "#111827", derive: true },
+          { key: "headerText", cssVar: "--header-text-color", kind: "color", label: "Text", default: "#ffffff", derive: true },
+        ]
+      },
+      {
+        layout: "single",
+        fields: [
+          { key: "subheadingText", cssVar: "--subheading-text-color", kind: "color", label: "Subheading text", default: "#cbd5e1", derive: true },
+        ]
+      }
+    ]
+  }
+];
+
+
+  // ----------------------------
+  // Utilities
+  // ----------------------------
   function safeParse(json, fallback) {
     try { return JSON.parse(json); } catch { return fallback; }
   }
 
-  function getStoredState() {
-    const raw = localStorage.getItem(CFG.storageKey);
-    const s = safeParse(raw, null);
-    return s && typeof s === "object" ? s : null;
-  }
-
-  function storeState(state) {
-    localStorage.setItem(CFG.storageKey, JSON.stringify(state));
+  function structuredCloneSafe(obj) {
+    if (typeof structuredClone === "function") return structuredClone(obj);
+    return JSON.parse(JSON.stringify(obj));
   }
 
   function ensureGoogleFontLoaded(fontName) {
-    // Avoid duplicating
     const id = `tt-font-${fontName.replace(/\s+/g, "-").toLowerCase()}`;
     if (document.getElementById(id)) return;
 
-    // Preconnect (optional, but nice)
     if (!document.getElementById("tt-preconnect-gfonts")) {
       const pre1 = document.createElement("link");
       pre1.id = "tt-preconnect-gfonts";
@@ -105,408 +221,650 @@
     document.head.appendChild(link);
   }
 
-  function applyState(state) {
-    const root = document.documentElement;
+  function ensureCssLoaded(href) {
+    return new Promise((resolve, reject) => {
+      const already = [...document.styleSheets].some(s => s.href && s.href.includes(href));
+      if (already) return resolve();
 
-    // Mode: set attribute + helpful class
-    root.setAttribute("data-theme", state.mode);
-    root.classList.toggle("tt-dark", state.mode === "dark");
+      const id = "tt-widget-css";
+      if (document.getElementById(id)) return resolve();
 
-    // CSS vars
-    root.style.setProperty(CFG.vars.primary, state.primary);
-    root.style.setProperty(CFG.vars.secondary, state.secondary);
-    root.style.setProperty(CFG.vars.background, state.background);
-    root.style.setProperty(CFG.vars.text, state.text);
-
-    const fontVar = state.font === "system-ui"
-      ? "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif"
-      : `'${state.font}', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif`;
-
-    root.style.setProperty(CFG.vars.font, fontVar);
-
-    // Optionally load Google font if selected
-    const fontMeta = CFG.fonts.find(f => f.value === state.font);
-    if (fontMeta?.google) ensureGoogleFontLoaded(fontMeta.value);
-
-    // Provide a base "hook" style for pages that want to use these tokens
-    injectBaseTokenStylesOnce();
+      const link = document.createElement("link");
+      link.id = id;
+      link.rel = "stylesheet";
+      link.href = href;
+      link.onload = () => resolve();
+      link.onerror = () => reject(new Error(`ThemeTweaker: failed to load CSS ${href}`));
+      document.head.appendChild(link);
+    });
   }
 
+  function readCssVar(name, fallback = "") {
+    const v = getComputedStyle(document.documentElement).getPropertyValue(name);
+    const s = (v || "").trim();
+    return s || fallback;
+  }
+
+  function rgbStringToHex(rgb) {
+    const m = rgb.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+    if (!m) return null;
+    const r = Number(m[1]), g = Number(m[2]), b = Number(m[3]);
+    const to2 = (n) => n.toString(16).padStart(2, "0");
+    return `#${to2(r)}${to2(g)}${to2(b)}`;
+  }
+
+  function normalizeColorLike(value) {
+    const v = (value || "").trim();
+    if (!v) return "";
+    if (v.startsWith("#")) return v;
+    if (v.startsWith("rgb(") || v.startsWith("rgba(")) return rgbStringToHex(v) || v;
+    return v; // keep gradients as-is
+  }
+
+  function isHexColor(v) {
+    return typeof v === "string" && /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v.trim());
+  }
+
+  function expandHex(hex) {
+    const h = hex.replace("#", "").trim();
+    if (h.length === 3) return "#" + h.split("").map(c => c + c).join("");
+    return "#" + h;
+  }
+
+  function hexToRgb(hex) {
+    const h = expandHex(hex).replace("#", "");
+    return {
+      r: parseInt(h.slice(0, 2), 16),
+      g: parseInt(h.slice(2, 4), 16),
+      b: parseInt(h.slice(4, 6), 16)
+    };
+  }
+
+  function clamp(n) {
+    return Math.max(0, Math.min(255, Math.round(n)));
+  }
+
+  function rgbToHex({ r, g, b }) {
+    const to2 = (n) => n.toString(16).padStart(2, "0");
+    return "#" + to2(clamp(r)) + to2(clamp(g)) + to2(clamp(b));
+  }
+
+  function darkenHex(hex, amount = 0.12) {
+    if (!isHexColor(hex)) return hex;
+    const { r, g, b } = hexToRgb(hex);
+    return rgbToHex({ r: r * (1 - amount), g: g * (1 - amount), b: b * (1 - amount) });
+  }
+
+  function darkenGradientString(gradient, amount = 0.10) {
+    if (typeof gradient !== "string") return gradient;
+    const matches = gradient.match(/#([0-9a-f]{3}|[0-9a-f]{6})/gi);
+    if (!matches || matches.length === 0) return gradient;
+
+    let out = gradient;
+    for (const m of matches) {
+      const darker = darkenHex(m, amount);
+      out = out.replace(new RegExp(m.replace("#", "\\#"), "g"), darker);
+    }
+    return out;
+  }
+
+  function computeHoverColor(value) {
+    const v = String(value || "").trim();
+    if (isHexColor(v)) return darkenHex(v, 0.12);
+    if (v.toLowerCase().includes("gradient(")) return darkenGradientString(v, 0.10);
+    return v;
+  }
+
+  function getButtonRadius(shape) {
+    switch (shape) {
+      case "square": return "0px";
+      case "rounded-sm": return "5px";
+      case "rounded-md": return "10px";
+      case "rounded-lg": return "20px";
+      case "circle": return "999px";
+      case "pill":
+      default: return "14px";
+    }
+  }
+
+  function makeLinearGradient(angleDeg, startHex, endHex) {
+    const a = Number.isFinite(angleDeg) ? angleDeg : 0;
+    const start = isHexColor(startHex) ? startHex : "#000000";
+    const end = isHexColor(endHex) ? endHex : "#ffffff";
+    return `linear-gradient(${Math.round(a)}deg, ${start} 0%, ${end} 100%)`;
+  }
+
+  function parseLinearGradient(gradientStr) {
+    const s = (gradientStr || "").trim();
+    if (!s.toLowerCase().startsWith("linear-gradient")) return null;
+
+    const angleMatch = s.match(/linear-gradient\(\s*([-\d.]+)\s*deg/i);
+    const angle = angleMatch ? Number(angleMatch[1]) : 180;
+
+    const hexes = s.match(/#([0-9a-f]{3}|[0-9a-f]{6})/ig) || [];
+    const start = hexes[0] || null;
+    const end = hexes[1] || hexes[0] || null;
+
+    return { angle, start, end };
+  }
+
+  function getPageKey() {
+    const { pathname } = window.location;
+    let file = pathname.split("/").filter(Boolean).join("/");
+    if (!file || file.endsWith("/")) file += "index";
+    file = file.replace(/\.html?$/i, "");
+    return file || "root";
+  }
+
+  function buildDefaults() {
+    const d = {};
+    for (const f of TT_FIELDS) d[f.key] = f.default;
+    // gradient UI defaults
+    d._bgKind = "solid";
+    d._bgSolid = "#f5f5f5";
+    d._bgStart = "#1e40af";
+    d._bgEnd = "#3b82f6";
+    d._bgAngle = 135;
+
+    d._ctaKind = "gradient";
+    d._ctaSolid = "#1e40af";
+    d._ctaStart = "#1e40af";
+    d._ctaEnd = "#3b82f6";
+    d._ctaAngle = 135;
+
+    return d;
+  }
+
+  function deriveFromHostCss() {
+    const out = {};
+    for (const f of TT_FIELDS) {
+      if (!f.derive || !f.cssVar) continue;
+      const raw = readCssVar(f.cssVar);
+      if (!raw) continue;
+      out[f.key] = normalizeColorLike(raw);
+    }
+
+    // background + cta (special cases)
+    const bgRaw = readCssVar("--bg-color");
+    const bgParsed = parseLinearGradient(bgRaw);
+    if (bgParsed) {
+      out._bgKind = "gradient";
+      out._bgAngle = bgParsed.angle ?? 135;
+      out._bgStart = bgParsed.start ?? out.primary ?? "#1e40af";
+      out._bgEnd = bgParsed.end ?? out.secondary ?? "#3b82f6";
+    } else {
+      out._bgKind = "solid";
+      out._bgSolid = normalizeColorLike(bgRaw) || "#f5f5f5";
+    }
+
+    const ctaRaw = readCssVar("--cta-button-bg-color");
+    const ctaParsed = parseLinearGradient(ctaRaw);
+    if (ctaParsed) {
+      out._ctaKind = "gradient";
+      out._ctaAngle = ctaParsed.angle ?? 135;
+      out._ctaStart = ctaParsed.start ?? out.primary ?? "#1e40af";
+      out._ctaEnd = ctaParsed.end ?? out.secondary ?? "#3b82f6";
+    } else {
+      out._ctaKind = "solid";
+      out._ctaSolid = normalizeColorLike(ctaRaw) || (out.primary ?? "#1e40af");
+    }
+
+    return out;
+  }
+
+  function getStoredState(key) {
+    const raw = localStorage.getItem(key);
+    const s = safeParse(raw, null);
+    return s && typeof s === "object" ? s : null;
+  }
+
+  function storeState(state, key) {
+    localStorage.setItem(key, JSON.stringify(state));
+  }
+
+  // ---- base token style injection (only social vars + helpers) ----
   let baseStylesInjected = false;
   function injectBaseTokenStylesOnce() {
     if (baseStylesInjected) return;
     baseStylesInjected = true;
 
+    const socialVars = Object.entries(CFG.socialBrandHex)
+      .map(([k, v]) => `  --social-${k}: ${v};`)
+      .join("\n");
+
     const style = document.createElement("style");
     style.id = "tt-base-token-styles";
     style.textContent = `
-      :root {
-        ${CFG.vars.primary}: ${CFG.defaults.primary};
-        ${CFG.vars.secondary}: ${CFG.defaults.secondary};
-        ${CFG.vars.background}: ${CFG.defaults.background};
-        ${CFG.vars.text}: ${CFG.defaults.text};
-        ${CFG.vars.font}: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      }
-      body {
-        background: var(${CFG.vars.background});
-        color: var(${CFG.vars.text});
-        font-family: var(${CFG.vars.font});
-      }
-    `;
+:root{
+${socialVars}
+  --social-use-brand-colors: 1;
+}
+
+/* Social helper */
+.tt-social { color: var(--social-unified-color); }
+:root[data-tt-social="brand"] .tt-social[data-kind="whatsapp"]{color:var(--social-whatsapp)}
+:root[data-tt-social="brand"] .tt-social[data-kind="linkedin"]{color:var(--social-linkedin)}
+:root[data-tt-social="brand"] .tt-social[data-kind="instagram"]{color:var(--social-instagram)}
+:root[data-tt-social="brand"] .tt-social[data-kind="facebook"]{color:var(--social-facebook)}
+:root[data-tt-social="brand"] .tt-social[data-kind="x"]{color:var(--social-x)}
+:root[data-tt-social="brand"] .tt-social[data-kind="twitter"]{color:var(--social-twitter)}
+:root[data-tt-social="brand"] .tt-social[data-kind="youtube"]{color:var(--social-youtube)}
+:root[data-tt-social="brand"] .tt-social[data-kind="tiktok"]{color:var(--social-tiktok)}
+:root[data-tt-social="brand"] .tt-social[data-kind="github"]{color:var(--social-github)}
+:root[data-tt-social="brand"] .tt-social[data-kind="stackoverflow"]{color:var(--social-stackoverflow)}
+:root[data-tt-social="brand"] .tt-social[data-kind="website"]{color:var(--social-website)}
+:root[data-tt-social="brand"] .tt-social[data-kind="email"]{color:var(--social-email)}
+:root[data-tt-social="brand"] .tt-social[data-kind="phone"]{color:var(--social-phone)}
+:root[data-tt-social="brand"] .tt-social[data-kind="map"]{color:var(--social-map)}
+:root[data-tt-social="brand"] .tt-social[data-kind="link"]{color:var(--social-link)}
+:root[data-tt-social="unified"] .tt-social{color:var(--social-unified-color)}
+`;
     document.head.appendChild(style);
   }
 
-  function createUI(state) {
-    // Styles for the widget
-    const style = document.createElement("style");
-    style.id = "tt-widget-styles";
-    style.textContent = `
-      .tt-wrap {
-        position: fixed;
-        ${CFG.position === "left" ? "left: 16px;" : "right: 16px;"}
-        bottom: 16px;
-        z-index: 2147483647;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      }
-      .tt-fab {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 12px;
-        border-radius: 999px;
-        border: 1px solid rgba(0,0,0,.12);
-        background: rgba(255,255,255,.92);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        box-shadow: 0 10px 30px rgba(0,0,0,.12);
-        cursor: pointer;
-        user-select: none;
-      }
-      :root.tt-dark .tt-fab,
-      [data-theme="dark"] .tt-fab {
-        background: rgba(17,24,39,.92);
-        border-color: rgba(255,255,255,.14);
-        color: rgba(255,255,255,.9);
-      }
-      .tt-panel {
-        margin-top: 10px;
-        width: 320px;
-        max-width: calc(100vw - 32px);
-        border-radius: 16px;
-        border: 1px solid rgba(0,0,0,.12);
-        background: rgba(255,255,255,.92);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        box-shadow: 0 12px 40px rgba(0,0,0,.14);
-        overflow: hidden;
-        display: none;
-      }
-      :root.tt-dark .tt-panel,
-      [data-theme="dark"] .tt-panel {
-        background: rgba(17,24,39,.92);
-        border-color: rgba(255,255,255,.14);
-        color: rgba(255,255,255,.9);
-      }
-      .tt-panel.tt-open { display: block; }
-      .tt-head {
-        padding: 12px 14px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        border-bottom: 1px solid rgba(0,0,0,.08);
-      }
-      :root.tt-dark .tt-head,
-      [data-theme="dark"] .tt-head {
-        border-bottom-color: rgba(255,255,255,.12);
-      }
-      .tt-title { font-weight: 700; font-size: 14px; }
-      .tt-actions { display: flex; gap: 8px; }
-      .tt-btn {
-        border: 1px solid rgba(0,0,0,.12);
-        background: transparent;
-        color: inherit;
-        padding: 6px 10px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 12px;
-      }
-      :root.tt-dark .tt-btn,
-      [data-theme="dark"] .tt-btn {
-        border-color: rgba(255,255,255,.18);
-      }
-      .tt-body { padding: 12px 14px; display: grid; gap: 10px; }
-      .tt-row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px; }
-      .tt-row label { font-size: 12px; opacity: .85; }
-      .tt-row input[type="color"] {
-        width: 44px; height: 28px; border-radius: 8px; border: 1px solid rgba(0,0,0,.12); padding: 0; background: transparent;
-      }
-      :root.tt-dark .tt-row input[type="color"],
-      [data-theme="dark"] .tt-row input[type="color"] {
-        border-color: rgba(255,255,255,.18);
-      }
-      .tt-row select {
-        width: 170px;
-        padding: 6px 8px;
-        border-radius: 10px;
-        border: 1px solid rgba(0,0,0,.12);
-        background: transparent;
-        color: inherit;
-        font-size: 12px;
-      }
-      :root.tt-dark .tt-row select,
-      [data-theme="dark"] .tt-row select {
-        border-color: rgba(255,255,255,.18);
-      }
-      .tt-foot {
-        padding: 10px 14px;
-        border-top: 1px solid rgba(0,0,0,.08);
-        font-size: 11px;
-        opacity: .75;
-      }
-      :root.tt-dark .tt-foot,
-      [data-theme="dark"] .tt-foot {
-        border-top-color: rgba(255,255,255,.12);
-      }
-      .tt-chip {
-        display: inline-block;
-        padding: 2px 8px;
-        border-radius: 999px;
-        border: 1px solid rgba(0,0,0,.12);
-        font-size: 11px;
-      }
-      :root.tt-dark .tt-chip,
-      [data-theme="dark"] .tt-chip {
-        border-color: rgba(255,255,255,.18);
-      }
-      .tt-preview {
-        display:flex;
-        gap: 8px;
-        align-items:center;
-        margin-top: 6px;
-      }
-      .tt-swatch {
-        width: 14px;
-        height: 14px;
-        border-radius: 4px;
-        border: 1px solid rgba(0,0,0,.12);
-      }
-      :root.tt-dark .tt-swatch,
-      [data-theme="dark"] .tt-swatch {
-        border-color: rgba(255,255,255,.18);
-      }
-      .tt-kbd {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      }
-    `;
-    document.head.appendChild(style);
+  function applyState(state) {
+    const root = document.documentElement;
 
-    // DOM
+    // mode + social flags
+    root.setAttribute("data-theme", state.mode);
+    root.classList.toggle("tt-dark", state.mode === "dark");
+    root.setAttribute("data-tt-social", state.socialColorMode === "unified" ? "unified" : "brand");
+
+    // background + cta materialize
+    const bgValue = state._bgKind === "gradient"
+      ? makeLinearGradient(state._bgAngle, state._bgStart, state._bgEnd)
+      : state._bgSolid;
+
+    const ctaValue = state._ctaKind === "gradient"
+      ? makeLinearGradient(state._ctaAngle, state._ctaStart, state._ctaEnd)
+      : state._ctaSolid;
+
+    root.style.setProperty("--bg-color", bgValue);
+    root.style.setProperty("--cta-button-bg-color", ctaValue);
+
+    // apply registry css vars
+     for (const f of allFields()) {
+       if (!f.cssVar) continue;
+       if (state[f.key] == null) continue;
+       console.log("applying", f.key, "->", state[f.key]);
+        root.style.setProperty(f.cssVar, state[f.key]);
+      }
+
+    // derived helpers
+    root.style.setProperty("--primary-color-hover", computeHoverColor(state.primary));
+    root.style.setProperty("--secondary-color-hover", computeHoverColor(state.secondary));
+    root.style.setProperty("--action-button-bg-color-hover", computeHoverColor(state.actionBtnBg));
+    root.style.setProperty("--info-item-icon-bg-color-hover", computeHoverColor(state.infoIconBg));
+    root.style.setProperty("--cta-button-bg-color-hover", computeHoverColor(ctaValue));
+    root.style.setProperty("--button-radius", getButtonRadius(state.buttonShape));
+
+    // font
+    const fontMeta = CFG.fonts.find(f => f.value === state.font);
+    if (fontMeta?.google) ensureGoogleFontLoaded(fontMeta.value);
+
+    const fontVar = state.font === "system-ui"
+      ? "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif"
+      : `'${state.font}', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif`;
+
+    root.style.setProperty("--font-family", fontVar);
+
+    injectBaseTokenStylesOnce();
+  }
+
+  // ---------- Dial control ----------
+  function createAngleDial(container, initialAngle, onChange) {
+    const size = 84;
+    const r = 34;
+    const cx = size / 2;
+    const cy = size / 2;
+    const strokeW = 8;
+
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("width", String(size));
+    svg.setAttribute("height", String(size));
+    svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
+    svg.style.touchAction = "none";
+
+    const track = document.createElementNS(svgNS, "circle");
+    track.setAttribute("cx", String(cx));
+    track.setAttribute("cy", String(cy));
+    track.setAttribute("r", String(r));
+    track.setAttribute("fill", "none");
+    track.setAttribute("stroke", "rgba(0,0,0,.18)");
+    track.setAttribute("stroke-width", String(strokeW));
+
+    const prog = document.createElementNS(svgNS, "path");
+    prog.setAttribute("fill", "none");
+    prog.setAttribute("stroke", "rgba(0,0,0,.55)");
+    prog.setAttribute("stroke-width", String(strokeW));
+    prog.setAttribute("stroke-linecap", "round");
+
+    const knob = document.createElementNS(svgNS, "circle");
+    knob.setAttribute("r", "7");
+    knob.setAttribute("fill", "rgba(255,255,255,.95)");
+    knob.setAttribute("stroke", "rgba(0,0,0,.25)");
+    knob.setAttribute("stroke-width", "1");
+
+    const label = document.createElement("div");
+    label.style.position = "absolute";
+    label.style.inset = "0";
+    label.style.display = "grid";
+    label.style.placeItems = "center";
+    label.style.fontSize = "12px";
+    label.style.fontWeight = "700";
+    label.style.pointerEvents = "none";
+
     const wrap = document.createElement("div");
-    wrap.className = "tt-wrap";
+    wrap.style.position = "relative";
+    wrap.style.width = `${size}px`;
+    wrap.style.height = `${size}px`;
+    wrap.appendChild(svg);
+    wrap.appendChild(label);
 
-    const fab = document.createElement("div");
-    fab.className = "tt-fab";
-    fab.innerHTML = `
-      <span class="tt-chip">Theme</span>
-      <span style="font-size:12px;opacity:.85">Customize</span>
-    `;
+    svg.appendChild(track);
+    svg.appendChild(prog);
+    svg.appendChild(knob);
+    container.appendChild(wrap);
 
-    const panel = document.createElement("div");
-    panel.className = "tt-panel" + (CFG.defaultOpen ? " tt-open" : "");
-
-    panel.innerHTML = `
-      <div class="tt-head">
-        <div>
-          <div class="tt-title">Theme Tweaker</div>
-          <div class="tt-preview">
-            <span class="tt-swatch" data-tt="sw-primary"></span>
-            <span class="tt-swatch" data-tt="sw-secondary"></span>
-            <span class="tt-swatch" data-tt="sw-bg"></span>
-            <span class="tt-swatch" data-tt="sw-text"></span>
-          </div>
-        </div>
-        <div class="tt-actions">
-          <button class="tt-btn" type="button" data-tt="reset">Reset</button>
-          <button class="tt-btn" type="button" data-tt="close">Close</button>
-        </div>
-      </div>
-
-      <div class="tt-body">
-        <div class="tt-row">
-          <label>Mode</label>
-          <select data-tt="mode">
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </div>
-
-        <div class="tt-row">
-          <label>Primary color</label>
-          <input data-tt="primary" type="color" />
-        </div>
-
-        <div class="tt-row">
-          <label>Secondary color</label>
-          <input data-tt="secondary" type="color" />
-        </div>
-
-        <div class="tt-row">
-          <label>Background</label>
-          <input data-tt="background" type="color" />
-        </div>
-
-        <div class="tt-row">
-          <label>Text color</label>
-          <input data-tt="text" type="color" />
-        </div>
-
-        <div class="tt-row">
-          <label>Font</label>
-          <select data-tt="font"></select>
-        </div>
-
-        <div style="display:grid;gap:6px;font-size:12px;opacity:.9">
-          <div><span class="tt-kbd">--primary-color</span> / <span class="tt-kbd">--secondary-color</span></div>
-          <div><span class="tt-kbd">--bg-color</span> / <span class="tt-kbd">--text-color</span></div>
-          <div><span class="tt-kbd">--font-family</span></div>
-        </div>
-      </div>
-
-      <div class="tt-foot">
-        Saved in <span class="tt-kbd">localStorage</span>. Refresh-safe.
-      </div>
-    `;
-
-    wrap.appendChild(fab);
-    wrap.appendChild(panel);
-    document.body.appendChild(wrap);
-
-    // Wiring
-    const modeEl = $('[data-tt="mode"]', panel);
-    const primaryEl = $('[data-tt="primary"]', panel);
-    const secondaryEl = $('[data-tt="secondary"]', panel);
-    const backgroundEl = $('[data-tt="background"]', panel);
-    const textEl = $('[data-tt="text"]', panel);
-    const fontEl = $('[data-tt="font"]', panel);
-
-    const swPrimary = $('[data-tt="sw-primary"]', panel);
-    const swSecondary = $('[data-tt="sw-secondary"]', panel);
-    const swBg = $('[data-tt="sw-bg"]', panel);
-    const swText = $('[data-tt="sw-text"]', panel);
-
-    const btnReset = $('[data-tt="reset"]', panel);
-    const btnClose = $('[data-tt="close"]', panel);
-
-    // Populate fonts
-    fontEl.innerHTML = CFG.fonts
-      .map(f => `<option value="${escapeHtml(f.value)}">${escapeHtml(f.label)}</option>`)
-      .join("");
-
-    // Set inputs from state
-    modeEl.value = state.mode;
-    primaryEl.value = state.primary;
-    secondaryEl.value = state.secondary;
-    backgroundEl.value = state.background;
-    textEl.value = state.text;
-    fontEl.value = state.font;
-
-    // Update swatches
-    function updateSwatches() {
-      swPrimary.style.background = state.primary;
-      swSecondary.style.background = state.secondary;
-      swBg.style.background = state.background;
-      swText.style.background = state.text;
-    }
-    updateSwatches();
-
-    function persistAndApply() {
-      storeState(state);
-      applyState(state);
-      updateSwatches();
+    function polarToXY(angleDeg) {
+      const a = (angleDeg - 90) * (Math.PI / 180);
+      return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
     }
 
-    function openPanel() { panel.classList.add("tt-open"); }
-    function closePanel() { panel.classList.remove("tt-open"); }
-    function togglePanel() { panel.classList.toggle("tt-open"); }
+    function describeArc(angleDeg) {
+      const end = polarToXY(angleDeg);
+      const start = polarToXY(0);
+      const largeArc = angleDeg > 180 ? 1 : 0;
+      return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 1 ${end.x} ${end.y}`;
+    }
 
-    fab.addEventListener("click", togglePanel);
-    btnClose.addEventListener("click", closePanel);
+    function setAngle(angleDeg, fire = true) {
+      let a = angleDeg % 360;
+      if (a < 0) a += 360;
 
-    // Input events
-    modeEl.addEventListener("change", () => {
-      state.mode = modeEl.value === "dark" ? "dark" : "light";
-      // If switching mode, you might want auto-default bg/text:
-      // (We keep your chosen colors as-is, but you can uncomment below)
-      // if (state.mode === "dark") { state.background = "#111827"; state.text = "#F9FAFB"; }
-      persistAndApply();
-    });
+      prog.setAttribute("d", describeArc(a));
+      const p = polarToXY(a);
+      knob.setAttribute("cx", String(p.x));
+      knob.setAttribute("cy", String(p.y));
+      label.textContent = `${Math.round(a)}°`;
 
-    primaryEl.addEventListener("input", () => { state.primary = primaryEl.value; persistAndApply(); });
-    secondaryEl.addEventListener("input", () => { state.secondary = secondaryEl.value; persistAndApply(); });
-    backgroundEl.addEventListener("input", () => { state.background = backgroundEl.value; persistAndApply(); });
-    textEl.addEventListener("input", () => { state.text = textEl.value; persistAndApply(); });
+      if (fire) onChange(Math.round(a));
+    }
 
-    fontEl.addEventListener("change", () => {
-      state.font = fontEl.value || "system-ui";
-      persistAndApply();
-    });
+    function angleFromEvent(e) {
+      const rect = svg.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
 
-    btnReset.addEventListener("click", () => {
-      Object.assign(state, structuredCloneSafe(CFG.defaults));
-      // reflect in UI
-      modeEl.value = state.mode;
-      primaryEl.value = state.primary;
-      secondaryEl.value = state.secondary;
-      backgroundEl.value = state.background;
-      textEl.value = state.text;
-      fontEl.value = state.font;
-      persistAndApply();
-    });
+      const dx = x - cx;
+      const dy = y - cy;
 
-    // Close on ESC
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closePanel();
-    });
+      let deg = Math.atan2(dy, dx) * (180 / Math.PI);
+      deg += 90;
+      if (deg < 0) deg += 360;
+      return deg;
+    }
 
-    // Click outside closes
-    document.addEventListener("click", (e) => {
-      if (!panel.classList.contains("tt-open")) return;
-      const target = e.target;
-      if (!(target instanceof Node)) return;
-      if (!wrap.contains(target)) closePanel();
-    });
+    let dragging = false;
+
+    const startDrag = (e) => {
+      dragging = true;
+      e.preventDefault?.();
+      setAngle(angleFromEvent(e));
+      window.addEventListener("mousemove", onMove);
+      window.addEventListener("mouseup", endDrag);
+      window.addEventListener("touchmove", onMove, { passive: false });
+      window.addEventListener("touchend", endDrag);
+    };
+
+    const onMove = (e) => {
+      if (!dragging) return;
+      e.preventDefault?.();
+      setAngle(angleFromEvent(e));
+    };
+
+    const endDrag = () => {
+      dragging = false;
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", endDrag);
+      window.removeEventListener("touchmove", onMove);
+      window.removeEventListener("touchend", endDrag);
+    };
+
+    svg.addEventListener("mousedown", startDrag);
+    svg.addEventListener("touchstart", startDrag, { passive: false });
+
+    setAngle(Number.isFinite(initialAngle) ? initialAngle : 0, false);
+
+    return { setAngle };
   }
 
-  function structuredCloneSafe(obj) {
-    if (typeof structuredClone === "function") return structuredClone(obj);
-    return JSON.parse(JSON.stringify(obj));
+  async function mountUIFromTemplate() {
+    const res = await fetch(CFG.htmlTemplateUrl, { cache: "no-store" });
+    if (!res.ok) throw new Error(`ThemeTweaker: failed to load ${CFG.htmlTemplateUrl}`);
+
+    const html = await res.text();
+    const host = document.createElement("div");
+    host.innerHTML = html;
+
+    const tpl = host.querySelector("#tt-template");
+    if (!tpl) throw new Error("ThemeTweaker: missing <template id='tt-template'>");
+
+    document.body.appendChild(tpl.content.cloneNode(true));
+
+    const wrap = document.getElementById("theme-tweaker");
+    if (!wrap) throw new Error("ThemeTweaker: missing #theme-tweaker after mount");
+
+    // position
+    if (CFG.position === "left") {
+      wrap.style.left = "16px";
+      wrap.style.right = "auto";
+    } else {
+      wrap.style.right = "16px";
+      wrap.style.left = "auto";
+    }
+
+    return wrap;
   }
 
-  function escapeHtml(s) {
-    return String(s)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+  function wireGradientUi(wrap, state, onChanged) {
+    const panel = $(".tt-panel", wrap);
+
+    const bgDialHost = $('[data-tt="bgDial"]', panel);
+    const ctaDialHost = $('[data-tt="ctaDial"]', panel);
+    const bgPreview = $('[data-tt="bgPreview"]', panel);
+    const ctaPreview = $('[data-tt="ctaPreview"]', panel);
+
+    const refreshPreviews = () => {
+      if (bgPreview) bgPreview.style.background = makeLinearGradient(state._bgAngle, state._bgStart, state._bgEnd);
+      if (ctaPreview) ctaPreview.style.background = makeLinearGradient(state._ctaAngle, state._ctaStart, state._ctaEnd);
+    };
+
+    if (bgDialHost) {
+      createAngleDial(bgDialHost, state._bgAngle, (a) => {
+        state._bgAngle = a;
+        refreshPreviews();
+        onChanged();
+      });
+    }
+
+    if (ctaDialHost) {
+      createAngleDial(ctaDialHost, state._ctaAngle, (a) => {
+        state._ctaAngle = a;
+        refreshPreviews();
+        onChanged();
+      });
+    }
+
+    refreshPreviews();
   }
 
-  function init() {
-    // Load saved state or default
-    const stored = getStoredState();
-    const state = Object.assign(structuredCloneSafe(CFG.defaults), stored || {});
+  function allFields() {
+  return TT_SECTIONS.flatMap(sec => sec.rows.flatMap(r => r.fields));
+}
 
-    // Apply state immediately
+function buildDefaults() {
+  const d = {};
+  for (const f of allFields()) d[f.key] = f.default;
+
+  // keep your gradient UI defaults too
+  d._bgKind = "solid";
+  d._bgSolid = "#f5f5f5";
+  d._bgStart = "#1e40af";
+  d._bgEnd = "#3b82f6";
+  d._bgAngle = 135;
+
+  d._ctaKind = "gradient";
+  d._ctaSolid = "#1e40af";
+  d._ctaStart = "#1e40af";
+  d._ctaEnd = "#3b82f6";
+  d._ctaAngle = 135;
+
+  return d;
+}
+
+function deriveFromHostCss() {
+  const out = {};
+  for (const f of allFields()) {
+    if (!f.derive || !f.cssVar) continue;
+    const raw = readCssVar(f.cssVar);
+    if (!raw) continue;
+    out[f.key] = normalizeColorLike(raw);
+  }
+  return out;
+}
+
+
+  async function init() {
+    CFG.storageKey = `${BASE_STORAGE_KEY}:${getPageKey()}`;
+    await ensureCssLoaded(CFG.cssUrl);
+
+    const defaults = buildDefaults();
+    const hostDefaults = Object.assign({}, defaults, deriveFromHostCss());
+    const stored = getStoredState(CFG.storageKey);
+    const state = Object.assign({}, hostDefaults, stored || {});
+
+    // expose to Alpine component
+    window.__TT = window.__TT || {};
+    window.__TT.cfg = CFG;
+    window.__TT.fields = TT_FIELDS;
+    window.__TT.state = state;
+    window.__TT.sections = TT_SECTIONS;
+
+
+    // apply initial state
     applyState(state);
 
-    // Build UI after DOM is ready
-    createUI(state);
+    // mount UI
+    const wrap = await mountUIFromTemplate();
+
+    // add body shift if open
+    if (CFG.defaultOpen) document.body.classList.add("tt-show");
+
+    // wire gradient dials (non-Alpine)
+    const persistAndApply = () => {
+      storeState(state, CFG.storageKey);
+      applyState(state);
+    };
+    wireGradientUi(wrap, state, persistAndApply);
+
+    // ensure Alpine sees the newly injected DOM
+    // Alpine v3 normally auto-inits via mutation observer, but this is a safe nudge.
+    if (window.Alpine && typeof window.Alpine.initTree === "function") {
+      window.Alpine.initTree(wrap);
+    }
+
+    // close on ESC
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        const panel = $(".tt-panel", wrap);
+        panel?.classList.remove("tt-open");
+        document.body.classList.remove("tt-show");
+        // also update Alpine open flag if present
+        wrap.__x?.$data && (wrap.__x.$data.open = false);
+      }
+    });
   }
 
+  // Alpine component factory (global)
+  window.themeTweaker = function themeTweaker() {
+    return {
+      open: CFG.defaultOpen,
+      fields: TT_FIELDS,
+      fonts: CFG.fonts,
+      state: window.__TT?.state || {},
+      sections: window.__TT.sections,
+
+      init() {
+        // grab shared state (set in init())
+        this.state = window.__TT.state;
+
+        // click outside closes
+        document.addEventListener("click", (e) => {
+          const wrap = document.getElementById("theme-tweaker");
+          const panel = wrap?.querySelector(".tt-panel");
+          if (!panel || !panel.classList.contains("tt-open")) return;
+          if (!wrap.contains(e.target)) this.close();
+        });
+      },
+
+      togglePanel() {
+        this.open = !this.open;
+        document.body.classList.toggle("tt-show", this.open);
+      },
+
+      close() {
+        this.open = false;
+        document.body.classList.remove("tt-show");
+      },
+
+      changed() {
+        console.log("changed", this.state);
+        // persist + apply (same state object)
+        localStorage.setItem(CFG.storageKey, JSON.stringify(this.state));
+        // apply
+        // (call internal applyState via closure)
+        applyState(this.state);
+      },
+
+      reset() {
+        const fresh = buildDefaults();
+        const host = deriveFromHostCss();
+        const merged = Object.assign({}, fresh, host);
+
+        // mutate existing state object in-place so Alpine stays reactive
+        for (const k of Object.keys(this.state)) delete this.state[k];
+        Object.assign(this.state, merged);
+
+        localStorage.removeItem(CFG.storageKey);
+        localStorage.setItem(CFG.storageKey, JSON.stringify(this.state));
+        applyState(this.state);
+
+        // refresh gradient previews (dials already set visually, but previews will update)
+        const wrap = document.getElementById("theme-tweaker");
+        const bgPreview = wrap?.querySelector('[data-tt="bgPreview"]');
+        const ctaPreview = wrap?.querySelector('[data-tt="ctaPreview"]');
+        if (bgPreview) bgPreview.style.background = makeLinearGradient(this.state._bgAngle, this.state._bgStart, this.state._bgEnd);
+        if (ctaPreview) ctaPreview.style.background = makeLinearGradient(this.state._ctaAngle, this.state._ctaStart, this.state._ctaEnd);
+      }
+    };
+  };
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", () => void init());
   } else {
-    init();
+    void init();
   }
+
+  // public API
+  window.ThemeTweaker = {
+    getState: () => structuredCloneSafe(getStoredState(CFG.storageKey) || buildDefaults()),
+    reset: () => {
+      localStorage.removeItem(CFG.storageKey);
+      location.reload();
+    }
+  };
 })();

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gourmet Grill House</title>
+    <link  rel="stylesheet" href="libs/jquery-simple-mobile-menu/styles/jquery-simple-mobilemenu-slide.css"/>
     <script defer src="https://cloud.umami.is/script.js" data-website-id="209c010b-1a61-40f3-a6ec-e3dbff4e803d"></script>
     <style>
         /* --- General Reset and Typography --- */
@@ -28,8 +29,8 @@
         #menu-app {
             position: relative;
             width: 100%;
-            max-width: 600px;
-            height: 100vh;
+            max-width: 100%;
+            height: calc(100vh - 40px);
             margin: 0 auto;
             background-color: white;
             overflow: hidden;
@@ -58,6 +59,29 @@
             justify-content: flex-end;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
             height: 150px;
+        }
+
+        .bizbio-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: 500;
+            text-shadow: none;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .bizbio-badge::before {
+            content: '⚡';
+            font-size: 1.1em;
         }
 
         .restaurant-details::before {
@@ -719,6 +743,32 @@ ease-in-out all;
         .cancel-btn:hover {
             background-color: #e0e0e0;
         }
+
+        /* --- Footer Styling --- */
+        .bizbio-footer {
+    /* background: linear-gradient(to bottom, #f5f5f5, #e8e8e8); */
+    /* padding: 10px 20px 20px; */
+    /* top: calc(100vh - 200px); */
+    text-align: center;
+    /* border-top: 1px solid #d0d0d0; */
+    /* position: absolute; */
+    /* width: 100%; */
+    text-align-last: center;
+    bottom: 0;
+    position: absolute;
+    font-size: 12px;
+    color: #00000085;
+    left: 0;
+    right: 0;
+    background: url('https://invoice.zoho.com/api/v3/settings/templates/invoicelogo/2-ee2082e947a303cd6af9a31e4dfb03b28dcfc5faa1a502c5af5176f0ad9d4937e200969e77d883d541978cf3f7e101f0');
+    height: 40px;
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position-x: 20px;
+    align-content: center;
+    background-position: 20px center;
+        background-color: #f2f2f2;
+}
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
 <script async src="https://plausible.io/js/pa-CCBqqre0Y3440fpq8Njba.js"></script>
@@ -751,6 +801,7 @@ ease-in-out all;
     <div id="menu-app">
         <div class="header-section">
             <div class="restaurant-details">
+                <div class="bizbio-badge">Hosted on BizBio</div>
                 <div class="details-content">
                     <h1>Gourmet Grill House</h1>
                     <p>Flame-Grilled Favorites & More</p>
@@ -761,7 +812,25 @@ ease-in-out all;
                 <h2>Full Menu</h2>
             </div>
         </div>
-
+<ul class="mobile_menu">
+  <li><a href="menu1.com">Menu 1</a></li>
+  <li>
+    <a href="menu2.com">Menu 2</a>
+    <ul class="submenu">
+      <li><a href="submenu1.com">Sub Menu 1</a></li>
+      <li>
+        <a href="submenu2.com">Sub Menu 2</a>
+        <ul class="submenu">
+          <li><a href="subsubmenu1.com">Sub Sub Menu 1</a></li>
+          <li><a href="subsubmenu2.com">Sub Sub Menu 2</a></li>
+          <li><a href="subsubmenu3.com">Sub Sub Menu 3</a></li>
+        </ul>
+       </li>
+      <li><a href="submenu3.com">Sub Menu 3</a></li>
+    </ul>
+  </li>
+  <li><a href="menu3.com">Menu 3</a></li>
+</ul>
         <div id="main-menu" class="menu-panel">
             <div class="menu-content">
                 <div class="category-item" data-category="burgers" onclick="showSubMenu('burgers', 'Gourmet Burgers')" data-umami-event="View Category" data-umami-event-category="Gourmet Burgers">
@@ -810,6 +879,12 @@ ease-in-out all;
             <div id="subMenuContent" class="menu-content">
                 </div>
         </div>
+    </div>
+
+    
+    <!-- BizBio Footer -->
+    <div class="bizbio-footer">
+        <div class="bizbio-footer-copyright">Powered by BizBio • Smart Business Pages</div>
     </div>
 
     <div id="itemModal" class="modal">
@@ -882,7 +957,8 @@ ease-in-out all;
             </div>
         </div>
     </div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="libs/jquery-simple-mobile-menu/jquery-simple-mobilemenu.min.js"></script>
 <script>
     // --- Cart State Management ---
     let cart = {};
@@ -915,6 +991,28 @@ ease-in-out all;
             { id: 'vanilla-shake', name: 'Vanilla Bean Milkshake', price: 40.90, priceText: 'From R40.90', shortDesc: 'Thick and creamy hand-spun vanilla shake.', fullDesc: 'A decadent, hand-spun milkshake made with premium vanilla ice cream and pure vanilla bean extract.', ingredients: 'Milk, Vanilla Ice Cream, Vanilla Extract.', image: 'https://picsum.photos/150/150?random=11' }
         ]
     };
+
+    $(document).ready(function() {
+  $(".mobile_menu").simpleMobileMenu({
+    //Hamburger Id
+    "hamburgerId" : "sm_menu_ham", 
+    //Menu Wrapper Class
+    "wrapperClass" : "sm_menu_outer", 
+    //Submenu Class
+    "submenuClass" : "submenu",
+    //Menu Style
+    "menuStyle" : "slide",
+    // Callback - Menu loaded 
+    "onMenuLoad" : function(menu) {
+       console.log("menu loaded")
+       console.log(menu)
+     },
+     //Callback - menu toggle(open/close)
+     "onMenuToggle" : function(menu,open) {
+       console.log(open)
+      }
+   });
+})
 
     function findItemById(itemId) {
         for (const category in menuData) {
@@ -953,7 +1051,7 @@ ease-in-out all;
             subMenuContent.insertAdjacentHTML('beforeend', html);
         });
 
-        // 2. Trigger CSS Transition
+        // 2. Trigger CSS Transition    
         menuApp.classList.add('sub-active');
     }
 

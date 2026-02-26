@@ -3,3 +3,4 @@ adminer/adminer.php
 adminer/error_log
 adminer/index.php
 error_log
+node_modules/*

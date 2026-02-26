@@ -1,0 +1,20 @@
+:root{
+    --primary-color: #ee6c4d;
+    --secondary-color: #3d5a80;
+    --page-background-color: #e0e5ec;
+    --card-bg-color: #e0e5ec;
+    --avatar-border-color: #e0e5ec;
+    --text-color: #293241;
+    --font-family: 'Nunito', sans-serif;
+    --action-button-bg-color: #e0e5ec;
+    --action-button-text-color: #3d5a80;
+    --info-item-icon-bg-color: #e0e5ec;
+    --info-item-label-color: #98c1d9;
+    --info-item-text-color: #293241;
+    --info-item-icon-text-color: #3d5a80;
+    --header-color: #293241;
+    --cta-button-bg-color: linear-gradient(145deg, #ee6c4d, #e85d3c);
+    --cta-button-text-color: #ffffff;
+    --button-radius: 15px;
+    --subtitle-color: #ee6c4d;
+}

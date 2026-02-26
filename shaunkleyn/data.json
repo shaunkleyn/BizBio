@@ -1,0 +1,59 @@
+{
+    "template": "06-glassmorphism",
+    "photo": "photo.jpg",
+    "title": "Web Developer",
+    "name": "Shaun Kleyn",
+    "buttons": [
+        {
+            "label": "Email",
+            "icon": "fas fa-envelope",
+            "link": "mailto:shaun.kleyn@example.com"
+        },
+        {
+            "label": "Phone",
+            "icon": "fas fa-phone",
+            "link": "tel:+27763033894"
+        },
+        {
+            "label": "Website",
+            "icon": "fas fa-globe",
+            "link": "https://shaunkleyn.com"
+        },
+        {
+            "label": "LinkedIn",
+            "icon": "fab fa-linkedin",
+            "link": "https://linkedin.com/in/shaunkleyn"
+        },
+        {
+            "label": "GitHub",
+            "icon": "fab fa-github",
+            "link": "https://github.com/shaunkleyn"
+        }
+    ],
+    "sections": [
+        {
+            "title": "Summary",
+            "content": "Passionate web developer with 5 years of experience in creating responsive and user-friendly websites. Skilled in HTML, CSS, JavaScript, and various frameworks. Committed to delivering high-quality code and innovative solutions."
+        }
+    ],
+    "email": "shaun.kleyn@example.com",
+    "phone": "+27763033894",
+    "website": "https://shaunkleyn.com",
+    "linkedin": "https://linkedin.com/in/shaunkleyn",
+    "github": "https://github.com/shaunkleyn",
+    "summary": "Passionate web developer with 5 years of experience in creating responsive and user-friendly websites. Skilled in HTML, CSS, JavaScript, and various frameworks. Committed to delivering high-quality code and innovative solutions.",
+    "experience": [
+        {
+            "position": "Senior Web Developer",
+            "company": "Tech Solutions Inc.",
+            "duration": "Jan 2020 - Present",
+            "description": "Lead a team of developers in creating and maintaining web applications. Implemented new features and optimized performance, resulting in a 30% increase in user engagement."
+        },
+        {
+            "position": "Web Developer",
+            "company": "Creative Web Agency",
+            "duration": "Jun 2017 - Dec 2019",
+            "description": "Developed responsive websites for various clients, ensuring cross-browser compatibility and mobile optimization. Collaborated with designers to create visually appealing interfaces."
+        }
+    ]
+}
