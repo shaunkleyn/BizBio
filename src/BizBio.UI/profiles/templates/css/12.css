@@ -1,0 +1,20 @@
+:root{
+    --primary-color: #8b4513;
+    --secondary-color: #cd853f;
+    --page-background-color: #f4e9d8;
+    --card-bg-color: #fffef9;
+    --avatar-border-color: #8b4513;
+    --text-color: #4a3728;
+    --font-family: 'Playfair Display', serif;
+    --action-button-bg-color: #8b4513;
+    --action-button-text-color: #fffef9;
+    --info-item-icon-bg-color: rgba(139, 69, 19, 0.1);
+    --info-item-label-color: #cd853f;
+    --info-item-text-color: #4a3728;
+    --info-item-icon-text-color: #8b4513;
+    --header-color: #4a3728;
+    --cta-button-bg-color: #8b4513;
+    --cta-button-text-color: #fffef9;
+    --button-radius: 4px;
+    --subtitle-color: #8b4513;
+}

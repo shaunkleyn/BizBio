@@ -15,9 +15,9 @@
     const BizBioEngine = {
         config: {
             dataFile: 'data.json',
-            templatesPath: '/templates/',
-            vcardGeneratorPath: '/vcard-generator.js',
-            walletIntegrationPath: '/wallet-integration.js'
+            templatesPath: '../templates/',
+            vcardGeneratorPath: '../vcard-generator.js',
+            walletIntegrationPath: '../wallet-integration.js'
         },
 
         // Element selectors for populating data
@@ -410,6 +410,7 @@
             // Add data attributes for vCard generator
             this.addVCardDataAttributes();
 
+
             // Expose normalised data for Alpine-driven templates
             window.__bizbioData = this.normalizeData(this.data);
         },
@@ -438,6 +439,7 @@
             if (social.instagram) body.setAttribute('data-vcard-social-instagram', social.instagram);
             if (social.twitter) body.setAttribute('data-vcard-social-twitter', social.twitter);
             if (social.whatsapp) body.setAttribute('data-vcard-social-whatsapp', data.whatsapp || `https://wa.me/${data.phone?.replace(/[^\d]/g, '')}`);
+
 
             // Wallet customization attributes
             const wallet = data.wallet || {};
@@ -628,7 +630,7 @@
                 }
             };
             document.body.appendChild(script);
-        },
+                    },
 
         /**
          * Load and initialize wallet integration (Google / Apple Wallet buttons)

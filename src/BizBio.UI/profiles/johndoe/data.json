@@ -1,0 +1,26 @@
+{
+    "template": "29-blue-dashboard",
+
+    "name": "John Doe",
+    "title": "Full Stack Developer",
+    "company": "TechSolutions SA",
+
+    "email": "john@techsolutions.co.za",
+    "phone": "+27 11 234 5678",
+    "phoneDisplay": "011 234 5678",
+    "whatsapp": "+27823456789",
+
+    "website": "https://www.techsolutions.co.za",
+    "address": "Sandton, Johannesburg, 2196",
+    "mapsUrl": "https://maps.google.com/?q=Sandton,+Johannesburg",
+
+    "photo": "https://randomuser.me/api/portraits/men/32.jpg",
+
+    "bio": "Building scalable web applications and leading development teams for over 10 years.",
+
+    "social": {
+        "linkedin": "https://linkedin.com/in/johndoedev",
+        "github": "https://github.com/johndoedev",
+        "twitter": "https://twitter.com/johndoedev"
+    }
+}

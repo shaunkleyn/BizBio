@@ -1,0 +1,20 @@
+:root{
+    --primary-color: #00b4d8;
+    --secondary-color: #0a2463;
+    --page-background-color: #0a2463;
+    --card-bg-color: #ffffff;
+    --avatar-border-color: #00b4d8;
+    --text-color: #0a2463;
+    --font-family: 'Montserrat', sans-serif;
+    --action-button-bg-color: #00b4d8;
+    --action-button-text-color: #ffffff;
+    --info-item-icon-bg-color: rgba(0, 180, 216, 0.1);
+    --info-item-label-color: #90e0ef;
+    --info-item-text-color: #0a2463;
+    --info-item-icon-text-color: #00b4d8;
+    --header-color: #ffffff;
+    --cta-button-bg-color: #00b4d8;
+    --cta-button-text-color: #ffffff;
+    --button-radius: 12px;
+    --subtitle-color: #00b4d8;
+}

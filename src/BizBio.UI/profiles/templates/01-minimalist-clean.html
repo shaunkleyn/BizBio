@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sarah Mitchell - Digital Business Card</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/01.css">
+    <script defer src="../links-helper.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@latest/dist/cdn.min.js"></script>
     <style>
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -152,53 +156,73 @@
     </style>
 </head>
 <body>
-    <div class="card">
+    <main x-data="bizCard('./data/template.json')" x-init="load()" class="card">
+    <template x-if="loading"><p>Loading…</p></template>
+    <template x-if="error"><p style="color:red" x-text="error"></p></template>
+
+    <template x-if="card">
+      <div class="card">
         <div class="header">
-            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah Mitchell" class="avatar">
-            <h1 class="name">Sarah Mitchell</h1>
-            <p class="title">Marketing Director at Bloom Agency</p>
+            <img x-show="card?.person?.photoUrl"
+            x-transition.opacity
+            :src="card.person.photoUrl"
+            alt=""
+            class="avatar"/>
+            <h1 class="name" x-text="fullName"></h1>
+            <p class="title" x-text="
+                card?.person?.company
+                ? `${card.person.title} at ${card.person.company}`
+                : card?.person?.title
+            "></p>
         </div>
 
+
+        <!-- Primary actions -->
         <div class="actions">
-            <a href="tel:+27821234567" class="action-btn btn-call"><i class="fas fa-phone"></i></a>
-            <a href="mailto:sarah@bloomagency.co.za" class="action-btn btn-email"><i class="fas fa-envelope"></i></a>
-            <a href="https://wa.me/27821234567" class="action-btn btn-whatsapp"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://www.bloomagency.co.za" class="action-btn btn-web"><i class="fas fa-globe"></i></a>
+          <template x-for="a in card.actions" :key="a.label">
+            <a
+              :href="actionHref(a)"
+              :class="`action-btn btn-${a.type}`" :style="`background-color: var(--${resolveSocialName(actionHref(a))})`"
+            ><i :class="resolveSocialIcon(actionHref(a))"></i></a>
+          </template>
         </div>
 
-        <div class="info-section">
-            <div class="info-item">
-                <div class="info-icon"><i class="fas fa-phone"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Phone</div>
-                    <a href="tel:+27821234567" class="info-value">082 123 4567</a>
-                </div>
-            </div>
-            <div class="info-item">
-                <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Email</div>
-                    <a href="mailto:sarah@bloomagency.co.za" class="info-value">sarah@bloomagency.co.za</a>
-                </div>
-            </div>
-            <div class="info-item">
-                <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Address</div>
-                    <span class="info-value">42 Long Street, Cape Town, 8001</span>
-                </div>
+        <div>
+            <div class="info-section">
+            <template x-for="a in card.actions" :key="a.label">
+                    <div class="info-item">
+                        <div class="info-icon"><i :class="getFaIconFromLabel(a.label)"></i></div>
+                        <div class="info-content">
+                            <div class="info-label" x-text="a.label"></div>
+                            <a :href="actionHref(a)" class="info-value" x-text="a.value"></a>
+                        </div>
+                    </div>
+            </template>
             </div>
         </div>
 
         <div class="social-links">
-            <a href="https://linkedin.com/in/sarahmitchell" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://facebook.com/bloomagency" class="social-link"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://instagram.com/sarahmitchell" class="social-link"><i class="fab fa-instagram"></i></a>
-            <a href="https://twitter.com/sarahmitchell" class="social-link"><i class="fab fa-x-twitter"></i></a>
+            <template x-for="s in card.socials" :key="s.url">
+                <a :href="s.url" class="social-link"><i :class="resolveSocialIcon(s.url)"></i></a>
+            </template>
         </div>
 
-        <a href="sarah_mitchell.vcf" class="save-btn"><i class="fas fa-download"></i> Save Contact</a>
-    </div>
+        <!-- CTA -->
+        <template x-if="card.cta">
+          <section style="margin-top:16px;">
+            <a
+                class="save-btn"
+              :href="card.cta.url"
+              x-text="card.cta.buttonLabel"
+            ></a>
+          </section>
+        </template>
+      </div>
+    </template>
+  </main>
     <script src="../vcard-generator.js"></script>
 </body>
+</body>
+</html>
+
 </html>
