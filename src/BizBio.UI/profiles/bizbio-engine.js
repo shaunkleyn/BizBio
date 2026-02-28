@@ -425,6 +425,7 @@
             const body = this.templateDoc.body;
             if (data.name) body.setAttribute('data-vcard-fn', data.name);
             if (data.title) body.setAttribute('data-vcard-title', data.title);
+            if (data.nickname) body.setAttribute('data-vcard-nickname', data.nickname);
             if (data.company) body.setAttribute('data-vcard-org', data.company);
             if (data.email) body.setAttribute('data-vcard-email', data.email);
             if (data.phone) body.setAttribute('data-vcard-tel', data.phone.replace(/[^\d+]/g, ''));
@@ -630,7 +631,7 @@
                 }
             };
             document.body.appendChild(script);
-                    },
+        },
 
         /**
          * Load and initialize wallet integration (Google / Apple Wallet buttons)

@@ -31,21 +31,23 @@
           </div>
         </NuxtLink>
 
-        <!-- Cards Product (Coming Soon) -->
-        <div class="mesh-card bg-md-surface rounded-2xl shadow-md-3 p-8 opacity-60 cursor-not-allowed">
-          <div class="bg-gradient-secondary rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-glow-pink">
+        <!-- Cards Product -->
+        <NuxtLink
+          to="/dashboard/cards"
+          class="group mesh-card bg-md-surface rounded-2xl shadow-md-3 p-8 card-hover border border-md-outline-variant"
+        >
+          <div class="bg-gradient-secondary rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform shadow-glow-pink">
             <i class="fas fa-id-card text-white text-3xl"></i>
           </div>
           <h2 class="text-2xl font-bold text-md-on-surface text-center mb-3">Business Cards</h2>
           <p class="text-md-on-surface-variant text-center mb-6">
             Create digital business cards and contact profiles
           </p>
-          <div class="flex items-center justify-center">
-            <span class="bg-md-surface-container text-md-on-surface-variant px-4 py-2 rounded-full text-sm font-semibold">
-              Coming Soon
-            </span>
+          <div class="flex items-center justify-center gap-2 text-md-secondary font-semibold">
+            <span>Get Started</span>
+            <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
           </div>
-        </div>
+        </NuxtLink>
 
         <!-- Catalog Product (Coming Soon) -->
         <div class="mesh-card bg-md-surface rounded-2xl shadow-md-3 p-8 opacity-60 cursor-not-allowed">
@@ -205,7 +207,7 @@
           </NuxtLink>
         </div>
 
-        <div class="gradient-border mesh-card bg-md-surface shadow-md-3 p-6 opacity-60">
+        <NuxtLink to="/dashboard/cards" class="gradient-border mesh-card bg-md-surface shadow-md-3 p-6 card-hover block">
           <div class="flex items-center gap-3 mb-3">
             <div class="bg-gradient-secondary rounded-lg p-3 shadow-glow-pink">
               <i class="fas fa-id-card text-white text-xl"></i>
@@ -215,8 +217,8 @@
           <p class="text-sm text-md-on-surface-variant mb-4">
             Share your contact information instantly with digital business cards and NFC technology.
           </p>
-          <span class="text-sm text-md-on-surface-variant font-semibold">Coming Soon</span>
-        </div>
+          <span class="text-sm text-md-secondary font-semibold hover:underline">Get Started <i class="fas fa-arrow-right ml-1"></i></span>
+        </NuxtLink>
 
         <div class="gradient-border mesh-card bg-md-surface shadow-md-3 p-6 opacity-60">
           <div class="flex items-center gap-3 mb-3">

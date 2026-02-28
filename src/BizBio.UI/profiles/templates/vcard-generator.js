@@ -112,6 +112,8 @@
          * Initialize the vCard generator
          */
         init: function(options = {}) {
+            if (this._initialized) return;
+            this._initialized = true;
             this.config = { ...this.config, ...options };
             this.detectAccentColor();
             this.checkAndAddFAB();
@@ -171,7 +173,8 @@
          */
         checkAndAddFAB: function() {
             // Check for existing FAB or save button
-            const existingFAB = document.querySelector('.mfb-component, .fab, [class*="floating-action"]');
+            // Note: avoid '.fab' selector as it matches Font Awesome brand icons (class="fab fa-*")
+            const existingFAB = document.querySelector('#bizbio-vcard-fab, .mfb-component, [class*="floating-action"]');
             const existingSaveBtn = document.querySelector('.save-btn[href$=".vcf"], a[download][href$=".vcf"]');
 
             if (existingFAB || existingSaveBtn) {

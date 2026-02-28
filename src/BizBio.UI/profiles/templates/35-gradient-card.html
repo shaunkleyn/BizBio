@@ -455,6 +455,7 @@
                 :src="photo"
                 alt="Profile Photo"
                 x-show="photo"
+                class="logo profile-photo"
                 @error="$el.style.display='none'; $el.nextElementSibling.style.display='flex';"
             >
             <div class="profile-initials" :style="photo ? 'display:none' : ''" x-text="initials">CBS</div>

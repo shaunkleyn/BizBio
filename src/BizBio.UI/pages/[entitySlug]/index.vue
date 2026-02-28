@@ -20,6 +20,19 @@ const router = useRouter()
 onMounted(async () => {
   const entitySlug = route.params.entitySlug as string
 
+  // Check if a static profile exists for this slug.
+  // If so, force a full page reload so the server middleware serves it
+  // instead of going through the Vue/API catalog system.
+  try {
+    const profileCheck = await fetch(`/${entitySlug}/data.json`, { method: 'HEAD' })
+    if (profileCheck.ok) {
+      window.location.href = `/${entitySlug}/`
+      return
+    }
+  } catch {
+    // No static profile — fall through to API-based catalog
+  }
+
   // Check if slug contains underscore (entity_catalog format)
   if (entitySlug.includes('_')) {
     const parts = entitySlug.split('_')

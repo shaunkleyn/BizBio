@@ -60,9 +60,9 @@
                         <div class="text-3xl font-bold text-md-on-surface">R99<span class="text-sm text-md-on-surface-variant">/month</span></div>
                     </div>
 
-                    <a href="pricing.html" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
+                    <NuxtLink to="/pricing" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
                         View Plans
-                    </a>
+                    </NuxtLink>
                     <sub><span class="text-yellow-600 mr-1">*</span> On selected plans only</sub>
                 </div>
 
@@ -110,9 +110,9 @@
                         <div class="text-3xl font-bold text-md-on-surface">R149<span class="text-sm text-md-on-surface-variant">/month</span></div>
                     </div>
 
-                    <a href="pricing.html" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
+                    <NuxtLink to="/pricing" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
                         View Plans
-                    </a>
+                    </NuxtLink>
                     <sub><span class="text-yellow-600 mr-1">*</span> On selected plans only</sub>
                 </div>
 
@@ -157,9 +157,9 @@
                         <div class="text-3xl font-bold text-md-on-surface">R199<span class="text-sm text-md-on-surface-variant">/month</span></div>
                     </div>
 
-                    <a href="pricing.html" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
+                    <NuxtLink to="/pricing" class="block w-full bg-blue-600 text-white text-center py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold">
                         View Plans
-                    </a>
+                    </NuxtLink>
                     <sub><span class="text-yellow-600 mr-1">*</span> On selected plans only</sub>
                 </div>
             </div>

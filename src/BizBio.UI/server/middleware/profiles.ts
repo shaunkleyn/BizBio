@@ -4,6 +4,11 @@ import { join } from 'path'
 
 const SKIP_PREFIXES = ['/_nuxt', '/api/', '/__nuxt', '/@', '/favicon']
 
+// Block the /templates/ directory index so it can't be browsed directly,
+// but individual template files (e.g. /templates/29-blue-dashboard.html) must
+// remain accessible for the bizbio-engine to load them.
+const BLOCKED_DIRECTORY_INDEXES = ['/templates/', '/templates']
+
 const MIME_TYPES: Record<string, string> = {
     '.html': 'text/html; charset=utf-8',
     '.js': 'application/javascript; charset=utf-8',
@@ -30,6 +35,9 @@ export default defineEventHandler(async (event) => {
 
     // Let Nuxt / API routes handle their own paths
     if (SKIP_PREFIXES.some(prefix => pathname.startsWith(prefix))) return
+
+    // Block directory index browsing for internal subdirectories (exact match only)
+    if (BLOCKED_DIRECTORY_INDEXES.includes(pathname)) return
 
     const profilesDir = join(process.cwd(), 'profiles')
     let filePath = join(profilesDir, pathname)
