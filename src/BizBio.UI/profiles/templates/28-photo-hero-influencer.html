@@ -82,9 +82,21 @@
             border-radius: 10px;
             text-transform: uppercase;
         }
-        .content {
-            padding: 70px 24px 24px;
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 70px 24px 0;
+            background: #fff;
             text-align: center;
+        }
+        .body {
+            padding: 0 24px 0;
+            text-align: center;
+            background: #fff;
+        }
+        .footer {
+            padding: 0 24px 24px;
             background: #fff;
         }
         .name {
@@ -99,12 +111,7 @@
             color: #9ca3af;
             margin-bottom: 20px;
         }
-        .action-row {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
+        .action-row { display: none; /* replaced by .action-buttons */ }
         .action-btn {
             padding: 10px 24px;
             border-radius: 25px;
@@ -228,15 +235,14 @@
             </div>
         </div>
 
-        <div class="content">
+        <div class="action-buttons">
             <h1 class="name">Isabella Cruz</h1>
             <p class="title">Vlogger & Fashion Lover</p>
+            <a href="mailto:isabella@fashionista.co.za" class="action-btn outline">Message</a>
+            <a href="#" class="action-btn filled">Follow</a>
+        </div>
 
-            <div class="action-row">
-                <a href="mailto:isabella@fashionista.co.za" class="action-btn outline">Message</a>
-                <a href="#" class="action-btn filled">Follow</a>
-            </div>
-
+        <div class="body">
             <div class="stats-row">
                 <div class="stat-item">
                     <div class="stat-label">Followers</div>
@@ -275,7 +281,9 @@
                     </div>
                 </a>
             </div>
+        </div>
 
+        <div class="footer">
             <a href="isabella_cruz.vcf" class="save-btn">
                 <i class="fas fa-user-plus"></i> Save Contact
             </a>

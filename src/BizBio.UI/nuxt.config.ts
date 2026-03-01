@@ -86,6 +86,15 @@ export default defineNuxtConfig({
     experimental: {
       wasm: false,
     },
+    // Include template HTML files in the build output so they are
+    // available in .output/public/templates/ after `npm run build`.
+    publicAssets: [
+      {
+        dir: 'profiles/templates',
+        baseURL: '/templates',
+        maxAge: 60 * 60 * 24, // 24 h browser cache
+      },
+    ],
   },
   image: {
     quality: 80,

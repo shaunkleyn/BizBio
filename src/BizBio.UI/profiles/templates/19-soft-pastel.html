@@ -74,7 +74,7 @@
             color: #9ca3af;
             margin-top: 4px;
         }
-        .action-bubbles {
+        .action-buttons {
             display: flex;
             justify-content: center;
             gap: 14px;
@@ -99,7 +99,7 @@
         .bubble-email { background: linear-gradient(135deg, #fed6e3, #f9a8d4); }
         .bubble-whatsapp { background: linear-gradient(135deg, #86efac, #4ade80); }
         .bubble-web { background: linear-gradient(135deg, #c4b5fd, #a78bfa); }
-        .info-cards {
+        .body {
             display: grid;
             gap: 12px;
             margin-bottom: 24px;
@@ -169,6 +169,9 @@
             background: linear-gradient(135deg, #c4b5fd, #a78bfa);
             color: #fff;
         }
+        .footer {
+            margin-top: 24px;
+        }
         .save-btn {
             display: flex;
             align-items: center;
@@ -202,14 +205,14 @@
             <p class="company">Blush Design Studio</p>
         </div>
 
-        <div class="action-bubbles">
+        <div class="action-buttons">
             <a href="tel:+27317654321" class="bubble bubble-call"><i class="fas fa-phone"></i></a>
             <a href="mailto:emily@blushdesign.co.za" class="bubble bubble-email"><i class="fas fa-envelope"></i></a>
             <a href="https://wa.me/27837654321" class="bubble bubble-whatsapp"><i class="fab fa-whatsapp"></i></a>
             <a href="https://www.blushdesign.co.za" class="bubble bubble-web"><i class="fas fa-globe"></i></a>
         </div>
 
-        <div class="info-cards">
+        <div class="body">
             <a href="tel:+27317654321" class="info-card">
                 <div class="info-emoji emoji-phone">📱</div>
                 <div class="info-content">
@@ -245,7 +248,9 @@
             <a href="https://instagram.com/blushdesignstudio" class="social-pill"><i class="fab fa-instagram"></i> Instagram</a>
         </div>
 
-        <a href="emily_wright.vcf" class="save-btn"><i class="fas fa-heart"></i> Save Contact</a>
+        <div class="footer">
+            <a href="emily_wright.vcf" class="save-btn"><i class="fas fa-heart"></i> Save Contact</a>
+        </div>
     </div>
     <script src="../vcard-generator.js"></script>
 </body>

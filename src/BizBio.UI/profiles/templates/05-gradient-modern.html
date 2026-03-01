@@ -24,14 +24,14 @@
             max-width: 400px;
             width: 100%;
         }
-        .main-card {
+        .header {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(20px);
             border-radius: 32px;
-            padding: 40px 30px;
+            padding: 40px 30px 20px;
             text-align: center;
             box-shadow: 0 30px 60px rgba(102,126,234,0.3);
-            margin-bottom: 20px;
+            margin-bottom: 0;
         }
         .avatar-wrapper {
             position: relative;
@@ -81,12 +81,14 @@
             color: #444;
             line-height: 1.6;
         }
-        .actions {
+        .action-buttons {
             display: flex;
             justify-content: center;
             gap: 14px;
-            margin-top: 28px;
+            padding: 16px 30px;
         }
+        .body {}
+        .footer { margin-bottom: 20px; }
         .action-btn {
             width: 54px;
             height: 54px;
@@ -209,7 +211,7 @@
 </head>
 <body>
     <div class="card">
-        <div class="main-card">
+        <div class="header">
             <div class="avatar-wrapper">
                 <img src="https://randomuser.me/api/portraits/women/26.jpg" alt="Priya Sharma" class="avatar">
                 <div class="status-badge"></div>
@@ -218,49 +220,54 @@
             <p class="title">UX Design Lead</p>
             <p class="company">PixelPerfect Studios</p>
             <p class="bio">Crafting intuitive digital experiences that delight users and drive business results. Passionate about accessibility and inclusive design.</p>
-            <div class="actions">
-                <a href="tel:+27845678901" class="action-btn btn-call"><i class="fas fa-phone"></i></a>
-                <a href="mailto:priya@pixelperfect.co.za" class="action-btn btn-email"><i class="fas fa-envelope"></i></a>
-                <a href="https://wa.me/27845678901" class="action-btn btn-whatsapp"><i class="fab fa-whatsapp"></i></a>
-                <a href="https://www.pixelperfect.co.za" class="action-btn btn-web"><i class="fas fa-globe"></i></a>
+        </div>
+
+        <div class="action-buttons">
+            <a href="tel:+27845678901" class="action-btn btn-call"><i class="fas fa-phone"></i></a>
+            <a href="mailto:priya@pixelperfect.co.za" class="action-btn btn-email"><i class="fas fa-envelope"></i></a>
+            <a href="https://wa.me/27845678901" class="action-btn btn-whatsapp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.pixelperfect.co.za" class="action-btn btn-web"><i class="fas fa-globe"></i></a>
+        </div>
+
+        <div class="body">
+            <div class="info-card">
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-phone"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Phone</div>
+                        <a href="tel:+27845678901" class="info-value">084 567 8901</a>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Email</div>
+                        <a href="mailto:priya@pixelperfect.co.za" class="info-value">priya@pixelperfect.co.za</a>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Location</div>
+                        <span class="info-value">Umhlanga, Durban</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="social-card">
+                <div class="social-title">Connect with me</div>
+                <div class="social-links">
+                    <a href="https://linkedin.com/in/priyasharma" class="social-link social-linkedin"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://facebook.com/pixelperfect" class="social-link social-facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/priya.designs" class="social-link social-instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://youtube.com/@priyauxdesign" class="social-link social-youtube"><i class="fab fa-youtube"></i></a>
+                </div>
             </div>
         </div>
 
-        <div class="info-card">
-            <div class="info-item">
-                <div class="info-icon"><i class="fas fa-phone"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Phone</div>
-                    <a href="tel:+27845678901" class="info-value">084 567 8901</a>
-                </div>
-            </div>
-            <div class="info-item">
-                <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Email</div>
-                    <a href="mailto:priya@pixelperfect.co.za" class="info-value">priya@pixelperfect.co.za</a>
-                </div>
-            </div>
-            <div class="info-item">
-                <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Location</div>
-                    <span class="info-value">Umhlanga, Durban</span>
-                </div>
-            </div>
+        <div class="footer">
+            <a href="priya_sharma.vcf" class="save-btn"><i class="fas fa-user-plus"></i> Add to Contacts</a>
         </div>
-
-        <div class="social-card">
-            <div class="social-title">Connect with me</div>
-            <div class="social-links">
-                <a href="https://linkedin.com/in/priyasharma" class="social-link social-linkedin"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://facebook.com/pixelperfect" class="social-link social-facebook"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://instagram.com/priya.designs" class="social-link social-instagram"><i class="fab fa-instagram"></i></a>
-                <a href="https://youtube.com/@priyauxdesign" class="social-link social-youtube"><i class="fab fa-youtube"></i></a>
-            </div>
-        </div>
-
-        <a href="priya_sharma.vcf" class="save-btn"><i class="fas fa-user-plus"></i> Add to Contacts</a>
     </div>
     <script src="../vcard-generator.js"></script>
 </body>

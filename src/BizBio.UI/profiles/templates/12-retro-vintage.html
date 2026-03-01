@@ -104,6 +104,33 @@
             margin: 0 10px;
             color: #8b4513;
         }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #d4c4a8;
+        }
+        .action-btn {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #2c2c2c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #2c2c2c;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        .action-btn:hover {
+            background: #2c2c2c;
+            color: #fffef5;
+        }
+        .body {
+            margin-bottom: 24px;
+        }
         .info-list {
             margin-bottom: 24px;
         }
@@ -137,30 +164,6 @@
             font-size: 14px;
             color: #2c2c2c;
         }
-        .actions {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding-bottom: 24px;
-            border-bottom: 1px solid #d4c4a8;
-        }
-        .action-btn {
-            width: 50px;
-            height: 50px;
-            border: 2px solid #2c2c2c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            color: #2c2c2c;
-            font-size: 18px;
-            transition: all 0.3s;
-        }
-        .action-btn:hover {
-            background: #2c2c2c;
-            color: #fffef5;
-        }
         .social-section {
             text-align: center;
         }
@@ -177,9 +180,12 @@
             transition: color 0.3s;
         }
         .social-link:hover { color: #8b4513; }
+        .footer {
+            border-top: 2px solid #2c2c2c;
+            text-align: center;
+        }
         .save-btn {
             display: block;
-            margin-top: 30px;
             padding: 16px;
             background: #2c2c2c;
             color: #fffef5;
@@ -197,11 +203,9 @@
             border-color: #8b4513;
         }
         .footer-ornament {
-            text-align: center;
             padding: 20px;
             font-size: 20px;
             color: #8b4513;
-            border-top: 2px solid #2c2c2c;
         }
     </style>
 </head>
@@ -221,53 +225,56 @@
                 <span class="section-title">Contact</span>
             </div>
 
-            <div class="actions">
+            <div class="action-buttons">
                 <a href="tel:+27218765432" class="action-btn"><i class="fas fa-phone"></i></a>
                 <a href="mailto:willem@heritagetreasures.co.za" class="action-btn"><i class="fas fa-envelope"></i></a>
                 <a href="https://wa.me/27828765432" class="action-btn"><i class="fab fa-whatsapp"></i></a>
                 <a href="https://www.heritagetreasures.co.za" class="action-btn"><i class="fas fa-globe"></i></a>
             </div>
 
-            <div class="info-list">
-                <a href="tel:+27218765432" class="info-item">
-                    <div class="info-icon"><i class="fas fa-phone"></i></div>
-                    <div class="info-content">
-                        <div class="info-label">Telephone</div>
-                        <div class="info-value">021 876 5432</div>
-                    </div>
-                </a>
-                <a href="mailto:willem@heritagetreasures.co.za" class="info-item">
-                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                    <div class="info-content">
-                        <div class="info-label">Electronic Mail</div>
-                        <div class="info-value">willem@heritagetreasures.co.za</div>
-                    </div>
-                </a>
-                <a href="https://maps.google.com/?q=Franschhoek,+South+Africa" class="info-item">
-                    <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
-                    <div class="info-content">
-                        <div class="info-label">Address</div>
-                        <div class="info-value">Main Road, Franschhoek</div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="social-section">
-                <div class="section-header">
-                    <span class="section-title">Social</span>
+            <div class="body">
+                <div class="info-list">
+                    <a href="tel:+27218765432" class="info-item">
+                        <div class="info-icon"><i class="fas fa-phone"></i></div>
+                        <div class="info-content">
+                            <div class="info-label">Telephone</div>
+                            <div class="info-value">021 876 5432</div>
+                        </div>
+                    </a>
+                    <a href="mailto:willem@heritagetreasures.co.za" class="info-item">
+                        <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="info-content">
+                            <div class="info-label">Electronic Mail</div>
+                            <div class="info-value">willem@heritagetreasures.co.za</div>
+                        </div>
+                    </a>
+                    <a href="https://maps.google.com/?q=Franschhoek,+South+Africa" class="info-item">
+                        <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="info-content">
+                            <div class="info-label">Address</div>
+                            <div class="info-value">Main Road, Franschhoek</div>
+                        </div>
+                    </a>
                 </div>
-                <div class="social-links">
-                    <a href="https://linkedin.com/in/willempretorius" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://facebook.com/heritagetreasures" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://instagram.com/heritagetreasures" class="social-link"><i class="fab fa-instagram"></i></a>
-                    <a href="https://twitter.com/willempretorius" class="social-link"><i class="fab fa-x-twitter"></i></a>
+
+                <div class="social-section">
+                    <div class="section-header">
+                        <span class="section-title">Social</span>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://linkedin.com/in/willempretorius" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://facebook.com/heritagetreasures" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/heritagetreasures" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://twitter.com/willempretorius" class="social-link"><i class="fab fa-x-twitter"></i></a>
+                    </div>
                 </div>
             </div>
-
-            <a href="willem_pretorius.vcf" class="save-btn"><i class="fas fa-download"></i> Save Contact</a>
         </div>
 
-        <div class="footer-ornament">&#10022; &#10022; &#10022;</div>
+        <div class="footer">
+            <a href="willem_pretorius.vcf" class="save-btn"><i class="fas fa-download"></i> Save Contact</a>
+            <div class="footer-ornament">&#10022; &#10022; &#10022;</div>
+        </div>
     </div>
     <script src="../vcard-generator.js"></script>
 </body>

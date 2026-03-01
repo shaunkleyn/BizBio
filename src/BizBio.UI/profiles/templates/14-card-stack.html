@@ -18,11 +18,11 @@
             align-items: center;
             padding: 20px;
         }
-        .card-container {
+        .card {
             max-width: 400px;
             width: 100%;
         }
-        .profile-card {
+        .header {
             background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
             border-radius: 24px;
             padding: 32px 24px;
@@ -51,7 +51,7 @@
             opacity: 0.9;
             margin-bottom: 20px;
         }
-        .quick-actions {
+        .action-buttons {
             display: flex;
             justify-content: center;
             gap: 12px;
@@ -73,11 +73,11 @@
             background: rgba(255,255,255,0.3);
             transform: scale(1.1);
         }
+        .body {}
         .info-card {
             background: #fff;
             border-radius: 24px;
             padding: 60px 24px 24px;
-            margin-bottom: -30px;
             position: relative;
             z-index: 2;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
@@ -118,11 +118,12 @@
         .social-card {
             background: #fff;
             border-radius: 24px;
-            padding: 50px 24px 24px;
+            padding: 24px;
             position: relative;
             z-index: 1;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
+        .footer { padding: 0 24px 24px; background: #fff; border-radius: 0 0 24px 24px; }
         .social-title {
             font-size: 12px;
             color: #94a3b8;
@@ -187,12 +188,12 @@
     </style>
 </head>
 <body>
-    <div class="card-container">
-        <div class="profile-card">
+    <div class="card">
+        <div class="header">
             <img src="https://randomuser.me/api/portraits/men/36.jpg" alt="Michael Chen" class="avatar">
             <h1 class="name">Michael Chen</h1>
             <p class="title">Data Analyst at Insight Analytics</p>
-            <div class="quick-actions">
+            <div class="action-buttons">
                 <a href="tel:+27124567890" class="quick-btn"><i class="fas fa-phone"></i></a>
                 <a href="mailto:michael@insightanalytics.co.za" class="quick-btn"><i class="fas fa-envelope"></i></a>
                 <a href="https://wa.me/27794567890" class="quick-btn"><i class="fab fa-whatsapp"></i></a>
@@ -200,6 +201,7 @@
             </div>
         </div>
 
+        <div class="body">
         <div class="info-card">
             <a href="tel:+27124567890" class="info-item">
                 <div class="info-icon"><i class="fas fa-phone"></i></div>
@@ -251,6 +253,8 @@
                     <span>Twitter</span>
                 </a>
             </div>
+        </div><!-- /body -->
+        <div class="footer">
             <a href="michael_chen.vcf" class="save-btn"><i class="fas fa-user-plus"></i> Save Contact</a>
         </div>
     </div>

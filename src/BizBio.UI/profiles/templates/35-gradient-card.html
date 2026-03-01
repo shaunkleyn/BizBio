@@ -349,8 +349,11 @@
             box-shadow: none;
         }
 
+        /* ── BODY ── */
+        .body { display: contents; }
+
         /* ── SOCIAL ICONS ── */
-        .social-section {
+        .footer {
             padding: 24px 20px 32px;
             display: flex;
             justify-content: center;
@@ -426,7 +429,7 @@
             .action-buttons { gap: 6px; padding: 16px 14px 20px; }
 
             .social-icon { width: 52px; height: 52px; font-size: 22px; }
-            .social-section { gap: 10px; }
+            .footer { gap: 10px; }
         }
     </style>
 </head>
@@ -504,6 +507,8 @@
         </a>
     </div>
 
+    <div class="body">
+
     <hr class="divider">
 
     <!-- Bio -->
@@ -535,10 +540,12 @@
         </template>
     </div><!-- /contact-rows -->
 
+    </div><!-- /body -->
+
     <hr class="divider">
 
     <!-- Social Icons -->
-    <div class="social-section" x-data="{ items: social }" x-show="items.length">
+    <div class="footer" x-data="{ items: social }" x-show="items.length">
         <template x-for="item in items" :key="item.platform">
             <a :href="item.url" :class="'social-icon ' + item.css"
                target="_blank" rel="noopener"

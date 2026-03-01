@@ -25,7 +25,7 @@
             max-width: 400px;
             width: 100%;
         }
-        .profile-section {
+        .header {
             background: var(--card-bg-color);
             border-radius: var(--card-radius);
             padding: 40px 30px;
@@ -118,12 +118,14 @@
                 color: var(--tagline-text-color);     
                 }
 
-        .actions-grid {
+        .action-buttons {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             margin-bottom: 20px;
         }
+        .body { margin-bottom: 20px; }
+        .footer {}
         .action-card {
             background: var(--card-bg-color);
             border-radius: var(--card-radius);
@@ -252,7 +254,7 @@
 </head>
 <body>
     <div class="card">
-        <div class="profile-section">
+        <div class="header">
             <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Zara Nkosi" class="avatar">
             <h1 class="name">Zara Nkosi</h1>
             <p class="title">Creative Director</p>
@@ -260,7 +262,7 @@
             <div class="tagline"><span class="tagline-text">Turning Ideas Into Visual Magic</span></div>
         </div>
 
-        <div class="actions-grid">
+        <div class="action-buttons">
             <a href="tel:+27834567890" class="action-card">
                 <div class="action-icon icon-call"><i class="fas fa-phone"></i></div>
                 <span class="action-label">Call Me</span>
@@ -279,38 +281,42 @@
             </a>
         </div>
 
-        <div class="info-card">
-            <div class="info-row">
-                <div class="info-icon"><i class="fas fa-phone"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Phone</div>
-                    <a href="tel:+27834567890" class="info-value">083 456 7890</a>
+        <div class="body">
+            <div class="info-card">
+                <div class="info-row">
+                    <div class="info-icon"><i class="fas fa-phone"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Phone</div>
+                        <a href="tel:+27834567890" class="info-value">083 456 7890</a>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Email</div>
+                        <a href="mailto:zara@fireflydesign.co.za" class="info-value">zara@fireflydesign.co.za</a>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Location</div>
+                        <span class="info-value">Maboneng, Johannesburg</span>
+                    </div>
                 </div>
             </div>
-            <div class="info-row">
-                <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Email</div>
-                    <a href="mailto:zara@fireflydesign.co.za" class="info-value">zara@fireflydesign.co.za</a>
-                </div>
-            </div>
-            <div class="info-row">
-                <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Location</div>
-                    <span class="info-value">Maboneng, Johannesburg</span>
-                </div>
+
+            <div class="social-bar">
+                <a href="https://linkedin.com/in/zarankosi" class="social-link social-linkedin"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://facebook.com/fireflydesign" class="social-link social-facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://instagram.com/zarankosi.design" class="social-link social-instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://tiktok.com/@zarankosi" class="social-link social-tiktok"><i class="fab fa-tiktok"></i></a>
             </div>
         </div>
 
-        <div class="social-bar">
-            <a href="https://linkedin.com/in/zarankosi" class="social-link social-linkedin"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://facebook.com/fireflydesign" class="social-link social-facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://instagram.com/zarankosi.design" class="social-link social-instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://tiktok.com/@zarankosi" class="social-link social-tiktok"><i class="fab fa-tiktok"></i></a>
+        <div class="footer">
+            <a href="zara_nkosi.vcf" class="save-btn"><i class="fas fa-download"></i> Save My Contact</a>
         </div>
-
-        <a href="zara_nkosi.vcf" class="save-btn"><i class="fas fa-download"></i> Save My Contact</a>
     </div>
     <script src="../vcard-generator.js"></script>
     <script defer src="./js/theme-tweaker.js"></script>

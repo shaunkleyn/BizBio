@@ -155,7 +155,7 @@
         }
 
         /* ===== QUICK ACTION PILLS ===== */
-        .quick-actions {
+        .action-buttons {
             display: flex;
             gap: 10px;
             justify-content: center;
@@ -208,7 +208,8 @@
 
         .pill-btn.whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); }
 
-        /* ===== INFO ROWS ===== */
+        /* ===== BODY + INFO ROWS ===== */
+        .body { display: contents; }
         .info-section {
             padding: 8px 0;
         }
@@ -337,7 +338,7 @@
         .social-pill.tiktok    { background: #f0fdf4; color: #010101; }
 
         /* ===== SAVE BUTTON ===== */
-        .save-section {
+        .footer {
             padding: 20px 24px 28px;
             border-top: 1px solid var(--border);
         }
@@ -492,7 +493,7 @@
                 border-radius: 28px 0 0 28px;
             }
 
-            .quick-actions {
+            .action-buttons {
                 grid-column: 2;
                 grid-row: 1;
                 flex-direction: column;
@@ -503,7 +504,7 @@
                 border-left: 1px solid var(--border);
             }
 
-            .quick-actions .pill-btn {
+            .action-buttons .pill-btn {
                 flex-direction: row;
                 justify-content: flex-start;
                 padding: 14px 18px;
@@ -512,7 +513,7 @@
                 border-radius: 12px;
             }
 
-            .quick-actions .pill-btn i {
+            .action-buttons .pill-btn i {
                 font-size: 20px;
                 width: 24px;
                 text-align: center;
@@ -536,7 +537,7 @@
                 border-left: 1px solid var(--border);
             }
 
-            .save-section {
+            .footer {
                 grid-column: 2;
                 grid-row: 5;
                 border-left: 1px solid var(--border);
@@ -576,7 +577,7 @@
         </div>
 
         <!-- Quick Action Buttons -->
-        <div class="quick-actions">
+        <div class="action-buttons">
             <a class="pill-btn call" href="tel:+27000000000">
                 <i class="fa-solid fa-phone"></i>
                 <span>Call</span>
@@ -591,6 +592,8 @@
             </a>
         </div>
 
+        <!-- Body: info rows, bio, social -->
+        <div class="body">
         <!-- Contact Info Rows -->
         <div class="info-section">
             <a class="info-row" href="tel:+27000000000">
@@ -652,8 +655,10 @@
             </div>
         </div>
 
+        </div><!-- /body -->
+
         <!-- Save Contact -->
-        <div class="save-section">
+        <div class="footer">
             <a class="save-btn" href="contact.vcf">
                 <i class="fa-solid fa-user-plus"></i>
                 Save Contact

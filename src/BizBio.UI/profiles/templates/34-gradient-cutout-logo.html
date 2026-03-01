@@ -44,7 +44,7 @@
             padding-top: 40px;
         }
 
-        .card-outer {
+        .card {
             width: 100%;
             max-width: 540px;
             display: flex;
@@ -55,7 +55,7 @@
         /* =====================================================
            GRADIENT TOP SECTION
         ===================================================== */
-        .gradient-section {
+        .header {
             text-align: center;
             padding: 0 24px;
         }
@@ -125,7 +125,7 @@
            creates a transparent semicircle at the card's top centre,
            through which the body gradient is visible.
         ===================================================== */
-        .white-card {
+        .body {
             position: relative;     /* anchor for .logo-float */
             background:
                 radial-gradient(
@@ -308,6 +308,7 @@
         /* =====================================================
            SAVE CONTACT
         ===================================================== */
+        .footer { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 0 22px 22px; }
         .save-btn {
             display: flex;
             align-items: center;
@@ -324,7 +325,6 @@
             letter-spacing: 0.5px;
             transition: transform 0.15s, box-shadow 0.15s;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
-            margin-bottom: 22px;
         }
 
         .save-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3); }
@@ -490,9 +490,9 @@
         }
 
         @media (min-width: 700px) {
-            .card-outer { max-width: 620px; }
+            .card { max-width: 620px; }
 
-            .white-card {
+            .body {
                 border-radius: 40px 40px 0 0;
             }
 
@@ -534,10 +534,10 @@
      PAGE
 ===================================================== -->
 <div class="page">
-    <div class="card-outer">
+    <div class="card">
 
         <!-- ── GRADIENT TOP ── -->
-        <div class="gradient-section">
+        <div class="header">
             <h1 class="card-name">Company Name</h1>
             <p class="tagline">Your Tagline Here</p>
 
@@ -561,7 +561,7 @@
         </div>
 
         <!-- ── WHITE CARD WITH CIRCULAR CUTOUT ── -->
-        <div class="white-card">
+        <div class="body">
 
             <!--
                 The logo straddles the boundary:
@@ -620,6 +620,9 @@
                 <p class="bio about">We are dedicated to delivering outstanding results for our clients. With years of experience, we pride ourselves on quality, reliability, and exceptional customer service.</p>
             </div>
 
+        </div><!-- /.body -->
+
+        <div class="footer">
             <!-- Save contact -->
             <a href="contact.vcf" class="save-btn">
                 <i class="fas fa-user-plus"></i>
@@ -635,10 +638,9 @@
                 <a href="https://www.youtube.com/@company"         class="social-btn" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                 <a href="https://www.tiktok.com/@company"          class="social-btn" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
             </div>
+        </div><!-- /.footer -->
 
-        </div><!-- /.white-card -->
-
-    </div><!-- /.card-outer -->
+    </div><!-- /.card -->
 
     <footer class="bizbio-footer">
         <div>Created &amp; Hosted by <a href="https://www.bizbio.co.za" target="_blank" rel="noopener">BizBio</a></div>

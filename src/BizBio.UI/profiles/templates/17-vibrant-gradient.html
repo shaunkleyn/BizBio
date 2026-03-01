@@ -21,8 +21,6 @@
         .card {
             max-width: 400px;
             width: 100%;
-        }
-        .main-card {
             background: #fff;
             border-radius: 32px;
             overflow: hidden;
@@ -69,14 +67,17 @@
             position: relative;
             z-index: 1;
         }
-        .content {
-            padding: 10px 24px 24px;
-        }
-        .action-row {
+        .action-buttons {
             display: flex;
             justify-content: center;
             gap: 12px;
-            margin-bottom: 24px;
+            padding: 16px 24px;
+        }
+        .body {
+            padding: 0 24px 24px;
+        }
+        .footer {
+            padding: 0 24px 24px;
         }
         .action-btn {
             width: 60px;
@@ -197,64 +198,64 @@
 </head>
 <body>
     <div class="card">
-        <div class="main-card">
-            <div class="header">
-                <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sasha Rodriguez" class="avatar">
-                <h1 class="name">Sasha Rodriguez</h1>
-                <p class="title">Brand Strategist at Pulse Marketing</p>
-            </div>
+        <div class="header">
+            <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sasha Rodriguez" class="avatar">
+            <h1 class="name">Sasha Rodriguez</h1>
+            <p class="title">Brand Strategist at Pulse Marketing</p>
+        </div>
 
-            <div class="content">
-                <div class="action-row">
-                    <a href="tel:+27867654321" class="action-btn btn-call"><i class="fas fa-phone"></i></a>
-                    <a href="mailto:sasha@pulsemarketing.co.za" class="action-btn btn-email"><i class="fas fa-envelope"></i></a>
-                    <a href="https://wa.me/27867654321" class="action-btn btn-whatsapp"><i class="fab fa-whatsapp"></i></a>
-                    <a href="https://www.pulsemarketing.co.za" class="action-btn btn-web"><i class="fas fa-globe"></i></a>
-                </div>
+        <div class="action-buttons">
+            <a href="tel:+27867654321" class="action-btn btn-call"><i class="fas fa-phone"></i></a>
+            <a href="mailto:sasha@pulsemarketing.co.za" class="action-btn btn-email"><i class="fas fa-envelope"></i></a>
+            <a href="https://wa.me/27867654321" class="action-btn btn-whatsapp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.pulsemarketing.co.za" class="action-btn btn-web"><i class="fas fa-globe"></i></a>
+        </div>
 
-                <div class="info-section">
-                    <a href="tel:+27867654321" class="info-item">
-                        <div class="info-icon icon-phone"><i class="fas fa-phone"></i></div>
-                        <div class="info-content">
-                            <div class="info-label">Phone</div>
-                            <div class="info-value">086 765 4321</div>
-                        </div>
-                    </a>
-                    <a href="mailto:sasha@pulsemarketing.co.za" class="info-item">
-                        <div class="info-icon icon-email"><i class="fas fa-envelope"></i></div>
-                        <div class="info-content">
-                            <div class="info-label">Email</div>
-                            <div class="info-value">sasha@pulsemarketing.co.za</div>
-                        </div>
-                    </a>
-                    <a href="https://www.pulsemarketing.co.za" class="info-item">
-                        <div class="info-icon icon-web"><i class="fas fa-globe"></i></div>
-                        <div class="info-content">
-                            <div class="info-label">Website</div>
-                            <div class="info-value">pulsemarketing.co.za</div>
-                        </div>
-                    </a>
-                    <a href="https://maps.google.com/?q=Braamfontein,+Johannesburg" class="info-item">
-                        <div class="info-icon icon-location"><i class="fas fa-map-marker-alt"></i></div>
-                        <div class="info-content">
-                            <div class="info-label">Location</div>
-                            <div class="info-value">Braamfontein, JHB</div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="social-section">
-                    <div class="social-title">Follow Me</div>
-                    <div class="social-links">
-                        <a href="https://linkedin.com/in/sasharodriguez" class="social-link social-linkedin"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="https://facebook.com/pulsemarketing" class="social-link social-facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://instagram.com/sasharodriguez" class="social-link social-instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="https://twitter.com/sasharodriguez" class="social-link social-twitter"><i class="fab fa-x-twitter"></i></a>
+        <div class="body">
+            <div class="info-section">
+                <a href="tel:+27867654321" class="info-item">
+                    <div class="info-icon icon-phone"><i class="fas fa-phone"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Phone</div>
+                        <div class="info-value">086 765 4321</div>
                     </div>
-                </div>
-
-                <a href="sasha_rodriguez.vcf" class="save-btn"><i class="fas fa-user-plus"></i> Add to Contacts</a>
+                </a>
+                <a href="mailto:sasha@pulsemarketing.co.za" class="info-item">
+                    <div class="info-icon icon-email"><i class="fas fa-envelope"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">sasha@pulsemarketing.co.za</div>
+                    </div>
+                </a>
+                <a href="https://www.pulsemarketing.co.za" class="info-item">
+                    <div class="info-icon icon-web"><i class="fas fa-globe"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Website</div>
+                        <div class="info-value">pulsemarketing.co.za</div>
+                    </div>
+                </a>
+                <a href="https://maps.google.com/?q=Braamfontein,+Johannesburg" class="info-item">
+                    <div class="info-icon icon-location"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Location</div>
+                        <div class="info-value">Braamfontein, JHB</div>
+                    </div>
+                </a>
             </div>
+
+            <div class="social-section">
+                <div class="social-title">Follow Me</div>
+                <div class="social-links">
+                    <a href="https://linkedin.com/in/sasharodriguez" class="social-link social-linkedin"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://facebook.com/pulsemarketing" class="social-link social-facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/sasharodriguez" class="social-link social-instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/sasharodriguez" class="social-link social-twitter"><i class="fab fa-x-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <a href="sasha_rodriguez.vcf" class="save-btn"><i class="fas fa-user-plus"></i> Add to Contacts</a>
         </div>
     </div>
     <script src="../vcard-generator.js"></script>

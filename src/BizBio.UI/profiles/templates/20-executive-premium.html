@@ -102,7 +102,7 @@
             color: #d4af37;
             font-size: 12px;
         }
-        .actions {
+        .action-buttons {
             display: flex;
             justify-content: center;
             gap: 16px;
@@ -127,8 +127,11 @@
             color: #1a1a2e;
             box-shadow: 0 0 30px rgba(212,175,55,0.4);
         }
-        .info-section {
+        .body {
             padding: 0 30px 30px;
+        }
+        .info-section {
+            margin-bottom: 30px;
         }
         .info-item {
             display: flex;
@@ -157,8 +160,9 @@
             font-weight: 400;
         }
         .social-section {
-            padding: 24px 30px;
+            padding: 24px;
             background: rgba(0,0,0,0.3);
+            margin: 0 -30px;
             text-align: center;
         }
         .social-title {
@@ -181,8 +185,10 @@
             transition: all 0.3s;
         }
         .social-link:hover { color: #d4af37; }
-        .save-section {
+        .footer {
             padding: 30px;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
         .save-btn {
             display: flex;
@@ -200,15 +206,11 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             transition: all 0.3s;
+            margin-bottom: 20px;
         }
         .save-btn:hover {
             box-shadow: 0 10px 40px rgba(212,175,55,0.4);
             transform: translateY(-2px);
-        }
-        .footer {
-            text-align: center;
-            padding: 20px;
-            border-top: 1px solid rgba(255,255,255,0.05);
         }
         .footer-text {
             font-size: 10px;
@@ -234,59 +236,58 @@
             <div class="divider-line"></div>
         </div>
 
-        <div class="actions">
+        <div class="action-buttons">
             <a href="tel:+27115551234" class="action-btn"><i class="fas fa-phone"></i></a>
             <a href="mailto:richard@sterlingcapital.co.za" class="action-btn"><i class="fas fa-envelope"></i></a>
             <a href="https://wa.me/27825551234" class="action-btn"><i class="fab fa-whatsapp"></i></a>
             <a href="https://www.sterlingcapital.co.za" class="action-btn"><i class="fas fa-globe"></i></a>
         </div>
 
-        <div class="info-section">
-            <a href="tel:+27115551234" class="info-item">
-                <div class="info-icon"><i class="fas fa-phone"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Direct Line</div>
-                    <div class="info-value">011 555 1234</div>
-                </div>
-            </a>
-            <a href="mailto:richard@sterlingcapital.co.za" class="info-item">
-                <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Email</div>
-                    <div class="info-value">richard@sterlingcapital.co.za</div>
-                </div>
-            </a>
-            <a href="https://www.sterlingcapital.co.za" class="info-item">
-                <div class="info-icon"><i class="fas fa-globe"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Website</div>
-                    <div class="info-value">sterlingcapital.co.za</div>
-                </div>
-            </a>
-            <a href="https://maps.google.com/?q=The+Leonardo,+Sandton" class="info-item">
-                <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Office</div>
-                    <div class="info-value">The Leonardo, Sandton</div>
-                </div>
-            </a>
-        </div>
+        <div class="body">
+            <div class="info-section">
+                <a href="tel:+27115551234" class="info-item">
+                    <div class="info-icon"><i class="fas fa-phone"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Direct Line</div>
+                        <div class="info-value">011 555 1234</div>
+                    </div>
+                </a>
+                <a href="mailto:richard@sterlingcapital.co.za" class="info-item">
+                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">richard@sterlingcapital.co.za</div>
+                    </div>
+                </a>
+                <a href="https://www.sterlingcapital.co.za" class="info-item">
+                    <div class="info-icon"><i class="fas fa-globe"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Website</div>
+                        <div class="info-value">sterlingcapital.co.za</div>
+                    </div>
+                </a>
+                <a href="https://maps.google.com/?q=The+Leonardo,+Sandton" class="info-item">
+                    <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Office</div>
+                        <div class="info-value">The Leonardo, Sandton</div>
+                    </div>
+                </a>
+            </div>
 
-        <div class="social-section">
-            <div class="social-title">Connect</div>
-            <div class="social-links">
-                <a href="https://linkedin.com/in/richardblackwood" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://twitter.com/richardblackwood" class="social-link"><i class="fab fa-x-twitter"></i></a>
-                <a href="https://facebook.com/sterlingcapitalgroup" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://instagram.com/sterlingcapital" class="social-link"><i class="fab fa-instagram"></i></a>
+            <div class="social-section">
+                <div class="social-title">Connect</div>
+                <div class="social-links">
+                    <a href="https://linkedin.com/in/richardblackwood" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://twitter.com/richardblackwood" class="social-link"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://facebook.com/sterlingcapitalgroup" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/sterlingcapital" class="social-link"><i class="fab fa-instagram"></i></a>
+                </div>
             </div>
         </div>
 
-        <div class="save-section">
-            <a href="richard_blackwood.vcf" class="save-btn"><i class="fas fa-user-plus"></i> Save Contact</a>
-        </div>
-
         <div class="footer">
+            <a href="richard_blackwood.vcf" class="save-btn"><i class="fas fa-user-plus"></i> Save Contact</a>
             <p class="footer-text">Sterling Capital Group &bull; Est. 2008</p>
         </div>
     </div>

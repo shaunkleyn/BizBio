@@ -18,7 +18,7 @@
             align-items: center;
             padding: 20px;
         }
-        .phone-mockup {
+        .card {
             max-width: 380px;
             width: 100%;
             background: #fff;
@@ -28,6 +28,7 @@
             border: 10px solid #1f2937;
             position: relative;
         }
+        .body {}
         .notch {
             position: absolute;
             top: 0;
@@ -106,7 +107,7 @@
             line-height: 1.6;
             font-style: italic;
         }
-        .action-section {
+        .action-buttons {
             padding: 0 24px 30px;
         }
         .action-btn {
@@ -143,6 +144,7 @@
             color: #1f2937;
             font-weight: 600;
         }
+        .footer {}
         .social-section {
             display: flex;
             justify-content: center;
@@ -190,7 +192,7 @@
     </style>
 </head>
 <body>
-    <div class="phone-mockup">
+    <div class="card">
         <div class="notch"></div>
         <div class="screen">
             <div class="header">
@@ -207,39 +209,43 @@
                 </div>
             </div>
 
-            <div class="profile-section">
-                <div class="avatar-container">
-                    <img src="https://randomuser.me/api/portraits/men/91.jpg" alt="Alexander Stone" class="avatar">
+            <div class="body">
+                <div class="profile-section">
+                    <div class="avatar-container">
+                        <img src="https://randomuser.me/api/portraits/men/91.jpg" alt="Alexander Stone" class="avatar">
+                    </div>
+                    <h1 class="name">Alexander Stone</h1>
+                    <p class="title">Managing Director</p>
+                    <p class="bio">Over 15 years of experience in strategic consulting, dedicated to driving sustainable growth.</p>
                 </div>
-                <h1 class="name">Alexander Stone</h1>
-                <p class="title">Managing Director</p>
-                <p class="bio">Over 15 years of experience in strategic consulting, dedicated to driving sustainable growth.</p>
+
+                <div class="action-buttons">
+                    <a href="mailto:alex@evergreenconsulting.co.za" class="action-btn">
+                        <div class="action-icon"><i class="fas fa-envelope"></i></div>
+                        <span class="action-text">Email</span>
+                    </a>
+                    <a href="tel:+27118765432" class="action-btn">
+                        <div class="action-icon"><i class="fas fa-phone"></i></div>
+                        <span class="action-text">Phone</span>
+                    </a>
+                    <a href="https://www.evergreenconsulting.co.za" class="action-btn">
+                        <div class="action-icon"><i class="fas fa-globe"></i></div>
+                        <span class="action-text">Website</span>
+                    </a>
+                </div>
             </div>
 
-            <div class="action-section">
-                <a href="mailto:alex@evergreenconsulting.co.za" class="action-btn">
-                    <div class="action-icon"><i class="fas fa-envelope"></i></div>
-                    <span class="action-text">Email</span>
-                </a>
-                <a href="tel:+27118765432" class="action-btn">
-                    <div class="action-icon"><i class="fas fa-phone"></i></div>
-                    <span class="action-text">Phone</span>
-                </a>
-                <a href="https://www.evergreenconsulting.co.za" class="action-btn">
-                    <div class="action-icon"><i class="fas fa-globe"></i></div>
-                    <span class="action-text">Website</span>
+            <div class="footer">
+                <div class="social-section">
+                    <a href="https://linkedin.com/in/alexanderstone" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://twitter.com/alexanderstone" class="social-btn"><i class="fab fa-twitter"></i></a>
+                    <a href="https://wa.me/27821234567" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+                </div>
+
+                <a href="alexander_stone.vcf" class="save-btn">
+                    <i class="fas fa-user-plus"></i> Save Contact
                 </a>
             </div>
-
-            <div class="social-section">
-                <a href="https://linkedin.com/in/alexanderstone" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://twitter.com/alexanderstone" class="social-btn"><i class="fab fa-twitter"></i></a>
-                <a href="https://wa.me/27821234567" class="social-btn"><i class="fab fa-whatsapp"></i></a>
-            </div>
-
-            <a href="alexander_stone.vcf" class="save-btn">
-                <i class="fas fa-user-plus"></i> Save Contact
-            </a>
         </div>
     </div>
     <script src="../vcard-generator.js"></script>

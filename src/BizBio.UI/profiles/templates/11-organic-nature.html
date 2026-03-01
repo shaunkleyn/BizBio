@@ -78,7 +78,7 @@
             padding-bottom: 30px;
             border-bottom: 1px solid #e8e0d0;
         }
-        .actions {
+        .action-buttons {
             display: flex;
             justify-content: center;
             gap: 16px;
@@ -114,6 +114,9 @@
         .action-btn:hover {
             transform: translateY(-4px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .body {
+            margin-bottom: 30px;
         }
         .info-list {
             margin-bottom: 30px;
@@ -184,12 +187,14 @@
             color: #fff;
             border-color: #5f7161;
         }
+        .footer {
+            margin-top: 30px;
+        }
         .save-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-top: 30px;
             padding: 18px;
             background: linear-gradient(135deg, #5f7161, #6d8b74);
             color: #fff;
@@ -218,48 +223,52 @@
         <div class="content">
             <p class="bio">"Nurturing mind, body, and soul through holistic wellness practices and sustainable living."</p>
 
-            <div class="actions">
+            <div class="action-buttons">
                 <a href="tel:+27731234567" class="action-btn btn-call"><i class="fas fa-phone"></i></a>
                 <a href="mailto:thandi@harmonyliving.co.za" class="action-btn btn-email"><i class="fas fa-envelope"></i></a>
                 <a href="https://wa.me/27731234567" class="action-btn btn-whatsapp"><i class="fab fa-whatsapp"></i></a>
                 <a href="https://www.harmonyliving.co.za" class="action-btn btn-web"><i class="fas fa-globe"></i></a>
             </div>
 
-            <div class="info-list">
-                <a href="tel:+27731234567" class="info-item">
-                    <div class="info-icon"><i class="fas fa-phone"></i></div>
-                    <div class="info-content">
-                        <div class="info-label">Phone</div>
-                        <div class="info-value">073 123 4567</div>
-                    </div>
-                </a>
-                <a href="mailto:thandi@harmonyliving.co.za" class="info-item">
-                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                    <div class="info-content">
-                        <div class="info-label">Email</div>
-                        <div class="info-value">thandi@harmonyliving.co.za</div>
-                    </div>
-                </a>
-                <a href="https://maps.google.com/?q=Knysna,+South+Africa" class="info-item">
-                    <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
-                    <div class="info-content">
-                        <div class="info-label">Location</div>
-                        <div class="info-value">Knysna, Garden Route</div>
-                    </div>
-                </a>
-            </div>
+            <div class="body">
+                <div class="info-list">
+                    <a href="tel:+27731234567" class="info-item">
+                        <div class="info-icon"><i class="fas fa-phone"></i></div>
+                        <div class="info-content">
+                            <div class="info-label">Phone</div>
+                            <div class="info-value">073 123 4567</div>
+                        </div>
+                    </a>
+                    <a href="mailto:thandi@harmonyliving.co.za" class="info-item">
+                        <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="info-content">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">thandi@harmonyliving.co.za</div>
+                        </div>
+                    </a>
+                    <a href="https://maps.google.com/?q=Knysna,+South+Africa" class="info-item">
+                        <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="info-content">
+                            <div class="info-label">Location</div>
+                            <div class="info-value">Knysna, Garden Route</div>
+                        </div>
+                    </a>
+                </div>
 
-            <div class="social-section">
-                <div class="social-title">Let's Connect</div>
-                <div class="social-links">
-                    <a href="https://linkedin.com/in/thandikhumalo" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://facebook.com/harmonyliving" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://instagram.com/thandiwellness" class="social-link"><i class="fab fa-instagram"></i></a>
-                    <a href="https://pinterest.com/thandiwellness" class="social-link"><i class="fab fa-pinterest-p"></i></a>
+                <div class="social-section">
+                    <div class="social-title">Let's Connect</div>
+                    <div class="social-links">
+                        <a href="https://linkedin.com/in/thandikhumalo" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://facebook.com/harmonyliving" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/thandiwellness" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com/thandiwellness" class="social-link"><i class="fab fa-pinterest-p"></i></a>
+                    </div>
                 </div>
             </div>
 
-            <a href="thandi_khumalo.vcf" class="save-btn"><i class="fas fa-leaf"></i> Save Contact</a>
+            <div class="footer">
+                <a href="thandi_khumalo.vcf" class="save-btn"><i class="fas fa-leaf"></i> Save Contact</a>
+            </div>
         </div>
     </div>
     <script src="../vcard-generator.js"></script>

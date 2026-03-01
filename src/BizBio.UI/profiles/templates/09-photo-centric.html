@@ -28,7 +28,7 @@
             background: #1a1a1a;
             box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
-        .hero {
+        .header {
             position: relative;
             height: 300px;
             overflow: hidden;
@@ -57,7 +57,7 @@
             color: #10b981;
             font-weight: 500;
         }
-        .actions {
+        .action-buttons {
             position: absolute;
             top: 16px;
             right: 16px;
@@ -82,8 +82,11 @@
             background: #10b981;
             transform: scale(1.1);
         }
-        .content {
-            padding: 24px;
+        .body {
+            padding: 24px 24px 0;
+        }
+        .footer {
+            padding: 0 24px 24px;
         }
         .bio {
             color: #999;
@@ -185,9 +188,9 @@
 </head>
 <body>
     <div class="card">
-        <div class="hero">
+        <div class="header">
             <img src="https://randomuser.me/api/portraits/men/58.jpg" alt="Ryan Thompson" class="hero-image">
-            <div class="actions">
+            <div class="action-buttons">
                 <a href="tel:+27815678901" class="action-btn"><i class="fas fa-phone"></i></a>
                 <a href="mailto:ryan@lenslightstudio.co.za" class="action-btn"><i class="fas fa-envelope"></i></a>
                 <a href="https://wa.me/27815678901" class="action-btn"><i class="fab fa-whatsapp"></i></a>
@@ -198,7 +201,7 @@
             </div>
         </div>
 
-        <div class="content">
+        <div class="body">
             <p class="bio">Capturing life's precious moments through a creative lens. Specializing in portraits, weddings, and commercial photography across KwaZulu-Natal.</p>
 
             <div class="info-grid">
@@ -228,7 +231,9 @@
                 <a href="https://linkedin.com/in/ryanthompsonphoto" class="social-btn btn-linkedin"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
                 <a href="https://instagram.com/ryanthompsonphoto" class="social-btn btn-instagram"><i class="fab fa-instagram"></i> Instagram</a>
             </div>
+        </div>
 
+        <div class="footer">
             <a href="ryan_thompson.vcf" class="save-btn"><i class="fas fa-user-plus"></i> Save Contact</a>
         </div>
     </div>

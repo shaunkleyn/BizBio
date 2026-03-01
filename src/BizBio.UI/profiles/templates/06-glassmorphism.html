@@ -87,7 +87,7 @@
             color: rgba(255,255,255,0.5);
             margin-top: 4px;
         }
-        .actions {
+        .action-buttons {
             display: flex;
             justify-content: center;
             gap: 14px;
@@ -112,8 +112,11 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-        .info-section {
+        .body {
             padding: 0 30px 30px;
+        }
+        .info-section {
+            margin-bottom: 20px;
         }
         .info-item {
             display: flex;
@@ -154,8 +157,9 @@
             font-weight: 500;
         }
         .social-section {
-            padding: 24px 30px;
+            padding: 24px;
             background: rgba(0,0,0,0.2);
+            margin: 0 -30px;
             text-align: center;
         }
         .social-title {
@@ -189,12 +193,14 @@
             color: #fff;
             transform: scale(1.1);
         }
+        .footer {
+            padding: 0 30px 30px;
+        }
         .save-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin: 0 30px 30px;
             padding: 16px;
             background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
             border: 1px solid rgba(255,255,255,0.3);
@@ -220,51 +226,55 @@
             <p class="company">CloudSync Technologies</p>
         </div>
 
-        <div class="actions">
+        <div class="action-buttons">
             <a href="tel:+27761234567" class="action-btn"><i class="fas fa-phone"></i></a>
             <a href="mailto:lerato@cloudsync.co.za" class="action-btn"><i class="fas fa-envelope"></i></a>
             <a href="https://wa.me/27761234567" class="action-btn"><i class="fab fa-whatsapp"></i></a>
             <a href="https://www.cloudsync.co.za" class="action-btn"><i class="fas fa-globe"></i></a>
         </div>
 
-        <div class="info-section">
-            <a href="tel:+27761234567" class="info-item">
-                <div class="info-icon"><i class="fas fa-phone"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Phone</div>
-                    <div class="info-value">076 123 4567</div>
-                </div>
-            </a>
-            <a href="mailto:lerato@cloudsync.co.za" class="info-item">
-                <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Email</div>
-                    <div class="info-value">lerato@cloudsync.co.za</div>
-                </div>
-            </a>
-            <a href="https://maps.google.com/?q=Menlyn+Maine,+Pretoria" class="info-item">
-                <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Location</div>
-                    <div class="info-value">Menlyn Maine, Pretoria</div>
-                </div>
-            </a>
-        </div>
+        <div class="body">
+            <div class="info-section">
+                <a href="tel:+27761234567" class="info-item">
+                    <div class="info-icon"><i class="fas fa-phone"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Phone</div>
+                        <div class="info-value">076 123 4567</div>
+                    </div>
+                </a>
+                <a href="mailto:lerato@cloudsync.co.za" class="info-item">
+                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">lerato@cloudsync.co.za</div>
+                    </div>
+                </a>
+                <a href="https://maps.google.com/?q=Menlyn+Maine,+Pretoria" class="info-item">
+                    <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Location</div>
+                        <div class="info-value">Menlyn Maine, Pretoria</div>
+                    </div>
+                </a>
+            </div>
 
-        <div class="social-section">
-            <div class="social-title">Connect</div>
-            <div class="social-links">
-                <a href="https://linkedin.com/in/leratomolefe" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://facebook.com/cloudsynctech" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://instagram.com/leratomolefe" class="social-link"><i class="fab fa-instagram"></i></a>
-                <a href="https://twitter.com/leratomolefe" class="social-link"><i class="fab fa-x-twitter"></i></a>
+            <div class="social-section">
+                <div class="social-title">Connect</div>
+                <div class="social-links">
+                    <a href="https://linkedin.com/in/leratomolefe" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://facebook.com/cloudsynctech" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/leratomolefe" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/leratomolefe" class="social-link"><i class="fab fa-x-twitter"></i></a>
+                </div>
             </div>
         </div>
 
-        <a href="lerato_molefe.vcf" class="save-btn">
-            <i class="fas fa-user-plus"></i>
-            Save Contact
-        </a>
+        <div class="footer">
+            <a href="lerato_molefe.vcf" class="save-btn">
+                <i class="fas fa-user-plus"></i>
+                Save Contact
+            </a>
+        </div>
     </div>
     <script src="../vcard-generator.js"></script>
 </body>

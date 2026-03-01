@@ -66,7 +66,7 @@
             margin-top: 4px;
             font-weight: 600;
         }
-        .actions {
+        .action-buttons {
             display: flex;
             justify-content: center;
             gap: 16px;
@@ -89,6 +89,9 @@
         .action-btn:hover {
             box-shadow: inset 6px 6px 14px #bec3c9, inset -6px -6px 14px #ffffff;
             color: #ee6c4d;
+        }
+        .body {
+            margin-bottom: 30px;
         }
         .info-section {
             margin-bottom: 30px;
@@ -135,7 +138,6 @@
         }
         .social-section {
             text-align: center;
-            margin-bottom: 30px;
         }
         .social-title {
             font-size: 12px;
@@ -167,6 +169,9 @@
         .social-link:hover {
             box-shadow: inset 4px 4px 10px #bec3c9, inset -4px -4px 10px #ffffff;
             color: #ee6c4d;
+        }
+        .footer {
+            margin-top: 30px;
         }
         .save-btn {
             display: flex;
@@ -200,51 +205,55 @@
             <p class="company">InnovateTech Solutions</p>
         </div>
 
-        <div class="actions">
+        <div class="action-buttons">
             <a href="tel:+27839876543" class="action-btn"><i class="fas fa-phone"></i></a>
             <a href="mailto:daniel@innovatetech.co.za" class="action-btn"><i class="fas fa-envelope"></i></a>
             <a href="https://wa.me/27839876543" class="action-btn"><i class="fab fa-whatsapp"></i></a>
             <a href="https://www.innovatetech.co.za" class="action-btn"><i class="fas fa-globe"></i></a>
         </div>
 
-        <div class="info-section">
-            <a href="tel:+27839876543" class="info-item">
-                <div class="info-icon"><i class="fas fa-phone"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Phone</div>
-                    <div class="info-value">083 987 6543</div>
-                </div>
-            </a>
-            <a href="mailto:daniel@innovatetech.co.za" class="info-item">
-                <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Email</div>
-                    <div class="info-value">daniel@innovatetech.co.za</div>
-                </div>
-            </a>
-            <a href="https://maps.google.com/?q=Techno+Park,+Stellenbosch" class="info-item">
-                <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
-                <div class="info-content">
-                    <div class="info-label">Address</div>
-                    <div class="info-value">Techno Park, Stellenbosch</div>
-                </div>
-            </a>
-        </div>
+        <div class="body">
+            <div class="info-section">
+                <a href="tel:+27839876543" class="info-item">
+                    <div class="info-icon"><i class="fas fa-phone"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Phone</div>
+                        <div class="info-value">083 987 6543</div>
+                    </div>
+                </a>
+                <a href="mailto:daniel@innovatetech.co.za" class="info-item">
+                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">daniel@innovatetech.co.za</div>
+                    </div>
+                </a>
+                <a href="https://maps.google.com/?q=Techno+Park,+Stellenbosch" class="info-item">
+                    <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Address</div>
+                        <div class="info-value">Techno Park, Stellenbosch</div>
+                    </div>
+                </a>
+            </div>
 
-        <div class="social-section">
-            <div class="social-title">Connect</div>
-            <div class="social-links">
-                <a href="https://linkedin.com/in/danielbotha" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://facebook.com/innovatetech" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://instagram.com/danielbotha" class="social-link"><i class="fab fa-instagram"></i></a>
-                <a href="https://twitter.com/danielbotha" class="social-link"><i class="fab fa-x-twitter"></i></a>
+            <div class="social-section">
+                <div class="social-title">Connect</div>
+                <div class="social-links">
+                    <a href="https://linkedin.com/in/danielbotha" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://facebook.com/innovatetech" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/danielbotha" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/danielbotha" class="social-link"><i class="fab fa-x-twitter"></i></a>
+                </div>
             </div>
         </div>
 
-        <a href="daniel_botha.vcf" class="save-btn">
-            <i class="fas fa-download"></i>
-            Save Contact
-        </a>
+        <div class="footer">
+            <a href="daniel_botha.vcf" class="save-btn">
+                <i class="fas fa-download"></i>
+                Save Contact
+            </a>
+        </div>
     </div>
     <script src="../vcard-generator.js"></script>
 </body>

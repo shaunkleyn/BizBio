@@ -51,7 +51,7 @@
             letter-spacing: 3px;
             font-weight: 500;
         }
-        .actions {
+        .action-buttons {
             display: flex;
             border-bottom: 2px solid #000;
         }
@@ -82,7 +82,7 @@
             letter-spacing: 1px;
             font-weight: 500;
         }
-        .content {
+        .body {
             padding: 30px;
         }
         .info-item {
@@ -134,6 +134,9 @@
             transition: opacity 0.3s;
         }
         .social-link:hover { opacity: 0.5; }
+        .footer {
+            display: block;
+        }
         .save-btn {
             display: block;
             padding: 20px;
@@ -160,7 +163,7 @@
             <p class="title">Principal Architect / Form & Function Studio</p>
         </div>
 
-        <div class="actions">
+        <div class="action-buttons">
             <a href="tel:+27214567890" class="action-btn">
                 <i class="fas fa-phone"></i>
                 <span>Call</span>
@@ -179,7 +182,7 @@
             </a>
         </div>
 
-        <div class="content">
+        <div class="body">
             <a href="tel:+27214567890" class="info-item">
                 <div class="info-icon"><i class="fas fa-phone"></i></div>
                 <div class="info-content">
@@ -208,19 +211,21 @@
                     <div class="info-value">Kloof Street, Cape Town</div>
                 </div>
             </a>
-        </div>
 
-        <div class="social-section">
-            <div class="social-title">Connect</div>
-            <div class="social-links">
-                <a href="https://linkedin.com/in/pieterjansen" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://facebook.com/formfunctionstudio" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://instagram.com/formfunctionstudio" class="social-link"><i class="fab fa-instagram"></i></a>
-                <a href="https://twitter.com/pieterjansen" class="social-link"><i class="fab fa-x-twitter"></i></a>
+            <div class="social-section">
+                <div class="social-title">Connect</div>
+                <div class="social-links">
+                    <a href="https://linkedin.com/in/pieterjansen" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://facebook.com/formfunctionstudio" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/formfunctionstudio" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/pieterjansen" class="social-link"><i class="fab fa-x-twitter"></i></a>
+                </div>
             </div>
         </div>
 
-        <a href="pieter_jansen.vcf" class="save-btn"><i class="fas fa-download"></i> Save Contact</a>
+        <div class="footer">
+            <a href="pieter_jansen.vcf" class="save-btn"><i class="fas fa-download"></i> Save Contact</a>
+        </div>
     </div>
     <script src="../vcard-generator.js"></script>
 </body>

@@ -73,6 +73,12 @@
             justify-content: center;
             gap: 6px;
         }
+        .action-buttons {
+            text-align: center;
+            padding: 16px 24px;
+        }
+        .body {}
+        .footer { padding: 24px; }
         .behance-btn {
             display: inline-flex;
             align-items: center;
@@ -84,7 +90,6 @@
             color: #fff;
             font-size: 16px;
             text-decoration: none;
-            margin-top: 16px;
             transition: all 0.3s;
         }
         .behance-btn:hover {
@@ -195,50 +200,57 @@
             <h1 class="name">Ryan Mitchell</h1>
             <p class="title">UI/UX Designer | Front End Developer</p>
             <p class="location"><i class="fas fa-map-marker-alt"></i> Durban, South Africa</p>
+        </div>
+
+        <div class="action-buttons">
             <a href="https://behance.net/ryanmitchell" class="behance-btn"><i class="fab fa-behance"></i></a>
         </div>
 
-        <div class="stats-section">
-            <div class="stat-item">
-                <div class="stat-value">2,332</div>
-                <div class="stat-label">Appreciation</div>
+        <div class="body">
+            <div class="stats-section">
+                <div class="stat-item">
+                    <div class="stat-value">2,332</div>
+                    <div class="stat-label">Appreciation</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">732</div>
+                    <div class="stat-label">Followers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">332</div>
+                    <div class="stat-label">Following</div>
+                </div>
             </div>
-            <div class="stat-item">
-                <div class="stat-value">732</div>
-                <div class="stat-label">Followers</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value">332</div>
-                <div class="stat-label">Following</div>
+
+            <div class="about-section">
+                <h2 class="about-title">About Ryan</h2>
+                <p class="about-text">
+                    Passionate about creating beautiful, functional interfaces that enhance user experiences.
+                    Specializing in responsive design and modern frontend technologies.
+                </p>
+
+                <div class="contact-grid">
+                    <a href="tel:+27319876543" class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                        <span class="contact-text">031 987 6543</span>
+                    </a>
+                    <a href="https://wa.me/27769876543" class="contact-item">
+                        <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
+                        <span class="contact-text">WhatsApp</span>
+                    </a>
+                    <a href="mailto:ryan@uicraft.co.za" class="contact-item full-width">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <span class="contact-text">ryan@uicraft.co.za</span>
+                    </a>
+                    <a href="https://www.uicraft.co.za" class="contact-item full-width">
+                        <div class="contact-icon"><i class="fas fa-globe"></i></div>
+                        <span class="contact-text">uicraft.co.za</span>
+                    </a>
+                </div>
             </div>
         </div>
 
-        <div class="about-section">
-            <h2 class="about-title">About Ryan</h2>
-            <p class="about-text">
-                Passionate about creating beautiful, functional interfaces that enhance user experiences.
-                Specializing in responsive design and modern frontend technologies.
-            </p>
-
-            <div class="contact-grid">
-                <a href="tel:+27319876543" class="contact-item">
-                    <div class="contact-icon"><i class="fas fa-phone"></i></div>
-                    <span class="contact-text">031 987 6543</span>
-                </a>
-                <a href="https://wa.me/27769876543" class="contact-item">
-                    <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
-                    <span class="contact-text">WhatsApp</span>
-                </a>
-                <a href="mailto:ryan@uicraft.co.za" class="contact-item full-width">
-                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
-                    <span class="contact-text">ryan@uicraft.co.za</span>
-                </a>
-                <a href="https://www.uicraft.co.za" class="contact-item full-width">
-                    <div class="contact-icon"><i class="fas fa-globe"></i></div>
-                    <span class="contact-text">uicraft.co.za</span>
-                </a>
-            </div>
-
+        <div class="footer">
             <a href="ryan_mitchell.vcf" class="follow-btn">
                 <i class="fas fa-user-plus"></i> Save Contact
             </a>

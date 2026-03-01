@@ -64,11 +64,12 @@
             width: 100%;
             max-width: 560px;
         }
+        .card { width: 100%; }
 
         /* ==============================
            TOP GRADIENT CARD
         ============================== */
-        .gradient-card {
+        .header {
             width: 100%;
             background: transparent;
             border-radius: var(--card-radius) var(--card-radius) 0 0;
@@ -266,7 +267,7 @@
         /* ==============================
            WHITE LOWER CARD
         ============================== */
-        .white-card {
+        .body {
             background: #ffffff;
             border-radius: 0 0 var(--card-radius) var(--card-radius);
             padding: 28px 20px 24px;
@@ -335,6 +336,8 @@
             line-height: 1.75;
             color: #555;
         }
+
+        .footer { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 18px; }
 
         /* ==============================
            SAVE CONTACT BUTTON
@@ -510,11 +513,11 @@
                 max-width: 600px;
             }
 
-            .gradient-card {
+            .header {
                 padding: 44px 32px 0;
             }
 
-            .white-card {
+            .body {
                 padding: 32px 28px 28px;
             }
 
@@ -576,8 +579,9 @@
     ============================= -->
     <div class="page-wrapper">
 
+        <div class="card">
         <!-- ---- GRADIENT HEADER CARD ---- -->
-        <div class="gradient-card">
+        <div class="header">
 
             <!-- Company name + tagline -->
             <div class="company-name-block">
@@ -625,10 +629,10 @@
                 </a>
             </div>
 
-        </div><!-- /.gradient-card -->
+        </div><!-- /.header -->
 
         <!-- ---- WHITE LOWER CARD ---- -->
-        <div class="white-card">
+        <div class="body">
 
             <!-- Action pill buttons -->
             <div class="action-buttons">
@@ -651,6 +655,9 @@
                 <p class="bio about">We are a passionate team dedicated to delivering outstanding results for our clients. With years of experience in the industry, we pride ourselves on quality, reliability and exceptional customer service.</p>
             </div>
 
+        </div><!-- /.body -->
+
+        <div class="footer">
             <!-- Save Contact -->
             <a href="contact.vcf" class="save-btn">
                 <i class="fas fa-user-plus"></i>
@@ -678,8 +685,9 @@
                     <i class="fab fa-tiktok"></i>
                 </a>
             </div>
+        </div><!-- /.footer -->
 
-        </div><!-- /.white-card -->
+        </div><!-- /.card -->
 
         <!-- BizBio Footer -->
         <footer class="bizbio-footer">

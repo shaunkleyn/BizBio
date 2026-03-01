@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="./css/theme-tweaker.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@latest/dist/cdn.min.js"></script>
     <style>
-        
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: var(--font-family);
@@ -82,7 +82,7 @@
             padding: 30px;
             padding-top: 20px;
         }
-        .quick-actions {
+        .action-buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 12px;
@@ -233,12 +233,14 @@
         .social-facebook { background: #1877f2; }
         .social-instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
         .social-twitter { background: #000; }
+        .footer {
+            margin-top: 24px;
+        }
         .save-contact {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-top: 24px;
             padding: 16px;
             /* background: var(--cta-button-bg-color); */
             color: var(--cta-button-text-color);
@@ -317,7 +319,7 @@
         </div>
 
         <div class="content">
-            <div class="quick-actions">
+            <div class="action-buttons">
                 <a href="tel:+27117891234" class="quick-action">
                     <i class="fas fa-phone"></i>
                     <span>Call</span>
@@ -336,47 +338,51 @@
                 </a>
             </div>
 
-            <div class="info-list">
-                <a href="tel:+27823456789" class="info-item">
-                    <div class="info-icon"><i class="fas fa-phone"></i></div>
-                    <div class="info-text">
-                        <div class="info-label">Mobile</div>
-                        <div class="info-value">082 345 6789</div>
-                    </div>
-                    <i class="fas fa-chevron-right info-arrow"></i>
-                </a>
-                <a href="mailto:james@nexusholdings.co.za" class="info-item">
-                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                    <div class="info-text">
-                        <div class="info-label">Email</div>
-                        <div class="info-value">james@nexusholdings.co.za</div>
-                    </div>
-                    <i class="fas fa-chevron-right info-arrow"></i>
-                </a>
-                <a href="https://www.nexusholdings.co.za" class="info-item">
-                    <div class="info-icon"><i class="fas fa-globe"></i></div>
-                    <div class="info-text">
-                        <div class="info-label">Website</div>
-                        <div class="info-value">www.nexusholdings.co.za</div>
-                    </div>
-                    <i class="fas fa-chevron-right info-arrow"></i>
-                </a>
-            </div>
+            <div class="body">
+                <div class="info-list">
+                    <a href="tel:+27823456789" class="info-item">
+                        <div class="info-icon"><i class="fas fa-phone"></i></div>
+                        <div class="info-text">
+                            <div class="info-label">Mobile</div>
+                            <div class="info-value">082 345 6789</div>
+                        </div>
+                        <i class="fas fa-chevron-right info-arrow"></i>
+                    </a>
+                    <a href="mailto:james@nexusholdings.co.za" class="info-item">
+                        <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="info-text">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">james@nexusholdings.co.za</div>
+                        </div>
+                        <i class="fas fa-chevron-right info-arrow"></i>
+                    </a>
+                    <a href="https://www.nexusholdings.co.za" class="info-item">
+                        <div class="info-icon"><i class="fas fa-globe"></i></div>
+                        <div class="info-text">
+                            <div class="info-label">Website</div>
+                            <div class="info-value">www.nexusholdings.co.za</div>
+                        </div>
+                        <i class="fas fa-chevron-right info-arrow"></i>
+                    </a>
+                </div>
 
-            <div class="social-section">
-                <div class="social-title">Connect with me</div>
-                <div class="social-links">
-                    <a href="https://linkedin.com/in/jamesanderson" class="tt-social social-link social-linkedin"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="https://facebook.com/nexusholdings" class="tt-social social-link social-facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://instagram.com/nexusholdings" class="tt-social social-link social-instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://twitter.com/jamesanderson" class="tt-social social-link social-twitter"><i class="fab fa-x-twitter"></i></a>
+                <div class="social-section">
+                    <div class="social-title">Connect with me</div>
+                    <div class="social-links">
+                        <a href="https://linkedin.com/in/jamesanderson" class="tt-social social-link social-linkedin"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://facebook.com/nexusholdings" class="tt-social social-link social-facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/nexusholdings" class="tt-social social-link social-instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://twitter.com/jamesanderson" class="tt-social social-link social-twitter"><i class="fab fa-x-twitter"></i></a>
+                    </div>
                 </div>
             </div>
 
-            <a href="james_anderson.vcf" class="save-contact">
-                <i class="fas fa-user-plus"></i>
-                Save to Contacts
-            </a>
+            <div class="footer">
+                <a href="james_anderson.vcf" class="save-contact">
+                    <i class="fas fa-user-plus"></i>
+                    Save to Contacts
+                </a>
+            </div>
         </div>
     </div>
     <script src="../vcard-generator.js"></script>

@@ -55,7 +55,7 @@
             font-size: 12px;
             color: #636e72;
         }
-        .action-pills {
+        .action-buttons {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
@@ -79,6 +79,9 @@
             color: #fff;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(248,80,50,0.3);
+        }
+        .body {
+            margin-bottom: 24px;
         }
         .info-list {
             margin-bottom: 24px;
@@ -128,7 +131,6 @@
             display: flex;
             justify-content: center;
             gap: 12px;
-            margin-bottom: 24px;
         }
         .social-btn {
             width: 48px;
@@ -146,6 +148,9 @@
         .btn-facebook { background: #1877f2; color: #fff; }
         .btn-instagram { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: #fff; }
         .btn-twitter { background: #000; color: #fff; }
+        .footer {
+            margin-top: 24px;
+        }
         .save-btn {
             display: flex;
             align-items: center;
@@ -176,45 +181,49 @@
             </div>
         </div>
 
-        <div class="action-pills">
+        <div class="action-buttons">
             <a href="tel:+27711234567" class="action-pill"><i class="fas fa-phone"></i> Call</a>
             <a href="mailto:amber@celebrateevents.co.za" class="action-pill"><i class="fas fa-envelope"></i> Email</a>
             <a href="https://wa.me/27711234567" class="action-pill"><i class="fab fa-whatsapp"></i> Chat</a>
             <a href="https://www.celebrateevents.co.za" class="action-pill"><i class="fas fa-globe"></i> Website</a>
         </div>
 
-        <div class="info-list">
-            <a href="tel:+27711234567" class="info-item">
-                <div class="info-icon"><i class="fas fa-phone"></i></div>
-                <div class="info-text">
-                    <div class="info-label">Phone</div>
-                    <div class="info-value">071 123 4567</div>
-                </div>
-            </a>
-            <a href="mailto:amber@celebrateevents.co.za" class="info-item">
-                <div class="info-icon"><i class="fas fa-envelope"></i></div>
-                <div class="info-text">
-                    <div class="info-label">Email</div>
-                    <div class="info-value">amber@celebrateevents.co.za</div>
-                </div>
-            </a>
-            <a href="https://maps.google.com/?q=Green+Point,+Cape+Town" class="info-item">
-                <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
-                <div class="info-text">
-                    <div class="info-label">Location</div>
-                    <div class="info-value">Green Point, Cape Town</div>
-                </div>
-            </a>
+        <div class="body">
+            <div class="info-list">
+                <a href="tel:+27711234567" class="info-item">
+                    <div class="info-icon"><i class="fas fa-phone"></i></div>
+                    <div class="info-text">
+                        <div class="info-label">Phone</div>
+                        <div class="info-value">071 123 4567</div>
+                    </div>
+                </a>
+                <a href="mailto:amber@celebrateevents.co.za" class="info-item">
+                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info-text">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">amber@celebrateevents.co.za</div>
+                    </div>
+                </a>
+                <a href="https://maps.google.com/?q=Green+Point,+Cape+Town" class="info-item">
+                    <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="info-text">
+                        <div class="info-label">Location</div>
+                        <div class="info-value">Green Point, Cape Town</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="social-row">
+                <a href="https://linkedin.com/in/amberjohnson" class="social-btn btn-linkedin"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://facebook.com/celebrateevents" class="social-btn btn-facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://instagram.com/celebrateevents" class="social-btn btn-instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://twitter.com/amberjohnson" class="social-btn btn-twitter"><i class="fab fa-x-twitter"></i></a>
+            </div>
         </div>
 
-        <div class="social-row">
-            <a href="https://linkedin.com/in/amberjohnson" class="social-btn btn-linkedin"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://facebook.com/celebrateevents" class="social-btn btn-facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://instagram.com/celebrateevents" class="social-btn btn-instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://twitter.com/amberjohnson" class="social-btn btn-twitter"><i class="fab fa-x-twitter"></i></a>
+        <div class="footer">
+            <a href="amber_johnson.vcf" class="save-btn"><i class="fas fa-user-plus"></i> Save Contact</a>
         </div>
-
-        <a href="amber_johnson.vcf" class="save-btn"><i class="fas fa-user-plus"></i> Save Contact</a>
     </div>
     <script src="../vcard-generator.js"></script>
 </body>

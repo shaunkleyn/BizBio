@@ -53,7 +53,7 @@
             font-size: 13px;
             color: #a0aec0;
         }
-        .action-row {
+        .action-buttons {
             display: flex;
             justify-content: center;
             gap: 16px;
@@ -81,13 +81,14 @@
         .action-btn.phone { background: linear-gradient(135deg, #3b82f6, #2563eb); }
         .action-btn.video { background: linear-gradient(135deg, #ef4444, #dc2626); }
         .action-btn.email { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-        .info-section {
+        .body {
             background: #323d4d;
             border-radius: 20px;
             padding: 24px;
             box-shadow:
                 inset 4px 4px 8px #2a3444,
                 inset -4px -4px 8px #3a4656;
+            margin-bottom: 24px;
         }
         .info-item {
             display: flex;
@@ -137,12 +138,14 @@
             font-size: 12px;
             gap: 8px;
         }
+        .footer {
+            margin-top: 24px;
+        }
         .save-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin-top: 24px;
             padding: 16px;
             background: linear-gradient(135deg, #3b82f6, #2563eb);
             color: #fff;
@@ -172,14 +175,14 @@
             <p class="title">yesterday</p>
         </div>
 
-        <div class="action-row">
+        <div class="action-buttons">
             <a href="https://wa.me/27681234567" class="action-btn whatsapp"><i class="fab fa-whatsapp"></i></a>
             <a href="tel:+27681234567" class="action-btn phone"><i class="fas fa-phone"></i></a>
             <a href="#" class="action-btn video"><i class="fas fa-video"></i></a>
             <a href="mailto:james@techforge.co.za" class="action-btn email"><i class="fas fa-envelope"></i></a>
         </div>
 
-        <div class="info-section">
+        <div class="body">
             <a href="tel:+27681234567" class="info-item">
                 <i class="fas fa-phone info-icon"></i>
                 <div class="info-content">
@@ -201,16 +204,18 @@
                     <div class="info-value">Rosebank, Johannesburg</div>
                 </div>
             </a>
+
+            <div class="map-preview">
+                <i class="fas fa-map"></i>
+                <span>25.8 km away</span>
+            </div>
         </div>
 
-        <div class="map-preview">
-            <i class="fas fa-map"></i>
-            <span>25.8 km away</span>
+        <div class="footer">
+            <a href="james_wilson.vcf" class="save-btn">
+                <i class="fas fa-user-plus"></i> Save Contact
+            </a>
         </div>
-
-        <a href="james_wilson.vcf" class="save-btn">
-            <i class="fas fa-user-plus"></i> Save Contact
-        </a>
     </div>
     <script src="../vcard-generator.js"></script>
 </body>

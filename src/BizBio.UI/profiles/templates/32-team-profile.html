@@ -173,8 +173,15 @@
             margin: 4px 0;
         }
 
+        /* Standard semantic aliases */
+        .card {}
+        .header {}
+        .action-buttons {}
+        .body { display: contents; }
+        .footer {}
+
         /* Quick-link icon row */
-        .quick-links {
+        .action-buttons {
             display: flex;
             justify-content: center;
             gap: 14px;
@@ -951,10 +958,10 @@
     <!-- ============================
          MAIN CARD
     ============================= -->
-    <div class="page-wrapper">
+    <div class="page-wrapper card">
 
         <!-- Header -->
-        <header class="site-header">
+        <header class="site-header header">
             <div class="header-title-block">
                 <span class="line1 card-name">Acme</span>
                 <span class="line2 job-title">Engineering</span>
@@ -973,7 +980,7 @@
                 <div class="profile-divider"></div>
 
                 <!-- Quick-link icon row -->
-                <div class="quick-links">
+                <div class="action-buttons">
                     <a href="tel:+27000000000" class="quick-link-btn ql-phone" title="Call Us" aria-label="Call Us">
                         <i class="fas fa-phone-alt"></i>
                     </a>
@@ -998,7 +1005,7 @@
         </section>
 
         <!-- Dark Contact + Map + Team Section -->
-        <section class="dark-section">
+        <section class="dark-section body">
             <div class="dark-section-inner">
                 <!-- Left: menu rows -->
                 <div class="dark-section-left">
@@ -1138,7 +1145,7 @@
         </div>
 
         <!-- Footer -->
-        <footer class="bizbio-footer">
+        <footer class="bizbio-footer footer">
             <div>Created &amp; Hosted by <a href="https://www.bizbio.co.za" target="_blank">BizBio</a></div>
             <div style="margin-top:4px;font-size:0.68rem;opacity:0.6;">&copy; 2025 BizBio. All rights reserved.</div>
         </footer>

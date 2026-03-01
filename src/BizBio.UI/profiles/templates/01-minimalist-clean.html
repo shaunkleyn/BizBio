@@ -52,7 +52,7 @@
             color: #666;
             font-weight: 400;
         }
-        .actions {
+        .action-buttons {
             display: flex;
             justify-content: center;
             gap: 12px;
@@ -140,9 +140,12 @@
             background: #1a1a1a;
             border-color: #1a1a1a;
         }
+        .footer {
+            padding: 0 30px 30px;
+        }
         .save-btn {
             display: block;
-            margin: 20px 30px 30px;
+            margin: 20px 0 0;
             padding: 14px;
             background: #1a1a1a;
             color: #fff;
@@ -178,7 +181,7 @@
 
 
         <!-- Primary actions -->
-        <div class="actions">
+        <div class="action-buttons">
           <template x-for="a in card.actions" :key="a.label">
             <a
               :href="actionHref(a)"
@@ -187,7 +190,7 @@
           </template>
         </div>
 
-        <div>
+        <div class="body">
             <div class="info-section">
             <template x-for="a in card.actions" :key="a.label">
                     <div class="info-item">
@@ -199,30 +202,27 @@
                     </div>
             </template>
             </div>
-        </div>
 
-        <div class="social-links">
-            <template x-for="s in card.socials" :key="s.url">
-                <a :href="s.url" class="social-link"><i :class="resolveSocialIcon(s.url)"></i></a>
-            </template>
+            <div class="social-links">
+                <template x-for="s in card.socials" :key="s.url">
+                    <a :href="s.url" class="social-link"><i :class="resolveSocialIcon(s.url)"></i></a>
+                </template>
+            </div>
         </div>
 
         <!-- CTA -->
         <template x-if="card.cta">
-          <section style="margin-top:16px;">
+          <div class="footer">
             <a
                 class="save-btn"
               :href="card.cta.url"
               x-text="card.cta.buttonLabel"
             ></a>
-          </section>
+          </div>
         </template>
       </div>
     </template>
   </main>
     <script src="../vcard-generator.js"></script>
 </body>
-</body>
-</html>
-
 </html>

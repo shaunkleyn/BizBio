@@ -125,12 +125,14 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
-        .actions {
+        .action-buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 1px;
             background: rgba(0, 255, 136, 0.1);
         }
+        .body {}
+        .footer {}
         .action-btn {
             display: flex;
             flex-direction: column;
@@ -262,7 +264,7 @@
                 </div>
             </div>
 
-            <div class="actions">
+            <div class="action-buttons">
                 <a href="tel:+27609876543" class="action-btn">
                     <i class="fas fa-phone"></i>
                     <span>Call</span>
@@ -281,6 +283,7 @@
                 </a>
             </div>
 
+            <div class="body">
             <div class="info-section">
                 <a href="tel:+27609876543" class="info-item">
                     <div class="info-icon"><i class="fas fa-phone"></i></div>
@@ -312,10 +315,13 @@
                 <a href="https://dribbble.com/aidenkruger" class="social-link"><i class="fab fa-dribbble"></i></a>
             </div>
 
+            </div><!-- /body -->
+            <div class="footer">
             <a href="aiden_kruger.vcf" class="save-btn">
                 <i class="fas fa-download"></i>
                 Download vCard
             </a>
+            </div>
         </div>
     </div>
     <script src="../vcard-generator.js"></script>

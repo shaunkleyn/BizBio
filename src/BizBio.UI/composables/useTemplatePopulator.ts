@@ -401,12 +401,30 @@ function buildCssOverrides(state: WizardState): string {
       ${a.iconStyle === 'none' ? 'background: transparent !important; box-shadow: none !important;' : `background: ${a.primaryColor} !important; color: ${a.buttonTextColor} !important;`}
     }
 
+    /* ── Action-buttons wrapper ───────────────────── */
+    .action-buttons .action-btn, .action-buttons .action-item,
+    .action-buttons a, .action-buttons button {
+      border-radius: ${ir} !important;
+    }
+
     /* ── CTA / save-contact button ────────────────── */
     .cta-btn, .cta-button, .save-contact-btn, .save-btn,
     .btn-cta, .btn-primary, .download-btn, .vcard-btn,
     a[href$=".vcf"], button[data-cta], .save-contact {
       ${ctaStyle}
       border-radius: ${br} !important;
+    }
+
+    /* ── Footer / CTA area ───────────────────────── */
+    .footer { padding: 0 20px 20px; }
+    .footer .cta-btn, .footer .save-btn, .footer a, .footer button {
+      ${ctaStyle}
+      border-radius: ${br} !important;
+    }
+
+    /* ── Body content area ───────────────────────── */
+    .body, .card .body {
+      font-family: var(--body-font);
     }
 
     /* ── Extra sections injected below template ───── */
@@ -566,13 +584,8 @@ export const useTemplatePopulator = () => {
     const sectionsScript = sectionsHtml
       ? `<script>(function() {
   var html = ${JSON.stringify(sectionsHtml)};
-  var c = document.querySelector('.card > .content')
-    || document.querySelector('.card .content')
-    || document.querySelector('.card .info-section')
-    || document.querySelector('.card .info-content')
-    || document.querySelector('.card .main-card')
-    || document.querySelector('.card .card-inner')
-    || document.querySelector('.card .profile-card-inner')
+  var c = document.querySelector('.card > .body')
+    || document.querySelector('.card .body')
     || document.querySelector('.card');
   if (c) {
     var t = document.createElement('div');
