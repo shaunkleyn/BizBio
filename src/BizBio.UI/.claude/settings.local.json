@@ -64,7 +64,10 @@
       "Bash(git ls-tree:*)",
       "Bash(gh workflow run:*)",
       "WebFetch(domain:github.com)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(git:*)",
+      "Bash(echo === $\\(basename \"$template\"\\) ===:*)",
+      "Bash(echo === Template $i ===:*)"
     ],
     "deny": [],
     "ask": []

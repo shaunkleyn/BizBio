@@ -2,7 +2,7 @@ import { defineEventHandler, getRequestURL, setResponseHeader, sendRedirect } fr
 import { readFile, stat } from 'fs/promises'
 import { join } from 'path'
 
-const SKIP_PREFIXES = ['/_nuxt', '/api/', '/__nuxt', '/@', '/favicon']
+const SKIP_PREFIXES = ['/_nuxt', '/api/', '/__nuxt', '/@', '/favicon', '/templates']
 
 // Block the /templates/ directory index so it can't be browsed directly,
 // but individual template files (e.g. /templates/29-blue-dashboard.html) must

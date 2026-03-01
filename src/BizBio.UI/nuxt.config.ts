@@ -1,4 +1,5 @@
 import { defineNuxtConfig } from "nuxt/config";
+import { fileURLToPath } from "node:url";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -90,7 +91,7 @@ export default defineNuxtConfig({
     // available in .output/public/templates/ after `npm run build`.
     publicAssets: [
       {
-        dir: 'profiles/templates',
+        dir: fileURLToPath(new URL('./profiles/templates', import.meta.url)),
         baseURL: '/templates',
         maxAge: 60 * 60 * 24, // 24 h browser cache
       },
