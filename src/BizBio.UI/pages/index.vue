@@ -49,13 +49,13 @@
 
             <!-- CTA Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8 scroll-fade-up">
-              <NuxtLink
-                to="/register"
+              <a
+                href="https://app.snaptap.co.za/register"
                 class="scroll-in inline-flex items-center justify-center bg-[var(--primary-color)] text-[var(--primary-button-text-color)] px-8 py-4 rounded-[var(--button-rounded-radius)] hover:bg-[var(--primary-button-hover-bg-color)] transition-all duration-300 font-semibold font-[var(--font-family-body)] shadow-lg hover:shadow-xl"
               >
                 <i class="fas fa-rocket mr-2"></i>
                 Get Started Free
-              </NuxtLink>
+              </a>
               <NuxtLink
                 to="/pricing"
                 class="scroll-in inline-flex items-center justify-center border-2 border-[var(--primary-color)] text-[var(--primary-color)] px-8 py-4 rounded-[var(--button-rounded-radius)] hover:bg-[var(--primary-color)] hover:text-white transition-all duration-300 font-semibold font-[var(--font-family-body)]"
@@ -313,12 +313,12 @@
 
             <!-- CTA Button -->
             <div class="pt-4">
-              <NuxtLink
-                to="/register"
+              <a
+                href="https://app.snaptap.co.za/register"
                 class="scroll-in inline-flex items-center bg-[var(--primary-color)] text-[var(--primary-button-text-color)] px-8 py-4 rounded-[var(--button-rounded-radius)] hover:bg-[var(--primary-button-hover-bg-color)] transition-all duration-300 font-semibold font-[var(--font-family-body)] shadow-lg hover:shadow-xl">
                 Start Building Your Profile
                 <i class="fas fa-arrow-right ml-2"></i>
-              </NuxtLink>
+              </a>
             </div>
           </div>
         </div>
@@ -463,13 +463,13 @@
 
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <NuxtLink
-            to="/register"
+          <a
+            href="https://app.snaptap.co.za/register"
             class="scroll-in inline-flex items-center justify-center bg-white text-[var(--primary-color)] px-8 py-4 rounded-[var(--button-rounded-radius)] hover:scale-105 hover:-translate-y-1 transition-all duration-300 font-semibold font-[var(--font-family-body)] shadow-xl"
           >
             <i class="fas fa-user-plus mr-2"></i>
             Create Your Profile Now
-          </NuxtLink>
+          </a>
           <NuxtLink
             to="/pricing"
             class="scroll-in inline-flex items-center justify-center border-2 border-white text-white px-8 py-4 rounded-[var(--button-rounded-radius)] hover:bg-white hover:text-[var(--primary-color)] transition-all duration-300 font-semibold font-[var(--font-family-body)]"

@@ -737,7 +737,7 @@
                         if (navigator.canShare({ files: [file] })) {
                             await navigator.share({
                                 title: 'Contact Details',
-                                text: 'Here are my contact details. Get yours on BizBio.co.za today!',
+                                text: 'Here are my contact details. Get yours on SnapTap.co.za today!',
                                 files: [file]
                             });
                             return;
@@ -751,7 +751,7 @@
                 if (navigator.share) {
                     await navigator.share({
                         title: 'Contact Details',
-                        text: 'Here are my contact details. Get yours on BizBio.co.za today!',
+                        text: 'Here are my contact details. Get yours on SnapTap.co.za today!',
                         url: window.location.href
                     });
                     return;

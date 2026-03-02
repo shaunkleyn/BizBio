@@ -262,6 +262,9 @@ useHead(() => ({
     { name: 'twitter:title', content: `${catalogData.value?.name} - ${entityData.value?.name}` },
     { name: 'twitter:description', content: catalogData.value?.description || entityData.value?.description },
     { name: 'twitter:image', content: catalogData.value?.coverImage || entityData.value?.logo }
+  ],
+  link: [
+    { rel: 'canonical', href: `https://menu.snaptap.co.za/${route.params.entitySlug}/${route.params.catalogSlug}` }
   ]
 }))
 
