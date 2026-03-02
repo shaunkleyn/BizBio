@@ -2,6 +2,8 @@ import { defineEventHandler, getRequestURL, setResponseHeader, sendRedirect } fr
 import { readFile, stat } from 'fs/promises'
 import { join } from 'path'
 
+const PROFILES_DIR = process.env.PROFILES_DIR || join(process.cwd(), 'profiles')
+
 const SKIP_PREFIXES = ['/_nuxt', '/api/', '/__nuxt', '/@', '/favicon', '/templates']
 
 // Block the /templates/ directory index so it can't be browsed directly,
@@ -39,8 +41,7 @@ export default defineEventHandler(async (event) => {
     // Block directory index browsing for internal subdirectories (exact match only)
     if (BLOCKED_DIRECTORY_INDEXES.includes(pathname)) return
 
-    const profilesDir = join(process.cwd(), 'profiles')
-    let filePath = join(profilesDir, pathname)
+    let filePath = join(PROFILES_DIR, pathname)
 
     try {
         const stats = await stat(filePath)

@@ -3,6 +3,7 @@ import { stat } from 'fs/promises'
 import { join } from 'path'
 
 const API_URL = process.env.NUXT_PUBLIC_API_URL || 'https://api.bizbio.co.za/api/v1'
+const PROFILES_DIR = process.env.PROFILES_DIR || join(process.cwd(), 'profiles')
 
 // Root domains that serve profiles directly at /{slug} with no redirect.
 // Add additional domains here as the brand expands.
@@ -40,7 +41,7 @@ const INTERNAL_PREFIXES = [
 
 async function isStaticCardSlug(slug: string): Promise<boolean> {
   try {
-    const s = await stat(join(process.cwd(), 'profiles', slug))
+    const s = await stat(join(PROFILES_DIR, slug))
     return s.isDirectory()
   } catch {
     return false

@@ -282,6 +282,8 @@ Key behaviours:
 - Entity slugs (menus) → 301 `menu.snaptap.co.za`
 - `/templates` in `INTERNAL_PREFIXES` so Nitro's `publicAssets` handler serves templates at `/templates/*`
 
+> **Profiles directory**: Both `00.domain-routing.ts` and `profiles.ts` resolve the profiles directory via `process.env.PROFILES_DIR` (falling back to `cwd/profiles`). The SnapTap PM2 instance sets `PROFILES_DIR=/var/www/bizbio/ui/profiles` so both processes share the same profiles without requiring a separate copy or symlink on the VPS.
+
 ---
 
 ## Phase 5 — Landing Page CTA Links
@@ -479,14 +481,14 @@ echo | openssl s_client -connect app.snaptap.co.za:443 -servername app.snaptap.c
 
 | File | Status | Notes |
 |------|--------|-------|
-| `server/middleware/00.domain-routing.ts` | ✅ Done | Domain routing middleware |
-| `server/middleware/profiles.ts` | ✅ Done | `/templates` in SKIP_PREFIXES |
+| `server/middleware/00.domain-routing.ts` | ✅ Done | Domain routing middleware; `PROFILES_DIR` env var support |
+| `server/middleware/profiles.ts` | ✅ Done | `/templates` in SKIP_PREFIXES; `PROFILES_DIR` env var support |
 | `nuxt.config.ts` | ✅ Done | publicAssets for templates |
 | `pages/index.vue` | ✅ Done | CTA links → absolute `app.snaptap.co.za` URLs |
 | `profiles/vcard-generator.js` | ✅ Done | Branding text → SnapTap.co.za |
 | `public/robots.txt` | ✅ Done | Points to snaptap.co.za/sitemap.xml |
 | `pages/[entitySlug]/[catalogSlug].vue` | ✅ Done | Canonical tag → menu.snaptap.co.za |
-| `ecosystem.config.cjs` | ✅ Done | Both entries use `./current/server/index.mjs`; `snaptap-frontend` cwd → `/var/www/snaptap/ui`; `bizbio-frontend` explicit cwd → `/var/www/bizbio/ui` |
+| `ecosystem.config.cjs` | ✅ Done | Both entries use `./current/server/index.mjs`; `snaptap-frontend` cwd → `/var/www/snaptap/ui`; `bizbio-frontend` explicit cwd → `/var/www/bizbio/ui`; `PROFILES_DIR=/var/www/bizbio/ui/profiles` set on both instances |
 
 ### VPS (require SSH access)
 
