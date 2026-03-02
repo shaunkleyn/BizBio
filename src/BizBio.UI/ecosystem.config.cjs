@@ -5,7 +5,8 @@ module.exports = {
       port: '3000',
       exec_mode: 'cluster',
       instances: 2, // Adjust based on VPS CPU cores (2 for 1-2 cores, 4 for 4+ cores)
-      script: './.output/server/index.mjs',
+      script: './current/server/index.mjs',
+      cwd: '/var/www/bizbio/ui',
       env: {
         NODE_ENV: 'production',
         PORT: 3000,
@@ -57,8 +58,8 @@ module.exports = {
       port: '3001',
       exec_mode: 'cluster',
       instances: 2,
-      script: './.output/server/index.mjs',
-      cwd: '/var/www/snaptap-ui',
+      script: './current/server/index.mjs',
+      cwd: '/var/www/snaptap/ui',
       env: {
         NODE_ENV: 'production',
         PORT: 3001,
