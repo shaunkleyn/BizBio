@@ -188,7 +188,7 @@ stages:
                   # Extract build
                   echo ">>> Extracting build artifact..."
                   cd \${RELEASE_DIR}
-                  unzip -q ui.zip -d ui-build
+                  unzip -qo ui.zip -d ui-build
                   rm ui.zip
 
                   # Update ecosystem config
@@ -199,17 +199,14 @@ stages:
 
                   # Backup current
                   if [ -L \${TARGET_DIR}/current ]; then
-                    sudo rm -dfr \${TARGET_DIR}/previous || true
+                    rm -rf \${TARGET_DIR}/previous || true
                     mv \${TARGET_DIR}/current \${TARGET_DIR}/previous
                     echo ">>> Backed up current to previous"
                   fi
 
                   # Create symlink
-                  sudo ln -sfn \${RELEASE_DIR}/ui-build/. \${TARGET_DIR}/current
+                  ln -sfn \${RELEASE_DIR}/ui-build/. \${TARGET_DIR}/current
                   echo ">>> Symlink created"
-
-                  # Set permissions
-                  sudo chown -R www-data:www-data \${TARGET_DIR}/current
 
                   # Ensure directories exist
                   mkdir -p \${TARGET_DIR}/profiles
@@ -310,7 +307,7 @@ stages:
                   # --------------------------------------------
                   echo ">>> Extracting build artifact..."
                   cd \${RELEASE_DIR}
-                  unzip -q ui.zip -d ui-build
+                  unzip -qo ui.zip -d ui-build
                   rm ui.zip
 
                   echo ">>> Build contents:"
@@ -352,7 +349,7 @@ stages:
                     CURRENT_TARGET=\$(readlink \${TARGET_DIR}/current)
                     echo ">>> Current points to: \${CURRENT_TARGET}"
                     echo ">>> Backing up current to previous..."
-                    sudo rm -dfr \${TARGET_DIR}/previous || true
+                    rm -rf \${TARGET_DIR}/previous || true
                     mv \${TARGET_DIR}/current \${TARGET_DIR}/previous
                   fi
 
@@ -360,32 +357,23 @@ stages:
                   # 5. Create symlink to new release
                   # --------------------------------------------
                   echo ">>> Creating symlink to new release..."
-                  sudo ln -sfn \${RELEASE_DIR}/ui-build/. \${TARGET_DIR}/current
+                  ln -sfn \${RELEASE_DIR}/ui-build/. \${TARGET_DIR}/current
 
                   # --------------------------------------------
-                  # 6. Set permissions
-                  # --------------------------------------------
-                  echo ">>> Setting permissions..."
-                  sudo chown -R www-data:www-data \${TARGET_DIR}/current
-
-                  # --------------------------------------------
-                  # 7. Ensure profiles directory exists
+                  # 6. Ensure profiles directory exists
                   # --------------------------------------------
                   echo ">>> Ensuring profiles directory exists..."
-                  if [ ! -d "\${TARGET_DIR}/profiles" ]; then
-                    sudo mkdir -p \${TARGET_DIR}/profiles
-                    sudo chown -R www-data:www-data \${TARGET_DIR}/profiles
-                    echo ">>> Created profiles directory"
-                  fi
+                  mkdir -p \${TARGET_DIR}/profiles
+                  echo ">>> Profiles directory ready"
 
                   # --------------------------------------------
-                  # 8. Ensure logs directory exists
+                  # 7. Ensure logs directory exists
                   # --------------------------------------------
                   echo ">>> Ensuring logs directory exists..."
                   mkdir -p \${TARGET_DIR}/logs
 
                   # --------------------------------------------
-                  # 9. Reload PM2
+                  # 8. Reload PM2
                   # --------------------------------------------
                   echo ">>> Reloading PM2..."
                   cd \${TARGET_DIR}
@@ -398,7 +386,7 @@ stages:
                   pm2 save
 
                   # --------------------------------------------
-                  # 10. Cleanup old releases (keep last 5)
+                  # 9. Cleanup old releases (keep last 5)
                   # --------------------------------------------
                   echo ">>> Cleaning up old releases..."
                   cd \${TARGET_DIR}/releases
@@ -407,7 +395,7 @@ stages:
                   ls -la \${TARGET_DIR}/releases/
 
                   # --------------------------------------------
-                  # 11. Verify deployment
+                  # 10. Verify deployment
                   # --------------------------------------------
                   echo ">>> Verifying deployment..."
                   sleep 3

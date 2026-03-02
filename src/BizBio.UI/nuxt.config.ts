@@ -87,6 +87,13 @@ export default defineNuxtConfig({
     experimental: {
       wasm: false,
     },
+        publicAssets: [
+      {
+        dir: fileURLToPath(new URL('./profiles', import.meta.url)),
+        baseURL: '/profiles',
+        maxAge: 60 * 60 * 24, // 24 h browser cache
+      }
+    ],
     // Profile assets (JS, templates) are in public/profile-assets/ and served automatically.
     // User profile HTML files are served directly by Nginx from /var/www/{site}/ui/profiles/
   },
