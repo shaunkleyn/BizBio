@@ -87,20 +87,8 @@ export default defineNuxtConfig({
     experimental: {
       wasm: false,
     },
-    // Include template HTML files in the build output so they are
-    // available in .output/public/templates/ after `npm run build`.
-    publicAssets: [
-      {
-        dir: fileURLToPath(new URL('./profiles', import.meta.url)),
-        baseURL: '/profiles',
-        maxAge: 60 * 60 * 24, // 24 h browser cache
-      },
-      {
-        dir: fileURLToPath(new URL('./profiles/templates', import.meta.url)),
-        baseURL: '/templates',
-        maxAge: 60 * 60 * 24, // 24 h browser cache
-      }
-    ],
+    // Profile assets (JS, templates) are in public/profile-assets/ and served automatically.
+    // User profile HTML files are served directly by Nginx from /var/www/{site}/ui/profiles/
   },
   image: {
     quality: 80,

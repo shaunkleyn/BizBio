@@ -1,0 +1,20 @@
+:root{
+    --primary-color: #ffffff;
+    --secondary-color: #e5e5e5;
+    --page-background-color: #1a1a1a;
+    --card-bg-color: #1a1a1a;
+    --avatar-border-color: #ffffff;
+    --text-color: #ffffff;
+    --font-family: 'Bebas Neue', sans-serif;
+    --action-button-bg-color: rgba(255, 255, 255, 0.1);
+    --action-button-text-color: #ffffff;
+    --info-item-icon-bg-color: rgba(255, 255, 255, 0.1);
+    --info-item-label-color: #888888;
+    --info-item-text-color: #ffffff;
+    --info-item-icon-text-color: #ffffff;
+    --header-color: #ffffff;
+    --cta-button-bg-color: #ffffff;
+    --cta-button-text-color: #1a1a1a;
+    --button-radius: 50px;
+    --subtitle-color: #cccccc;
+}

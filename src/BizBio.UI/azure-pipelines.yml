@@ -1,134 +1,284 @@
-# Azure Pipelines configuration for BizBio.UI (Nuxt 3)
+# Azure DevOps Pipeline for BizBio API
+# This pipeline builds, tests, and deploys the BizBio ASP.NET Core API to a VPS
+
 trigger:
   branches:
     include:
-      - main
-      - develop
-      - feature/*
+    - main
+    - develop
+    - feature/*
   paths:
-    include:
-      - src/BizBio.UI/**
+    exclude:
+    - README.md
+    - docs/*
+    - .github/*
 
 pr:
   branches:
     include:
-      - main
-      - develop
-  paths:
-    include:
-      - src/BizBio.UI/**
-
-pool:
-  vmImage: 'ubuntu-latest'
+    - main
+    - develop
 
 variables:
-  nodeVersion: '18.x'
   buildConfiguration: 'Release'
-  workingDirectory: '$(Build.SourcesDirectory)/src/BizBio.UI'
+  dotnetVersion: '8.x'
+  projectPath: 'src/BizBio.API/BizBio.API.csproj'
+  solutionPath: 'BizBio.sln'
 
 stages:
-  - stage: Build
-    displayName: 'Build UI Application'
-    jobs:
-      - job: BuildJob
-        displayName: 'Build and Test'
-        steps:
-          - checkout: self
-            displayName: 'Checkout Repository'
+- stage: Build
+  displayName: 'Build and Test'
+  jobs:
+  - job: Build
+    displayName: 'Build Job'
+    pool:
+      vmImage: 'ubuntu-latest'
 
-          - task: NodeTool@0
-            displayName: 'Install Node.js $(nodeVersion)'
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Install .NET SDK'
+      inputs:
+        version: $(dotnetVersion)
+        includePreviewVersions: false
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore Dependencies'
+      inputs:
+        command: 'restore'
+        projects: '$(solutionPath)'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build Solution'
+      inputs:
+        command: 'build'
+        projects: '$(solutionPath)'
+        arguments: '--configuration $(buildConfiguration) --no-restore'
+
+    # Uncomment when tests are added
+    # - task: DotNetCoreCLI@2
+    #   displayName: 'Run Tests'
+    #   inputs:
+    #     command: 'test'
+    #     projects: '**/*Tests/*.csproj'
+    #     arguments: '--configuration $(buildConfiguration) --no-build --collect:"XPlat Code Coverage"'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish API'
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: '$(projectPath)'
+        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/api --no-build'
+        zipAfterPublish: true
+
+    - task: CopyFiles@2
+      displayName: 'Copy Deployment Scripts'
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: |
+          deploy/**
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifacts'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+# Deploy to Development/Staging Environment
+- stage: DeployDev
+  displayName: 'Deploy to Development'
+  dependsOn: Build
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  jobs:
+  - deployment: DeployDev
+    displayName: 'Deploy to Dev Server'
+    environment: 'Development'
+    pool:
+      vmImage: 'ubuntu-latest'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download Artifacts'
             inputs:
-              versionSpec: $(nodeVersion)
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop'
+              downloadPath: '$(System.ArtifactsDirectory)'
 
-          - task: Cache@2
-            displayName: 'Cache node_modules'
+          - task: Bash@3
+            displayName: 'Deploy to VPS via SSH'
             inputs:
-              key: 'npm | "$(Agent.OS)" | $(workingDirectory)/package-lock.json'
-              path: '$(workingDirectory)/node_modules'
-              restoreKeys: |
-                npm | "$(Agent.OS)"
+              targetType: 'inline'
+              script: |
+                # Install SSH key
+                mkdir -p ~/.ssh
+                echo "$(SSH_PRIVATE_KEY)" > ~/.ssh/id_rsa
+                chmod 600 ~/.ssh/id_rsa
+                ssh-keyscan -H $(VPS_HOST) >> ~/.ssh/known_hosts
 
-          - script: |
-              cd $(workingDirectory)
-              npm ci
-            displayName: 'Install Dependencies'
+                # Create deployment directory on VPS
+                ssh $(VPS_USER)@$(VPS_HOST) "mkdir -p /tmp/bizbio-deploy"
 
-          - script: |
-              cd $(workingDirectory)
-              npm run build
-            displayName: 'Build Application'
+                # Copy artifacts to VPS
+                scp -r $(System.ArtifactsDirectory)/drop/api/* $(VPS_USER)@$(VPS_HOST):/tmp/bizbio-deploy/
 
-          # Optional: Run tests if you have them
-          # - script: |
-          #     cd $(workingDirectory)
-          #     npm run test
-          #   displayName: 'Run Tests'
+                # Execute deployment script on VPS
+                ssh $(VPS_USER)@$(VPS_HOST) << 'ENDSSH'
+                  set -e
 
-          # Optional: Run linting
-          # - script: |
-          #     cd $(workingDirectory)
-          #     npm run lint
-          #   displayName: 'Run Linter'
+                  # Stop the service
+                  sudo systemctl stop bizbio-api || true
 
-          - task: ArchiveFiles@2
-            displayName: 'Archive Build Output'
+                  # Backup current deployment
+                  if [ -d /var/www/bizbio-api ]; then
+                    sudo cp -r /var/www/bizbio-api /var/www/bizbio-api.backup.$(date +%Y%m%d_%H%M%S)
+                  fi
+
+                  # Deploy new version
+                  sudo mkdir -p /var/www/bizbio-api
+                  sudo unzip -o /tmp/bizbio-deploy/BizBio.API.zip -d /var/www/bizbio-api/
+
+                  # Set permissions
+                  sudo chown -R www-data:www-data /var/www/bizbio-api
+                  sudo chmod -R 755 /var/www/bizbio-api
+
+                  # Ensure uploads directory exists
+                  sudo mkdir -p /var/www/uploads
+                  sudo chown -R www-data:www-data /var/www/uploads
+
+                  # Run database migrations (if needed)
+                  # cd /var/www/bizbio-api
+                  # sudo -u www-data dotnet BizBio.API.dll ef database update
+
+                  # Start the service
+                  sudo systemctl start bizbio-api
+                  sudo systemctl status bizbio-api
+
+                  # Cleanup
+                  rm -rf /tmp/bizbio-deploy
+                ENDSSH
+
+                # Verify deployment
+                echo "Waiting for service to start..."
+                sleep 10
+
+                # Test the API health endpoint
+                curl -f https://api.bizbio.co.za/health || exit 1
+                echo "Deployment successful!"
+
+# Deploy to Production Environment
+- stage: DeployProd
+  displayName: 'Deploy to Production'
+  dependsOn: Build
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  jobs:
+  - deployment: DeployProd
+    displayName: 'Deploy to Production Server'
+    environment: 'Production'
+    pool:
+      vmImage: 'ubuntu-latest'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download Artifacts'
             inputs:
-              rootFolderOrFile: '$(workingDirectory)/.output'
-              includeRootFolder: false
-              archiveType: 'zip'
-              archiveFile: '$(Build.ArtifactStagingDirectory)/bizbio-ui-$(Build.BuildId).zip'
-              replaceExistingArchive: true
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'drop'
+              downloadPath: '$(System.ArtifactsDirectory)'
 
-          - task: PublishBuildArtifacts@1
-            displayName: 'Publish Build Artifacts'
+          - task: Bash@3
+            displayName: 'Deploy to Production VPS via SSH'
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'ui-build'
-              publishLocation: 'Container'
+              targetType: 'inline'
+              script: |
+                # Install SSH key
+                mkdir -p ~/.ssh
+                echo "$(SSH_PRIVATE_KEY)" > ~/.ssh/id_rsa
+                chmod 600 ~/.ssh/id_rsa
+                ssh-keyscan -H $(VPS_HOST) >> ~/.ssh/known_hosts
 
-  - stage: Deploy
-    displayName: 'Deploy to Environment'
-    dependsOn: Build
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-    jobs:
-      - deployment: DeployProduction
-        displayName: 'Deploy to Production'
-        environment: 'production'
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - download: current
-                  artifact: ui-build
+                # Create deployment directory on VPS
+                ssh $(VPS_USER)@$(VPS_HOST) "mkdir -p /tmp/bizbio-deploy"
 
-                - task: ExtractFiles@1
-                  displayName: 'Extract Build Files'
-                  inputs:
-                    archiveFilePatterns: '$(Pipeline.Workspace)/ui-build/*.zip'
-                    destinationFolder: '$(Pipeline.Workspace)/deploy'
-                    cleanDestinationFolder: true
+                # Copy artifacts to VPS
+                scp -r $(System.ArtifactsDirectory)/drop/api/* $(VPS_USER)@$(VPS_HOST):/tmp/bizbio-deploy/
 
-                # Add deployment steps here based on your hosting provider
-                # Examples:
+                # Execute deployment script on VPS
+                ssh $(VPS_USER)@$(VPS_HOST) << 'ENDSSH'
+                  set -e
 
-                # For Azure Static Web Apps:
-                # - task: AzureStaticWebApp@0
-                #   inputs:
-                #     app_location: '$(Pipeline.Workspace)/deploy'
-                #     api_location: ''
-                #     output_location: ''
-                #     azure_static_web_apps_api_token: $(AZURE_STATIC_WEB_APPS_API_TOKEN)
+                  echo "Starting deployment to Production..."
 
-                # For Azure App Service:
-                # - task: AzureWebApp@1
-                #   inputs:
-                #     azureSubscription: 'YourAzureSubscription'
-                #     appName: 'bizbio-ui'
-                #     package: '$(Pipeline.Workspace)/ui-build/*.zip'
+                  # Stop the service
+                  sudo systemctl stop bizbio-api || true
 
-                # For custom deployment:
-                - script: |
-                    echo "Deploy to your hosting provider"
-                    echo "Build artifacts are in: $(Pipeline.Workspace)/deploy"
-                  displayName: 'Custom Deployment'
+                  # Backup current deployment
+                  if [ -d /var/www/bizbio-api ]; then
+                    sudo cp -r /var/www/bizbio-api /var/www/bizbio-api.backup.$(date +%Y%m%d_%H%M%S)
+
+                    # Keep only last 5 backups
+                    cd /var/www
+                    ls -t bizbio-api.backup.* 2>/dev/null | tail -n +6 | xargs -r sudo rm -rf
+                  fi
+
+                  # Deploy new version
+                  sudo mkdir -p /var/www/bizbio-api
+                  sudo unzip -o /tmp/bizbio-deploy/BizBio.API.zip -d /var/www/bizbio-api/
+
+                  # Set permissions
+                  sudo chown -R www-data:www-data /var/www/bizbio-api
+                  sudo chmod -R 755 /var/www/bizbio-api
+
+                  # Ensure uploads directory exists
+                  sudo mkdir -p /var/www/uploads
+                  sudo chown -R www-data:www-data /var/www/uploads
+
+                  # Run database migrations
+                  echo "Running database migrations..."
+                  cd /var/www/bizbio-api
+                  # sudo -u www-data dotnet BizBio.API.dll ef database update
+
+                  # Start the service
+                  echo "Starting bizbio-api service..."
+                  sudo systemctl start bizbio-api
+
+                  # Wait for service to start
+                  sleep 5
+
+                  # Check service status
+                  sudo systemctl status bizbio-api --no-pager
+
+                  # Cleanup
+                  rm -rf /tmp/bizbio-deploy
+
+                  echo "Deployment completed successfully!"
+                ENDSSH
+
+                # Verify deployment
+                echo "Verifying deployment..."
+                sleep 10
+
+                # Test the API health endpoint
+                if curl -f https://api.bizbio.co.za/health; then
+                  echo "✅ Production deployment successful!"
+                else
+                  echo "❌ Health check failed!"
+                  exit 1
+                fi
+
+          - task: Bash@3
+            displayName: 'Notify Deployment Success'
+            condition: succeeded()
+            inputs:
+              targetType: 'inline'
+              script: |
+                echo "Production deployment completed successfully at $(date)"
+                echo "Build: $(Build.BuildNumber)"
+                echo "Commit: $(Build.SourceVersion)"

@@ -1,0 +1,20 @@
+:root{
+    --primary-color: #a855f7;
+    --secondary-color: #ec4899;
+    --page-background-color: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+    --card-bg-color: #ffffff;
+    --avatar-border-color: #a855f7;
+    --text-color: #1f2937;
+    --font-family: 'Plus Jakarta Sans', sans-serif;
+    --action-button-bg-color: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+    --action-button-text-color: #ffffff;
+    --info-item-icon-bg-color: rgba(168, 85, 247, 0.1);
+    --info-item-label-color: #9ca3af;
+    --info-item-text-color: #1f2937;
+    --info-item-icon-text-color: #a855f7;
+    --header-color: #1f2937;
+    --cta-button-bg-color: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+    --cta-button-text-color: #ffffff;
+    --button-radius: 12px;
+    --subtitle-color: #a855f7;
+}

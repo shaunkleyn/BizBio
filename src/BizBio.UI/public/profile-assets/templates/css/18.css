@@ -1,0 +1,20 @@
+:root{
+    --primary-color: #003366;
+    --secondary-color: #66b3ff;
+    --page-background-color: #f0f4f8;
+    --card-bg-color: #ffffff;
+    --avatar-border-color: #003366;
+    --text-color: #003366;
+    --font-family: 'Source Sans Pro', sans-serif;
+    --action-button-bg-color: #003366;
+    --action-button-text-color: #ffffff;
+    --info-item-icon-bg-color: rgba(0, 51, 102, 0.1);
+    --info-item-label-color: #66b3ff;
+    --info-item-text-color: #003366;
+    --info-item-icon-text-color: #003366;
+    --header-color: #003366;
+    --cta-button-bg-color: linear-gradient(135deg, #003366 0%, #66b3ff 100%);
+    --cta-button-text-color: #ffffff;
+    --button-radius: 8px;
+    --subtitle-color: #66b3ff;
+}

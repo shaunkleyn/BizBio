@@ -1,0 +1,463 @@
+# Azure DevOps Pipeline for SnapTap UI
+# This pipeline builds and deploys the SnapTap Nuxt UI to VPS
+
+trigger:
+  branches:
+    include:
+    - main
+    - develop
+    - feature/*
+  paths:
+    include:
+    - src/BizBio.UI/**
+
+pr:
+  branches:
+    include:
+    - main
+    - develop
+  paths:
+    include:
+    - src/BizBio.UI/**
+
+variables:
+  nodeVersion: '20.x'
+  workingDirectory: '$(Build.SourcesDirectory)/src/BizBio.UI'
+  targetDirectory: '/var/www/snaptap/ui'
+
+# ============================================================================
+# STAGE: BUILD
+# ============================================================================
+stages:
+- stage: Build
+  displayName: 'Build SnapTap UI'
+  jobs:
+  - job: BuildUI
+    displayName: 'Build Nuxt Application'
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    steps:
+    - task: NodeTool@0
+      displayName: 'Install Node.js $(nodeVersion)'
+      inputs:
+        versionSpec: $(nodeVersion)
+
+    - task: Cache@2
+      displayName: 'Cache node_modules'
+      inputs:
+        key: 'npm | "$(Agent.OS)" | $(workingDirectory)/package-lock.json'
+        path: '$(workingDirectory)/node_modules'
+        restoreKeys: |
+          npm | "$(Agent.OS)"
+
+    - script: |
+        cd $(workingDirectory)
+        npm ci
+      displayName: 'Install Dependencies'
+
+    - script: |
+        cd $(workingDirectory)
+        npm run build
+      displayName: 'Build Application'
+      env:
+        NODE_ENV: production
+
+    # Verify build output
+    - script: |
+        echo "=== Build Output Structure ==="
+        ls -la $(workingDirectory)/.output/
+        echo "=== Public folder ==="
+        ls -la $(workingDirectory)/.output/public/ | head -20
+        echo "=== Profile Assets ==="
+        ls -la $(workingDirectory)/.output/public/profile-assets/ || echo "profile-assets not found"
+      displayName: 'Verify Build Output'
+
+    # Archive the .output directory
+    - task: ArchiveFiles@2
+      displayName: 'Archive Build Output'
+      inputs:
+        rootFolderOrFile: '$(workingDirectory)/.output'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/ui.zip'
+        replaceExistingArchive: true
+
+    # Copy ecosystem config
+    - task: CopyFiles@2
+      displayName: 'Copy ecosystem.config.cjs'
+      inputs:
+        SourceFolder: '$(workingDirectory)'
+        Contents: 'ecosystem.config.cjs'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/config'
+
+    # Copy nginx config
+    - task: CopyFiles@2
+      displayName: 'Copy Nginx Config'
+      inputs:
+        SourceFolder: '$(workingDirectory)/nginx'
+        Contents: '*.conf'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/config/nginx'
+      continueOnError: true
+
+    # Copy deployment scripts
+    - task: CopyFiles@2
+      displayName: 'Copy Deployment Scripts'
+      inputs:
+        SourceFolder: '$(workingDirectory)/scripts'
+        Contents: '*.sh'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/scripts'
+      continueOnError: true
+
+    # Publish artifacts
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish UI Artifacts'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'ui-build'
+        publishLocation: 'Container'
+
+# ============================================================================
+# STAGE: Deploy to Development
+# ============================================================================
+- stage: DeployDev
+  displayName: 'Deploy to Development'
+  dependsOn: Build
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  jobs:
+  - deployment: DeployUIDev
+    displayName: 'Deploy UI to Dev'
+    environment: 'Development'
+    pool:
+      vmImage: 'ubuntu-latest'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download UI Artifacts'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'ui-build'
+              downloadPath: '$(System.ArtifactsDirectory)'
+
+          - task: Bash@3
+            displayName: 'Deploy UI via SSH'
+            inputs:
+              targetType: 'inline'
+              script: |
+                set -e
+
+                # Install SSH key
+                mkdir -p ~/.ssh
+                echo "$(SSH_PRIVATE_KEY)" > ~/.ssh/id_rsa
+                chmod 600 ~/.ssh/id_rsa
+                ssh-keyscan -H $(VPS_HOST) >> ~/.ssh/known_hosts
+
+                RELEASE_ID=$(Build.BuildId)
+                TARGET_DIR="$(targetDirectory)"
+
+                echo "=========================================="
+                echo "SnapTap UI Dev Deployment"
+                echo "Release: ${RELEASE_ID}"
+                echo "=========================================="
+
+                # Create release directory
+                ssh $(VPS_USER)@$(VPS_HOST) "mkdir -p ${TARGET_DIR}/releases/${RELEASE_ID}"
+
+                # Upload artifacts
+                echo ">>> Uploading build artifacts..."
+                scp $(System.ArtifactsDirectory)/ui-build/ui.zip $(VPS_USER)@$(VPS_HOST):${TARGET_DIR}/releases/${RELEASE_ID}/
+                scp $(System.ArtifactsDirectory)/ui-build/config/ecosystem.config.cjs $(VPS_USER)@$(VPS_HOST):${TARGET_DIR}/releases/${RELEASE_ID}/ 2>/dev/null || true
+                scp $(System.ArtifactsDirectory)/ui-build/config/nginx/*.conf $(VPS_USER)@$(VPS_HOST):${TARGET_DIR}/releases/${RELEASE_ID}/ 2>/dev/null || true
+
+                # Execute deployment
+                ssh $(VPS_USER)@$(VPS_HOST) << ENDSSH
+                  set -e
+
+                  TARGET_DIR="${TARGET_DIR}"
+                  RELEASE_ID="${RELEASE_ID}"
+                  RELEASE_DIR="\${TARGET_DIR}/releases/\${RELEASE_ID}"
+
+                  echo "=========================================="
+                  echo "Deploying Release \${RELEASE_ID}"
+                  echo "=========================================="
+
+                  # Extract build
+                  echo ">>> Extracting build artifact..."
+                  cd \${RELEASE_DIR}
+                  unzip -q ui.zip -d ui-build
+                  rm ui.zip
+
+                  # Update ecosystem config
+                  if [ -f "\${RELEASE_DIR}/ecosystem.config.cjs" ]; then
+                    cp \${RELEASE_DIR}/ecosystem.config.cjs \${TARGET_DIR}/ecosystem.config.cjs
+                    echo ">>> Ecosystem config updated"
+                  fi
+
+                  # Backup current
+                  if [ -L \${TARGET_DIR}/current ]; then
+                    sudo rm -dfr \${TARGET_DIR}/previous || true
+                    mv \${TARGET_DIR}/current \${TARGET_DIR}/previous
+                    echo ">>> Backed up current to previous"
+                  fi
+
+                  # Create symlink
+                  sudo ln -sfn \${RELEASE_DIR}/ui-build/. \${TARGET_DIR}/current
+                  echo ">>> Symlink created"
+
+                  # Set permissions
+                  sudo chown -R www-data:www-data \${TARGET_DIR}/current
+
+                  # Ensure directories exist
+                  mkdir -p \${TARGET_DIR}/profiles
+                  mkdir -p \${TARGET_DIR}/logs
+
+                  # Reload PM2
+                  cd \${TARGET_DIR}
+                  if pm2 list | grep -q "snaptap-frontend"; then
+                    pm2 reload ecosystem.config.cjs --only snaptap-frontend --env production
+                  else
+                    pm2 start ecosystem.config.cjs --only snaptap-frontend --env production
+                  fi
+                  pm2 save
+
+                  # Cleanup old releases (keep last 5)
+                  cd \${TARGET_DIR}/releases
+                  ls -dt */ | tail -n +6 | xargs -r rm -rf
+
+                  echo "=========================================="
+                  echo "Dev Deployment Complete!"
+                  echo "=========================================="
+                ENDSSH
+
+                echo ">>> UI Dev Deployment complete!"
+
+# ============================================================================
+# STAGE: Deploy to Production
+# ============================================================================
+- stage: DeployProd
+  displayName: 'Deploy to Production'
+  dependsOn: Build
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  jobs:
+  - deployment: DeployUIProd
+    displayName: 'Deploy UI to Production'
+    environment: 'Production'
+    pool:
+      vmImage: 'ubuntu-latest'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@0
+            displayName: 'Download UI Artifacts'
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              artifactName: 'ui-build'
+              downloadPath: '$(System.ArtifactsDirectory)'
+
+          - task: Bash@3
+            displayName: 'Deploy UI to Production VPS'
+            inputs:
+              targetType: 'inline'
+              script: |
+                set -e
+
+                # Install SSH key
+                mkdir -p ~/.ssh
+                echo "$(SSH_PRIVATE_KEY)" > ~/.ssh/id_rsa
+                chmod 600 ~/.ssh/id_rsa
+                ssh-keyscan -H $(VPS_HOST) >> ~/.ssh/known_hosts
+
+                RELEASE_ID=$(Build.BuildId)
+                TARGET_DIR="$(targetDirectory)"
+
+                echo "=========================================="
+                echo "SnapTap UI Production Deployment"
+                echo "Release: ${RELEASE_ID}"
+                echo "=========================================="
+
+                # Create release directory
+                ssh $(VPS_USER)@$(VPS_HOST) "mkdir -p ${TARGET_DIR}/releases/${RELEASE_ID}"
+
+                # Upload artifacts
+                echo ">>> Uploading build artifacts..."
+                scp $(System.ArtifactsDirectory)/ui-build/ui.zip $(VPS_USER)@$(VPS_HOST):${TARGET_DIR}/releases/${RELEASE_ID}/
+
+                # Upload configs
+                scp $(System.ArtifactsDirectory)/ui-build/config/ecosystem.config.cjs $(VPS_USER)@$(VPS_HOST):${TARGET_DIR}/releases/${RELEASE_ID}/ 2>/dev/null || true
+                scp $(System.ArtifactsDirectory)/ui-build/config/nginx/*.conf $(VPS_USER)@$(VPS_HOST):${TARGET_DIR}/releases/${RELEASE_ID}/ 2>/dev/null || true
+
+                # Execute deployment
+                ssh $(VPS_USER)@$(VPS_HOST) << ENDSSH
+                  set -e
+
+                  TARGET_DIR="${TARGET_DIR}"
+                  RELEASE_ID="${RELEASE_ID}"
+                  RELEASE_DIR="\${TARGET_DIR}/releases/\${RELEASE_ID}"
+
+                  echo "=========================================="
+                  echo "Deploying Release \${RELEASE_ID}"
+                  echo "=========================================="
+
+                  # --------------------------------------------
+                  # 1. Extract build artifact
+                  # --------------------------------------------
+                  echo ">>> Extracting build artifact..."
+                  cd \${RELEASE_DIR}
+                  unzip -q ui.zip -d ui-build
+                  rm ui.zip
+
+                  echo ">>> Build contents:"
+                  ls -la \${RELEASE_DIR}/ui-build/
+
+                  # --------------------------------------------
+                  # 2. Update Nginx configuration
+                  # --------------------------------------------
+                  echo ">>> Checking Nginx configuration..."
+                  if [ -f "\${RELEASE_DIR}/snaptap.co.za.conf" ]; then
+                    echo ">>> Updating Nginx config..."
+                    sudo cp \${RELEASE_DIR}/snaptap.co.za.conf /etc/nginx/sites-available/snaptap.co.za
+                    sudo nginx -t
+                    if [ \$? -eq 0 ]; then
+                      sudo systemctl reload nginx
+                      echo ">>> Nginx configuration updated and reloaded"
+                    else
+                      echo ">>> ERROR: Nginx config test failed, keeping old config"
+                      exit 1
+                    fi
+                  else
+                    echo ">>> No nginx config in release, keeping existing"
+                  fi
+
+                  # --------------------------------------------
+                  # 3. Update ecosystem.config.cjs
+                  # --------------------------------------------
+                  echo ">>> Updating PM2 ecosystem config..."
+                  if [ -f "\${RELEASE_DIR}/ecosystem.config.cjs" ]; then
+                    cp \${RELEASE_DIR}/ecosystem.config.cjs \${TARGET_DIR}/ecosystem.config.cjs
+                    echo ">>> Ecosystem config updated"
+                  fi
+
+                  # --------------------------------------------
+                  # 4. Backup current release
+                  # --------------------------------------------
+                  echo ">>> Managing release symlinks..."
+                  if [ -L \${TARGET_DIR}/current ]; then
+                    CURRENT_TARGET=\$(readlink \${TARGET_DIR}/current)
+                    echo ">>> Current points to: \${CURRENT_TARGET}"
+                    echo ">>> Backing up current to previous..."
+                    sudo rm -dfr \${TARGET_DIR}/previous || true
+                    mv \${TARGET_DIR}/current \${TARGET_DIR}/previous
+                  fi
+
+                  # --------------------------------------------
+                  # 5. Create symlink to new release
+                  # --------------------------------------------
+                  echo ">>> Creating symlink to new release..."
+                  sudo ln -sfn \${RELEASE_DIR}/ui-build/. \${TARGET_DIR}/current
+
+                  # --------------------------------------------
+                  # 6. Set permissions
+                  # --------------------------------------------
+                  echo ">>> Setting permissions..."
+                  sudo chown -R www-data:www-data \${TARGET_DIR}/current
+
+                  # --------------------------------------------
+                  # 7. Ensure profiles directory exists
+                  # --------------------------------------------
+                  echo ">>> Ensuring profiles directory exists..."
+                  if [ ! -d "\${TARGET_DIR}/profiles" ]; then
+                    sudo mkdir -p \${TARGET_DIR}/profiles
+                    sudo chown -R www-data:www-data \${TARGET_DIR}/profiles
+                    echo ">>> Created profiles directory"
+                  fi
+
+                  # --------------------------------------------
+                  # 8. Ensure logs directory exists
+                  # --------------------------------------------
+                  echo ">>> Ensuring logs directory exists..."
+                  mkdir -p \${TARGET_DIR}/logs
+
+                  # --------------------------------------------
+                  # 9. Reload PM2
+                  # --------------------------------------------
+                  echo ">>> Reloading PM2..."
+                  cd \${TARGET_DIR}
+
+                  if pm2 list | grep -q "snaptap-frontend"; then
+                    pm2 reload ecosystem.config.cjs --only snaptap-frontend --env production
+                  else
+                    pm2 start ecosystem.config.cjs --only snaptap-frontend --env production
+                  fi
+                  pm2 save
+
+                  # --------------------------------------------
+                  # 10. Cleanup old releases (keep last 5)
+                  # --------------------------------------------
+                  echo ">>> Cleaning up old releases..."
+                  cd \${TARGET_DIR}/releases
+                  ls -dt */ | tail -n +6 | xargs -r rm -rf
+                  echo ">>> Remaining releases:"
+                  ls -la \${TARGET_DIR}/releases/
+
+                  # --------------------------------------------
+                  # 11. Verify deployment
+                  # --------------------------------------------
+                  echo ">>> Verifying deployment..."
+                  sleep 3
+
+                  # Check if app is responding
+                  HTTP_CODE=\$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3001/ || echo "000")
+                  if [ "\$HTTP_CODE" = "200" ]; then
+                    echo ">>> Application is responding (HTTP \${HTTP_CODE})"
+                  else
+                    echo ">>> WARNING: Application returned HTTP \${HTTP_CODE}"
+                    echo ">>> Checking PM2 logs..."
+                    pm2 logs snaptap-frontend --lines 20 --nostream
+                  fi
+
+                  # Check static asset
+                  ASSET_CODE=\$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3001/profile-assets/bizbio-engine.js || echo "000")
+                  if [ "\$ASSET_CODE" = "200" ]; then
+                    echo ">>> Profile assets are accessible (HTTP \${ASSET_CODE})"
+                  else
+                    echo ">>> WARNING: Profile assets returned HTTP \${ASSET_CODE}"
+                  fi
+
+                  echo "=========================================="
+                  echo "UI Deployment Complete!"
+                  echo "=========================================="
+                  echo "Release: \${RELEASE_ID}"
+                  echo "Current: \${TARGET_DIR}/current -> \$(readlink \${TARGET_DIR}/current)"
+                  echo "=========================================="
+                  pm2 status snaptap-frontend
+                ENDSSH
+
+                # Final verification from outside
+                echo ">>> Final verification..."
+                sleep 5
+
+                if curl -sf https://www.snaptap.co.za/ > /dev/null; then
+                  echo "✅ SnapTap UI Production deployment successful!"
+                else
+                  echo "⚠️ External health check warning (may be expected for new setup)"
+                fi
+
+          - task: Bash@3
+            displayName: 'Deployment Summary'
+            condition: succeeded()
+            inputs:
+              targetType: 'inline'
+              script: |
+                echo "=========================================="
+                echo "SnapTap UI Production Deployment Summary"
+                echo "=========================================="
+                echo "Completed at: $(date)"
+                echo "Build: $(Build.BuildNumber)"
+                echo "Commit: $(Build.SourceVersion)"
+                echo "URL: https://www.snaptap.co.za"
+                echo "=========================================="

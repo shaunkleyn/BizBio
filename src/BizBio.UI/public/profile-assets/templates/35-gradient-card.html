@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Name - Digital Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #e2e2e2;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 24px 16px 48px;
+        }
+
+        /* ── OUTER CARD ── */
+        .card {
+            width: 100%;
+            max-width: 600px;
+            background: #ffffff;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 6px 30px rgba(0,0,0,0.14);
+        }
+
+        /* ── GRADIENT HEADER ── */
+        .header {
+            background: linear-gradient(120deg, #7ba0d8 0%, #9370cc 45%, #a660d0 75%, #9b55c8 100%);
+            padding: 32px 28px 20px;
+            text-align: center;
+        }
+
+        .company-name {
+            font-size: clamp(22px, 5vw, 34px);
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+            letter-spacing: -0.3px;
+            margin-bottom: 6px;
+        }
+
+        .tagline {
+            font-size: 16px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.92);
+            letter-spacing: 1px;
+            margin-bottom: 38px;
+        }
+
+        .header-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 30px;
+        }
+
+        .header-meta span {
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.8);
+            letter-spacing: 0.3px;
+        }
+
+        /* ── HERO ZONE ──
+           White section. The profile photo sits here but is pulled UP via
+           absolute positioning so it overlaps the header/body boundary.
+           Review badges live below it, fully in the white area.
+        */
+        .hero-zone {
+            position: relative;
+            background: #ffffff;
+            /* padding-top = half profile height (74px) + gap (30px) = 104px
+               This ensures the badges sit comfortably below the profile photo */
+            padding-top: 24px;
+            padding-left: 24px;
+            padding-right: 24px;
+            padding-bottom: 20px;
+        }
+
+        /* Profile photo – absolutely positioned, pulled into the header */
+        .profile-wrapper {
+            position: absolute;
+            top: -74px;          /* half of 148px → center sits at header/body boundary */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 148px;
+            height: 148px;
+            border-radius: 50%;
+            border: 6px solid #9b55c8;
+            background: #ffffff;
+            overflow: hidden;
+            z-index: 10;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .profile-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .profile-initials {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #ddd5f0, #e8e0f4);
+            font-size: 32px;
+            font-weight: 800;
+            color: #9b55c8;
+        }
+
+        /* Review badges – two circles in the white zone */
+        .review-badges {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .review-badge {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            padding: 14px;
+            text-align: center;
+            flex-shrink: 0;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+
+        .review-badge:hover {
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: 0 8px 22px rgba(0,0,0,0.14);
+            background: #e8e8e8;
+        }
+
+        .review-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #555;
+            line-height: 1.2;
+        }
+
+        /* Google multicolour letters */
+        .google-text {
+            font-size: 22px;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.5px;
+        }
+        .g-blue   { color: #4285F4; }
+        .g-red    { color: #EA4335; }
+        .g-yellow { color: #FBBC05; }
+        .g-green  { color: #34A853; }
+
+        /* Facebook text */
+        .facebook-text {
+            font-size: 21px;
+            font-weight: 900;
+            color: #1877F2;
+            line-height: 1;
+        }
+
+        .review-stars {
+            font-size: 16px;
+            color: #f5a623;
+            letter-spacing: 1px;
+            line-height: 1;
+        }
+
+        /* ── DIVIDERS ── */
+        .divider {
+            border: none;
+            border-top: 1px solid #ebebeb;
+            margin: 0;
+        }
+
+        /* ── ACTION BUTTONS ── */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            padding: 22px 20px 24px;
+        }
+
+        .action-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 16px 6px;
+            border-radius: 50px;
+            text-decoration: none;
+            color: #ffffff;
+            font-family: 'Nunito', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            transition: transform 0.18s ease, filter 0.18s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-btn i { font-size: 20px; }
+
+        .action-btn:hover  { transform: translateY(-2px); filter: brightness(1.08); color: #fff; }
+        .action-btn:active { transform: translateY(0);    filter: brightness(0.95); }
+
+        .btn-call     { background: #29b8d3; box-shadow: 0 4px 16px rgba(41,184,211,0.35); }
+        .btn-email    { background: #7b55bf; box-shadow: 0 4px 16px rgba(123,85,191,0.35); }
+        .btn-whatsapp { background: #e91f8c; box-shadow: 0 4px 16px rgba(233,31,140,0.35); }
+
+        /* ── BIO SECTION ── */
+        .bio-section {
+            padding: 24px 28px;
+            text-align: center;
+        }
+
+        .bio-section p {
+            font-size: 14px;
+            font-weight: 400;
+            color: #555;
+            line-height: 1.75;
+        }
+
+        /* ── CONTACT INFO ROWS ── */
+        .contact-rows {
+            padding: 8px 20px;
+        }
+
+        .contact-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 13px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .contact-row:last-child {
+            border-bottom: none;
+        }
+
+        .contact-row-icon {
+            flex-shrink: 0;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(123,85,191,0.12), rgba(166,96,208,0.08));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9b55c8;
+            font-size: 16px;
+            transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+        }
+
+        .contact-row:hover .contact-row-icon {
+            background: linear-gradient(135deg, #7ba0d8, #9b55c8);
+            color: #ffffff;
+            transform: scale(1.06);
+        }
+
+        .contact-row-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .contact-row-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #aaa;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .contact-row-value {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.3;
+        }
+
+        .contact-row-value a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .contact-row-value a:hover {
+            color: #9b55c8;
+        }
+
+        .contact-row-action {
+            flex-shrink: 0;
+        }
+
+        .contact-row-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 34px;
+            padding: 0 14px;
+            border-radius: 50px;
+            border: 1.5px solid #9b55c8;
+            color: #9b55c8;
+            font-family: 'Nunito', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .contact-row-btn:hover {
+            background: linear-gradient(120deg, #7ba0d8, #9b55c8);
+            border-color: transparent;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(155,85,200,0.35);
+            transform: translateY(-1px);
+        }
+
+        .contact-row-btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        /* ── BODY ── */
+        .body { display: contents; }
+
+        /* ── SOCIAL ICONS ── */
+        .footer {
+            padding: 24px 20px 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .social-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: #ffffff;
+            text-decoration: none;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+            flex-shrink: 0;
+        }
+
+        .social-icon:hover  { transform: translateY(-4px) scale(1.08); box-shadow: 0 10px 24px rgba(0,0,0,0.2); color: #fff; }
+        .social-icon:active { transform: scale(0.95); }
+
+        .si-facebook  { background: #2d4a8a; }
+        .si-pinterest { background: #c8001d; }
+        .si-linkedin  { background: #0077b5; }
+        .si-instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+        .si-whatsapp  { background: #25c060; }
+        .si-website   { background: #607d8b; }
+        .si-twitter   { background: #000000; }
+        .si-youtube   { background: #ff0000; }
+        .si-tiktok    { background: #010101; }
+        .si-github    { background: #24292e; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 480px) {
+            .review-badge {
+                width: 120px;
+                height: 120px;
+                padding: 10px;
+            }
+            .google-text   { font-size: 19px; }
+            .facebook-text { font-size: 18px; }
+            .review-label  { font-size: 10px; }
+            .review-stars  { font-size: 14px; }
+
+            .hero-zone {
+                padding-top: 90px;  /* recalc: half of 130px profile + 25px gap */
+            }
+            .profile-wrapper {
+                width: 130px;
+                height: 130px;
+                top: -65px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .review-badge {
+                width: 104px;
+                height: 104px;
+                padding: 8px;
+            }
+            .google-text   { font-size: 16px; }
+            .facebook-text { font-size: 15px; }
+            .review-stars  { font-size: 12px; }
+            .hero-zone     { padding-top: 80px; }
+            .profile-wrapper { width: 116px; height: 116px; top: -58px; }
+
+            .action-btn     { font-size: 11px; padding: 14px 4px; }
+            .action-btn i   { font-size: 17px; }
+            .action-buttons { gap: 6px; padding: 16px 14px 20px; }
+
+            .social-icon { width: 52px; height: 52px; font-size: 22px; }
+            .footer { gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card" x-data="window.__bizbioData || {}">
+
+    <!-- ═══ GRADIENT HEADER ═══ -->
+    <div class="header">
+        <h1 class="company-name" x-text="name">Your Company Name</h1>
+        <p class="tagline" x-text="tagline">Tagline</p>
+        <div class="header-meta">
+            <!-- static reg/vat — bind from data.json if added later -->
+        </div>
+    </div>
+
+    <!-- ═══ HERO ZONE ═══
+         Profile photo is pulled up into the header via absolute + negative top.
+         Review badges sit below it, fully in the white section.
+    -->
+    <div class="hero-zone">
+
+        <!-- Profile Photo — overlaps the header/body boundary -->
+        <div class="profile-wrapper">
+            <img
+                :src="photo"
+                alt="Profile Photo"
+                x-show="photo"
+                class="logo profile-photo"
+                @error="$el.style.display='none'; $el.nextElementSibling.style.display='flex';"
+            >
+            <div class="profile-initials" :style="photo ? 'display:none' : ''" x-text="initials">CBS</div>
+        </div>
+
+        <!-- Review Badges — lower in the white area, centred -->
+        <div class="review-badges" x-show="googleReviewUrl || facebookReviewUrl">
+
+            <a :href="googleReviewUrl" target="_blank" rel="noopener"
+               class="review-badge" x-show="googleReviewUrl" :aria-label="'Review us on Google'">
+                <div class="review-label">Review Us On</div>
+                <div class="google-text">
+                    <span class="g-blue">G</span><span class="g-red">o</span><span class="g-yellow">o</span><span class="g-blue">g</span><span class="g-green">l</span><span class="g-red">e</span>
+                </div>
+                <div class="review-stars">★★★★★</div>
+            </a>
+
+            <a :href="facebookReviewUrl" target="_blank" rel="noopener"
+               class="review-badge" x-show="facebookReviewUrl" :aria-label="'Review us on Facebook'">
+                <div class="review-label">Review Us On</div>
+                <div class="facebook-text">facebook</div>
+                <div class="review-stars">★★★★★</div>
+            </a>
+
+        </div>
+    </div>
+    <!-- /hero-zone -->
+
+    <!-- ═══ BODY ═══ -->
+
+    <hr class="divider">
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a :href="phoneHref" class="action-btn btn-call" x-show="phoneHref">
+            <i class="fa-solid fa-phone-volume"></i>
+            Call Us
+        </a>
+        <a :href="emailHref" class="action-btn btn-email" x-show="emailHref">
+            <i class="fa-solid fa-envelope"></i>
+            Email
+        </a>
+        <a :href="whatsappHref" target="_blank" rel="noopener" class="action-btn btn-whatsapp" x-show="whatsappHref">
+            <i class="fa-brands fa-whatsapp"></i>
+            WhatsApp
+        </a>
+    </div>
+
+    <div class="body">
+
+    <hr class="divider">
+
+    <!-- Bio -->
+    <div class="bio-section" x-show="bio">
+        <p x-text="bio"></p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Contact Info Rows -->
+    <div class="contact-rows" x-data="{ rows: info }" x-show="rows.length">
+        <template x-for="row in rows" :key="row.value">
+            <div class="contact-row">
+                <div class="contact-row-icon"><i :class="row.icon"></i></div>
+                <div class="contact-row-info">
+                    <div class="contact-row-label" x-text="row.title"></div>
+                    <div class="contact-row-value">
+                        <a :href="row.href" x-text="row.value"
+                           :target="(row.type === 'website' || row.type === 'address') ? '_blank' : null"
+                           rel="noopener"></a>
+                    </div>
+                </div>
+                <div class="contact-row-action" x-show="row.button">
+                    <a :href="row.href" class="contact-row-btn" x-text="row.button"
+                       :target="(row.type === 'website' || row.type === 'address') ? '_blank' : null"
+                       rel="noopener"></a>
+                </div>
+            </div>
+        </template>
+    </div><!-- /contact-rows -->
+
+    </div><!-- /body -->
+
+    <hr class="divider">
+
+    <!-- Social Icons -->
+    <div class="footer" x-data="{ items: social }" x-show="items.length">
+        <template x-for="item in items" :key="item.platform">
+            <a :href="item.url" :class="'social-icon ' + item.css"
+               target="_blank" rel="noopener"
+               :aria-label="item.platform">
+                <i :class="item.icon"></i>
+            </a>
+        </template>
+    </div>
+
+</div><!-- /card -->
+
+</body>
+</html>

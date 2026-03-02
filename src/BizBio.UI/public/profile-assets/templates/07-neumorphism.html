@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel Botha - Digital Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/07.css">
+    <link rel="stylesheet" href="./css/theme-tweaker.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@latest/dist/cdn.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #e0e5ec;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            background: #e0e5ec;
+            max-width: 400px;
+            width: 100%;
+            border-radius: 30px;
+            padding: 40px 30px;
+            box-shadow: 20px 20px 60px #bec3c9, -20px -20px 60px #ffffff;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .avatar-container {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            padding: 8px;
+            background: #e0e5ec;
+            box-shadow: 8px 8px 20px #bec3c9, -8px -8px 20px #ffffff;
+        }
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .name {
+            font-size: 26px;
+            font-weight: 800;
+            color: #3d5a80;
+            margin-bottom: 8px;
+        }
+        .title {
+            font-size: 14px;
+            color: #ee6c4d;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .company {
+            font-size: 14px;
+            color: #98c1d9;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .action-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #3d5a80;
+            font-size: 20px;
+            background: #e0e5ec;
+            box-shadow: 6px 6px 14px #bec3c9, -6px -6px 14px #ffffff;
+            transition: all 0.3s;
+        }
+        .action-btn:hover {
+            box-shadow: inset 6px 6px 14px #bec3c9, inset -6px -6px 14px #ffffff;
+            color: #ee6c4d;
+        }
+        .body {
+            margin-bottom: 30px;
+        }
+        .info-section {
+            margin-bottom: 30px;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            background: #e0e5ec;
+            border-radius: 16px;
+            margin-bottom: 14px;
+            box-shadow: 6px 6px 14px #bec3c9, -6px -6px 14px #ffffff;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .info-item:hover {
+            box-shadow: inset 4px 4px 10px #bec3c9, inset -4px -4px 10px #ffffff;
+        }
+        .info-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #e0e5ec;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            color: #ee6c4d;
+            font-size: 18px;
+            box-shadow: 4px 4px 10px #bec3c9, -4px -4px 10px #ffffff;
+        }
+        .info-content { flex: 1; }
+        .info-label {
+            font-size: 11px;
+            color: #98c1d9;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .info-value {
+            font-size: 14px;
+            color: #3d5a80;
+            font-weight: 700;
+        }
+        .social-section {
+            text-align: center;
+        }
+        .social-title {
+            font-size: 12px;
+            color: #98c1d9;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+        }
+        .social-link {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3d5a80;
+            text-decoration: none;
+            font-size: 18px;
+            background: #e0e5ec;
+            box-shadow: 5px 5px 12px #bec3c9, -5px -5px 12px #ffffff;
+            transition: all 0.3s;
+        }
+        .social-link:hover {
+            box-shadow: inset 4px 4px 10px #bec3c9, inset -4px -4px 10px #ffffff;
+            color: #ee6c4d;
+        }
+        .footer {
+            margin-top: 30px;
+        }
+        .save-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 18px;
+            background: linear-gradient(145deg, #ee6c4d, #d4553a);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 15px;
+            box-shadow: 6px 6px 14px #bec3c9, -6px -6px 14px #ffffff;
+            transition: all 0.3s;
+        }
+        .save-btn:hover {
+            background: linear-gradient(145deg, #d4553a, #ee6c4d);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <div class="avatar-container">
+                <img src="https://randomuser.me/api/portraits/men/42.jpg" alt="Daniel Botha" class="avatar">
+            </div>
+            <h1 class="name">Daniel Botha</h1>
+            <p class="title">Product Manager</p>
+            <p class="company">InnovateTech Solutions</p>
+        </div>
+
+        <div class="action-buttons">
+            <a href="tel:+27839876543" class="action-btn"><i class="fas fa-phone"></i></a>
+            <a href="mailto:daniel@innovatetech.co.za" class="action-btn"><i class="fas fa-envelope"></i></a>
+            <a href="https://wa.me/27839876543" class="action-btn"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://www.innovatetech.co.za" class="action-btn"><i class="fas fa-globe"></i></a>
+        </div>
+
+        <div class="body">
+            <div class="info-section">
+                <a href="tel:+27839876543" class="info-item">
+                    <div class="info-icon"><i class="fas fa-phone"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Phone</div>
+                        <div class="info-value">083 987 6543</div>
+                    </div>
+                </a>
+                <a href="mailto:daniel@innovatetech.co.za" class="info-item">
+                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">daniel@innovatetech.co.za</div>
+                    </div>
+                </a>
+                <a href="https://maps.google.com/?q=Techno+Park,+Stellenbosch" class="info-item">
+                    <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Address</div>
+                        <div class="info-value">Techno Park, Stellenbosch</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="social-section">
+                <div class="social-title">Connect</div>
+                <div class="social-links">
+                    <a href="https://linkedin.com/in/danielbotha" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://facebook.com/innovatetech" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/danielbotha" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/danielbotha" class="social-link"><i class="fab fa-x-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <a href="daniel_botha.vcf" class="save-btn">
+                <i class="fas fa-download"></i>
+                Save Contact
+            </a>
+        </div>
+    </div>
+    <script src="/profile-assets/vcard-generator.js"></script>
+</body>
+</html>

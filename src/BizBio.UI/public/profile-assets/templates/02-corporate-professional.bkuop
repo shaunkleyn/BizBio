@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>James Anderson - Digital Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            background: #fff;
+            max-width: 420px;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            padding: 40px 30px 60px;
+            position: relative;
+        }
+        .company-logo {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #fff;
+            font-weight: 700;
+        }
+        .header h1 {
+            color: #fff;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .header .title {
+            color: rgba(255,255,255,0.8);
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .header .company {
+            color: rgba(255,255,255,0.6);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .avatar-container {
+            position: absolute;
+            bottom: -50px;
+            right: 30px;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 16px;
+            object-fit: cover;
+            border: 4px solid #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .content {
+            padding: 30px;
+            padding-top: 20px;
+        }
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+            margin-top: 40px;
+        }
+        .quick-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            padding: 16px 8px;
+            border-radius: 12px;
+            background: #f8fafc;
+            transition: all 0.2s;
+        }
+        .quick-action:hover {
+            background: #1e40af;
+        }
+        .quick-action:hover i,
+        .quick-action:hover span {
+            color: #fff;
+        }
+        .quick-action i {
+            font-size: 20px;
+            color: #1e40af;
+            margin-bottom: 8px;
+            transition: color 0.2s;
+        }
+        .quick-action span {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .info-list {
+            margin-bottom: 24px;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .info-item:hover {
+            background: #e2e8f0;
+            transform: translateX(4px);
+        }
+        .info-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: #1e40af;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+        }
+        .info-icon i {
+            color: #fff;
+            font-size: 16px;
+        }
+        .info-text {
+            flex: 1;
+        }
+        .info-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 2px;
+        }
+        .info-value {
+            font-size: 14px;
+            color: #1e293b;
+            font-weight: 500;
+        }
+        .info-arrow {
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+        .social-section {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .social-title {
+            font-size: 12px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+        .social-link {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        .social-link:hover { transform: scale(1.1); }
+        .social-linkedin { background: #0077b5; }
+        .social-facebook { background: #1877f2; }
+        .social-instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .social-twitter { background: #000; }
+        .save-contact {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 24px;
+            padding: 16px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .save-contact:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(30,64,175,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <div class="company-logo">NX</div>
+            <h1>James Anderson</h1>
+            <p class="title">Chief Financial Officer</p>
+            <p class="company">Nexus Holdings (Pty) Ltd</p>
+            <div class="avatar-container">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="James Anderson" class="avatar">
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="quick-actions">
+                <a href="tel:+27117891234" class="quick-action">
+                    <i class="fas fa-phone"></i>
+                    <span>Call</span>
+                </a>
+                <a href="mailto:james@nexusholdings.co.za" class="quick-action">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email</span>
+                </a>
+                <a href="https://wa.me/27823456789" class="quick-action">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="https://maps.google.com/?q=Sandton+City" class="quick-action">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Locate</span>
+                </a>
+            </div>
+
+            <div class="info-list">
+                <a href="tel:+27823456789" class="info-item">
+                    <div class="info-icon"><i class="fas fa-phone"></i></div>
+                    <div class="info-text">
+                        <div class="info-label">Mobile</div>
+                        <div class="info-value">082 345 6789</div>
+                    </div>
+                    <i class="fas fa-chevron-right info-arrow"></i>
+                </a>
+                <a href="mailto:james@nexusholdings.co.za" class="info-item">
+                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info-text">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">james@nexusholdings.co.za</div>
+                    </div>
+                    <i class="fas fa-chevron-right info-arrow"></i>
+                </a>
+                <a href="https://www.nexusholdings.co.za" class="info-item">
+                    <div class="info-icon"><i class="fas fa-globe"></i></div>
+                    <div class="info-text">
+                        <div class="info-label">Website</div>
+                        <div class="info-value">www.nexusholdings.co.za</div>
+                    </div>
+                    <i class="fas fa-chevron-right info-arrow"></i>
+                </a>
+            </div>
+
+            <div class="social-section">
+                <div class="social-title">Connect with me</div>
+                <div class="social-links">
+                    <a href="https://linkedin.com/in/jamesanderson" class="social-link social-linkedin"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://facebook.com/nexusholdings" class="social-link social-facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/nexusholdings" class="social-link social-instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/jamesanderson" class="social-link social-twitter"><i class="fab fa-x-twitter"></i></a>
+                </div>
+            </div>
+
+            <a href="james_anderson.vcf" class="save-contact">
+                <i class="fas fa-user-plus"></i>
+                Save to Contacts
+            </a>
+        </div>
+    </div>
+    <script src="../vcard-generator.js"></script>
+</body>
+</html>

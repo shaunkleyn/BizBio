@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sophia Martinez - Digital Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/22.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            max-width: 380px;
+            width: 100%;
+            background: #fff;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(168, 85, 247, 0.3);
+            position: relative;
+        }
+        .header {
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            padding: 30px 24px 100px;
+            text-align: center;
+            position: relative;
+        }
+        .header-icons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .header-icon {
+            color: rgba(255,255,255,0.7);
+            font-size: 18px;
+        }
+        .name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .location {
+            font-size: 13px;
+            color: rgba(255,255,255,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .location i {
+            color: #fbbf24;
+        }
+        .wave-section {
+            position: relative;
+            margin-top: -60px;
+        }
+        .wave-svg {
+            display: block;
+            width: 100%;
+        }
+        .avatar-container {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+        .avatar-ring {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #fff 0%, #fce7f3 100%);
+            padding: 4px;
+            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.3);
+        }
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
+            padding: 0 40px;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #a855f7;
+        }
+        .stat-label {
+            font-size: 10px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 60px;
+            padding: 0 24px;
+        }
+        .social-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a855f7;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .social-btn:hover {
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            border-color: transparent;
+            color: #fff;
+        }
+        .body {
+            padding: 20px 24px 0;
+        }
+        .footer {
+            padding: 0 24px 30px;
+        }
+        .info-list {
+            margin-top: 16px;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid #f3f4f6;
+            text-decoration: none;
+        }
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        .info-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .info-icon {
+            color: #a855f7;
+            font-size: 16px;
+            width: 20px;
+        }
+        .info-label {
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
+        }
+        .info-value {
+            font-size: 14px;
+            color: #9ca3af;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .info-value i {
+            font-size: 12px;
+        }
+        .save-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 16px;
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);
+        }
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(168, 85, 247, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <div class="header-icons">
+                <i class="fas fa-bars header-icon"></i>
+                <i class="fas fa-cog header-icon"></i>
+            </div>
+            <h1 class="name">Sophia Martinez</h1>
+            <p class="location"><i class="fas fa-map-marker-alt"></i> Cape Town, South Africa</p>
+        </div>
+
+        <div class="wave-section">
+            <svg class="wave-svg" viewBox="0 0 400 100" preserveAspectRatio="none">
+                <path d="M0,60 C100,100 300,0 400,60 L400,100 L0,100 Z" fill="#fff"/>
+            </svg>
+            <div class="avatar-container">
+                <div class="avatar-ring">
+                    <img src="https://randomuser.me/api/portraits/women/79.jpg" alt="Sophia Martinez" class="avatar">
+                </div>
+            </div>
+            <div class="stats-row">
+                <div class="stat">
+                    <div class="stat-value">25K</div>
+                    <div class="stat-label">Followers</div>
+                </div>
+                <div class="stat" style="width: 90px;"></div>
+                <div class="stat">
+                    <div class="stat-value">55</div>
+                    <div class="stat-label">Following</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="https://facebook.com/sophiamartinez" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://dribbble.com/sophiamartinez" class="social-btn"><i class="fab fa-dribbble"></i></a>
+            <a href="https://twitter.com/sophiamartinez" class="social-btn"><i class="fab fa-twitter"></i></a>
+        </div>
+
+        <div class="body">
+            <div class="info-list">
+                <a href="tel:+27214567890" class="info-item">
+                    <div class="info-left">
+                        <i class="fas fa-phone info-icon"></i>
+                        <span class="info-label">Phone</span>
+                    </div>
+                    <span class="info-value">021 456 7890 <i class="fas fa-chevron-right"></i></span>
+                </a>
+                <a href="mailto:sophia@creativestudio.co.za" class="info-item">
+                    <div class="info-left">
+                        <i class="fas fa-envelope info-icon"></i>
+                        <span class="info-label">Email</span>
+                    </div>
+                    <span class="info-value"><i class="fas fa-chevron-right"></i></span>
+                </a>
+                <a href="https://www.creativestudio.co.za" class="info-item">
+                    <div class="info-left">
+                        <i class="fas fa-globe info-icon"></i>
+                        <span class="info-label">Website</span>
+                    </div>
+                    <span class="info-value"><i class="fas fa-chevron-right"></i></span>
+                </a>
+                <a href="https://linkedin.com/in/sophiamartinez" class="info-item">
+                    <div class="info-left">
+                        <i class="fab fa-linkedin info-icon"></i>
+                        <span class="info-label">LinkedIn</span>
+                    </div>
+                    <span class="info-value"><i class="fas fa-chevron-right"></i></span>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <a href="sophia_martinez.vcf" class="save-btn">
+                <i class="fas fa-user-plus"></i> Save Contact
+            </a>
+        </div>
+    </div>
+    <script src="/profile-assets/vcard-generator.js"></script>
+</body>
+</html>

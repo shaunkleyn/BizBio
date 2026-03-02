@@ -1,0 +1,188 @@
+<template id="tt-template">
+  <div class="tt-wrap" id="theme-tweaker" x-data="themeTweaker()" x-init="init()">
+    <div class="tt-fab" role="button" tabindex="0" aria-label="Open Theme Tweaker" @click="togglePanel()"
+         @keydown.enter.prevent="togglePanel()" @keydown.space.prevent="togglePanel()">
+      <span class="tt-chip">Theme</span>
+      <span class="tt-fab-label">Customize</span>
+    </div>
+
+    <div class="tt-panel" :class="open ? 'tt-open' : ''">
+      <div class="tt-head">
+        <div>
+          <div class="tt-title">Theme Tweaker</div>
+          <div class="tt-hint">
+            Edits CSS variables on <span class="tt-mono">:root</span> and saves to localStorage.
+          </div>
+        </div>
+        <div class="tt-actions">
+          <button class="tt-btn" type="button" @click="reset()">Reset</button>
+          <button class="tt-btn" type="button" @click="close()">Close</button>
+        </div>
+      </div>
+
+      <div class="tt-body">
+        <!-- AUTO FIELDS (1-line registration drives these) -->
+        <!-- AUTO SECTIONS -->
+<template x-for="sec in sections" :key="sec.section">
+  <div>
+    <div class="tt-section-title" x-text="sec.section"></div>
+
+    <template x-for="row in sec.rows" :key="sec.section + ':' + (row.layout || 'single') + ':' + row.fields.map(f=>f.key).join(',')">
+      <div>
+        <!-- PAIR (2 columns) -->
+        <template x-if="row.layout === 'pair'">
+          <div class="tt-grid2">
+            <template x-for="f in row.fields" :key="f.key">
+              <div class="tt-row">
+                <label x-text="f.label"></label>
+
+                <template x-if="f.kind === 'color'">
+                  <input type="color" x-model="state[f.key]" @input="changed()" />
+                </template>
+
+                <template x-if="f.kind === 'select'">
+                  <select x-model="state[f.key]" @change="changed()">
+                    <template x-if="f.optionsFromCfg === 'fonts'">
+                      <template x-for="opt in fonts" :key="opt.value">
+                        <option :value="opt.value" x-text="opt.label"></option>
+                      </template>
+                    </template>
+                    <template x-if="!f.optionsFromCfg">
+                      <template x-for="opt in f.options" :key="opt">
+                        <option :value="opt.value || opt" x-text="opt.label || opt"></option>
+                      </template>
+                    </template>
+                  </select>
+                </template>
+              </div>
+            </template>
+          </div>
+        </template>
+
+        <!-- SINGLE (full width rows, stacked) -->
+        <template x-if="row.layout !== 'pair'">
+          <template x-for="f in row.fields" :key="f.key">
+            <div class="tt-row">
+              <label x-text="f.label"></label>
+
+              <template x-if="f.kind === 'color'">
+                <input type="color" x-model="state[f.key]" @input="changed()" />
+              </template>
+
+              <template x-if="f.kind === 'select'">
+                <select x-model="state[f.key]" @change="changed()">
+                  <template x-if="f.optionsFromCfg === 'fonts'">
+                    <template x-for="opt in fonts" :key="opt.value">
+                      <option :value="opt.value" x-text="opt.label"></option>
+                    </template>
+                  </template>
+                  <template x-if="!f.optionsFromCfg">
+                    <template x-for="opt in f.options" :key="opt.key || opt">
+                      <option :value="opt.value || opt" x-text="opt.label || opt"></option>
+                    </template>
+                  </template>
+                </select>
+              </template>
+            </div>
+          </template>
+        </template>
+      </div>
+    </template>
+
+    <div class="tt-sep"></div>
+  </div>
+</template>
+
+
+        <div class="tt-sep"></div>
+
+        <!-- SPECIAL: Background solid/gradient -->
+        <div class="tt-row">
+          <label>Background</label>
+          <select data-tt="bgKind" x-model="state._bgKind" @change="changed()">
+            <option value="solid">Solid</option>
+            <option value="gradient">Gradient</option>
+          </select>
+        </div>
+
+        <div class="tt-row" x-show="state._bgKind !== 'gradient'">
+          <label>BG color</label>
+          <input data-tt="bgSolid" type="color" x-model="state._bgSolid" @input="changed()" />
+        </div>
+
+        <div class="tt-gradient-row" x-show="state._bgKind === 'gradient'">
+          <div class="tt-gradient-box">
+            <div class="tt-row" style="grid-template-columns:1fr auto">
+              <label>Start</label>
+              <input data-tt="bgStart" type="color" x-model="state._bgStart" @input="changed()" />
+            </div>
+            <div class="tt-row" style="grid-template-columns:1fr auto">
+              <label>End</label>
+              <input data-tt="bgEnd" type="color" x-model="state._bgEnd" @input="changed()" />
+            </div>
+            <div class="tt-gradient-preview" data-tt="bgPreview"></div>
+          </div>
+
+          <div class="tt-gradient-box">
+            <div class="tt-dial-wrap">
+              <div class="tt-dial-label">Angle</div>
+              <div data-tt="bgDial"></div>
+            </div>
+          </div>
+
+          <div></div>
+        </div>
+
+        <div class="tt-sep"></div>
+
+        <!-- SPECIAL: CTA solid/gradient -->
+        <div class="tt-row">
+          <label>CTA BG</label>
+          <select data-tt="ctaKind" x-model="state._ctaKind" @change="changed()">
+            <option value="solid">Solid</option>
+            <option value="gradient">Gradient</option>
+          </select>
+        </div>
+
+        <div class="tt-row" x-show="state._ctaKind !== 'gradient'">
+          <label>CTA color</label>
+          <input data-tt="ctaSolid" type="color" x-model="state._ctaSolid" @input="changed()" />
+        </div>
+
+        <div class="tt-gradient-row" x-show="state._ctaKind === 'gradient'">
+          <div class="tt-gradient-box">
+            <div class="tt-row" style="grid-template-columns:1fr auto">
+              <label>Start</label>
+              <input data-tt="ctaStart" type="color" x-model="state._ctaStart" @input="changed()" />
+            </div>
+            <div class="tt-row" style="grid-template-columns:1fr auto">
+              <label>End</label>
+              <input data-tt="ctaEnd" type="color" x-model="state._ctaEnd" @input="changed()" />
+            </div>
+            <div class="tt-gradient-preview" data-tt="ctaPreview"></div>
+          </div>
+
+          <div class="tt-gradient-box">
+            <div class="tt-dial-wrap">
+              <div class="tt-dial-label">Angle</div>
+              <div data-tt="ctaDial"></div>
+            </div>
+          </div>
+
+          <div></div>
+        </div>
+
+        <div class="tt-sep"></div>
+
+        <div class="tt-hint">
+          In your HTML: <span class="tt-mono">class="tt-social"</span> +
+          <span class="tt-mono">data-kind="whatsapp"</span>
+        </div>
+      </div>
+
+      <div class="tt-foot">
+        Tip: Use <span class="tt-mono">var(--primary-color)</span> etc. in your CSS.
+      </div>
+    </div>
+  </div>
+</template>

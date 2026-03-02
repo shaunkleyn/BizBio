@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Name - Digital Business Card</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --grad-start: #00c4e0;
+            --grad-mid:   #6e3ed6;
+            --grad-end:   #b520b5;
+            --grad: linear-gradient(150deg, var(--grad-start) 0%, var(--grad-mid) 55%, var(--grad-end) 100%);
+            --call:  #00b4d8;
+            --email: #7b2d8b;
+            --wa:    #e91e8c;
+            /* Logo sizing — change these two vars to scale the logo */
+            --logo-d: 124px;   /* diameter */
+            --logo-r: 62px;    /* radius = half diameter */
+            --cutout: 68px;    /* transparent circle radius — slightly > logo-r for a gradient halo */
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--grad);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* =====================================================
+           PAGE LAYOUT
+        ===================================================== */
+        .page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding-top: 40px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 540px;
+            display: flex;
+            flex-direction: column;
+            /* No position: relative here — keeps logo stacking clean */
+        }
+
+        /* =====================================================
+           GRADIENT TOP SECTION
+        ===================================================== */
+        .header {
+            text-align: center;
+            padding: 0 24px;
+        }
+
+        .card-name {
+            font-size: clamp(1.9rem, 8vw, 2.8rem);
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.1;
+            text-shadow: 0 2px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        .tagline {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.75);
+            font-weight: 500;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+
+        /*
+         * 3-column grid: meta-left | logo-spacer | meta-right
+         * The center column reserves space for the TOP HALF of the logo.
+         * align-items: flex-end puts the reg/vat labels at the logo's
+         * vertical centre line (= bottom of the spacer = top of white card).
+         */
+        .meta-logo-row {
+            display: grid;
+            grid-template-columns: 1fr var(--logo-d) 1fr;
+            align-items: flex-end;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .meta-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 10px;
+        }
+
+        .meta-label {
+            font-size: 0.58rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .meta-value {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.92);
+            font-weight: 700;
+            margin-top: 3px;
+            letter-spacing: 0.3px;
+        }
+
+        /* Reserves vertical space equal to the top half of the logo */
+        .logo-spacer {
+            height: var(--logo-r);
+        }
+
+        /* =====================================================
+           WHITE CARD  —  the circular notch is the key trick:
+           radial-gradient(circle at 50% 0, transparent R, white R+1)
+           creates a transparent semicircle at the card's top centre,
+           through which the body gradient is visible.
+        ===================================================== */
+        .body {
+            position: relative;     /* anchor for .logo-float */
+            background:
+                radial-gradient(
+                    circle at 50% 0px,
+                    transparent 0,
+                    transparent var(--cutout),
+                    #ffffff calc(var(--cutout) + 1px)
+                );
+            border-radius: 32px 32px 0 0;
+            /* padding-top makes room for the lower half of the logo */
+            padding: calc(var(--logo-r) + 18px) 22px 36px;
+            /* Soft shadow so card reads against the gradient */
+            box-shadow: 0 -4px 40px rgba(0, 0, 0, 0.18);
+        }
+
+        /*
+         * Logo — absolutely positioned so it straddles the boundary:
+         *   top half (logo-r px) is in the gradient area
+         *   bottom half (logo-r px) is inside the white card cutout
+         */
+        .logo-float {
+            position: absolute;
+            top: calc(-1 * var(--logo-r));   /* go up by exactly half the logo */
+            left: 50%;
+            transform: translateX(-50%);
+            width: var(--logo-d);
+            height: var(--logo-d);
+            border-radius: 50%;
+            border: 5px solid #ffffff;
+            overflow: hidden;
+            background: #ffffff;
+            box-shadow:
+                0 0 0 4px rgba(255, 255, 255, 0.28),   /* outer halo */
+                0 14px 40px rgba(0, 0, 0, 0.38);        /* drop shadow */
+            z-index: 5;
+            flex-shrink: 0;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* =====================================================
+           REVIEW ROW
+        ===================================================== */
+        .review-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 1px solid rgba(0, 0, 0, 0.07);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+            margin-bottom: 24px;
+        }
+
+        .review-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 16px 8px;
+            text-decoration: none;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .review-col:first-child { border-right: 1px solid rgba(0, 0, 0, 0.07); }
+        .review-col:hover { background: rgba(0, 0, 0, 0.02); }
+
+        .review-label {
+            font-size: 0.62rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-weight: 600;
+        }
+
+        .review-logo {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .google-g {
+            width: 26px;
+            height: 26px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .google-g span {
+            font-weight: 900;
+            font-size: 0.92rem;
+            background: linear-gradient(135deg, #4285f4 25%, #ea4335 50%, #fbbc05 75%, #34a853 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .fb-logo {
+            width: 26px;
+            height: 26px;
+            border-radius: 7px;
+            background: #1877f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.85rem;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+        }
+
+        .review-platform-name {
+            font-size: 0.8rem;
+            color: #222;
+            font-weight: 700;
+        }
+
+        .stars {
+            color: #ffd700;
+            font-size: 0.92rem;
+            letter-spacing: 2px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* =====================================================
+           ACTION PILL BUTTONS
+        ===================================================== */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .action-pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            height: 58px;
+            border-radius: 29px;
+            text-decoration: none;
+            font-size: 0.96rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.6px;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-pill i { font-size: 1.1rem; }
+        .action-pill:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28); }
+        .action-pill:active { transform: translateY(0); filter: brightness(0.95); }
+
+        .pill-call  { background: var(--call); }
+        .pill-email { background: var(--email); }
+        .pill-wa    { background: var(--wa); }
+
+        /* =====================================================
+           BIO
+        ===================================================== */
+        .bio-section { text-align: center; margin-bottom: 24px; }
+
+        .bio {
+            font-size: 0.87rem;
+            line-height: 1.78;
+            color: #555;
+        }
+
+        /* =====================================================
+           SAVE CONTACT
+        ===================================================== */
+        .footer { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 0 22px 22px; }
+        .save-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px;
+            background: var(--grad);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 14px;
+            font-size: 0.96rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+        }
+
+        .save-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3); }
+
+        /* =====================================================
+           SOCIAL ICONS
+        ===================================================== */
+        .social-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #f0f2f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16); }
+        .social-btn[href*="facebook.com"]  { color: #1877f2; }
+        .social-btn[href*="instagram.com"] { color: #e1306c; }
+        .social-btn[href*="linkedin.com"]  { color: #0a66c2; }
+        .social-btn[href*="twitter.com"]   { color: #1da1f2; }
+        .social-btn[href*="youtube.com"]   { color: #ff0000; }
+        .social-btn[href*="tiktok.com"]    { color: #010101; }
+
+        /* =====================================================
+           BIZBIO FOOTER
+        ===================================================== */
+        .bizbio-footer {
+            text-align: center;
+            padding: 18px 0 28px;
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.6);
+            width: 100%;
+            max-width: 540px;
+        }
+
+        .bizbio-footer a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .bizbio-footer a:hover { text-decoration: underline; }
+
+        /* =====================================================
+           FAB
+        ===================================================== */
+        .fab-container {
+            position: fixed;
+            bottom: 24px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .fab-menu {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.35s ease, opacity 0.3s ease;
+        }
+
+        .fab-menu.open { max-height: 260px; opacity: 1; }
+
+        .fab-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .fab-label {
+            background: rgba(0, 0, 0, 0.72);
+            backdrop-filter: blur(4px);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.76rem;
+            font-weight: 600;
+            padding: 6px 13px;
+            border-radius: 20px;
+            white-space: nowrap;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .fab-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--grad);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+            flex-shrink: 0;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .fab-btn:hover { filter: brightness(1.1); transform: scale(1.08); }
+
+        .fab-main {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--wa);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 6px 20px rgba(233, 30, 140, 0.5);
+            cursor: pointer;
+            border: none;
+            transition: all 0.25s;
+        }
+
+        .fab-main:hover { filter: brightness(1.1); transform: scale(1.05); }
+        .fab-icon-open  { display: block; }
+        .fab-icon-close { display: none; }
+        .fab-main.open .fab-icon-open  { display: none; }
+        .fab-main.open .fab-icon-close { display: block; }
+
+        /* =====================================================
+           RESPONSIVE — DESKTOP
+        ===================================================== */
+        @media (min-width: 600px) {
+            .action-buttons {
+                flex-direction: row;
+                gap: 10px;
+            }
+            .action-pill {
+                flex: 1;
+                font-size: 0.88rem;
+            }
+            .bizbio-footer { max-width: 620px; }
+        }
+
+        @media (min-width: 700px) {
+            .card { max-width: 620px; }
+
+            .body {
+                border-radius: 40px 40px 0 0;
+            }
+
+            :root {
+                --logo-d: 140px;
+                --logo-r: 70px;
+                --cutout: 76px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- =====================================================
+     FLOATING ACTION BUTTON
+===================================================== -->
+<div class="fab-container">
+    <div class="fab-menu" id="fabMenu">
+        <button class="fab-item" onclick="window.BizBioVCard && window.BizBioVCard.download()">
+            <span class="fab-label">Download Contact</span>
+            <div class="fab-btn"><i class="fas fa-address-card"></i></div>
+        </button>
+        <button class="fab-item" id="fabShareContact">
+            <span class="fab-label">Share Contact</span>
+            <div class="fab-btn"><i class="fas fa-share-nodes"></i></div>
+        </button>
+        <button class="fab-item" id="fabShareProfile">
+            <span class="fab-label">Share Profile</span>
+            <div class="fab-btn"><i class="fas fa-link"></i></div>
+        </button>
+    </div>
+    <button class="fab-main" id="fabMain" aria-label="More options">
+        <i class="fas fa-share-alt fab-icon-open"></i>
+        <i class="fas fa-times fab-icon-close"></i>
+    </button>
+</div>
+
+<!-- =====================================================
+     PAGE
+===================================================== -->
+<div class="page">
+    <div class="card">
+
+        <!-- ── GRADIENT TOP ── -->
+        <div class="header">
+            <h1 class="card-name">Company Name</h1>
+            <p class="tagline">Your Tagline Here</p>
+
+            <!--
+                3-col grid:
+                  col 1 — Reg No (aligns to bottom = logo vertical centre)
+                  col 2 — spacer that reserves the top half of the logo
+                  col 3 — VAT No (same alignment)
+            -->
+            <div class="meta-logo-row">
+                <div class="meta-block">
+                    <span class="meta-label">Reg No:</span>
+                    <span class="meta-value">2024/000000/07</span>
+                </div>
+                <div class="logo-spacer"></div>
+                <div class="meta-block">
+                    <span class="meta-label">VAT No:</span>
+                    <span class="meta-value">4990000000</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── WHITE CARD WITH CIRCULAR CUTOUT ── -->
+        <div class="body">
+
+            <!--
+                The logo straddles the boundary:
+                  top half  → visible in the gradient area above (logo-r px above white-card top)
+                  bottom half → sits inside the transparent radial-gradient circle
+                The cutout radius (--cutout) is slightly larger than the logo radius
+                (--logo-r), leaving a thin halo of gradient colour around the logo ring.
+            -->
+            <div class="logo-float">
+                <img class="avatar"
+                     src="https://placehold.co/220x220/ffffff/0d1b3e?text=LOGO"
+                     alt="Company Logo">
+            </div>
+
+            <!-- Review columns -->
+            <div class="review-row">
+                <a href="https://www.google.com/search?q=company+reviews"
+                   class="review-col" target="_blank" rel="noopener" aria-label="Review on Google">
+                    <span class="review-label">Review Us On</span>
+                    <div class="review-logo">
+                        <div class="google-g"><span>G</span></div>
+                        <span class="review-platform-name">Google</span>
+                    </div>
+                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                </a>
+
+                <a href="https://www.facebook.com/company"
+                   class="review-col" target="_blank" rel="noopener" aria-label="Review on Facebook">
+                    <span class="review-label">Review Us On</span>
+                    <div class="review-logo">
+                        <div class="fb-logo"><i class="fab fa-facebook-f"></i></div>
+                        <span class="review-platform-name">Facebook</span>
+                    </div>
+                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                </a>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="action-buttons">
+                <a href="tel:+27000000000" class="action-pill pill-call">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>CALL US</span>
+                </a>
+                <a href="mailto:info@company.co.za" class="action-pill pill-email">
+                    <i class="fas fa-envelope"></i>
+                    <span>EMAIL</span>
+                </a>
+                <a href="https://wa.me/27000000000" class="action-pill pill-wa" target="_blank" rel="noopener">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WHATSAPP</span>
+                </a>
+            </div>
+
+            <!-- Bio -->
+            <div class="bio-section">
+                <p class="bio about">We are dedicated to delivering outstanding results for our clients. With years of experience, we pride ourselves on quality, reliability, and exceptional customer service.</p>
+            </div>
+
+        </div><!-- /.body -->
+
+        <div class="footer">
+            <!-- Save contact -->
+            <a href="contact.vcf" class="save-btn">
+                <i class="fas fa-user-plus"></i>
+                Save Contact
+            </a>
+
+            <!-- Social icons -->
+            <div class="social-row">
+                <a href="https://www.facebook.com/company"         class="social-btn" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/company"        class="social-btn" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/company/company" class="social-btn" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://twitter.com/company"              class="social-btn" target="_blank" rel="noopener" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+                <a href="https://www.youtube.com/@company"         class="social-btn" target="_blank" rel="noopener" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.tiktok.com/@company"          class="social-btn" target="_blank" rel="noopener" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            </div>
+        </div><!-- /.footer -->
+
+    </div><!-- /.card -->
+
+    <footer class="bizbio-footer">
+        <div>Created &amp; Hosted by <a href="https://www.bizbio.co.za" target="_blank" rel="noopener">BizBio</a></div>
+        <div style="margin-top:4px;opacity:0.6;">&copy; 2025 BizBio. All rights reserved.</div>
+    </footer>
+
+</div><!-- /.page -->
+
+<script>
+(function () {
+    'use strict';
+
+    /* ── FAB ── */
+    var fabMain = document.getElementById('fabMain');
+    var fabMenu = document.getElementById('fabMenu');
+
+    fabMain.addEventListener('click', function () {
+        var open = fabMenu.classList.toggle('open');
+        fabMain.classList.toggle('open', open);
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!fabMain.closest('.fab-container').contains(e.target)) {
+            fabMenu.classList.remove('open');
+            fabMain.classList.remove('open');
+        }
+    });
+
+    /* ── Share Contact (VCF) ── */
+    document.getElementById('fabShareContact').addEventListener('click', async function () {
+        try {
+            var res  = await fetch('contact.vcf');
+            var blob = await res.blob();
+            var file = new File([blob], 'contact.vcf', { type: 'text/vcard' });
+            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({ title: 'Contact Details', files: [file] });
+            } else {
+                window.location.href = 'contact.vcf';
+            }
+        } catch (err) {
+            if (err.name !== 'AbortError') window.location.href = 'contact.vcf';
+        }
+    });
+
+    /* ── Share Profile URL ── */
+    document.getElementById('fabShareProfile').addEventListener('click', async function () {
+        try {
+            if (navigator.share) {
+                await navigator.share({ title: document.title, url: window.location.href });
+            } else {
+                await navigator.clipboard.writeText(window.location.href);
+                alert('Profile link copied to clipboard!');
+            }
+        } catch (err) {
+            if (err.name !== 'AbortError') console.warn('Share failed:', err);
+        }
+    });
+
+}());
+</script>
+
+<script src="/profile-assets/vcard-generator.js"></script>
+</body>
+</html>

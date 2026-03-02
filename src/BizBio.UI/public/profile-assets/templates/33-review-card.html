@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acme Company - Digital Business Card</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Acme Company - Digital Business Card">
+    <meta property="og:description" content="Connect with us on BizBio.">
+    <meta property="og:image" content="logo.jpg">
+    <meta property="og:type" content="website">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --grad-start:    #00b4d8;
+            --grad-end:      #7b2d8b;
+            --grad:          linear-gradient(135deg, var(--grad-start) 0%, var(--grad-end) 100%);
+            --call-color:    #00b4d8;
+            --call-hover:    #0096b8;
+            --email-color:   #7b2d8b;
+            --email-hover:   #621f72;
+            --wa-color:      #e91e8c;
+            --wa-hover:      #c71577;
+            --text-light:    #ffffff;
+            --text-dark:     #1a1a2e;
+            --text-muted:    #666;
+            --card-radius:   24px;
+            --transition:    all 0.25s ease;
+            --shadow-sm:     0 4px 12px rgba(0,0,0,0.12);
+            --shadow-md:     0 8px 24px rgba(0,0,0,0.18);
+            --shadow-lg:     0 16px 40px rgba(0,0,0,0.25);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        /* Body background = same gradient as header for seamless full-screen look */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--grad);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px 16px 80px;
+        }
+
+        /* ==============================
+           PAGE WRAPPER
+        ============================== */
+        .page-wrapper {
+            width: 100%;
+            max-width: 560px;
+        }
+        .card { width: 100%; }
+
+        /* ==============================
+           TOP GRADIENT CARD
+        ============================== */
+        .header {
+            width: 100%;
+            background: transparent;
+            border-radius: var(--card-radius) var(--card-radius) 0 0;
+            padding: 36px 24px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            /* Subtle inner border for definition */
+            box-shadow: 0 2px 0 rgba(255,255,255,0.15) inset;
+        }
+
+        /* Company name */
+        .company-name-block {
+            text-align: center;
+            margin-bottom: 6px;
+        }
+
+        .card-name {
+            font-size: clamp(1.8rem, 8vw, 2.6rem);
+            font-weight: 900;
+            color: var(--text-light);
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.25);
+        }
+
+        .tagline {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.78);
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        /* Reg / VAT row with logo in center */
+        .logo-meta-row {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            width: 100%;
+            gap: 12px;
+            margin: 20px 0 0;
+        }
+
+        .meta-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .meta-label {
+            font-size: 0.62rem;
+            color: rgba(255,255,255,0.65);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .meta-value {
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.9);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .meta-block--left  { text-align: center; }
+        .meta-block--right { text-align: center; }
+
+        /* Avatar / Logo */
+        .avatar-ring {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.18);
+            border: 4px solid rgba(255,255,255,0.85);
+            padding: 4px;
+            box-shadow: var(--shadow-lg);
+            flex-shrink: 0;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Review columns */
+        .review-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            width: 100%;
+            margin-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .review-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 16px 8px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .review-col:first-child {
+            border-right: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .review-col:hover {
+            background: rgba(255,255,255,0.06);
+        }
+
+        .review-label {
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.7);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-weight: 600;
+        }
+
+        .review-platform-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* Google G logo via CSS */
+        .google-g {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 900;
+            font-family: 'Poppins', sans-serif;
+            /* Google G gradient text */
+            background-clip: text;
+            -webkit-background-clip: text;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        .google-g span {
+            background: linear-gradient(135deg, #4285f4 25%, #ea4335 50%, #fbbc05 75%, #34a853 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .review-platform-name {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.9);
+            font-weight: 700;
+        }
+
+        .stars {
+            color: #ffd700;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Facebook logo */
+        .fb-logo {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: #1877f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 900;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+
+        /* ==============================
+           WHITE LOWER CARD
+        ============================== */
+        .body {
+            background: #ffffff;
+            border-radius: 0 0 var(--card-radius) var(--card-radius);
+            padding: 28px 20px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.22);
+        }
+
+        /* ==============================
+           ACTION BUTTONS (pill)
+        ============================== */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .action-pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            height: 56px;
+            border-radius: 28px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+        }
+        .action-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(0,0,0,0.26);
+        }
+        .action-pill:active { transform: translateY(0); }
+
+        .action-pill i {
+            font-size: 1.1rem;
+        }
+
+        .pill-call     { background: var(--call-color); }
+        .pill-call:hover { background: var(--call-hover); }
+
+        .pill-email    { background: var(--email-color); }
+        .pill-email:hover { background: var(--email-hover); }
+
+        .pill-whatsapp { background: var(--wa-color); }
+        .pill-whatsapp:hover { background: var(--wa-hover); }
+
+        /* ==============================
+           BIO
+        ============================== */
+        .bio-section {
+            width: 100%;
+            text-align: center;
+        }
+
+        .bio {
+            font-size: 0.88rem;
+            line-height: 1.75;
+            color: #555;
+        }
+
+        .footer { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+
+        /* ==============================
+           SAVE CONTACT BUTTON
+        ============================== */
+        .save-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 15px;
+            background: var(--grad);
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            box-shadow: 0 6px 20px rgba(0,0,80,0.2);
+        }
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(0,0,80,0.3);
+            filter: brightness(1.05);
+        }
+
+        /* ==============================
+           SOCIAL ICONS
+        ============================== */
+        .social-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .social-icon-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #f0f4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: var(--transition);
+            color: #555;
+            box-shadow: var(--shadow-sm);
+        }
+        .social-icon-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+        .social-icon-btn[href*="facebook.com"]  { color: #1877f2; }
+        .social-icon-btn[href*="instagram.com"] { color: #e1306c; }
+        .social-icon-btn[href*="linkedin.com"]  { color: #0a66c2; }
+        .social-icon-btn[href*="twitter.com"]   { color: #1da1f2; }
+        .social-icon-btn[href*="youtube.com"]   { color: #ff0000; }
+        .social-icon-btn[href*="tiktok.com"]    { color: #010101; }
+
+        /* ==============================
+           BIZBIO FOOTER
+        ============================== */
+        .bizbio-footer {
+            text-align: center;
+            padding: 14px 0 0;
+            font-size: 0.73rem;
+            color: rgba(255,255,255,0.65);
+            width: 100%;
+        }
+        .bizbio-footer a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .bizbio-footer a:hover { text-decoration: underline; }
+
+        /* ==============================
+           FAB
+        ============================== */
+        .fab-container {
+            position: fixed;
+            bottom: 24px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .fab-menu {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .fab-menu.open {
+            max-height: 260px;
+            opacity: 1;
+        }
+
+        .fab-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .fab-item-label {
+            background: rgba(0,0,0,0.75);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+
+        .fab-item-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--call-color);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: var(--shadow-md);
+            flex-shrink: 0;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+        .fab-item-btn:hover { filter: brightness(1.1); transform: scale(1.08); }
+
+        .fab-main {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--wa-color);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 6px 20px rgba(233,30,140,0.5);
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+        }
+        .fab-main:hover { filter: brightness(1.1); transform: scale(1.05); }
+        .fab-main .fa-times { display: none; }
+        .fab-main.open .fa-share-alt { display: none; }
+        .fab-main.open .fa-times { display: block; }
+
+        /* ==============================
+           RESPONSIVE - DESKTOP
+        ============================== */
+        @media (min-width: 600px) {
+            .page-wrapper {
+                max-width: 600px;
+            }
+
+            .header {
+                padding: 44px 32px 0;
+            }
+
+            .body {
+                padding: 32px 28px 28px;
+            }
+
+            .card-name {
+                font-size: 2.8rem;
+            }
+
+            .action-buttons {
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            .action-pill {
+                flex: 1;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (min-width: 700px) {
+            .page-wrapper {
+                max-width: 660px;
+            }
+
+            .avatar-ring {
+                width: 110px;
+                height: 110px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================
+         FLOATING ACTION BUTTON
+    ============================= -->
+    <div class="fab-container">
+        <div class="fab-menu" id="fabMenu">
+            <a href="contact.vcf" target="_blank" class="fab-item" title="Download Contact">
+                <span class="fab-item-label">Download Contact</span>
+                <div class="fab-item-btn"><i class="fas fa-download"></i></div>
+            </a>
+            <a href="contact.vcf" class="fab-item" id="fabShareContact" title="Share Contact">
+                <span class="fab-item-label">Share Contact</span>
+                <div class="fab-item-btn"><i class="fas fa-address-card"></i></div>
+            </a>
+            <button class="fab-item" id="fabShareProfile" title="Share Profile" style="background:none;border:none;padding:0;">
+                <span class="fab-item-label">Share Profile</span>
+                <div class="fab-item-btn"><i class="fas fa-link"></i></div>
+            </button>
+        </div>
+        <button class="fab-main" id="fabMain" aria-label="Share options">
+            <i class="fas fa-share-alt"></i>
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- ============================
+         PAGE CONTENT
+    ============================= -->
+    <div class="page-wrapper">
+
+        <div class="card">
+        <!-- ---- GRADIENT HEADER CARD ---- -->
+        <div class="header">
+
+            <!-- Company name + tagline -->
+            <div class="company-name-block">
+                <h1 class="card-name company">Acme Company</h1>
+                <p class="tagline">Your Tagline Goes Here</p>
+            </div>
+
+            <!-- Reg No | Logo | VAT No -->
+            <div class="logo-meta-row">
+                <div class="meta-block meta-block--left">
+                    <span class="meta-label">Reg No:</span>
+                    <span class="meta-value">2024/000000/07</span>
+                </div>
+
+                <div class="avatar-ring">
+                    <img src="https://placehold.co/220x220/ffffff/0d1b3e?text=LOGO" alt="Company Logo" class="avatar">
+                </div>
+
+                <div class="meta-block meta-block--right">
+                    <span class="meta-label">VAT No:</span>
+                    <span class="meta-value">4990000000</span>
+                </div>
+            </div>
+
+            <!-- Review columns -->
+            <div class="review-row">
+                <!-- Google reviews -->
+                <a href="https://www.google.com/search?q=placeholder+reviews" class="review-col" target="_blank" aria-label="Review us on Google">
+                    <span class="review-label">Review Us On</span>
+                    <div class="review-platform-logo">
+                        <div class="google-g"><span>G</span></div>
+                        <span class="review-platform-name">Google</span>
+                    </div>
+                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                </a>
+
+                <!-- Facebook reviews -->
+                <a href="https://www.facebook.com/placeholder" class="review-col" target="_blank" aria-label="Review us on Facebook">
+                    <span class="review-label">Review Us On</span>
+                    <div class="review-platform-logo">
+                        <div class="fb-logo"><i class="fab fa-facebook-f"></i></div>
+                        <span class="review-platform-name">Facebook</span>
+                    </div>
+                    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                </a>
+            </div>
+
+        </div><!-- /.header -->
+
+        <!-- ---- WHITE LOWER CARD ---- -->
+        <div class="body">
+
+            <!-- Action pill buttons -->
+            <div class="action-buttons">
+                <a href="tel:+27000000000" class="action-pill pill-call">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>CALL US</span>
+                </a>
+                <a href="mailto:info@acmecompany.co.za" class="action-pill pill-email">
+                    <i class="fas fa-envelope"></i>
+                    <span>EMAIL</span>
+                </a>
+                <a href="https://wa.me/27000000000" class="action-pill pill-whatsapp" target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WHATSAPP</span>
+                </a>
+            </div>
+
+            <!-- Bio -->
+            <div class="bio-section">
+                <p class="bio about">We are a passionate team dedicated to delivering outstanding results for our clients. With years of experience in the industry, we pride ourselves on quality, reliability and exceptional customer service.</p>
+            </div>
+
+        </div><!-- /.body -->
+
+        <div class="footer">
+            <!-- Save Contact -->
+            <a href="contact.vcf" class="save-btn">
+                <i class="fas fa-user-plus"></i>
+                Save Contact
+            </a>
+
+            <!-- Social icons -->
+            <div class="social-row">
+                <a href="https://www.facebook.com/placeholder" class="social-icon-btn" target="_blank" aria-label="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/placeholder" class="social-icon-btn" target="_blank" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.linkedin.com/company/placeholder" class="social-icon-btn" target="_blank" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://twitter.com/placeholder" class="social-icon-btn" target="_blank" aria-label="Twitter / X">
+                    <i class="fab fa-x-twitter"></i>
+                </a>
+                <a href="https://www.youtube.com/@placeholder" class="social-icon-btn" target="_blank" aria-label="YouTube">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="https://www.tiktok.com/@placeholder" class="social-icon-btn" target="_blank" aria-label="TikTok">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+            </div>
+        </div><!-- /.footer -->
+
+        </div><!-- /.card -->
+
+        <!-- BizBio Footer -->
+        <footer class="bizbio-footer">
+            <div>Created &amp; Hosted by <a href="https://www.bizbio.co.za" target="_blank">BizBio</a></div>
+            <div style="margin-top:4px;font-size:0.67rem;opacity:0.6;">&copy; 2025 BizBio. All rights reserved.</div>
+        </footer>
+
+    </div><!-- /.page-wrapper -->
+
+
+
+    <script>
+    (function() {
+        'use strict';
+
+        /* ============================
+           FAB
+        ============================ */
+        var fabMain = document.getElementById('fabMain');
+        var fabMenu = document.getElementById('fabMenu');
+        var fabOpen = false;
+
+        fabMain.addEventListener('click', function() {
+            fabOpen = !fabOpen;
+            fabMenu.classList.toggle('open', fabOpen);
+            fabMain.classList.toggle('open', fabOpen);
+        });
+
+        // Close FAB when clicking outside
+        document.addEventListener('click', function(e) {
+            if (fabOpen && !fabMain.contains(e.target) && !fabMenu.contains(e.target)) {
+                fabOpen = false;
+                fabMenu.classList.remove('open');
+                fabMain.classList.remove('open');
+            }
+        });
+
+        /* Share Contact */
+        document.getElementById('fabShareContact').addEventListener('click', async function(e) {
+            e.preventDefault();
+            try {
+                var response = await fetch('contact.vcf');
+                var blob     = await response.blob();
+                var file     = new File([blob], 'contact.vcf', { type: 'text/vcard' });
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({ title: 'Contact Details', files: [file] });
+                } else if (navigator.share) {
+                    await navigator.share({ title: 'Contact Details', url: window.location.href });
+                } else {
+                    window.location.href = 'contact.vcf';
+                }
+            } catch (err) {
+                if (err.name !== 'AbortError') window.location.href = 'contact.vcf';
+            }
+        });
+
+        /* Share Profile */
+        document.getElementById('fabShareProfile').addEventListener('click', async function() {
+            try {
+                if (navigator.share) {
+                    await navigator.share({
+                        title: document.title,
+                        text: 'Check out this BizBio profile!',
+                        url: window.location.href
+                    });
+                } else {
+                    navigator.clipboard.writeText(window.location.href)
+                        .then(function() { alert('Profile link copied to clipboard!'); });
+                }
+            } catch (err) {
+                if (err.name !== 'AbortError') console.warn('Share failed:', err);
+            }
+        });
+
+    })();
+    </script>
+
+    <script src="/profile-assets/vcard-generator.js"></script>
+</body>
+</html>

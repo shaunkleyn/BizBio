@@ -1,0 +1,20 @@
+:root{
+    --primary-color: #6366f1;
+    --secondary-color: #8b5cf6;
+    --page-background-color: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --card-bg-color: #ffffff;
+    --avatar-border-color: #6366f1;
+    --text-color: #1e1b4b;
+    --font-family: 'Inter', sans-serif;
+    --action-button-bg-color: #6366f1;
+    --action-button-text-color: #ffffff;
+    --info-item-icon-bg-color: rgba(99, 102, 241, 0.1);
+    --info-item-label-color: #a5b4fc;
+    --info-item-text-color: #1e1b4b;
+    --info-item-icon-text-color: #6366f1;
+    --header-color: #1e1b4b;
+    --cta-button-bg-color: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --cta-button-text-color: #ffffff;
+    --button-radius: 16px;
+    --subtitle-color: #6366f1;
+}

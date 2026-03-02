@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>David Mthembu - Digital Business Card</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/18.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: #eef2f7;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            max-width: 400px;
+            width: 100%;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,51,102,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #003366 0%, #004d99 100%);
+            padding: 32px 24px;
+            display: flex;
+            align-items: center;
+        }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 3px solid rgba(255,255,255,0.3);
+            margin-right: 20px;
+        }
+        .header-info { flex: 1; }
+        .name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .title {
+            font-size: 14px;
+            color: #66b3ff;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .company {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+        }
+        .action-buttons {
+            display: flex;
+            background: #f8fafc;
+            border-bottom: 1px solid #eef2f7;
+        }
+        .action-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 8px;
+            text-decoration: none;
+            color: #003366;
+            border-right: 1px solid #eef2f7;
+            transition: all 0.2s;
+        }
+        .action-item:last-child { border-right: none; }
+        .action-item:hover {
+            background: #003366;
+            color: #fff;
+        }
+        .action-item i {
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+        .action-item span {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .body {
+            padding: 24px;
+        }
+        .section-label {
+            font-size: 11px;
+            color: #99aabb;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .info-list {
+            margin-bottom: 24px;
+        }
+        .info-row {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            background: #f8fafc;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .info-row:hover {
+            background: #eef2f7;
+        }
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #003366;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+            color: #fff;
+            font-size: 14px;
+        }
+        .info-text { flex: 1; }
+        .info-label {
+            font-size: 11px;
+            color: #99aabb;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        .info-value {
+            font-size: 14px;
+            color: #003366;
+            font-weight: 600;
+        }
+        .social-section {
+            padding-top: 20px;
+            border-top: 1px solid #eef2f7;
+        }
+        .social-links {
+            display: flex;
+            gap: 10px;
+        }
+        .social-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #003366;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .social-btn:hover {
+            background: #003366;
+            color: #fff;
+        }
+        .footer {
+            padding: 0 24px 24px;
+        }
+        .save-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px;
+            background: linear-gradient(135deg, #003366, #004d99);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,51,102,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <img src="https://randomuser.me/api/portraits/men/28.jpg" alt="David Mthembu" class="avatar">
+            <div class="header-info">
+                <h1 class="name">David Mthembu</h1>
+                <p class="title">Senior Financial Advisor</p>
+                <p class="company">Pinnacle Wealth Management</p>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="tel:+27118901234" class="action-item">
+                <i class="fas fa-phone"></i>
+                <span>Call</span>
+            </a>
+            <a href="mailto:david@pinnaclewealth.co.za" class="action-item">
+                <i class="fas fa-envelope"></i>
+                <span>Email</span>
+            </a>
+            <a href="https://wa.me/27788901234" class="action-item">
+                <i class="fab fa-whatsapp"></i>
+                <span>Chat</span>
+            </a>
+            <a href="https://www.pinnaclewealth.co.za" class="action-item">
+                <i class="fas fa-globe"></i>
+                <span>Website</span>
+            </a>
+        </div>
+
+        <div class="body">
+            <div class="section-label">Contact Details</div>
+            <div class="info-list">
+                <a href="tel:+27118901234" class="info-row">
+                    <div class="info-icon"><i class="fas fa-phone"></i></div>
+                    <div class="info-text">
+                        <div class="info-label">Phone</div>
+                        <div class="info-value">011 890 1234</div>
+                    </div>
+                </a>
+                <a href="mailto:david@pinnaclewealth.co.za" class="info-row">
+                    <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="info-text">
+                        <div class="info-label">Email</div>
+                        <div class="info-value">david@pinnaclewealth.co.za</div>
+                    </div>
+                </a>
+                <a href="https://www.pinnaclewealth.co.za" class="info-row">
+                    <div class="info-icon"><i class="fas fa-globe"></i></div>
+                    <div class="info-text">
+                        <div class="info-label">Website</div>
+                        <div class="info-value">pinnaclewealth.co.za</div>
+                    </div>
+                </a>
+                <a href="https://maps.google.com/?q=Sandton+City,+Johannesburg" class="info-row">
+                    <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="info-text">
+                        <div class="info-label">Address</div>
+                        <div class="info-value">Sandton City, Johannesburg</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="social-section">
+                <div class="section-label">Social Profiles</div>
+                <div class="social-links">
+                    <a href="https://linkedin.com/in/davidmthembu" class="social-btn"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+                    <a href="https://twitter.com/davidmthembu" class="social-btn"><i class="fab fa-x-twitter"></i> Twitter</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <a href="david_mthembu.vcf" class="save-btn"><i class="fas fa-user-plus"></i> Save Contact</a>
+        </div>
+    </div>
+    <script src="/profile-assets/vcard-generator.js"></script>
+</body>
+</html>
