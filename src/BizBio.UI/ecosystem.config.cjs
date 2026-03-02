@@ -84,11 +84,8 @@ module.exports = {
       max_restarts: 10,
       min_uptime: '10s',
       kill_timeout: 5000,
-      listen_timeout: 3000,
-      wait_ready: true,
       merge_logs: true,
       log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
-      shutdown_with_message: true,
       env_production: {
         NODE_ENV: 'production',
         PORT: 3001,
