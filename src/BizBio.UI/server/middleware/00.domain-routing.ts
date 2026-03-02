@@ -2,13 +2,31 @@ import { defineEventHandler, getRequestHeader, getRequestURL, sendRedirect } fro
 import { stat } from 'fs/promises'
 import { join } from 'path'
 
-// Marketing / landing pages that stay on the root domain
+const API_URL = process.env.NUXT_PUBLIC_API_URL || 'https://api.bizbio.co.za/api/v1'
+
+// Root domains that serve profiles directly at /{slug} with no redirect.
+// Add additional domains here as the brand expands.
+const PROFILE_ROOT_DOMAINS = new Set(['snaptap.co.za', 'snaptap.me'])
+
+// www subdomain → canonical bare domain
+const WWW_TO_CANONICAL: Record<string, string> = {
+  'www.snaptap.co.za': 'snaptap.co.za',
+  'www.snaptap.me':    'snaptap.me',
+}
+
+// cards. subdomain → redirect back to the canonical root domain
+const CARDS_TO_CANONICAL: Record<string, string> = {
+  'cards.snaptap.co.za': 'snaptap.co.za',
+  'cards.snaptap.me':    'snaptap.me',
+}
+
+// Marketing / landing pages — served as-is on the root domain
 const LANDING_EXACT = new Set([
   '/', '/pricing', '/categories', '/help', '/contact',
   '/terms', '/privacy', '/search', '/products',
 ])
 
-// App-area paths that redirect to app.snaptap.co.za
+// App-area paths → redirect to app.snaptap.co.za (the single app home)
 const APP_PREFIXES = [
   '/login', '/register', '/forgot-password', '/reset-password',
   '/verify-email', '/dashboard', '/menu',
@@ -20,8 +38,6 @@ const INTERNAL_PREFIXES = [
   '/robots', '/sitemap', '/templates', '/404', '/500',
 ]
 
-// Check whether a slug has a static profile directory on disk.
-// Static profiles are business cards and are served directly at snaptap.co.za/{slug}.
 async function isStaticCardSlug(slug: string): Promise<boolean> {
   try {
     const s = await stat(join(process.cwd(), 'profiles', slug))
@@ -31,13 +47,9 @@ async function isStaticCardSlug(slug: string): Promise<boolean> {
   }
 }
 
-// Check whether a slug belongs to an entity (menu / restaurant / catalog).
 async function isEntitySlug(slug: string, apiUrl: string): Promise<boolean> {
   try {
-    await $fetch(`${apiUrl}/entities/by-slug/${slug}`, {
-      method: 'GET',
-      timeout: 3000,
-    })
+    await $fetch(`${apiUrl}/entities/by-slug/${slug}`, { method: 'GET', timeout: 3000 })
     return true
   } catch {
     return false
@@ -54,44 +66,44 @@ export default defineEventHandler(async (event) => {
   // Never intercept Nuxt internals or templates (served as public assets)
   if (INTERNAL_PREFIXES.some(p => path.startsWith(p))) return
 
-  // ── www.snaptap.co.za → canonical bare domain ──────────────────────────
-  if (host === 'www.snaptap.co.za') {
-    return sendRedirect(event, `https://snaptap.co.za${path}${qs}`, 301)
+  // ── www.* → canonical bare domain ──────────────────────────────────────
+  const canonical = WWW_TO_CANONICAL[host]
+  if (canonical) {
+    return sendRedirect(event, `https://${canonical}${path}${qs}`, 301)
   }
 
-  // ── cards.snaptap.co.za/{slug} → snaptap.co.za/{slug} (canonical) ──────
-  // Profiles are canonical at the root domain; cards subdomain is an alias.
-  if (host === 'cards.snaptap.co.za') {
-    return sendRedirect(event, `https://snaptap.co.za${path}${qs}`, 301)
+  // ── cards.* → canonical root domain (profiles live at root) ────────────
+  const cardsCanonical = CARDS_TO_CANONICAL[host]
+  if (cardsCanonical) {
+    return sendRedirect(event, `https://${cardsCanonical}${path}${qs}`, 301)
   }
 
-  // ── All other subdomains (app, menu) pass through unchanged ─────────────
-  if (host !== 'snaptap.co.za') return
+  // ── All other subdomains (app.*, menu.*) pass through unchanged ─────────
+  if (!PROFILE_ROOT_DOMAINS.has(host)) return
 
-  // ── Root domain routing logic ────────────────────────────────────────────
+  // ── Root domain routing logic (snaptap.co.za, snaptap.me) ──────────────
 
   // Known landing pages — serve as-is
-  const normalised = path.replace(/\/$/, '') || '/'
-  if (LANDING_EXACT.has(path) || LANDING_EXACT.has(normalised)) return
+  const normalized = path.replace(/\/$/, '') || '/'
+  if (LANDING_EXACT.has(path) || LANDING_EXACT.has(normalized)) return
 
-  // App paths → app.snaptap.co.za
+  // App paths → app.snaptap.co.za (single app entry point regardless of brand domain)
   if (APP_PREFIXES.some(p => path === p || path.startsWith(`${p}/`))) {
     return sendRedirect(event, `https://app.snaptap.co.za${path}${qs}`, 301)
   }
 
-  // Potential slug — must have at least one non-empty path segment
+  // Potential slug — needs at least one non-empty path segment
   const segments = path.split('/').filter(Boolean)
   if (segments.length === 0) return
 
   const slug = segments[0]
 
-  // Static card profiles are served directly at snaptap.co.za/{slug}.
-  // Fall through so profiles.ts middleware can serve the file from disk.
+  // Static card profiles are served directly at {domain}/{slug}.
+  // Fall through so profiles.ts serves the file from disk.
   if (await isStaticCardSlug(slug)) return
 
-  // Entity slugs (menus / restaurants) redirect to the menu subdomain.
-  const { public: pub } = useRuntimeConfig()
-  if (await isEntitySlug(slug, pub.apiUrl)) {
+  // Entity slugs (menus / restaurants) → menu.snaptap.co.za
+  if (await isEntitySlug(slug, API_URL)) {
     return sendRedirect(event, `https://menu.snaptap.co.za${path}${qs}`, 301)
   }
 
