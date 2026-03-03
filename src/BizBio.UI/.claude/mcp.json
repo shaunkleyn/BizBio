@@ -1,0 +1,8 @@
+  {
+    "mcpServers": {
+      "mcp-ssh": {
+        "command": "npx",
+        "args": ["-y", "@aiondadotcom/mcp-ssh"]
+      }
+    }
+  }
