@@ -67,7 +67,9 @@
       "mcp__ide__getDiagnostics",
       "Bash(git:*)",
       "Bash(echo === $\\(basename \"$template\"\\) ===:*)",
-      "Bash(echo === Template $i ===:*)"
+      "Bash(echo === Template $i ===:*)",
+      "WebFetch(domain:www.snaptap.co.za)",
+      "WebFetch(domain:www.npmjs.com)"
     ],
     "deny": [],
     "ask": []
