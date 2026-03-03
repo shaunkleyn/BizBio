@@ -1,0 +1,271 @@
+     1→<template>
+     2→  <div>
+     3→    <section class="min-h-screen bg-gradient-to-br from-[var(--light-background-color)] to-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+     4→      <!-- Decorative Background Blobs -->
+     5→      <div class="absolute top-20 right-10 w-72 h-72 bg-[var(--accent3-color)] rounded-full opacity-10 blur-3xl"></div>
+     6→      <div class="absolute bottom-20 left-10 w-96 h-96 bg-[var(--primary-color)] rounded-full opacity-10 blur-3xl"></div>
+     7→
+     8→      <div class="max-w-2xl w-full relative z-10">
+     9→        <!-- Header -->
+    10→        <div class="text-center mb-8">
+    11→          <div class="flex justify-center mb-6">
+    12→            <div class="bg-[var(--accent3-color)] bg-opacity-10 rounded-full p-4">
+    13→              <i class="fas fa-user-plus text-[var(--accent3-color)] text-5xl"></i>
+    14→            </div>
+    15→          </div>
+    16→          <h1 class="text-3xl sm:text-4xl font-bold text-[var(--dark-text-color)] font-[var(--font-family-heading)] mb-2">
+    17→            Create Your Account
+    18→          </h1>
+    19→          <p class="text-[var(--gray-text-color)] font-[var(--font-family-body)]">
+    20→            Join thousands of professionals sharing their profiles smarter
+    21→          </p>
+    22→        </div>
+    23→
+    24→        <!-- Registration Form -->
+    25→        <div class="bg-white rounded-2xl shadow-2xl p-8 sm:p-10">
+    26→          <!-- Success Message -->
+    27→          <div v-if="successMessage" class="mb-6 bg-[var(--accent3-color)] bg-opacity-10 border-2 border-[var(--accent3-color)] rounded-lg p-4">
+    28→            <div class="flex items-center gap-3">
+    29→              <i class="fas fa-check-circle text-[var(--accent3-color)] text-2xl"></i>
+    30→              <div>
+    31→                <p class="font-semibold text-[var(--dark-text-color)]">{{ successMessage }}</p>
+    32→                <p class="text-sm text-[var(--gray-text-color)] mt-1">Please check your email to verify your account.</p>
+    33→              </div>
+    34→            </div>
+    35→          </div>
+    36→
+    37→          <!-- Error Message -->
+    38→          <div v-if="error" class="mb-6 bg-[var(--accent-color)] bg-opacity-10 border-2 border-[var(--accent-color)] rounded-lg p-4">
+    39→            <div class="flex items-center gap-3">
+    40→              <i class="fas fa-exclamation-circle text-[var(--accent-color)] text-2xl"></i>
+    41→              <p class="text-[var(--dark-text-color)]">{{ error }}</p>
+    42→            </div>
+    43→          </div>
+    44→
+    45→          <form @submit.prevent="handleRegister" class="space-y-6">
+    46→            <!-- Name Fields -->
+    47→            <div class="grid sm:grid-cols-2 gap-4">
+    48→              <div>
+    49→                <label for="firstName" class="block text-sm font-semibold text-[var(--dark-text-color)] font-[var(--font-family-body)] mb-2">
+    50→                  First Name
+    51→                </label>
+    52→                <input
+    53→                  type="text"
+    54→                  id="firstName"
+    55→                  v-model="formData.firstName"
+    56→                  required
+    57→                  class="block w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-colors font-[var(--font-family-body)]"
+    58→                  placeholder="John"
+    59→                />
+    60→              </div>
+    61→              <div>
+    62→                <label for="lastName" class="block text-sm font-semibold text-[var(--dark-text-color)] font-[var(--font-family-body)] mb-2">
+    63→                  Last Name
+    64→                </label>
+    65→                <input
+    66→                  type="text"
+    67→                  id="lastName"
+    68→                  v-model="formData.lastName"
+    69→                  required
+    70→                  class="block w-full px-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-colors font-[var(--font-family-body)]"
+    71→                  placeholder="Smith"
+    72→                />
+    73→              </div>
+    74→            </div>
+    75→
+    76→            <!-- Email Field -->
+    77→            <div>
+    78→              <label for="email" class="block text-sm font-semibold text-[var(--dark-text-color)] font-[var(--font-family-body)] mb-2">
+    79→                Email Address
+    80→              </label>
+    81→              <div class="relative">
+    82→                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+    83→                  <i class="fas fa-envelope text-[var(--gray-text-color)]"></i>
+    84→                </div>
+    85→                <input
+    86→                  type="email"
+    87→                  id="email"
+    88→                  v-model="formData.email"
+    89→                  required
+    90→                  class="block w-full pl-12 pr-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-colors font-[var(--font-family-body)]"
+    91→                  placeholder="your@email.com"
+    92→                />
+    93→              </div>
+    94→            </div>
+    95→
+    96→            <!-- Password Fields -->
+    97→            <div class="grid sm:grid-cols-2 gap-4">
+    98→              <div>
+    99→                <label for="password" class="block text-sm font-semibold text-[var(--dark-text-color)] font-[var(--font-family-body)] mb-2">
+   100→                  Password
+   101→                </label>
+   102→                <div class="relative">
+   103→                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+   104→                    <i class="fas fa-lock text-[var(--gray-text-color)]"></i>
+   105→                  </div>
+   106→                  <input
+   107→                    type="password"
+   108→                    id="password"
+   109→                    v-model="formData.password"
+   110→                    required
+   111→                    class="block w-full pl-12 pr-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-colors font-[var(--font-family-body)]"
+   112→                    placeholder="••••••••"
+   113→                  />
+   114→                </div>
+   115→              </div>
+   116→              <div>
+   117→                <label for="confirmPassword" class="block text-sm font-semibold text-[var(--dark-text-color)] font-[var(--font-family-body)] mb-2">
+   118→                  Confirm Password
+   119→                </label>
+   120→                <div class="relative">
+   121→                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+   122→                    <i class="fas fa-lock text-[var(--gray-text-color)]"></i>
+   123→                  </div>
+   124→                  <input
+   125→                    type="password"
+   126→                    id="confirmPassword"
+   127→                    v-model="confirmPassword"
+   128→                    required
+   129→                    class="block w-full pl-12 pr-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-colors font-[var(--font-family-body)]"
+   130→                    placeholder="••••••••"
+   131→                  />
+   132→                </div>
+   133→              </div>
+   134→            </div>
+   135→
+   136→            <!-- Phone Number -->
+   137→            <div>
+   138→              <label for="phone" class="block text-sm font-semibold text-[var(--dark-text-color)] font-[var(--font-family-body)] mb-2">
+   139→                Phone Number (Optional)
+   140→              </label>
+   141→              <div class="relative">
+   142→                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+   143→                  <i class="fas fa-phone text-[var(--gray-text-color)]"></i>
+   144→                </div>
+   145→                <input
+   146→                  type="tel"
+   147→                  id="phone"
+   148→                  v-model="formData.phone"
+   149→                  class="block w-full pl-12 pr-4 py-3 border-2 border-[var(--light-border-color)] rounded-lg focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-colors font-[var(--font-family-body)]"
+   150→                  placeholder="+1 (555) 123-4567"
+   151→                />
+   152→              </div>
+   153→            </div>
+   154→
+   155→            <!-- Terms Checkbox -->
+   156→            <div class="flex items-start">
+   157→              <input
+   158→                type="checkbox"
+   159→                id="terms"
+   160→                v-model="agreeToTerms"
+   161→                required
+   162→                class="mt-1 h-5 w-5 text-[var(--primary-color)] border-[var(--light-border-color)] rounded focus:ring-[var(--primary-color)]"
+   163→              />
+   164→              <label for="terms" class="ml-3 text-sm text-[var(--gray-text-color)] font-[var(--font-family-body)]">
+   165→                I agree to the
+   166→                <NuxtLink to="/terms" class="text-[var(--primary-color)] hover:underline">Terms of Service</NuxtLink>
+   167→                and
+   168→                <NuxtLink to="/privacy" class="text-[var(--primary-color)] hover:underline">Privacy Policy</NuxtLink>
+   169→              </label>
+   170→            </div>
+   171→
+   172→            <!-- Submit Button -->
+   173→            <button
+   174→              type="submit"
+   175→              :disabled="loading"
+   176→              class="w-full bg-[var(--primary-color)] text-[var(--primary-button-text-color)] px-6 py-4 rounded-[var(--button-rounded-radius)] hover:bg-[var(--primary-button-hover-bg-color)] transition-all duration-200 font-semibold font-[var(--font-family-body)] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+   177→            >
+   178→              <i v-if="loading" class="fas fa-spinner fa-spin"></i>
+   179→              <i v-else class="fas fa-user-plus"></i>
+   180→              <span>{{ loading ? 'Creating Account...' : 'Create Account' }}</span>
+   181→            </button>
+   182→          </form>
+   183→
+   184→          <!-- Sign In Link -->
+   185→          <div class="mt-8 text-center">
+   186→            <p class="text-[var(--gray-text-color)] font-[var(--font-family-body)]">
+   187→              Already have an account?
+   188→              <NuxtLink to="/login" class="text-[var(--primary-color)] hover:underline font-semibold">
+   189→                Sign In
+   190→              </NuxtLink>
+   191→            </p>
+   192→          </div>
+   193→        </div>
+   194→      </div>
+   195→    </section>
+   196→  </div>
+   197→</template>
+   198→
+   199→<script setup>
+   200→import { useAuthStore } from '~/stores/auth'
+   201→
+   202→const authStore = useAuthStore()
+   203→const router = useRouter()
+   204→
+   205→const formData = ref({
+   206→  firstName: '',
+   207→  lastName: '',
+   208→  email: '',
+   209→  password: '',
+   210→  phone: ''
+   211→})
+   212→
+   213→const confirmPassword = ref('')
+   214→const agreeToTerms = ref(false)
+   215→const loading = ref(false)
+   216→const error = ref(null)
+   217→const successMessage = ref(null)
+   218→
+   219→const handleRegister = async () => {
+   220→  error.value = null
+   221→  successMessage.value = null
+   222→
+   223→  // Validate passwords match
+   224→  if (formData.value.password !== confirmPassword.value) {
+   225→    error.value = 'Passwords do not match'
+   226→    return
+   227→  }
+   228→
+   229→  // Validate terms agreement
+   230→  if (!agreeToTerms.value) {
+   231→    error.value = 'You must agree to the Terms of Service and Privacy Policy'
+   232→    return
+   233→  }
+   234→
+   235→  loading.value = true
+   236→
+   237→  const result = await authStore.register(formData.value)
+   238→
+   239→  if (result.success) {
+   240→    successMessage.value = 'Registration successful!'
+   241→    // Clear form
+   242→    formData.value = {
+   243→      firstName: '',
+   244→      lastName: '',
+   245→      email: '',
+   246→      password: '',
+   247→      phone: ''
+   248→    }
+   249→    confirmPassword.value = ''
+   250→    agreeToTerms.value = false
+   251→
+   252→    // Optionally redirect to login after a delay
+   253→    setTimeout(() => {
+   254→      router.push('/login')
+   255→    }, 3000)
+   256→  } else {
+   257→    error.value = result.error
+   258→  }
+   259→
+   260→  loading.value = false
+   261→}
+   262→
+   263→useHead({
+   264→  title: 'Register',
+   265→})
+   266→</script>
+   267→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

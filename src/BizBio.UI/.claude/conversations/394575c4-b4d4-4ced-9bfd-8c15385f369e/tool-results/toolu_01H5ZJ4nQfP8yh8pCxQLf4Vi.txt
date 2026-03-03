@@ -1,0 +1,98 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\menu\[slug].vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   102→          </div>
+   103→        </div>
+   104→      </div>
+   105→
+   106→      <!-- Menu Items by Category -->
+   107→      <div class="max-w-7xl mx-auto pb-24 bg-gray-50">
+   108→        <div
+   109→          v-for="category in categories"
+   110→          :key="category.id"
+   111→          :id="`category-${category.id}`"
+   112→          class="mb-8"
+   113→        >
+   114→          <h2 class="text-2xl font-bold text-gray-900 px-4 sm:px-6 lg:px-8 py-6 bg-white sticky top-[52px] z-10 border-b border-gray-100">
+   115→            {{ category.name }}
+   116→          </h2>
+   117→
+   118→          <!-- Grid Layout for Menu Items -->
+   119→          <div class="px-4 sm:px-6 lg:px-8 pt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+   120→            <div
+   121→              v-for="item in getCategoryItems(category.id)"
+   122→              :key="item.id"
+   123→              class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-gray-200"
+   124→            >
+   125→              <!-- Item Image -->
+   126→              <div
+   127→                @click="openItemDetail(item)"
+   128→                class="relative w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 cursor-pointer overflow-hidden group"
+   129→              >
+   130→                <img
+   131→                  v-if="item.images && item.images.length > 0"
+   132→                  :src="item.images[0]"
+   133→                  :alt="item.name"
+   134→                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+   135→                />
+   136→                <div v-else class="w-full h-full flex items-center justify-center">
+   137→                  <i class="fas fa-utensils text-5xl text-gray-300"></i>
+   138→                </div>
+   139→                <span
+   140→                  v-if="item.itemType === 1"
+   141→                  class="absolute top-3 left-3 px-2.5 py-1 bg-orange-500 text-white text-xs font-bold rounded-full shadow-lg"
+   142→                >
+   143→                  BUNDLE
+   144→                </span>
+   145→              </div>
+   146→
+   147→              <!-- Item Info -->
+   148→              <div class="p-4">
+   149→                <div class="mb-2">
+   150→                  <h3
+   151→                    @click="openItemDetail(item)"
+   152→                    class="text-lg font-bold text-gray-900 mb-1 cursor-pointer hover:text-gray-700 transition-colors"
+   153→                  >
+   154→                    {{ item.name }}
+   155→                  </h3>
+   156→                  <p v-if="item.description" class="text-sm text-gray-600 line-clamp-2 leading-relaxed">
+   157→                    {{ item.description }}
+   158→                  </p>
+   159→                </div>
+   160→
+   161→                <!-- Price and Add Button -->
+   162→                <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
+   163→                  <div class="flex flex-col">
+   164→                    <span class="text-xs text-gray-500 font-medium">From</span>
+   165→                    <span class="text-lg font-bold text-gray-900">R{{ item.price.toFixed(2) }}</span>
+   166→                  </div>
+   167→                  <button
+   168→                    @click="openItemDetail(item)"
+   169→                    class="px-6 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors active:scale-95 transform"
+   170→                  >
+   171→                    Add
+   172→                  </button>
+   173→                </div>
+   174→
+   175→                <!-- Edit Button (when in edit mode) -->
+   176→                <button
+   177→                  v-if="editMode"
+   178→                  @click.stop="editItem(item)"
+   179→                  class="mt-3 w-full px-3 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+   180→                >
+   181→                  <i class="fas fa-edit mr-1"></i>
+   182→                  Edit Item
+   183→                </button>
+   184→              </div>
+   185→            </div>
+   186→          </div>
+   187→
+   188→          <!-- Empty Category -->
+   189→          <div v-if="getCategoryItems(category.id).length === 0" class="text-center py-16 text-gray-500 bg-white mx-4 sm:mx-6 lg:mx-8 rounded-lg">
+   190→            <i class="fas fa-box-open text-6xl mb-4 opacity-30"></i>
+   191→            <p class="text-base font-medium">No items in this category</p>
+   192→          </div>
+   193→        </div>
+   194→      </div>
+   195→
+   196→      <!-- Floating Cart Button (Mobile) -->
+   197→      <div
+   198→        v-if="cartStore.itemCount > 0"

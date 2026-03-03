@@ -1,0 +1,1 @@
+File created successfully at: C:\Development\github\bizbio2\BizBio\src\BizBio.Core\Entities\Category.cs

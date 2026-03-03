@@ -1,0 +1,41 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.API\Controllers\LibraryItemsController.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   520→        }
+   521→    }
+   522→}
+   523→
+   524→public class CreateLibraryItemDto
+   525→{
+   526→    public int? CategoryId { get; set; }
+   527→    public CatalogItemType ItemType { get; set; } = CatalogItemType.Regular;
+   528→    public string Name { get; set; } = null!;
+   529→    public string? Description { get; set; }
+   530→    public decimal Price { get; set; }
+   531→    public List<string>? Images { get; set; }
+   532→    public List<string>? Tags { get; set; } // Allergens, dietary info
+   533→    public int SortOrder { get; set; } = 0;
+   534→    public bool AvailableInEventMode { get; set; } = true;
+   535→    public bool EventModeOnly { get; set; } = false;
+   536→    public List<CreateVariantDto>? Variants { get; set; }
+   537→    public List<int>? OptionGroupIds { get; set; }
+   538→    public List<int>? ExtraGroupIds { get; set; }
+   539→}
+   540→
+   541→public class UpdateLibraryItemDto
+   542→{
+   543→    public string? Name { get; set; }
+   544→    public string? Description { get; set; }
+   545→    public decimal? Price { get; set; }
+   546→    public int? CategoryId { get; set; }
+   547→    public List<string>? Images { get; set; }
+   548→    public List<string>? Tags { get; set; }
+   549→    public int? SortOrder { get; set; }
+   550→    public bool? AvailableInEventMode { get; set; }
+   551→    public bool? EventModeOnly { get; set; }
+   552→    public List<CreateVariantDto>? Variants { get; set; }
+   553→    public List<int>? OptionGroupIds { get; set; }
+   554→    public List<int>? ExtraGroupIds { get; set; }
+   555→}
+   556→
+   557→public class CreateVariantDto
+   558→{
+   559→    public string Title { get; set; } = null!;

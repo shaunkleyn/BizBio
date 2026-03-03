@@ -1,0 +1,56 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\components\ItemFormModal.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   513→    fetchExtraGroups()
+   514→  ])
+   515→})
+   516→
+   517→async function fetchOptionGroups() {
+   518→  loadingOptions.value = true
+   519→  try {
+   520→    const api = useApi()
+   521→    const response = await api.get('/library/option-groups')
+   522→    console.log('Option groups response:', response)
+   523→    if (response.success) {
+   524→      // Ensure we always set an array
+   525→      if (Array.isArray(response.data)) {
+   526→        availableOptionGroups.value = response.data
+   527→      } else if (response.data && Array.isArray(response.data.optionGroups)) {
+   528→        availableOptionGroups.value = response.data.optionGroups
+   529→      } else {
+   530→        availableOptionGroups.value = []
+   531→      }
+   532→    }
+   533→  } catch (error) {
+   534→    console.error('Error fetching option groups:', error)
+   535→    availableOptionGroups.value = []
+   536→  } finally {
+   537→    loadingOptions.value = false
+   538→  }
+   539→}
+   540→
+   541→async function fetchExtraGroups() {
+   542→  loadingExtras.value = true
+   543→  try {
+   544→    const api = useApi()
+   545→    const response = await api.get('/library/extra-groups')
+   546→    console.log('Extra groups response:', response)
+   547→    if (response.success) {
+   548→      // Ensure we always set an array
+   549→      if (Array.isArray(response.data)) {
+   550→        availableExtraGroups.value = response.data
+   551→      } else if (response.data && Array.isArray(response.data.extraGroups)) {
+   552→        availableExtraGroups.value = response.data.extraGroups
+   553→      } else {
+   554→        availableExtraGroups.value = []
+   555→      }
+   556→    }
+   557→  } catch (error) {
+   558→    console.error('Error fetching extra groups:', error)
+   559→    availableExtraGroups.value = []
+   560→  } finally {
+   561→    loadingExtras.value = false
+   562→  }
+   563→}
+   564→
+   565→function toggleTag(tag: string) {
+   566→  const index = form.tags.indexOf(tag)
+   567→  if (index > -1) {

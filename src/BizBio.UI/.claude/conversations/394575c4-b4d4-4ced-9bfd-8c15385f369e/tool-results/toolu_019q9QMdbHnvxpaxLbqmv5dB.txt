@@ -1,0 +1,17 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\components\ItemFormModal.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   449→const libraryItemsApi = useLibraryItemsApi()
+   450→const uploadsApi = useUploadsApi()
+   451→const toast = useToast()
+   452→
+   453→const saving = ref(false)
+   454→const uploading = ref(false)
+   455→const loadingExtras = ref(false)
+   456→const loadingOptions = ref(false)
+   457→const tagInput = ref('')
+   458→const maxImages = ref(5) // TODO: Get from user's subscription
+   459→const availableExtraGroups = ref<any[]>([])
+   460→const availableOptionGroups = ref<any[]>([])
+   461→
+   462→const commonTags = [
+   463→  'Gluten-Free',
+   464→  'Vegan',

@@ -1,0 +1,143 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.Infrastructure\Data\ApplicationDbContext.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   154→                .WithMany(b => b.UserSubscriptions)
+   155→                .HasForeignKey(e => e.BillingCycleId)
+   156→                .OnDelete(DeleteBehavior.Restrict);
+   157→
+   158→            entity.HasOne(e => e.ProductLine)
+   159→                .WithMany()
+   160→                .HasForeignKey(e => e.ProductLineId)
+   161→                .OnDelete(DeleteBehavior.Restrict);
+   162→        });
+   163→
+   164→        // ProductSubscription Configuration
+   165→        modelBuilder.Entity<ProductSubscription>(entity =>
+   166→        {
+   167→            entity.ToTable("ProductSubscriptions");
+   168→            entity.HasKey(e => e.Id);
+   169→            entity.HasIndex(e => e.UserId);
+   170→            entity.HasIndex(e => e.TierId);
+   171→            entity.HasIndex(e => e.ProductType);
+   172→            entity.HasIndex(e => e.Status);
+   173→            entity.HasIndex(e => new { e.UserId, e.ProductType }).IsUnique();
+   174→
+   175→            entity.Property(e => e.ProductType).IsRequired();
+   176→            entity.Property(e => e.Status).IsRequired();
+   177→            entity.Property(e => e.BillingCycle).IsRequired();
+   178→            entity.Property(e => e.IsTrialActive).HasDefaultValue(true);
+   179→
+   180→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   181→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   182→
+   183→            entity.HasOne(e => e.User)
+   184→                .WithMany()
+   185→                .HasForeignKey(e => e.UserId)
+   186→                .OnDelete(DeleteBehavior.Cascade);
+   187→
+   188→            entity.HasOne(e => e.Tier)
+   189→                .WithMany(t => t.ProductSubscriptions)
+   190→                .HasForeignKey(e => e.TierId)
+   191→                .OnDelete(DeleteBehavior.Restrict);
+   192→        });
+   193→
+   194→        // Entity Configuration
+   195→        modelBuilder.Entity<Entity>(entity =>
+   196→        {
+   197→            entity.ToTable("Entities");
+   198→            entity.HasKey(e => e.Id);
+   199→            entity.HasIndex(e => e.UserId);
+   200→            entity.HasIndex(e => e.Slug).IsUnique();
+   201→            entity.HasIndex(e => e.EntityType);
+   202→            entity.HasIndex(e => e.IsActive);
+   203→            entity.HasIndex(e => new { e.UserId, e.SortOrder });
+   204→
+   205→            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+   206→            entity.Property(e => e.Slug).HasMaxLength(255).IsRequired();
+   207→            entity.Property(e => e.Description).HasMaxLength(2000);
+   208→            entity.Property(e => e.Logo).HasMaxLength(500);
+   209→            entity.Property(e => e.Address).HasMaxLength(255);
+   210→            entity.Property(e => e.City).HasMaxLength(100);
+   211→            entity.Property(e => e.PostalCode).HasMaxLength(20);
+   212→            entity.Property(e => e.Phone).HasMaxLength(20);
+   213→            entity.Property(e => e.Email).HasMaxLength(255);
+   214→            entity.Property(e => e.Website).HasMaxLength(500);
+   215→            entity.Property(e => e.Currency).HasMaxLength(3).HasDefaultValue("ZAR");
+   216→            entity.Property(e => e.Timezone).HasMaxLength(50).HasDefaultValue("Africa/Johannesburg");
+   217→            entity.Property(e => e.EntityType).IsRequired();
+   218→
+   219→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   220→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   221→
+   222→            entity.HasOne(e => e.User)
+   223→                .WithMany()
+   224→                .HasForeignKey(e => e.UserId)
+   225→                .OnDelete(DeleteBehavior.Cascade);
+   226→
+   227→            entity.HasMany(e => e.Catalogs)
+   228→                .WithOne(c => c.Entity)
+   229→                .HasForeignKey(c => c.EntityId)
+   230→                .OnDelete(DeleteBehavior.Cascade);
+   231→
+   232→            entity.HasMany(e => e.Categories)
+   233→                .WithOne(c => c.Entity)
+   234→                .HasForeignKey(c => c.EntityId)
+   235→                .OnDelete(DeleteBehavior.Cascade);
+   236→        });
+   237→
+   238→        // Category Configuration (entity-level categories)
+   239→        modelBuilder.Entity<Category>(entity =>
+   240→        {
+   241→            entity.ToTable("CategoriesNew");
+   242→            entity.HasKey(e => e.Id);
+   243→            entity.HasIndex(e => e.EntityId);
+   244→            entity.HasIndex(e => e.IsActive);
+   245→            entity.HasIndex(e => new { e.EntityId, e.SortOrder });
+   246→
+   247→            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+   248→            entity.Property(e => e.Slug).HasMaxLength(255);
+   249→            entity.Property(e => e.Description).HasMaxLength(1000);
+   250→            entity.Property(e => e.Icon).HasMaxLength(500);
+   251→
+   252→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   253→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   254→
+   255→            entity.HasOne(e => e.Entity)
+   256→                .WithMany(ent => ent.Categories)
+   257→                .HasForeignKey(e => e.EntityId)
+   258→                .OnDelete(DeleteBehavior.Cascade);
+   259→
+   260→            entity.HasMany(e => e.CatalogCategories)
+   261→                .WithOne(cc => cc.Category)
+   262→                .HasForeignKey(cc => cc.CategoryId)
+   263→                .OnDelete(DeleteBehavior.Cascade);
+   264→        });
+   265→
+   266→        // CatalogCategory Configuration (junction table)
+   267→        modelBuilder.Entity<CatalogCategory>(entity =>
+   268→        {
+   269→            entity.ToTable("CatalogCategories");
+   270→            entity.HasKey(e => e.Id);
+   271→            entity.HasIndex(e => e.CatalogId);
+   272→            entity.HasIndex(e => e.CategoryId);
+   273→            entity.HasIndex(e => new { e.CatalogId, e.CategoryId }).IsUnique();
+   274→
+   275→            entity.Property(e => e.SortOrder).HasDefaultValue(0);
+   276→
+   277→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   278→
+   279→            entity.HasOne(e => e.Catalog)
+   280→                .WithMany(c => c.Categories)
+   281→                .HasForeignKey(e => e.CatalogId)
+   282→                .OnDelete(DeleteBehavior.Cascade);
+   283→
+   284→            entity.HasOne(e => e.Category)
+   285→                .WithMany(c => c.CatalogCategories)
+   286→                .HasForeignKey(e => e.CategoryId)
+   287→                .OnDelete(DeleteBehavior.Cascade);
+   288→        });
+   289→
+   290→        // SubscriptionAddon Configuration
+   291→        modelBuilder.Entity<SubscriptionAddon>(entity =>
+   292→        {
+   293→            entity.ToTable("SubscriptionAddons");
+   294→            entity.HasKey(e => e.Id);
+   295→            entity.HasIndex(e => e.ProductLineId);

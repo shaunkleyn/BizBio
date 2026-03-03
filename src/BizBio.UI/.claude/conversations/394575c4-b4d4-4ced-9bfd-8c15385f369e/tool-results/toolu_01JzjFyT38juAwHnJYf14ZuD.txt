@@ -1,0 +1,77 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\menu\[slug].vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    40→          {{ editMode ? 'Done' : 'Edit' }}
+    41→        </button>
+    42→      </div>
+    43→
+    44→      <!-- Restaurant Info Header -->
+    45→      <div class="bg-white border-b border-gray-200">
+    46→        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    47→          <!-- Restaurant Name and Rating -->
+    48→          <div class="mb-4">
+    49→            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+    50→              {{ menuData?.name || 'Menu' }}
+    51→            </h1>
+    52→            <div v-if="menuData?.rating" class="flex items-center gap-2 mb-3">
+    53→              <div class="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-full">
+    54→                <i class="fas fa-star text-yellow-500 text-xs"></i>
+    55→                <span class="font-bold text-gray-900">{{ menuData.rating }}</span>
+    56→              </div>
+    57→              <span v-if="menuData?.reviewCount" class="text-sm text-gray-600">
+    58→                {{ menuData.reviewCount.toLocaleString() }} reviews
+    59→              </span>
+    60→            </div>
+    61→          </div>
+    62→
+    63→          <!-- Operating Hours -->
+    64→          <div v-if="menuData?.operatingHours" class="mb-4 pb-4 border-b border-gray-200">
+    65→            <div class="flex items-start gap-3">
+    66→              <i class="fas fa-clock text-gray-400 mt-1"></i>
+    67→              <div class="flex-1">
+    68→                <div class="text-sm text-gray-900 font-medium mb-2">Operating Hours</div>
+    69→                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+    70→                  <div v-for="(hours, day) in menuData.operatingHours" :key="day" class="flex justify-between">
+    71→                    <span class="text-gray-600">{{ day }}</span>
+    72→                    <span class="text-gray-900 font-medium">{{ hours }}</span>
+    73→                  </div>
+    74→                </div>
+    75→              </div>
+    76→            </div>
+    77→          </div>
+    78→
+    79→          <!-- Address -->
+    80→          <div v-if="menuData?.address" class="mb-4 pb-4 border-b border-gray-200">
+    81→            <div class="flex items-start gap-3">
+    82→              <i class="fas fa-map-marker-alt text-gray-400 mt-1"></i>
+    83→              <div class="flex-1">
+    84→                <div class="text-sm text-gray-900 font-medium mb-1">Address</div>
+    85→                <div class="text-sm text-gray-600">{{ menuData.address }}</div>
+    86→              </div>
+    87→            </div>
+    88→          </div>
+    89→
+    90→          <!-- Cuisine Tags -->
+    91→          <div v-if="menuData?.cuisineTags && menuData.cuisineTags.length > 0" class="mb-4">
+    92→            <div class="flex flex-wrap gap-2">
+    93→              <span
+    94→                v-for="(tag, index) in menuData.cuisineTags"
+    95→                :key="index"
+    96→                class="px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-full"
+    97→              >
+    98→                {{ tag }}
+    99→              </span>
+   100→            </div>
+   101→          </div>
+   102→
+   103→          <!-- Delivery Info Banner -->
+   104→          <div v-if="menuData?.deliveryInfo" class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+   105→            <div class="flex items-center gap-3 text-sm text-blue-900">
+   106→              <i class="fas fa-motorcycle text-blue-600"></i>
+   107→              <span class="font-medium">{{ menuData.deliveryInfo }}</span>
+   108→            </div>
+   109→          </div>
+   110→        </div>
+   111→      </div>
+   112→
+   113→      <!-- Category Tabs (Sticky) -->
+   114→      <div v-if="categories.length > 0" class="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
+   115→        <div class="max-w-7xl mx-auto">

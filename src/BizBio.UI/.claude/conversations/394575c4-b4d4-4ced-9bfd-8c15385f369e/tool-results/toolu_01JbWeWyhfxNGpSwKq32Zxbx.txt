@@ -1,0 +1,28 @@
+     1→namespace BizBio.Core.Entities;
+     2→
+     3→/// <summary>
+     4→/// Junction table linking Option Groups to Options (many-to-many)
+     5→/// Defines which options belong to which groups
+     6→/// </summary>
+     7→public class CatalogItemOptionGroupItem : BaseEntity
+     8→{
+     9→    public int OptionGroupId { get; set; }
+    10→    public int OptionId { get; set; }
+    11→
+    12→    public int DisplayOrder { get; set; }
+    13→
+    14→    /// <summary>
+    15→    /// Whether this option is selected by default
+    16→    /// e.g., "Medium" might be the default size
+    17→    /// </summary>
+    18→    public bool IsDefault { get; set; } = false;
+    19→
+    20→    // Navigation properties
+    21→    public virtual CatalogItemOptionGroup OptionGroup { get; set; } = null!;
+    22→    public virtual CatalogItemOption Option { get; set; } = null!;
+    23→}
+    24→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

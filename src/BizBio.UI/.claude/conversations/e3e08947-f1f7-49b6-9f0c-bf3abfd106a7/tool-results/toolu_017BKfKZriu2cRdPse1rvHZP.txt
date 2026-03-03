@@ -1,0 +1,18 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\components\MenuSidebar.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+     1→<template>
+     2→  <aside class="w-64 bg-[var(--light-background-color)] h-screen sticky top-0 border-r border-[var(--light-border-color)] hidden lg:block overflow-y-auto">
+     3→    <div class="p-6">
+     4→      <!-- Product Header -->
+     5→      <div class="flex items-center gap-3 mb-8">
+     6→        <div class="w-10 h-10 bg-gradient-to-br from-[var(--primary-color)] to-[var(--accent2-color)] rounded-lg flex items-center justify-center">
+     7→          <i class="fas fa-utensils text-white"></i>
+     8→        </div>
+     9→        <div>
+    10→          <h2 class="font-bold text-[var(--dark-text-color)]">Menu Pro</h2>
+    11→          <p class="text-xs text-[var(--gray-text-color)]">Dashboard</p>
+    12→        </div>
+    13→      </div>
+    14→
+    15→      <!-- Navigation Links -->
+    16→      <nav class="space-y-2">
+    17→        <NuxtLink

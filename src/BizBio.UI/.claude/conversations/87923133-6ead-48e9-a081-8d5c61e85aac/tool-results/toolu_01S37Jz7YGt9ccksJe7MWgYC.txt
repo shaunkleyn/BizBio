@@ -1,0 +1,7 @@
+Found 6 files
+components\BaseModal.vue
+layouts\default.vue
+pages\pricing.vue
+pages\login.vue
+pages\register.vue
+pages\index.vue

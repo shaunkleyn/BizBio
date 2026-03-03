@@ -1,0 +1,50 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\menu\[slug].vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    36→          {{ editMode ? 'Done' : 'Edit' }}
+    37→        </button>
+    38→      </div>
+    39→
+    40→      <!-- Restaurant Info Header -->
+    41→      <div class="bg-white border-b border-gray-200">
+    42→        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    43→          <div class="flex items-start justify-between mb-3">
+    44→            <div class="flex-1">
+    45→              <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+    46→                {{ menuData?.name || 'Menu' }}
+    47→              </h1>
+    48→              <div class="flex items-center gap-4 text-sm text-gray-600 flex-wrap mb-3">
+    49→                <div v-if="menuData?.rating" class="flex items-center gap-1.5 bg-gray-50 px-3 py-1.5 rounded-full">
+    50→                  <i class="fas fa-star text-yellow-500 text-xs"></i>
+    51→                  <span class="font-bold text-gray-900">{{ menuData.rating }}</span>
+    52→                  <span v-if="menuData?.reviewCount" class="text-gray-500">({{ menuData.reviewCount.toLocaleString() }})</span>
+    53→                </div>
+    54→                <div v-if="menuData?.deliveryTime" class="flex items-center gap-1.5">
+    55→                  <i class="fas fa-clock text-gray-400"></i>
+    56→                  <span>{{ menuData.deliveryTime }}</span>
+    57→                </div>
+    58→                <div v-if="menuData?.distance" class="flex items-center gap-1.5">
+    59→                  <i class="fas fa-map-marker-alt text-gray-400"></i>
+    60→                  <span>{{ menuData.distance }}</span>
+    61→                </div>
+    62→              </div>
+    63→              <p v-if="menuData?.businessName" class="text-sm text-gray-500 mb-2">
+    64→                {{ menuData.businessName }}
+    65→              </p>
+    66→              <p v-if="menuData?.description" class="text-sm text-gray-600 leading-relaxed max-w-3xl">
+    67→                {{ menuData.description }}
+    68→              </p>
+    69→            </div>
+    70→          </div>
+    71→
+    72→          <!-- Delivery Info Banner -->
+    73→          <div v-if="menuData?.deliveryInfo" class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+    74→            <div class="flex items-center gap-3 text-sm text-blue-900">
+    75→              <i class="fas fa-motorcycle text-blue-600"></i>
+    76→              <span class="font-medium">{{ menuData.deliveryInfo }}</span>
+    77→            </div>
+    78→          </div>
+    79→        </div>
+    80→      </div>
+    81→
+    82→      <!-- Category Tabs (Sticky) -->
+    83→      <div v-if="categories.length > 0" class="sticky top-16 z-30 bg-md-surface shadow-md border-b border-md-outline-variant">
+    84→        <div class="overflow-x-auto hide-scrollbar">

@@ -1,0 +1,13 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\dashboard\library\extras.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   245→  }
+   246→}
+   247→
+   248→const saveExtra = async () => {
+   249→  saving.value = true
+   250→  try {
+   251→    if (editingExtra.value) {
+   252→      const response = await api.put(`/library/extras/${editingExtra.value.id}`, formData.value)
+   253→      if (response.success) {
+   254→        await fetchExtras()
+   255→        closeModal()
+   256→      } else {

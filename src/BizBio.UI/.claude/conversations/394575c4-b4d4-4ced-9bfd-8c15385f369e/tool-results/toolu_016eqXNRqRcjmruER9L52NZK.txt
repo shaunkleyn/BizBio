@@ -1,0 +1,42 @@
+     1→namespace BizBio.Core.Entities;
+     2→
+     3→using System.ComponentModel.DataAnnotations;
+     4→
+     5→/// <summary>
+     6→/// Individual option for product customization (e.g., "Small", "Medium", "Large", "No Tomato")
+     7→/// Represents product options/choices, separate from extras which are add-ons/upsells
+     8→/// </summary>
+     9→public class CatalogItemOption : BaseEntity
+    10→{
+    11→    // Nullable for library options (UserId set) or catalog-specific options (CatalogId set)
+    12→    public int? UserId { get; set; }
+    13→    public int? CatalogId { get; set; }
+    14→
+    15→    [Required]
+    16→    [MaxLength(200)]
+    17→    public string Name { get; set; } = null!;
+    18→
+    19→    [MaxLength(1000)]
+    20→    public string? Description { get; set; }
+    21→
+    22→    /// <summary>
+    23→    /// Price adjustment for this option (can be positive, negative, or zero)
+    24→    /// e.g., "Large" might add +R10, "No Sugar" might be R0
+    25→    /// </summary>
+    26→    public decimal PriceModifier { get; set; }
+    27→
+    28→    [MaxLength(500)]
+    29→    public string? ImageUrl { get; set; }
+    30→
+    31→    public int DisplayOrder { get; set; }
+    32→
+    33→    // Navigation properties
+    34→    public virtual User? User { get; set; }
+    35→    public virtual Catalog? Catalog { get; set; }
+    36→    public virtual ICollection<CatalogItemOptionGroupItem> OptionGroupItems { get; set; } = new List<CatalogItemOptionGroupItem>();
+    37→}
+    38→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

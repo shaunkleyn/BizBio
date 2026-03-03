@@ -1,0 +1,71 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.Core\Services\MenuMappingService.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   212→            }
+   213→        };
+   214→    }
+   215→
+   216→    /// <summary>
+   217→    /// Maps from dedicated CatalogItemOptionGroup to OptionGroupDto (primary method)
+   218→    /// </summary>
+   219→    private OptionGroupDto MapOptionGroupToDto(CatalogItemOptionGroup group)
+   220→    {
+   221→        return new OptionGroupDto
+   222→        {
+   223→            Id = group.Id,
+   224→            Name = group.Name,
+   225→            Label = group.Description ?? $"Please select {group.Name.ToLower()}",
+   226→            MinimumSelect = group.MinRequired,
+   227→            MaximumSelect = group.MaxAllowed > 0 ? group.MaxAllowed : 1,
+   228→            OrderIndex = group.DisplayOrder,
+   229→            Items = group.GroupItems
+   230→                .OrderBy(gi => gi.DisplayOrder)
+   231→                .Select(gi => new OptionItemDto
+   232→                {
+   233→                    Id = gi.Option.Id,
+   234→                    Name = gi.Option.Name,
+   235→                    Default = gi.IsDefault,
+   236→                    Price = gi.Option.PriceModifier,
+   237→                    OrderIndex = gi.DisplayOrder,
+   238→                    BusinessIdentity = new BusinessIdentityDto
+   239→                    {
+   240→                        External = gi.Option.Description
+   241→                    }
+   242→                })
+   243→                .ToList()
+   244→        };
+   245→    }
+   246→
+   247→    /// <summary>
+   248→    /// Maps from CatalogItemExtraGroup to OptionGroupDto (legacy support)
+   249→    /// For when extra groups have MinRequired >= 1 and act as options
+   250→    /// </summary>
+   251→    private OptionGroupDto MapExtraGroupToOptionDto(CatalogItemExtraGroup group)
+   252→    {
+   253→        return new OptionGroupDto
+   254→        {
+   255→            Id = group.Id,
+   256→            Name = group.Name,
+   257→            Label = group.Description ?? $"Please select {group.Name.ToLower()}",
+   258→            MinimumSelect = group.MinRequired,
+   259→            MaximumSelect = group.MaxAllowed > 0 ? group.MaxAllowed : 1,
+   260→            OrderIndex = group.DisplayOrder,
+   261→            Items = group.GroupItems
+   262→                .OrderBy(gi => gi.DisplayOrder)
+   263→                .Select(gi => new OptionItemDto
+   264→                {
+   265→                    Id = gi.Extra.Id,
+   266→                    Name = gi.Extra.Name,
+   267→                    Default = false,
+   268→                    Price = gi.PriceOverride ?? gi.Extra.BasePrice,
+   269→                    OrderIndex = gi.DisplayOrder,
+   270→                    BusinessIdentity = new BusinessIdentityDto
+   271→                    {
+   272→                        External = gi.Extra.Code
+   273→                    }
+   274→                })
+   275→                .ToList()
+   276→        };
+   277→    }
+   278→
+   279→    private ExtraGroupDto MapToExtraGroup(CatalogItemExtraGroup group)
+   280→    {
+   281→        return new ExtraGroupDto

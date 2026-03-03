@@ -1,0 +1,60 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\components\MenuSidebar.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   109→            <i class="fas fa-plus-circle w-5 relative z-10"></i>
+   110→            <span class="text-sm relative z-10">Extras</span>
+   111→          </NuxtLink>
+   112→
+   113→          <NuxtLink
+   114→            to="/menu/library/extra-groups"
+   115→            :class="[
+   116→              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
+   117→              route.path === '/menu/library/extra-groups'
+   118→                ? 'bg-gradient-secondary text-white shadow-glow-pink'
+   119→                : 'text-md-on-surface-variant hover:text-md-secondary'
+   120→            ]"
+   121→          >
+   122→            <div :class="[
+   123→              'absolute inset-0 bg-md-secondary-container opacity-0 group-hover:opacity-100 transition-opacity',
+   124→              route.path === '/menu/library/extra-groups' ? 'opacity-0' : ''
+   125→            ]"></div>
+   126→            <i class="fas fa-object-group w-5 relative z-10"></i>
+   127→            <span class="text-sm relative z-10">Extra Groups</span>
+   128→          </NuxtLink>
+   129→
+   130→          <NuxtLink
+   131→            to="/menu/library/options"
+   132→            :class="[
+   133→              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
+   134→              route.path === '/menu/library/options'
+   135→                ? 'bg-gradient-tertiary text-white shadow-glow-teal'
+   136→                : 'text-md-on-surface-variant hover:text-md-tertiary'
+   137→            ]"
+   138→          >
+   139→            <div :class="[
+   140→              'absolute inset-0 bg-md-tertiary-container opacity-0 group-hover:opacity-100 transition-opacity',
+   141→              route.path === '/menu/library/options' ? 'opacity-0' : ''
+   142→            ]"></div>
+   143→            <i class="fas fa-sliders-h w-5 relative z-10"></i>
+   144→            <span class="text-sm relative z-10">Options</span>
+   145→          </NuxtLink>
+   146→
+   147→          <NuxtLink
+   148→            to="/menu/library/option-groups"
+   149→            :class="[
+   150→              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
+   151→              route.path === '/menu/library/option-groups'
+   152→                ? 'bg-gradient-accent text-white shadow-md-2'
+   153→                : 'text-md-on-surface-variant hover:text-md-accent'
+   154→            ]"
+   155→          >
+   156→            <div :class="[
+   157→              'absolute inset-0 bg-md-accent-container opacity-0 group-hover:opacity-100 transition-opacity',
+   158→              route.path === '/menu/library/option-groups' ? 'opacity-0' : ''
+   159→            ]"></div>
+   160→            <i class="fas fa-layer-group w-5 relative z-10"></i>
+   161→            <span class="text-sm relative z-10">Option Groups</span>
+   162→          </NuxtLink>
+   163→        </div>
+   164→
+   165→        <NuxtLink
+   166→          to="/menu/categories"
+   167→          :class="[

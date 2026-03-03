@@ -1,0 +1,104 @@
+   100→            {
+   101→                await _emailService.SendVerificationEmailAsync(user.Email, user.FullName, verificationToken);
+   102→                _logger.LogInformation("Verification email sent successfully to {Email}", user.Email);
+   103→
+   104→                _telemetryClient.TrackEvent("UserRegistered", new Dictionary<string, string>
+   105→                {
+   106→                    { "Email", user.Email },
+   107→                    { "UserId", user.Id.ToString() }
+   108→                });
+   109→            }
+   110→            catch (Exception emailEx)
+   111→            {
+   112→                // Log email error but don't fail registration
+   113→                _logger.LogError(emailEx, "Failed to send verification email to {Email}", user.Email);
+   114→
+   115→                _telemetryClient.TrackException(emailEx, new Dictionary<string, string>
+   116→                {
+   117→                    { "Operation", "SendVerificationEmail" },
+   118→                    { "Email", user.Email },
+   119→                    { "UserId", user.Id.ToString() }
+   120→                });
+   121→            }
+   122→
+   123→            return AuthResult.SuccessResult(user);
+   124→        }
+   125→        catch (Exception ex)
+   126→        {
+   127→            _logger.LogError(ex, "Registration failed for {Email}", dto.Email);
+   128→            _telemetryClient.TrackException(ex, new Dictionary<string, string>
+   129→            {
+   130→                { "Operation", "UserRegistration" },
+   131→                { "Email", dto.Email }
+   132→            });
+   133→            return AuthResult.FailureResult($"Registration failed: {ex.Message}");
+   134→        }
+   135→    }
+   136→
+   137→    /// <summary>
+   138→    /// Authenticates a user with email and password, returning a JWT token if successful.
+   139→    /// Implements account lockout after 5 failed attempts for 30 minutes.
+   140→    /// </summary>
+   141→    /// <param name="dto">Login credentials</param>
+   142→    /// <returns>AuthResult with JWT token if authentication successful</returns>
+   143→    public async Task<AuthResult> LoginAsync(LoginDto dto)
+   144→    {
+   145→        if (dto == null)
+   146→            return AuthResult.FailureResult("Login credentials cannot be null");
+   147→
+   148→        try
+   149→        {
+   150→            // Find user by email
+   151→            var user = await _userRepository.GetByEmailAsync(dto.Email);
+   152→            if (user == null)
+   153→                return AuthResult.FailureResult("Invalid email or password");
+   154→
+   155→            // Check if account is locked
+   156→            if (user.LockoutEnd.HasValue && user.LockoutEnd > DateTime.UtcNow)
+   157→            {
+   158→                var remainingTime = user.LockoutEnd.Value - DateTime.UtcNow;
+   159→                return AuthResult.FailureResult($"Account is locked. Try again in {remainingTime.Minutes} minutes");
+   160→            }
+   161→
+   162→            // Check if user is active
+   163→            if (!user.IsActive)
+   164→                return AuthResult.FailureResult("User account is not active");
+   165→
+   166→            // Verify password
+   167→            if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+   168→            {
+   169→                // Increment failed login attempts
+   170→                user.FailedLoginAttempts++;
+   171→
+   172→                // Lock account if 5 failed attempts
+   173→                if (user.FailedLoginAttempts >= 5)
+   174→                {
+   175→                    user.LockoutEnd = DateTime.UtcNow.AddMinutes(30);
+   176→                    await _userRepository.UpdateAsync(user);
+   177→                    await _userRepository.SaveChangesAsync();
+   178→                    return AuthResult.FailureResult("Too many failed login attempts. Account locked for 30 minutes");
+   179→                }
+   180→
+   181→                await _userRepository.UpdateAsync(user);
+   182→                await _userRepository.SaveChangesAsync();
+   183→
+   184→                return AuthResult.FailureResult("Invalid email or password");
+   185→            }
+   186→
+   187→            // Check if email is verified
+   188→            if (!user.EmailVerified)
+   189→                return AuthResult.FailureResult("Email not verified. Please verify your email before logging in");
+   190→
+   191→            // Reset failed login attempts and clear lockout
+   192→            user.FailedLoginAttempts = 0;
+   193→            user.LockoutEnd = null;
+   194→            user.LastLoginAt = DateTime.UtcNow;
+   195→            user.UpdatedAt = DateTime.UtcNow;
+   196→
+   197→            await _userRepository.UpdateAsync(user);
+   198→            await _userRepository.SaveChangesAsync();
+   199→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

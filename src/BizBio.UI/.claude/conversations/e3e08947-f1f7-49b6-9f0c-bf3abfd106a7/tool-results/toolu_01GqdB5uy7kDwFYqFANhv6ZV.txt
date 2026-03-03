@@ -1,0 +1,323 @@
+     1→<template>
+     2→  <div class="container mx-auto px-4 py-8">
+     3→    <div class="flex justify-between items-center mb-6">
+     4→      <div>
+     5→        <h1 class="text-3xl font-bold text-gray-800">Extras Library</h1>
+     6→        <p class="text-gray-600 mt-2">Manage reusable extras/modifiers for your menu items</p>
+     7→      </div>
+     8→      <button
+     9→        @click="showCreateModal = true"
+    10→        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+    11→      >
+    12→        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    13→          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+    14→        </svg>
+    15→        Add Extra
+    16→      </button>
+    17→    </div>
+    18→
+    19→    <!-- Loading State -->
+    20→    <div v-if="loading" class="flex justify-center items-center py-12">
+    21→      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    22→    </div>
+    23→
+    24→    <!-- Error State -->
+    25→    <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+    26→      {{ error }}
+    27→    </div>
+    28→
+    29→    <!-- Extras List -->
+    30→    <div v-else-if="extras.length > 0" class="bg-white rounded-lg shadow-md overflow-hidden">
+    31→      <table class="min-w-full divide-y divide-gray-200">
+    32→        <thead class="bg-gray-50">
+    33→          <tr>
+    34→            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+    35→            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
+    36→            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Base Price</th>
+    37→            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+    38→            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+    39→          </tr>
+    40→        </thead>
+    41→        <tbody class="bg-white divide-y divide-gray-200">
+    42→          <tr v-for="extra in extras" :key="extra.id" class="hover:bg-gray-50 transition-colors">
+    43→            <td class="px-6 py-4 whitespace-nowrap">
+    44→              <div class="text-sm font-medium text-gray-900">{{ extra.name }}</div>
+    45→            </td>
+    46→            <td class="px-6 py-4 whitespace-nowrap">
+    47→              <div class="text-sm text-gray-500">{{ extra.code || '-' }}</div>
+    48→            </td>
+    49→            <td class="px-6 py-4 whitespace-nowrap">
+    50→              <div class="text-sm text-gray-900">R{{ extra.basePrice.toFixed(2) }}</div>
+    51→            </td>
+    52→            <td class="px-6 py-4">
+    53→              <div class="text-sm text-gray-500 truncate max-w-md">{{ extra.description || '-' }}</div>
+    54→            </td>
+    55→            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+    56→              <button
+    57→                @click="editExtra(extra)"
+    58→                class="text-blue-600 hover:text-blue-900 mr-4"
+    59→              >
+    60→                Edit
+    61→              </button>
+    62→              <button
+    63→                @click="deleteExtra(extra.id)"
+    64→                class="text-red-600 hover:text-red-900"
+    65→              >
+    66→                Delete
+    67→              </button>
+    68→            </td>
+    69→          </tr>
+    70→        </tbody>
+    71→      </table>
+    72→    </div>
+    73→
+    74→    <!-- Empty State -->
+    75→    <div v-else class="bg-white rounded-lg shadow-md p-12 text-center">
+    76→      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    77→        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+    78→      </svg>
+    79→      <h3 class="mt-2 text-sm font-medium text-gray-900">No extras</h3>
+    80→      <p class="mt-1 text-sm text-gray-500">Get started by creating a new extra.</p>
+    81→      <div class="mt-6">
+    82→        <button
+    83→          @click="showCreateModal = true"
+    84→          class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+    85→        >
+    86→          Add Extra
+    87→        </button>
+    88→      </div>
+    89→    </div>
+    90→
+    91→    <!-- Create/Edit Modal -->
+    92→    <div
+    93→      v-if="showCreateModal || editingExtra"
+    94→      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    95→      @click.self="closeModal"
+    96→    >
+    97→      <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    98→        <div class="p-6">
+    99→          <div class="flex justify-between items-center mb-6">
+   100→            <h2 class="text-2xl font-bold text-gray-800">
+   101→              {{ editingExtra ? 'Edit Extra' : 'Create Extra' }}
+   102→            </h2>
+   103→            <button @click="closeModal" class="text-gray-400 hover:text-gray-600">
+   104→              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+   105→                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+   106→              </svg>
+   107→            </button>
+   108→          </div>
+   109→
+   110→          <form @submit.prevent="saveExtra" class="space-y-4">
+   111→            <div>
+   112→              <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+   113→              <input
+   114→                v-model="formData.name"
+   115→                type="text"
+   116→                required
+   117→                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+   118→                placeholder="e.g., Extra Cheese, Bacon"
+   119→              />
+   120→            </div>
+   121→
+   122→            <div>
+   123→              <label class="block text-sm font-medium text-gray-700 mb-2">Code/SKU</label>
+   124→              <input
+   125→                v-model="formData.code"
+   126→                type="text"
+   127→                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+   128→                placeholder="e.g., EXT-CHEESE"
+   129→              />
+   130→            </div>
+   131→
+   132→            <div>
+   133→              <label class="block text-sm font-medium text-gray-700 mb-2">Base Price *</label>
+   134→              <input
+   135→                v-model.number="formData.basePrice"
+   136→                type="number"
+   137→                step="0.01"
+   138→                min="0"
+   139→                required
+   140→                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+   141→                placeholder="0.00"
+   142→              />
+   143→            </div>
+   144→
+   145→            <div>
+   146→              <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+   147→              <textarea
+   148→                v-model="formData.description"
+   149→                rows="3"
+   150→                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+   151→                placeholder="Optional description"
+   152→              ></textarea>
+   153→            </div>
+   154→
+   155→            <div>
+   156→              <label class="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+   157→              <input
+   158→                v-model="formData.imageUrl"
+   159→                type="url"
+   160→                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+   161→                placeholder="https://example.com/image.jpg"
+   162→              />
+   163→            </div>
+   164→
+   165→            <div>
+   166→              <label class="block text-sm font-medium text-gray-700 mb-2">Display Order</label>
+   167→              <input
+   168→                v-model.number="formData.displayOrder"
+   169→                type="number"
+   170→                min="0"
+   171→                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+   172→                placeholder="0"
+   173→              />
+   174→            </div>
+   175→
+   176→            <div class="flex justify-end gap-3 pt-4">
+   177→              <button
+   178→                type="button"
+   179→                @click="closeModal"
+   180→                class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+   181→              >
+   182→                Cancel
+   183→              </button>
+   184→              <button
+   185→                type="submit"
+   186→                :disabled="saving"
+   187→                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+   188→              >
+   189→                {{ saving ? 'Saving...' : editingExtra ? 'Update' : 'Create' }}
+   190→              </button>
+   191→            </div>
+   192→          </form>
+   193→        </div>
+   194→      </div>
+   195→    </div>
+   196→  </div>
+   197→</template>
+   198→
+   199→<script setup lang="ts">
+   200→definePageMeta({
+   201→  layout: 'dashboard'
+   202→})
+   203→
+   204→const api = useApi()
+   205→const loading = ref(true)
+   206→const error = ref('')
+   207→const extras = ref<any[]>([])
+   208→const showCreateModal = ref(false)
+   209→const editingExtra = ref<any>(null)
+   210→const saving = ref(false)
+   211→
+   212→const formData = ref({
+   213→  Name: '',
+   214→  Code: '',
+   215→  BasePrice: 0,
+   216→  Description: '',
+   217→  ImageUrl: '',
+   218→  DisplayOrder: 0
+   219→})
+   220→
+   221→const fetchExtras = async () => {
+   222→  loading.value = true
+   223→  error.value = ''
+   224→  try {
+   225→    const response = await api.get('/library/extras')
+   226→    if (response.success) {
+   227→      // Ensure we always set an array
+   228→      if (Array.isArray(response.data)) {
+   229→        extras.value = response.data
+   230→      } else if (response.data && Array.isArray(response.data.extras)) {
+   231→        extras.value = response.data.extras
+   232→      } else {
+   233→        console.warn('Unexpected response structure:', response.data)
+   234→        extras.value = []
+   235→      }
+   236→    } else {
+   237→      error.value = 'Failed to load extras'
+   238→      extras.value = []
+   239→    }
+   240→  } catch (err: any) {
+   241→    error.value = err.message || 'An error occurred'
+   242→    extras.value = []
+   243→  } finally {
+   244→    loading.value = false
+   245→  }
+   246→}
+   247→
+   248→const saveExtra = async () => {
+   249→  saving.value = true
+   250→  try {
+   251→    if (editingExtra.value) {
+   252→      const response = await api.put(`/library/extras/${editingExtra.value.Id}`, formData.value)
+   253→      if (response.success) {
+   254→        await fetchExtras()
+   255→        closeModal()
+   256→      } else {
+   257→        alert('Failed to update extra')
+   258→      }
+   259→    } else {
+   260→      const response = await api.post('/library/extras', formData.value)
+   261→      if (response.success) {
+   262→        await fetchExtras()
+   263→        closeModal()
+   264→      } else {
+   265→        alert('Failed to create extra')
+   266→      }
+   267→    }
+   268→  } catch (err: any) {
+   269→    alert(err.message || 'An error occurred')
+   270→  } finally {
+   271→    saving.value = false
+   272→  }
+   273→}
+   274→
+   275→const editExtra = (extra: any) => {
+   276→  editingExtra.value = extra
+   277→  formData.value = {
+   278→    name: extra.name,
+   279→    code: extra.code || '',
+   280→    basePrice: extra.basePrice,
+   281→    description: extra.description || '',
+   282→    imageUrl: extra.imageUrl || '',
+   283→    displayOrder: extra.displayOrder
+   284→  }
+   285→}
+   286→
+   287→const deleteExtra = async (id: number) => {
+   288→  if (!confirm('Are you sure you want to delete this extra?')) return
+   289→
+   290→  try {
+   291→    const response = await api.delete(`/library/extras/${id}`)
+   292→    if (response.success) {
+   293→      await fetchExtras()
+   294→    } else {
+   295→      alert('Failed to delete extra')
+   296→    }
+   297→  } catch (err: any) {
+   298→    alert(err.message || 'An error occurred')
+   299→  }
+   300→}
+   301→
+   302→const closeModal = () => {
+   303→  showCreateModal.value = false
+   304→  editingExtra.value = null
+   305→  formData.value = {
+   306→    name: '',
+   307→    code: '',
+   308→    basePrice: 0,
+   309→    description: '',
+   310→    imageUrl: '',
+   311→    displayOrder: 0
+   312→  }
+   313→}
+   314→
+   315→onMounted(() => {
+   316→  fetchExtras()
+   317→})
+   318→</script>
+   319→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

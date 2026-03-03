@@ -1,0 +1,18 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.API\Program.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    21→        config.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"],
+    22→    configureApplicationInsightsLoggerOptions: (options) => { }
+    23→);
+    24→
+    25→// Add services to the container
+    26→builder.Services.AddControllers(options =>
+    27→{
+    28→    options.Filters.Add<ApplicationInsightsExceptionFilter>();
+    29→})
+    30→.AddJsonOptions(options =>
+    31→{
+    32→    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    33→});
+    34→
+    35→// Database Configuration
+    36→// AutoDetect works with both MySQL and MariaDB
+    37→var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

@@ -1,0 +1,28 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\menu\[slug].vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   196→          </div>
+   197→        </div>
+   198→      </div>
+   199→
+   200→      <!-- Floating Cart Button -->
+   201→      <div
+   202→        v-if="cartStore.itemCount > 0"
+   203→        @click="cartStore.openCart()"
+   204→        class="fixed bottom-6 left-4 right-4 md:left-auto md:right-6 md:max-w-sm z-40 bg-gray-900 text-white rounded-xl shadow-2xl px-5 py-4 cursor-pointer hover:bg-gray-800 transition-all active:scale-95 transform"
+   205→      >
+   206→        <div class="flex items-center justify-between">
+   207→          <div class="flex items-center gap-3">
+   208→            <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+   209→              <i class="fas fa-shopping-cart text-base"></i>
+   210→            </div>
+   211→            <div class="flex flex-col">
+   212→              <span class="font-semibold text-base">{{ cartStore.itemCount }} {{ cartStore.itemCount === 1 ? 'item' : 'items' }}</span>
+   213→              <span class="text-xs text-gray-300">View cart</span>
+   214→            </div>
+   215→          </div>
+   216→          <div class="font-bold text-xl">R{{ cartStore.total.toFixed(2) }}</div>
+   217→        </div>
+   218→      </div>
+   219→    </div>
+   220→
+   221→    <!-- Item Detail Modal -->
+   222→    <ItemDetailModal

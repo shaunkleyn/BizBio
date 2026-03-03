@@ -1,0 +1,2 @@
+Exit code 1
+tail: cannot open 'C:UsersshaunkAppDataLocalTempclaudeC--Development-github-bizbio2-BizBio-src-BizBio-UItasksb2d7f4c.output' for reading: No such file or directory

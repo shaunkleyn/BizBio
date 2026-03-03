@@ -1,0 +1,32 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\menu\[slug].vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    78→          </div>
+    79→        </div>
+    80→      </div>
+    81→
+    82→      <!-- Category Tabs (Sticky) -->
+    83→      <div v-if="categories.length > 0" class="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
+    84→        <div class="max-w-7xl mx-auto">
+    85→          <div class="overflow-x-auto hide-scrollbar">
+    86→            <div class="flex space-x-1 px-4 sm:px-6 lg:px-8 py-2 min-w-max">
+    87→              <button
+    88→                v-for="category in categories"
+    89→                :key="category.id"
+    90→                :data-category-id="category.id"
+    91→                @click="scrollToCategory(category.id)"
+    92→                :class="[
+    93→                  'px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all relative',
+    94→                  activeCategory === category.id
+    95→                    ? 'text-gray-900 border-b-2 border-gray-900'
+    96→                    : 'text-gray-600 hover:text-gray-900 border-b-2 border-transparent'
+    97→                ]"
+    98→              >
+    99→                {{ category.name }}
+   100→              </button>
+   101→            </div>
+   102→          </div>
+   103→        </div>
+   104→      </div>
+   105→
+   106→      <!-- Menu Items by Category -->
+   107→      <div class="max-w-7xl mx-auto pb-24">
+   108→        <div

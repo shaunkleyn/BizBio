@@ -1,0 +1,323 @@
+     1→<template>
+     2→
+     3→  <aside class="w-64 bg-md-surface shadow-md-2 sticky top-16 border-r border-md-outline-variant hidden lg:block overflow-y-auto self-start" style="max-height: calc(100vh - 4rem);">
+     4→    <div class="p-4">
+     5→      <!-- Product Header with Gradient -->
+     6→      <div class="relative mb-6 gradient-border p-4 rounded-xl animate-scale-in">
+     7→        <div class="flex items-center gap-3">
+     8→          <div class="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center flex-shrink-0 shadow-glow-purple">
+     9→            <i :class="[currentProduct.icon, 'text-white text-xl']"></i>
+    10→          </div>
+    11→          <div class="flex-1 min-w-0">
+    12→            <h2 class="font-bold text-md-on-surface text-base">{{ currentProduct.name }}</h2>
+    13→            <p class="text-xs text-md-on-surface-variant">{{ currentProduct.subtitle }}</p>
+    14→          </div>
+    15→        </div>
+    16→      </div>
+    17→
+    18→      <!-- Navigation Links -->
+    19→      <nav class="space-y-1">
+    20→        <NuxtLink
+    21→          to="/menu"
+    22→          :class="[
+    23→            'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
+    24→            isActive('/menu') && !route.path.includes('/menu/')
+    25→              ? 'bg-gradient-primary text-white shadow-glow-purple'
+    26→              : 'text-md-on-surface-variant hover:text-md-primary'
+    27→          ]"
+    28→        >
+    29→          <div :class="[
+    30→            'absolute inset-0 bg-md-primary-container opacity-0 group-hover:opacity-100 transition-opacity',
+    31→            isActive('/menu') && !route.path.includes('/menu/') ? 'opacity-0' : ''
+    32→          ]"></div>
+    33→          <i class="fas fa-th-large w-5 relative z-10"></i>
+    34→          <span class="text-sm relative z-10">Overview</span>
+    35→        </NuxtLink>
+    36→
+    37→        <NuxtLink
+    38→          to="/menu/menus"
+    39→          :class="[
+    40→            'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
+    41→            isActive('/menu/menus')
+    42→              ? 'bg-gradient-secondary text-white shadow-glow-pink'
+    43→              : 'text-md-on-surface-variant hover:text-md-secondary'
+    44→          ]"
+    45→        >
+    46→          <div :class="[
+    47→            'absolute inset-0 bg-md-secondary-container opacity-0 group-hover:opacity-100 transition-opacity',
+    48→            isActive('/menu/menus') ? 'opacity-0' : ''
+    49→          ]"></div>
+    50→          <i class="fas fa-book-open w-5 relative z-10"></i>
+    51→          <span class="text-sm relative z-10">Menus</span>
+    52→        </NuxtLink>
+    53→
+    54→        <NuxtLink
+    55→            to="/dashboard/bundles"
+    56→            :class="[
+    57→              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
+    58→              route.path === '/dashboard/bundles'
+    59→                ? 'bg-gradient-tertiary text-white shadow-glow-teal'
+    60→                : 'text-md-on-surface-variant hover:text-md-tertiary'
+    61→            ]"
+    62→          >
+    63→            <div :class="[
+    64→              'absolute inset-0 bg-md-tertiary-container opacity-0 group-hover:opacity-100 transition-opacity',
+    65→              route.path === '/dashboard/bundles' ? 'opacity-0' : ''
+    66→            ]"></div>
+    67→            <i class="fas fa-layer-group w-5 relative z-10"></i>
+    68→            <span class="text-sm relative z-10">Bundles</span>
+    69→          </NuxtLink>
+    70→
+    71→        <!-- Library Submenu -->
+    72→        <div class="mt-6">
+    73→          <div class="flex items-center gap-2 px-4 py-2 mb-2">
+    74→            <div class="h-px flex-1 bg-gradient-primary"></div>
+    75→            <span class="text-xs font-bold text-md-on-surface-variant uppercase tracking-wider">Library</span>
+    76→            <div class="h-px flex-1 bg-gradient-primary"></div>
+    77→          </div>
+    78→
+    79→          <NuxtLink
+    80→            to="/menu/library/items"
+    81→            :class="[
+    82→              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
+    83→              route.path === '/menu/library/items'
+    84→                ? 'bg-gradient-accent text-white shadow-md-2'
+    85→                : 'text-md-on-surface-variant hover:text-md-accent'
+    86→            ]"
+    87→          >
+    88→            <div :class="[
+    89→              'absolute inset-0 bg-md-accent-container opacity-0 group-hover:opacity-100 transition-opacity',
+    90→              route.path === '/menu/library/items' ? 'opacity-0' : ''
+    91→            ]"></div>
+    92→            <i class="fas fa-utensils w-5 relative z-10"></i>
+    93→            <span class="text-sm relative z-10">Items</span>
+    94→          </NuxtLink>
+    95→
+    96→          <NuxtLink
+    97→            to="/menu/library/extras"
+    98→            :class="[
+    99→              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
+   100→              route.path === '/menu/library/extras'
+   101→                ? 'bg-gradient-primary text-white shadow-glow-purple'
+   102→                : 'text-md-on-surface-variant hover:text-md-primary'
+   103→            ]"
+   104→          >
+   105→            <div :class="[
+   106→              'absolute inset-0 bg-md-primary-container opacity-0 group-hover:opacity-100 transition-opacity',
+   107→              route.path === '/menu/library/extras' ? 'opacity-0' : ''
+   108→            ]"></div>
+   109→            <i class="fas fa-plus-circle w-5 relative z-10"></i>
+   110→            <span class="text-sm relative z-10">Extras</span>
+   111→          </NuxtLink>
+   112→
+   113→          <NuxtLink
+   114→            to="/menu/library/extra-groups"
+   115→            :class="[
+   116→              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-medium md-ripple group relative overflow-hidden',
+   117→              route.path === '/menu/library/extra-groups'
+   118→                ? 'bg-gradient-secondary text-white shadow-glow-pink'
+   119→                : 'text-md-on-surface-variant hover:text-md-secondary'
+   120→            ]"
+   121→          >
+   122→            <i class="fas fa-object-group w-5"></i>
+   123→            <span>Extra Groups</span>
+   124→          </NuxtLink>
+   125→        </div>
+   126→
+   127→        <NuxtLink
+   128→          to="/menu/categories"
+   129→          :class="[
+   130→            'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+   131→            isActive('/menu/categories')
+   132→              ? 'bg-md-primary-container text-white font-semibold'
+   133→              : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+   134→          ]"
+   135→        >
+   136→          <i class="fas fa-layer-group w-5"></i>
+   137→          <span>Categories</span>
+   138→        </NuxtLink>
+   139→        
+   140→        <NuxtLink
+   141→          v-if="!true"
+   142→          to="/menu/events"
+   143→          :class="[
+   144→            'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+   145→            isActive('/menu/events')
+   146→              ? 'bg-md-primary-container text-white font-semibold'
+   147→              : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+   148→          ]"
+   149→        >
+   150→          <i class="fas fa-calendar-alt w-5"></i>
+   151→          <span>Events</span>
+   152→        </NuxtLink>
+   153→        <span v-else class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-[var(--dark-text-color)] opacity-50 cursor-not-allowed hover:bg-[var(--medium-background-color)]">
+   154→          <i class="fas fa-calendar-alt w-5"></i>
+   155→          Events
+   156→        </span>
+   157→
+   158→        <NuxtLink
+   159→         v-if="!true"
+   160→          to="/menu/tables"
+   161→          :class="[
+   162→            'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+   163→            isActive('/menu/tables')
+   164→              ? 'bg-md-primary-container text-white font-semibold'
+   165→              : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+   166→          ]"
+   167→        >
+   168→          <i class="fas fa-qrcode w-5"></i>
+   169→          <span>QR Codes</span>
+   170→        </NuxtLink>
+   171→         <span v-else class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-[var(--dark-text-color)] opacity-50 cursor-not-allowed hover:bg-[var(--medium-background-color)]">
+   172→          <i class="fas fa-qrcode w-5"></i>
+   173→          QR Codes
+   174→        </span>
+   175→      </nav>
+   176→
+   177→      <!-- Stats Section -->
+   178→      <div class="mt-8 pt-6 border-t border-[var(--light-border-color)]">
+   179→        <h3 class="text-xs font-semibold text-[var(--gray-text-color)] uppercase mb-3">Quick Stats</h3>
+   180→        <div class="space-y-2">
+   181→          <div class="flex justify-between text-sm">
+   182→            <span class="text-[var(--gray-text-color)]">Active Menus</span>
+   183→            <span class="font-semibold text-[var(--dark-text-color)]">{{ stats?.menus || 0 }}</span>
+   184→          </div>
+   185→          <div class="flex justify-between text-sm">
+   186→            <span class="text-[var(--gray-text-color)]">Total Items</span>
+   187→            <span class="font-semibold text-[var(--dark-text-color)]">{{ stats?.items || 0 }}</span>
+   188→          </div>
+   189→          <div class="flex justify-between text-sm">
+   190→            <span class="text-[var(--gray-text-color)]">Categories</span>
+   191→            <span class="font-semibold text-[var(--dark-text-color)]">{{ stats?.categories || 0 }}</span>
+   192→          </div>
+   193→        </div>
+   194→      </div>
+   195→    </div>
+   196→  </aside>
+   197→
+   198→  <!-- Dropdown Menu (Teleported to body to escape overflow) -->
+   199→  <Teleport to="body">
+   200→    <div
+   201→      v-if="dropdownOpen"
+   202→      :style="{ position: 'fixed', top: `${dropdownPosition.top}px`, left: `${dropdownPosition.left}px`, zIndex: 9999 }"
+   203→      class="w-80 bg-[var(--light-background-color)] rounded-lg shadow-xl border border-[var(--light-border-color)] py-2"
+   204→    >
+   205→      <NuxtLink
+   206→        v-for="product in products"
+   207→        :key="product.id"
+   208→        :to="product.path"
+   209→        @click="dropdownOpen = false"
+   210→        class="flex items-center gap-3 px-4 py-3 hover:bg-[var(--medium-background-color)] transition-colors"
+   211→      >
+   212→        <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
+   213→          :class="product.id === currentProduct.id ? 'bg-md-primary-container' : 'bg-[var(--medium-background-color)]'"
+   214→        >
+   215→          <i :class="[product.icon, product.id === currentProduct.id ? 'text-[var(--primary-color)]' : 'text-[var(--gray-text-color)]', 'text-xl']"></i>
+   216→        </div>
+   217→        <div class="flex-1">
+   218→          <div class="font-semibold text-[var(--dark-text-color)]">{{ product.name }}</div>
+   219→          <div class="text-xs text-[var(--gray-text-color)]">{{ product.description }}</div>
+   220→        </div>
+   221→        <i v-if="product.id === currentProduct.id" class="fas fa-check text-[var(--primary-color)] flex-shrink-0"></i>
+   222→      </NuxtLink>
+   223→    </div>
+   224→  </Teleport>
+   225→</template>
+   226→
+   227→<script setup lang="ts">
+   228→  import { ref, computed, onMounted, onUnmounted } from 'vue'
+   229→  const route = useRoute()
+   230→  const { pageHeader, pageActions } = usePageMeta()
+   231→
+   232→const props = defineProps<{
+   233→  stats?: {
+   234→    menus?: number
+   235→    items?: number
+   236→    categories?: number
+   237→  }
+   238→}>()
+   239→
+   240→const isActive = (path: string) => {
+   241→  return route.path.startsWith(path)
+   242→}
+   243→
+   244→const dropdownOpen = ref(false)
+   245→const dropdownRef = ref<HTMLElement | null>(null)
+   246→const dropdownPosition = ref({ top: 0, left: 0 })
+   247→
+   248→// Use page metadata composable
+   249→
+   250→const products = [
+   251→  {
+   252→    id: 'menu',
+   253→    name: 'Menu',
+   254→    subtitle: 'Digital Menus',
+   255→    description: 'Create and manage digital menus',
+   256→    icon: 'fas fa-utensils',
+   257→    path: '/menu'
+   258→  },
+   259→  {
+   260→    id: 'cards',
+   261→    name: 'Business Cards',
+   262→    subtitle: 'Digital Cards',
+   263→    description: 'Create digital business cards',
+   264→    icon: 'fas fa-id-card',
+   265→    path: '/cards'
+   266→  },
+   267→  {
+   268→    id: 'catalog',
+   269→    name: 'Catalog',
+   270→    subtitle: 'Product Catalog',
+   271→    description: 'Manage product catalogs',
+   272→    icon: 'fas fa-book',
+   273→    path: '/catalog'
+   274→  }
+   275→]
+   276→
+   277→const currentProduct = computed(() => {
+   278→  const path = route.path
+   279→  if (path.startsWith('/menu')) return products[0]
+   280→  if (path.startsWith('/cards')) return products[1]
+   281→  if (path.startsWith('/catalog')) return products[2]
+   282→  return products[0] // default
+   283→})
+   284→
+   285→function toggleDropdown() {
+   286→  if (!dropdownRef.value) return
+   287→  
+   288→  if (!dropdownOpen.value) {
+   289→    const rect = dropdownRef.value.getBoundingClientRect()
+   290→    dropdownPosition.value = {
+   291→      top: rect.bottom + 8,
+   292→      left: rect.left
+   293→    }
+   294→  }
+   295→  
+   296→  dropdownOpen.value = !dropdownOpen.value
+   297→}
+   298→
+   299→// Close dropdown when clicking outside
+   300→const handleClickOutside = (event: MouseEvent) => {
+   301→  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
+   302→    // Check if click is not on the teleported dropdown
+   303→    const target = event.target as HTMLElement
+   304→    if (!target.closest('.w-80.bg-\\[var\\(--light-background-color\\)\\]')) {
+   305→      dropdownOpen.value = false
+   306→    }
+   307→  }
+   308→}
+   309→
+   310→onMounted(() => {
+   311→  document.addEventListener('click', handleClickOutside)
+   312→})
+   313→
+   314→onUnmounted(() => {
+   315→  document.removeEventListener('click', handleClickOutside)
+   316→})
+   317→</script>
+   318→
+   319→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

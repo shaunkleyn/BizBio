@@ -1,0 +1,11 @@
+total 48
+drwxr-xr-x 1 shaunk 1049089    0 Dec 19 06:59 .
+drwxr-xr-x 1 shaunk 1049089    0 Dec 19 06:40 ..
+drwxr-xr-x 1 shaunk 1049089    0 Dec 18 19:29 .vs
+drwxr-xr-x 1 shaunk 1049089    0 Dec 18 19:31 BizBio.API
+drwxr-xr-x 1 shaunk 1049089    0 Dec  8 11:01 BizBio.Core
+drwxr-xr-x 1 shaunk 1049089    0 Dec 18 19:31 BizBio.Infrastructure
+drwxr-xr-x 1 shaunk 1049089    0 Dec 18 19:42 BizBio.UI
+drwxr-xr-x 1 shaunk 1049089    0 Dec 18 19:31 BizBio.UI2
+-rw-r--r-- 1 shaunk 1049089    0 Dec 19 06:59 nul
+-rw-r--r-- 1 shaunk 1049089 2129 Dec 18 19:31 src.sln

@@ -1,0 +1,417 @@
+     1→import axios, { type AxiosInstance } from 'axios'
+     2→
+     3→let apiClient: AxiosInstance | null = null
+     4→
+     5→export const useApi = () => {
+     6→  const config = useRuntimeConfig()
+     7→  const router = useRouter()
+     8→
+     9→  if (apiClient) {
+    10→    return apiClient
+    11→  }
+    12→
+    13→  apiClient = axios.create({
+    14→    baseURL: config.public.apiUrl as string,
+    15→    headers: {
+    16→      'Content-Type': 'application/json'
+    17→    },
+    18→    withCredentials: false,
+    19→  })
+    20→
+    21→  // Add request interceptor to include JWT token
+    22→  apiClient.interceptors.request.use(
+    23→    (config) => {
+    24→      if (import.meta.client) {
+    25→        const token = localStorage.getItem('token')
+    26→        if (token) {
+    27→          config.headers.Authorization = `Bearer ${token}`
+    28→        }
+    29→
+    30→        // Add start time for tracking
+    31→        config.metadata = { startTime: Date.now() }
+    32→      }
+    33→      return config
+    34→    },
+    35→    (error) => {
+    36→      return Promise.reject(error)
+    37→    }
+    38→  )
+    39→
+    40→  // Add response interceptor for error handling
+    41→  apiClient.interceptors.response.use(
+    42→    (response) => {
+    43→      // Track successful API calls
+    44→      if (import.meta.client && response.config.metadata?.startTime) {
+    45→        try {
+    46→          const duration = Date.now() - response.config.metadata.startTime
+    47→          const method = response.config.method?.toUpperCase() || 'GET'
+    48→          const url = `${response.config.baseURL}${response.config.url}`
+    49→
+    50→          // Use window.$nuxt to avoid SSR issues
+    51→          if (typeof window !== 'undefined' && (window as any).$nuxt?.$trackDependency) {
+    52→            (window as any).$nuxt.$trackDependency(
+    53→              `${method} ${response.config.url}`,
+    54→              method,
+    55→              url,
+    56→              duration,
+    57→              true,
+    58→              response.status,
+    59→              {
+    60→                responseSize: JSON.stringify(response.data).length,
+    61→                endpoint: response.config.url
+    62→              }
+    63→            )
+    64→          }
+    65→        } catch (err) {
+    66→          // Fail silently if tracking fails
+    67→          console.debug('Tracking error:', err)
+    68→        }
+    69→      }
+    70→      // Return only the data property instead of the full response
+    71→      return response.data
+    72→    },
+    73→    (error) => {
+    74→      // Track failed API calls
+    75→      if (import.meta.client && error.config?.metadata?.startTime) {
+    76→        try {
+    77→          const duration = Date.now() - error.config.metadata.startTime
+    78→          const method = error.config.method?.toUpperCase() || 'GET'
+    79→          const url = `${error.config.baseURL}${error.config.url}`
+    80→          const statusCode = error.response?.status || 0
+    81→
+    82→          // Use window.$nuxt to avoid SSR issues
+    83→          if (typeof window !== 'undefined' && (window as any).$nuxt?.$trackDependency) {
+    84→            (window as any).$nuxt.$trackDependency(
+    85→              `${method} ${error.config.url}`,
+    86→              method,
+    87→              url,
+    88→              duration,
+    89→              false,
+    90→              statusCode,
+    91→              {
+    92→                errorMessage: error.message,
+    93→                endpoint: error.config.url
+    94→              }
+    95→            )
+    96→          }
+    97→
+    98→          // Track as exception for 5xx errors
+    99→          if (statusCode >= 500 && typeof window !== 'undefined' && (window as any).$nuxt?.$trackException) {
+   100→            (window as any).$nuxt.$trackException(new Error(`API Error: ${method} ${error.config.url} - ${statusCode}`), {
+   101→              endpoint: error.config.url,
+   102→              statusCode,
+   103→              duration,
+   104→              errorMessage: error.response?.data?.message || error.message
+   105→            })
+   106→          }
+   107→        } catch (err) {
+   108→          // Fail silently if tracking fails
+   109→          console.debug('Tracking error:', err)
+   110→        }
+   111→      }
+   112→
+   113→      // Only redirect to login if:
+   114→      // 1. We got a 401 error
+   115→      // 2. It's NOT from the login endpoint
+   116→      // 3. It's NOT from the register endpoint
+   117→      const isAuthEndpoint = error.config?.url?.includes('/auth/login') ||
+   118→                            error.config?.url?.includes('/auth/register')
+   119→
+   120→      if (error.response?.status === 401 && !isAuthEndpoint && import.meta.client) {
+   121→        // Token expired or invalid, redirect to login
+   122→        localStorage.removeItem('token')
+   123→        localStorage.removeItem('user')
+   124→        router.push('/login')
+   125→      }
+   126→      return Promise.reject(error)
+   127→    }
+   128→  )
+   129→
+   130→  return apiClient
+   131→}
+   132→
+   133→// Auth API
+   134→export const useAuthApi = () => {
+   135→  const api = useApi()
+   136→
+   137→  return {
+   138→    register: (data: any) => api.post('/auth/register', data),
+   139→    login: (credentials: any) => api.post('/auth/login', credentials),
+   140→    verifyEmail: (token: string) => api.get(`/auth/verify-email?token=${token}`),
+   141→    resendVerification: (email: string) => api.post('/auth/resend-verification', { email }),
+   142→    forgotPassword: (email: string) => api.post('/auth/forgot-password', { email }),
+   143→    resetPassword: (token: string, newPassword: string) =>
+   144→      api.post('/auth/reset-password', { token, newPassword })
+   145→  }
+   146→}
+   147→
+   148→// Profiles API
+   149→export const useProfilesApi = () => {
+   150→  const api = useApi()
+   151→
+   152→  return {
+   153→    getBySlug: (slug: string) => api.get(`/profiles/${slug}`),
+   154→    getMyProfiles: () => api.get('/profiles'),
+   155→    create: (data: any) => api.post('/profiles', data),
+   156→    update: (id: string, data: any) => api.put(`/profiles/${id}`, data),
+   157→    delete: (id: string) => api.delete(`/profiles/${id}`),
+   158→    trackView: (slug: string) => api.post(`/profiles/${slug}/view`),
+   159→    getAnalytics: (id: string) => api.get(`/profiles/${id}/analytics`)
+   160→  }
+   161→}
+   162→
+   163→// Menus API
+   164→export const useMenusApi = () => {
+   165→  const api = useApi()
+   166→
+   167→  return {
+   168→    getByProfileSlug: (profileSlug: string) => api.get(`/menus/${profileSlug}`),
+   169→    getMenuBySlug: (slug: string) => api.get(`/c/${slug}`),
+   170→    getItemDetails: (slug: string, itemId: number) => api.get(`/c/${slug}/items/${itemId}`),
+   171→    getBundleDetails: (slug: string, bundleId: number) => api.get(`/c/${slug}/bundles/${bundleId}`),
+   172→    getItems: (menuId: string) => api.get(`/menus/${menuId}/items`),
+   173→    createItem: (menuId: string, data: any) => api.post(`/menus/${menuId}/items`, data),
+   174→    updateItem: (menuId: string, itemId: string, data: any) =>
+   175→      api.put(`/menus/${menuId}/items/${itemId}`, data),
+   176→    deleteItem: (menuId: string, itemId: string) =>
+   177→      api.delete(`/menus/${menuId}/items/${itemId}`),
+   178→    getCategories: (menuId: string) => api.get(`/menus/${menuId}/categories`),
+   179→    reorderItems: (menuId: string, data: any) => api.put(`/menus/${menuId}/reorder`, data),
+   180→    // Create complete menu with profile, categories, and items
+   181→    createMenu: (data: any) => api.post('/menus', data),
+   182→    getMyMenus: () => api.get('/menus/my'),
+   183→    getMenuById: (menuId: number) => api.get(`/menus/${menuId}`),
+   184→    updateMenu: (menuId: string, data: any) => api.put(`/menus/${menuId}`, data),
+   185→    deleteMenu: (menuId: string) => api.delete(`/menus/${menuId}`)
+   186→  }
+   187→}
+   188→
+   189→// Tables API
+   190→export const useTablesApi = () => {
+   191→  const api = useApi()
+   192→
+   193→  return {
+   194→    getMyTables: () => api.get('/tables'),
+   195→    getById: (id: string) => api.get(`/tables/${id}`),
+   196→    getByNFCCode: (code: string) => api.get(`/tables/nfc/${code}`),
+   197→    create: (data: any) => api.post('/tables', data),
+   198→    update: (id: string, data: any) => api.put(`/tables/${id}`, data),
+   199→    delete: (id: string) => api.delete(`/tables/${id}`),
+   200→    generateNFCCode: (id: string) => api.post(`/tables/${id}/generate-nfc`)
+   201→  }
+   202→}
+   203→
+   204→// Subscriptions API
+   205→export const useSubscriptionsApi = () => {
+   206→  const api = useApi()
+   207→
+   208→  return {
+   209→    getTiers: () => api.get('/subscriptions/tiers'),
+   210→    getCurrentSubscription: () => api.get('/subscriptions/current'),
+   211→    subscribe: (tierId: string, paymentData: any) =>
+   212→      api.post('/subscriptions/subscribe', { tierId, ...paymentData }),
+   213→    updateSubscription: (tierId: string) => api.put('/subscriptions/update', { tierId }),
+   214→    cancel: () => api.post('/subscriptions/cancel'),
+   215→    getHistory: () => api.get('/subscriptions/history'),
+   216→    processPayment: (data: any) => api.post('/payments/process', data),
+   217→    verifyPayment: (paymentId: string) => api.get(`/payments/verify/${paymentId}`)
+   218→  }
+   219→}
+   220→
+   221→// Bundles API
+   222→export const useBundlesApi = () => {
+   223→  const api = useApi()
+   224→
+   225→  return {
+   226→    // Bundle operations
+   227→    getBundles: () => api.get(`/dashboard/bundles`),
+   228→    getBundle: (bundleId: string) =>
+   229→      api.get(`/dashboard/bundles/${bundleId}`),
+   230→    createBundle: (data: any) =>
+   231→      api.post(`/dashboard/bundles`, data),
+   232→    updateBundle: (bundleId: string, data: any) =>
+   233→      api.put(`/dashboard/bundles/${bundleId}`, data),
+   234→    deleteBundle: (bundleId: string) =>
+   235→      api.delete(`/dashboard/bundles/${bundleId}`),
+   236→
+   237→    // Step operations
+   238→    addStep: (bundleId: string, data: any) =>
+   239→      api.post(`/dashboard/bundles/${bundleId}/steps`, data),
+   240→
+   241→    // Product assignment
+   242→    addProductToStep: (bundleId: string, stepId: string, data: any) =>
+   243→      api.post(`/dashboard/bundles/${bundleId}/steps/${stepId}/products`, data),
+   244→
+   245→    // Option groups
+   246→    addOptionGroup: (bundleId: string, stepId: string, data: any) =>
+   247→      api.post(`/dashboard/bundles/${bundleId}/steps/${stepId}/option-groups`, data),
+   248→    updateOptionGroup: (bundleId: string, stepId: string, optionGroupId: string, data: any) =>
+   249→      api.put(`/dashboard/bundles/${bundleId}/steps/${stepId}/option-groups/${optionGroupId}`, data),
+   250→    deleteOptionGroup: (bundleId: string, stepId: string, optionGroupId: string) =>
+   251→      api.delete(`/dashboard/bundles/${bundleId}/steps/${stepId}/option-groups/${optionGroupId}`),
+   252→
+   253→    // Options
+   254→    addOption: (bundleId: string, stepId: string, optionGroupId: string, data: any) =>
+   255→      api.post(`/dashboard/bundles/${bundleId}/steps/${stepId}/option-groups/${optionGroupId}/options`, data),
+   256→    updateOption: (bundleId: string, stepId: string, optionGroupId: string, optionId: string, data: any) =>
+   257→      api.put(`/dashboard/bundles/${bundleId}/steps/${stepId}/option-groups/${optionGroupId}/options/${optionId}`, data),
+   258→    deleteOption: (bundleId: string, stepId: string, optionGroupId: string, optionId: string) =>
+   259→      api.delete(`/dashboard/bundles/${bundleId}/steps/${stepId}/option-groups/${optionGroupId}/options/${optionId}`),
+   260→
+   261→    // Add bundle to category (catalogId now passed in data object)
+   262→    addToCategory: (bundleId: string, data: any) =>
+   263→      api.post(`/dashboard/bundles/${bundleId}/add-to-category`, data),
+   264→
+   265→    // Step management
+   266→    updateStep: (bundleId: string, stepId: string, data: any) =>
+   267→      api.put(`/dashboard/bundles/${bundleId}/steps/${stepId}`, data),
+   268→    deleteStep: (bundleId: string, stepId: string) =>
+   269→      api.delete(`/dashboard/bundles/${bundleId}/steps/${stepId}`),
+   270→    reorderSteps: (bundleId: string, data: any) =>
+   271→      api.put(`/dashboard/bundles/${bundleId}/steps/reorder`, data),
+   272→
+   273→    // Product management in steps
+   274→    removeProductFromStep: (bundleId: string, stepId: string, productId: string) =>
+   275→      api.delete(`/dashboard/bundles/${bundleId}/steps/${stepId}/products/${productId}`)
+   276→  }
+   277→}
+   278→
+   279→// Uploads API
+   280→export const useUploadsApi = () => {
+   281→  const api = useApi()
+   282→
+   283→  return {
+   284→    uploadFile: (file: File) => {
+   285→      const formData = new FormData()
+   286→      formData.append('file', file)
+   287→      return api.post('/uploads', formData, {
+   288→        headers: { 'Content-Type': 'multipart/form-data' }
+   289→      })
+   290→    },
+   291→    uploadLogo: (file: File) => {
+   292→      const formData = new FormData()
+   293→      formData.append('logo', file)
+   294→      return api.post('/uploads/logo', formData, {
+   295→        headers: { 'Content-Type': 'multipart/form-data' }
+   296→      })
+   297→    },
+   298→    uploadMenuImage: (file: File) => {
+   299→      const formData = new FormData()
+   300→      formData.append('image', file)
+   301→      return api.post('/uploads/menu-image', formData, {
+   302→        headers: { 'Content-Type': 'multipart/form-data' }
+   303→      })
+   304→    },
+   305→    deleteFile: (fileId: string) => api.delete(`/uploads/${fileId}`)
+   306→  }
+   307→}
+   308→
+   309→// Library Items API
+   310→export const useLibraryItemsApi = () => {
+   311→  const api = useApi()
+   312→
+   313→  return {
+   314→    // Library items CRUD
+   315→    getItems: (categoryId?: number) => {
+   316→      const params = categoryId ? `?categoryId=${categoryId}` : ''
+   317→      return api.get(`/library/items${params}`)
+   318→    },
+   319→    getItem: (id: number) => api.get(`/library/items/${id}`),
+   320→    createItem: (data: any) => api.post('/library/items', data),
+   321→    updateItem: (id: number, data: any) => api.put(`/library/items/${id}`, data),
+   322→    deleteItem: (id: number) => api.delete(`/library/items/${id}`),
+   323→    addToCatalog: (id: number, data: any) => api.post(`/library/items/${id}/add-to-catalog`, data)
+   324→  }
+   325→}
+   326→
+   327→// Library Categories API
+   328→export const useLibraryCategoriesApi = () => {
+   329→  const api = useApi()
+   330→
+   331→  return {
+   332→    // Library categories CRUD
+   333→    getCategories: () => api.get('/library/categories'),
+   334→    getCategory: (id: number) => api.get(`/library/categories/${id}`),
+   335→    createCategory: (data: any) => api.post('/library/categories', data),
+   336→    updateCategory: (id: number, data: any) => api.put(`/library/categories/${id}`, data),
+   337→    deleteCategory: (id: number) => api.delete(`/library/categories/${id}`),
+   338→    addToCatalog: (id: number, data: any) => api.post(`/library/categories/${id}/add-to-catalog`, data)
+   339→  }
+   340→}
+   341→
+   342→// Catalogs API (Menu Editor)
+   343→export const useCatalogsApi = () => {
+   344→  const api = useApi()
+   345→
+   346→  return {
+   347→    // Get full catalog details for editing - uses /menus/{id} endpoint
+   348→    getCatalogDetail: (id: number) => api.get(`/menus/${id}`),
+   349→
+   350→    // Catalog operations
+   351→    updateCatalog: (id: number, dto: any) =>
+   352→      api.put(`/catalogs/${id}`, dto),
+   353→
+   354→    // Category operations
+   355→    createCategory: (catalogId: number, dto: any) =>
+   356→      api.post(`/catalogs/${catalogId}/categories`, dto),
+   357→    updateCategory: (categoryId: number, dto: any) =>
+   358→      api.put(`/categories/${categoryId}`, dto),
+   359→    deleteCategory: (categoryId: number) =>
+   360→      api.delete(`/categories/${categoryId}`),
+   361→
+   362→    // Reorder operations
+   363→    reorderCategories: (catalogId: number, items: any) =>
+   364→      api.put(`/catalogs/${catalogId}/categories/reorder`, items),
+   365→    reorderItems: (catalogId: number, items: any) =>
+   366→      api.put(`/catalogs/${catalogId}/items/reorder`, items),
+   367→
+   368→    // Add to catalog operations
+   369→    addItemToCatalog: (catalogId: number, dto: any) =>
+   370→      api.post(`/catalogs/${catalogId}/items`, dto),
+   371→    addBundleToCatalog: (catalogId: number, dto: any) =>
+   372→      api.post(`/catalogs/${catalogId}/bundles`, dto),
+   373→
+   374→    // Remove from catalog operations
+   375→    removeItem: (catalogId: number, itemId: number) =>
+   376→      api.delete(`/catalogs/${catalogId}/items/${itemId}`),
+   377→    removeBundle: (catalogId: number, bundleId: number) =>
+   378→      api.delete(`/catalogs/${catalogId}/bundles/${bundleId}`),
+   379→
+   380→    // Update item categories
+   381→    updateItemCategories: (catalogId: number, itemId: number, dto: any) =>
+   382→      api.put(`/catalogs/${catalogId}/items/${itemId}/categories`, dto)
+   383→  }
+   384→}
+   385→
+   386→// Options API (Product Customizations)
+   387→export const useOptionsApi = () => {
+   388→  const api = useApi()
+   389→
+   390→  return {
+   391→    // Options CRUD
+   392→    getOptions: () => api.get('/library/options'),
+   393→    getOption: (id: number) => api.get(`/library/options/${id}`),
+   394→    createOption: (data: any) => api.post('/library/options', data),
+   395→    updateOption: (id: number, data: any) => api.put(`/library/options/${id}`, data),
+   396→    deleteOption: (id: number) => api.delete(`/library/options/${id}`)
+   397→  }
+   398→}
+   399→
+   400→// Option Groups API
+   401→export const useOptionGroupsApi = () => {
+   402→  const api = useApi()
+   403→
+   404→  return {
+   405→    // Option Groups CRUD
+   406→    getOptionGroups: () => api.get('/library/option-groups'),
+   407→    getOptionGroup: (id: number) => api.get(`/library/option-groups/${id}`),
+   408→    createOptionGroup: (data: any) => api.post('/library/option-groups', data),
+   409→    updateOptionGroup: (id: number, data: any) => api.put(`/library/option-groups/${id}`, data),
+   410→    deleteOptionGroup: (id: number) => api.delete(`/library/option-groups/${id}`)
+   411→  }
+   412→}
+   413→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

@@ -1,0 +1,19 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\components\ProductSwitcher.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    57→    </div>
+    58→  </div>
+    59→</template>
+    60→
+    61→<script setup lang="ts">
+    62→import { ref, computed, onMounted, onUnmounted, inject } from 'vue'
+    63→
+    64→const route = useRoute()
+    65→const dropdownOpen = ref(false)
+    66→const dropdownRef = ref<HTMLElement | null>(null)
+    67→
+    68→// Inject page metadata from pages
+    69→const pageHeader = inject<{ title: string, description: string } | null>('pageHeader', null)
+    70→const pageActions = inject<(() => any) | null>('pageActions', null)
+    71→
+    72→const products = [
+    73→  {
+    74→    id: 'menu',

@@ -1,0 +1,141 @@
+     1→// https://nuxt.com/docs/api/configuration/nuxt-config
+     2→export default defineNuxtConfig({
+     3→  compatibilityDate: '2025-11-23',
+     4→
+     5→  devtools: { enabled: false },
+     6→
+     7→  // SSR Configuration - enabled by default but explicit for clarity
+     8→  ssr: true,
+     9→
+    10→  modules: [
+    11→    '~/modules/fix-windows-path',
+    12→    '@nuxtjs/tailwindcss',
+    13→    '@pinia/nuxt',
+    14→    '@nuxt/image'
+    15→  ],
+    16→
+    17→  css: [
+    18→   // '@fortawesome/fontawesome-free/css/all.min.css',
+    19→    '~/assets/css/main.css',
+    20→    '~/assets/fonts/css/all.css',
+    21→
+    22→  ],
+    23→
+    24→  app: {
+    25→    head: {
+    26→      title: 'BizBio - Digital Business Profiles',
+    27→      meta: [
+    28→        { charset: 'utf-8' },
+    29→        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+    30→        {
+    31→          name: 'description',
+    32→          content: 'Create and share your digital business profile with BizBio'
+    33→        }
+    34→      ],
+    35→      link: [
+    36→        {
+    37→          rel: 'stylesheet',
+    38→          href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap'
+    39→        },
+    40→      ]
+    41→    }
+    42→  },
+    43→
+    44→  runtimeConfig: {
+    45→    public: {
+    46→      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'https://localhost:5001/api/v1',
+    47→      appInsightsConnectionString: process.env.NUXT_PUBLIC_APP_INSIGHTS_CONNECTION_STRING || '',
+    48→      googleAnalyticsId: process.env.NUXT_PUBLIC_GOOGLE_ANALYTICS_ID || 'G-XXXXXXXXXX',
+    49→      cookieDomain: process.env.NUXT_PUBLIC_COOKIE_DOMAIN || undefined
+    50→    }
+    51→  },
+    52→
+    53→  // Performance optimizations
+    54→  nitro: {
+    55→    compressPublicAssets: true,
+    56→    preset: 'node-server', // Optimized for Node.js server deployment
+    57→    
+    58→    // Production optimizations
+    59→    // Note: minify disabled due to Rollup bug on Windows with Nuxt 3.20.1
+    60→    // Re-enable after upgrading to a fixed version
+    61→    minify: false,
+    62→    sourceMap: false,
+    63→    
+    64→    // Server configuration for VPS deployment
+    65→    experimental: {
+    66→      wasm: false // Disable if not needed to reduce memory
+    67→    }
+    68→  },
+    69→
+    70→  // Image optimization
+    71→  image: {
+    72→    quality: 80,
+    73→    formats: ['webp', 'avif', 'png', 'jpg'],
+    74→    screens: {
+    75→      xs: 320,
+    76→      sm: 640,
+    77→      md: 768,
+    78→      lg: 1024,
+    79→      xl: 1280,
+    80→      xxl: 1536,
+    81→    },
+    82→  },
+    83→
+    84→  // Route rules for better performance
+    85→  routeRules: {
+    86→    // Static pages - prerendered at build time
+    87→    '/': { prerender: true },
+    88→    '/pricing': { prerender: true },
+    89→    '/categories': { prerender: true },
+    90→    '/help': { prerender: true },
+    91→    '/contact': { prerender: true },
+    92→    '/terms': { prerender: true },
+    93→    '/privacy': { prerender: true },
+    94→
+    95→    // Dashboard - SSR with short cache
+    96→    '/dashboard/**': { ssr: false }, // Client-side only for auth-protected pages
+    97→    '/dashboard/menu/create': { ssr: false }, // Client-side only for menu creation
+    98→    
+    99→    // Auth pages - SSR only, no cache
+   100→    '/login': { ssr: true },
+   101→    '/register': { ssr: true },
+   102→    '/forgot-password': { ssr: true },
+   103→    '/reset-password': { ssr: true },
+   104→    '/verify-email': { ssr: true },
+   105→    
+   106→    // Search and products - SSR with cache
+   107→    '/search': { ssr: true, cache: { maxAge: 60 * 10 } }, // 10 minutes
+   108→    '/products': { ssr: true, cache: { maxAge: 60 * 15 } }, // 15 minutes
+   109→  },
+   110→  
+   111→  darkMode: 'class',
+   112→
+   113→  // Production build optimizations
+   114→  experimental: {
+   115→    payloadExtraction: false, // Can help with performance on VPS
+   116→    renderJsonPayloads: true,
+   117→    typedPages: true,
+   118→  },
+   119→
+   120→  // Optimize builds for production
+   121→  vite: {
+   122→    build: {
+   123→      rollupOptions: {
+   124→        output: {
+   125→          manualChunks: (id) => {
+   126→            // Only split chunks for client-side modules
+   127→            if (id.includes('node_modules')) {
+   128→              if (id.includes('pinia')) return 'pinia';
+   129→              // Skip axios as it's external on server-side
+   130→            }
+   131→          }
+   132→        }
+   133→      }
+   134→    }
+   135→  },
+   136→})
+   137→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

@@ -1,0 +1,396 @@
+     1→<template>
+     2→  <div class="container mx-auto px-4 py-8">
+     3→    <div class="flex justify-between items-center mb-6">
+     4→      <div>
+     5→        <h1 class="text-3xl font-bold text-gray-800">Extra Groups Library</h1>
+     6→        <p class="text-gray-600 mt-2">Group related extras together (e.g., "Choose Toppings", "Add Extra Cheese")</p>
+     7→      </div>
+     8→      <button
+     9→        @click="showCreateModal = true"
+    10→        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+    11→      >
+    12→        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    13→          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+    14→        </svg>
+    15→        Add Extra Group
+    16→      </button>
+    17→    </div>
+    18→
+    19→    <!-- Loading State -->
+    20→    <div v-if="loading" class="flex justify-center items-center py-12">
+    21→      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    22→    </div>
+    23→
+    24→    <!-- Error State -->
+    25→    <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+    26→      {{ error }}
+    27→    </div>
+    28→
+    29→    <!-- Extra Groups List -->
+    30→    <div v-else-if="extraGroups.length > 0" class="grid gap-6">
+    31→      <div
+    32→        v-for="group in extraGroups"
+    33→        :key="group.id"
+    34→        class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+    35→      >
+    36→        <div class="flex justify-between items-start mb-4">
+    37→          <div>
+    38→            <h3 class="text-xl font-bold text-gray-800">{{ group.name }}</h3>
+    39→            <p v-if="group.Description" class="text-gray-600 mt-1">{{ group.description }}</p>
+    40→            <div class="flex gap-4 mt-2 text-sm text-gray-500">
+    41→              <span>Min: {{ group.minRequired }}</span>
+    42→              <span>Max: {{ group.maxAllowed || 'Unlimited' }}</span>
+    43→              <span v-if="group.allowMultipleQuantities" class="text-green-600">Multiple Quantities</span>
+    44→            </div>
+    45→          </div>
+    46→          <div class="flex gap-2">
+    47→            <button
+    48→              @click="editGroup(group)"
+    49→              class="text-blue-600 hover:text-blue-900 px-3 py-1"
+    50→            >
+    51→              Edit
+    52→            </button>
+    53→            <button
+    54→              @click="deleteGroup(group.id)"
+    55→              class="text-red-600 hover:text-red-900 px-3 py-1"
+    56→            >
+    57→              Delete
+    58→            </button>
+    59→          </div>
+    60→        </div>
+    61→
+    62→        <!-- Extras in Group -->
+    63→        <div v-if="group.Extras && group.Extras.length > 0" class="mt-4">
+    64→          <h4 class="text-sm font-semibold text-gray-700 mb-2">Extras in this group:</h4>
+    65→          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+    66→            <div
+    67→              v-for="item in group.Extras"
+    68→              :key="item.id"
+    69→              class="flex justify-between items-center bg-gray-50 rounded-lg p-3"
+    70→            >
+    71→              <div>
+    72→                <span class="text-sm font-medium text-gray-800">{{ item.extra.name }}</span>
+    73→                <span class="text-xs text-gray-500 ml-2">
+    74→                  R{{ (item.priceOverride !== null ? item.priceOverride : item.extra.basePrice).toFixed(2) }}
+    75→                </span>
+    76→              </div>
+    77→            </div>
+    78→          </div>
+    79→        </div>
+    80→        <div v-else class="mt-4 text-sm text-gray-500 italic">
+    81→          No extras in this group yet
+    82→        </div>
+    83→      </div>
+    84→    </div>
+    85→
+    86→    <!-- Empty State -->
+    87→    <div v-else class="bg-white rounded-lg shadow-md p-12 text-center">
+    88→      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    89→        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+    90→      </svg>
+    91→      <h3 class="mt-2 text-sm font-medium text-gray-900">No extra groups</h3>
+    92→      <p class="mt-1 text-sm text-gray-500">Get started by creating a new extra group.</p>
+    93→      <div class="mt-6">
+    94→        <button
+    95→          @click="showCreateModal = true"
+    96→          class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+    97→        >
+    98→          Add Extra Group
+    99→        </button>
+   100→      </div>
+   101→    </div>
+   102→
+   103→    <!-- Create/Edit Modal -->
+   104→    <div
+   105→      v-if="showCreateModal || editingGroup"
+   106→      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+   107→      @click.self="closeModal"
+   108→    >
+   109→      <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+   110→        <div class="p-6">
+   111→          <div class="flex justify-between items-center mb-6">
+   112→            <h2 class="text-2xl font-bold text-gray-800">
+   113→              {{ editingGroup ? 'Edit Extra Group' : 'Create Extra Group' }}
+   114→            </h2>
+   115→            <button @click="closeModal" class="text-gray-400 hover:text-gray-600">
+   116→              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+   117→                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+   118→              </svg>
+   119→            </button>
+   120→          </div>
+   121→
+   122→          <form @submit.prevent="saveGroup" class="space-y-4">
+   123→            <div>
+   124→              <label class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
+   125→              <input
+   126→                v-model="formData.Name"
+   127→                type="text"
+   128→                required
+   129→                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+   130→                placeholder="e.g., Choose Toppings, Add Extra Cheese"
+   131→              />
+   132→            </div>
+   133→
+   134→            <div>
+   135→              <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+   136→              <textarea
+   137→                v-model="formData.Description"
+   138→                rows="2"
+   139→                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+   140→                placeholder="Optional description"
+   141→              ></textarea>
+   142→            </div>
+   143→
+   144→            <div class="grid grid-cols-2 gap-4">
+   145→              <div>
+   146→                <label class="block text-sm font-medium text-gray-700 mb-2">Minimum Required</label>
+   147→                <input
+   148→                  v-model.number="formData.MinRequired"
+   149→                  type="number"
+   150→                  min="0"
+   151→                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+   152→                  placeholder="0"
+   153→                />
+   154→              </div>
+   155→
+   156→              <div>
+   157→                <label class="block text-sm font-medium text-gray-700 mb-2">Maximum Allowed</label>
+   158→                <input
+   159→                  v-model.number="formData.MaxAllowed"
+   160→                  type="number"
+   161→                  min="0"
+   162→                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+   163→                  placeholder="0 = Unlimited"
+   164→                />
+   165→                <p class="text-xs text-gray-500 mt-1">0 = Unlimited</p>
+   166→              </div>
+   167→            </div>
+   168→
+   169→            <div class="flex items-center">
+   170→              <input
+   171→                v-model="formData.AllowMultipleQuantities"
+   172→                type="checkbox"
+   173→                id="allowMultiple"
+   174→                class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+   175→              />
+   176→              <label for="allowMultiple" class="ml-2 block text-sm text-gray-700">
+   177→                Allow multiple quantities of the same extra
+   178→              </label>
+   179→            </div>
+   180→
+   181→            <div>
+   182→              <label class="block text-sm font-medium text-gray-700 mb-2">Display Order</label>
+   183→              <input
+   184→                v-model.number="formData.DisplayOrder"
+   185→                type="number"
+   186→                min="0"
+   187→                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+   188→                placeholder="0"
+   189→              />
+   190→            </div>
+   191→
+   192→            <!-- Select Extras -->
+   193→            <div>
+   194→              <label class="block text-sm font-medium text-gray-700 mb-2">Select Extras</label>
+   195→              <div v-if="availableExtras.length > 0" class="border border-gray-300 rounded-lg p-4 max-h-60 overflow-y-auto">
+   196→                <div
+   197→                  v-for="extra in availableExtras"
+   198→                  :key="extra.id"
+   199→                  class="flex items-center py-2 hover:bg-gray-50 rounded px-2"
+   200→                >
+   201→                  <input
+   202→                    type="checkbox"
+   203→                    :id="`extra-${extra.id}`"
+   204→                    :value="extra.id"
+   205→                    v-model="formData.extraIds"
+   206→                    class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+   207→                  />
+   208→                  <label :for="`extra-${extra.id}`" class="ml-3 flex-1 flex justify-between items-center cursor-pointer">
+   209→                    <span class="text-sm text-gray-800">{{ extra.name }}</span>
+   210→                    <span class="text-sm text-gray-500">R{{ extra.basePrice.toFixed(2) }}</span>
+   211→                  </label>
+   212→                </div>
+   213→              </div>
+   214→              <p v-else class="text-sm text-gray-500 italic">
+   215→                No extras available. Create extras first in the Extras Library.
+   216→              </p>
+   217→            </div>
+   218→
+   219→            <div class="flex justify-end gap-3 pt-4 border-t">
+   220→              <button
+   221→                type="button"
+   222→                @click="closeModal"
+   223→                class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+   224→              >
+   225→                Cancel
+   226→              </button>
+   227→              <button
+   228→                type="submit"
+   229→                :disabled="saving"
+   230→                class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+   231→              >
+   232→                {{ saving ? 'Saving...' : editingGroup ? 'Update' : 'Create' }}
+   233→              </button>
+   234→            </div>
+   235→          </form>
+   236→        </div>
+   237→      </div>
+   238→    </div>
+   239→  </div>
+   240→</template>
+   241→
+   242→<script setup lang="ts">
+   243→definePageMeta({
+   244→  layout: 'dashboard'
+   245→})
+   246→
+   247→const api = useApi()
+   248→const loading = ref(true)
+   249→const error = ref('')
+   250→const extraGroups = ref<any[]>([])
+   251→const availableExtras = ref<any[]>([])
+   252→const showCreateModal = ref(false)
+   253→const editingGroup = ref<any>(null)
+   254→const saving = ref(false)
+   255→
+   256→const formData = ref({
+   257→  Name: '',
+   258→  Description: '',
+   259→  MinRequired: 0,
+   260→  MaxAllowed: 0,
+   261→  AllowMultipleQuantities: true,
+   262→  DisplayOrder: 0,
+   263→  ExtraIds: [] as number[]
+   264→})
+   265→
+   266→const fetchExtraGroups = async () => {
+   267→  loading.value = true
+   268→  error.value = ''
+   269→  try {
+   270→    const response = await api.get('/library/extra-groups')
+   271→    console.log('Extra groups response:', response);
+   272→    if (response.success) {
+   273→      // Ensure we always set an array
+   274→      if (Array.isArray(response.data)) {
+   275→        extraGroups.value = response.data
+   276→      } else if (response.data && Array.isArray(response.data.extraGroups)) {
+   277→        extraGroups.value = response.data.extraGroups
+   278→      } else {
+   279→        console.warn('Unexpected response structure:', response.data)
+   280→        extraGroups.value = []
+   281→      }
+   282→    } else {
+   283→      error.value = 'Failed to load extra groups'
+   284→      extraGroups.value = []
+   285→    }
+   286→  } catch (err: any) {
+   287→    error.value = err.message || 'An error occurred'
+   288→    extraGroups.value = []
+   289→  } finally {
+   290→    loading.value = false
+   291→  }
+   292→}
+   293→
+   294→const fetchAvailableExtras = async () => {
+   295→  try {
+   296→    const response = await api.get('/library/extras')
+   297→    if (response.success) {
+   298→      // Ensure we always set an array
+   299→      if (Array.isArray(response.data)) {
+   300→        availableExtras.value = response.data
+   301→      } else if (response.data && Array.isArray(response.data.extras)) {
+   302→        availableExtras.value = response.data.extras
+   303→      } else {
+   304→        availableExtras.value = []
+   305→      }
+   306→    }
+   307→  } catch (err) {
+   308→    console.error('Failed to fetch extras', err)
+   309→    availableExtras.value = []
+   310→  }
+   311→}
+   312→
+   313→const saveGroup = async () => {
+   314→  saving.value = true
+   315→  try {
+   316→    if (editingGroup.value) {
+   317→      const response = await api.put(`/library/extra-groups/${editingGroup.value.id}`, formData.value)
+   318→      if (response.success) {
+   319→        await fetchExtraGroups()
+   320→        closeModal()
+   321→      } else {
+   322→        alert('Failed to update extra group')
+   323→      }
+   324→    } else {
+   325→      const response = await api.post('/library/extra-groups', formData.value)
+   326→      if (response.success) {
+   327→        await fetchExtraGroups()
+   328→        closeModal()
+   329→      } else {
+   330→        alert('Failed to create extra group')
+   331→      }
+   332→    }
+   333→  } catch (err: any) {
+   334→    alert(err.message || 'An error occurred')
+   335→  } finally {
+   336→    saving.value = false
+   337→  }
+   338→}
+   339→
+   340→const editGroup = (group: any) => {
+   341→  editingGroup.value = group
+   342→  formData.value = {
+   343→    Name: group.Name,
+   344→    Description: group.Description || '',
+   345→    MinRequired: group.MinRequired,
+   346→    MaxAllowed: group.MaxAllowed,
+   347→    AllowMultipleQuantities: group.AllowMultipleQuantities,
+   348→    DisplayOrder: group.DisplayOrder,
+   349→    ExtraIds: group.Extras ? group.Extras.map((item: any) => item.ExtraId) : []
+   350→  }
+   351→}
+   352→
+   353→const deleteGroup = async (id: number) => {
+   354→  if (!confirm('Are you sure you want to delete this extra group?')) return
+   355→
+   356→  try {
+   357→    const response = await api.delete(`/library/extra-groups/${id}`)
+   358→    if (response.success) {
+   359→      await fetchExtraGroups()
+   360→    } else {
+   361→      alert('Failed to delete extra group')
+   362→    }
+   363→  } catch (err: any) {
+   364→    alert(err.message || 'An error occurred')
+   365→  }
+   366→}
+   367→
+   368→const closeModal = () => {
+   369→  showCreateModal.value = false
+   370→  editingGroup.value = null
+   371→  formData.value = {
+   372→    Name: '',
+   373→    Description: '',
+   374→    MinRequired: 0,
+   375→    MaxAllowed: 0,
+   376→    AllowMultipleQuantities: true,
+   377→    DisplayOrder: 0,
+   378→    ExtraIds: []
+   379→  }
+   380→}
+   381→
+   382→watch([showCreateModal, editingGroup], () => {
+   383→  if (showCreateModal.value || editingGroup.value) {
+   384→    fetchAvailableExtras()
+   385→  }
+   386→})
+   387→
+   388→onMounted(() => {
+   389→  fetchExtraGroups()
+   390→})
+   391→</script>
+   392→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

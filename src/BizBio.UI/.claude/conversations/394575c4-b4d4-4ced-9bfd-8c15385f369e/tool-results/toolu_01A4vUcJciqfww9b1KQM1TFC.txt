@@ -1,0 +1,78 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\menu\[slug].vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   257→          <h2 class="text-2xl font-bold text-gray-900 px-4 sm:px-6 lg:px-8 py-6 bg-white sticky top-[52px] z-10 border-b border-gray-100">
+   258→            {{ category.name }}
+   259→          </h2>
+   260→
+   261→          <!-- Grid Layout for Menu Items -->
+   262→          <div class="px-4 sm:px-6 lg:px-8 pt-3 sm:pt-4 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+   263→            <div
+   264→              v-for="item in getCategoryItems(category.id)"
+   265→              :key="item.id"
+   266→              class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-gray-200"
+   267→            >
+   268→              <!-- Item Image -->
+   269→              <div
+   270→                @click="openItemDetail(item)"
+   271→                class="relative w-full h-32 sm:h-40 md:h-48 bg-gradient-to-br from-gray-100 to-gray-200 cursor-pointer overflow-hidden group"
+   272→              >
+   273→                <img
+   274→                  v-if="item.images && item.images.length > 0"
+   275→                  :src="item.images[0]"
+   276→                  :alt="item.name"
+   277→                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+   278→                />
+   279→                <div v-else class="w-full h-full flex items-center justify-center">
+   280→                  <i class="fas fa-utensils text-3xl sm:text-4xl md:text-5xl text-gray-300"></i>
+   281→                </div>
+   282→                <span
+   283→                  v-if="item.itemType === 1"
+   284→                  class="absolute top-2 left-2 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-orange-500 text-white text-xs font-bold rounded-full shadow-lg"
+   285→                >
+   286→                  BUNDLE
+   287→                </span>
+   288→              </div>
+   289→
+   290→              <!-- Item Info -->
+   291→              <div class="p-2 sm:p-3 md:p-4">
+   292→                <div class="mb-2">
+   293→                  <h3
+   294→                    @click="openItemDetail(item)"
+   295→                    class="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1 cursor-pointer hover:text-gray-700 transition-colors line-clamp-1"
+   296→                  >
+   297→                    {{ item.name }}
+   298→                  </h3>
+   299→                  <p v-if="item.description" class="text-xs sm:text-sm text-gray-600 line-clamp-2 leading-relaxed hidden sm:block">
+   300→                    {{ item.description }}
+   301→                  </p>
+   302→                </div>
+   303→
+   304→                <!-- Price and Add Button -->
+   305→                <div class="flex items-center justify-between mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-100">
+   306→                  <div class="flex flex-col">
+   307→                    <span class="text-xs text-gray-500 font-medium">From</span>
+   308→                    <span class="text-sm sm:text-base md:text-lg font-bold text-gray-900">R{{ item.price.toFixed(2) }}</span>
+   309→                  </div>
+   310→                  <button
+   311→                    @click="openItemDetail(item)"
+   312→                    class="px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-2.5 bg-gray-900 text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors active:scale-95 transform"
+   313→                  >
+   314→                    Add
+   315→                  </button>
+   316→                </div>
+   317→
+   318→                <!-- Edit Button (when in edit mode) -->
+   319→                <button
+   320→                  v-if="editMode"
+   321→                  @click.stop="editItem(item)"
+   322→                  class="mt-2 sm:mt-3 w-full px-2 sm:px-3 py-1.5 sm:py-2 bg-blue-600 text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+   323→                >
+   324→                  <i class="fas fa-edit mr-1"></i>
+   325→                  Edit Item
+   326→                </button>
+   327→              </div>
+   328→            </div>
+   329→          </div>
+   330→
+   331→          <!-- Empty Category -->
+   332→          <div v-if="getCategoryItems(category.id).length === 0" class="text-center py-16 text-gray-500 bg-white mx-4 sm:mx-6 lg:mx-8 rounded-lg">
+   333→            <i class="fas fa-box-open text-6xl mb-4 opacity-30"></i>

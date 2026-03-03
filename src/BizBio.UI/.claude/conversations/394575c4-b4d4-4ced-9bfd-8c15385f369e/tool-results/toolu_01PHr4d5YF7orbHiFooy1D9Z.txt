@@ -1,0 +1,39 @@
+     1→namespace BizBio.Core.Entities;
+     2→
+     3→using System.ComponentModel.DataAnnotations;
+     4→
+     5→/// <summary>
+     6→/// Represents an extra/modifier that can be added to catalog items (e.g., "Feta Cheese", "Extra Bacon")
+     7→/// </summary>
+     8→public class CatalogItemExtra : BaseEntity
+     9→{
+    10→    public int? UserId { get; set; } // For library extras
+    11→    public int? CatalogId { get; set; } // For catalog-specific extras
+    12→
+    13→    [Required]
+    14→    [MaxLength(200)]
+    15→    public string Name { get; set; } = null!;
+    16→
+    17→    [MaxLength(1000)]
+    18→    public string? Description { get; set; }
+    19→
+    20→    [MaxLength(100)]
+    21→    public string? Code { get; set; } // SKU or product code
+    22→
+    23→    public decimal BasePrice { get; set; }
+    24→
+    25→    [MaxLength(500)]
+    26→    public string? ImageUrl { get; set; }
+    27→
+    28→    public int DisplayOrder { get; set; }
+    29→
+    30→    // Navigation properties
+    31→    public virtual User? User { get; set; }
+    32→    public virtual Catalog? Catalog { get; set; }
+    33→    public virtual ICollection<CatalogItemExtraGroupItem> ExtraGroupItems { get; set; } = new List<CatalogItemExtraGroupItem>();
+    34→}
+    35→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

@@ -1,0 +1,155 @@
+     1→using System.ComponentModel.DataAnnotations;
+     2→using System.Text.Json.Serialization;
+     3→
+     4→namespace BizBio.Core.Entities;
+     5→
+     6→/// <summary>
+     7→/// Unified entity representing a business, restaurant, store, venue, or organization.
+     8→/// Replaces separate Restaurant/Company/Profile tables to support multi-product architecture.
+     9→/// </summary>
+    10→public class Entity : BaseEntity
+    11→{
+    12→    /// <summary>
+    13→    /// The user who owns this entity
+    14→    /// </summary>
+    15→    public int UserId { get; set; }
+    16→
+    17→    /// <summary>
+    18→    /// Type of entity (Restaurant, Store, Venue, Organization)
+    19→    /// </summary>
+    20→    public EntityType EntityType { get; set; } = EntityType.Restaurant;
+    21→
+    22→    /// <summary>
+    23→    /// Entity name (e.g., "The Cocktail Lounge", "Tech Store", "Event Venue")
+    24→    /// </summary>
+    25→    [Required]
+    26→    [MaxLength(255)]
+    27→    public string Name { get; set; } = null!;
+    28→
+    29→    /// <summary>
+    30→    /// URL-friendly slug for public pages
+    31→    /// </summary>
+    32→    [Required]
+    33→    [MaxLength(255)]
+    34→    public string Slug { get; set; } = null!;
+    35→
+    36→    /// <summary>
+    37→    /// Description of the entity
+    38→    /// </summary>
+    39→    [MaxLength(2000)]
+    40→    public string? Description { get; set; }
+    41→
+    42→    /// <summary>
+    43→    /// Logo/brand image URL
+    44→    /// </summary>
+    45→    [MaxLength(500)]
+    46→    public string? Logo { get; set; }
+    47→
+    48→    // Contact Information
+    49→
+    50→    /// <summary>
+    51→    /// Physical address
+    52→    /// </summary>
+    53→    [MaxLength(255)]
+    54→    public string? Address { get; set; }
+    55→
+    56→    /// <summary>
+    57→    /// City
+    58→    /// </summary>
+    59→    [MaxLength(100)]
+    60→    public string? City { get; set; }
+    61→
+    62→    /// <summary>
+    63→    /// Postal/ZIP code
+    64→    /// </summary>
+    65→    [MaxLength(20)]
+    66→    public string? PostalCode { get; set; }
+    67→
+    68→    /// <summary>
+    69→    /// Contact phone number
+    70→    /// </summary>
+    71→    [MaxLength(20)]
+    72→    public string? Phone { get; set; }
+    73→
+    74→    /// <summary>
+    75→    /// Contact email address
+    76→    /// </summary>
+    77→    [MaxLength(255)]
+    78→    public string? Email { get; set; }
+    79→
+    80→    /// <summary>
+    81→    /// Website URL
+    82→    /// </summary>
+    83→    [MaxLength(500)]
+    84→    public string? Website { get; set; }
+    85→
+    86→    // Settings
+    87→
+    88→    /// <summary>
+    89→    /// Currency code (ISO 4217) - e.g., ZAR, USD, EUR
+    90→    /// </summary>
+    91→    [MaxLength(3)]
+    92→    public string Currency { get; set; } = "ZAR";
+    93→
+    94→    /// <summary>
+    95→    /// Timezone identifier (IANA time zone database) - e.g., Africa/Johannesburg
+    96→    /// </summary>
+    97→    [MaxLength(50)]
+    98→    public string Timezone { get; set; } = "Africa/Johannesburg";
+    99→
+   100→    /// <summary>
+   101→    /// Display order for sorting
+   102→    /// </summary>
+   103→    public int SortOrder { get; set; } = 0;
+   104→
+   105→    // Navigation properties
+   106→
+   107→    /// <summary>
+   108→    /// The user who owns this entity
+   109→    /// </summary>
+   110→    [JsonIgnore]
+   111→    public virtual User User { get; set; } = null!;
+   112→
+   113→    /// <summary>
+   114→    /// Catalogs/menus belonging to this entity
+   115→    /// </summary>
+   116→    [JsonIgnore]
+   117→    public virtual ICollection<Catalog> Catalogs { get; set; } = new List<Catalog>();
+   118→
+   119→    /// <summary>
+   120→    /// Categories belonging to this entity
+   121→    /// </summary>
+   122→    [JsonIgnore]
+   123→    public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
+   124→}
+   125→
+   126→/// <summary>
+   127→/// Entity type enumeration to distinguish different business types
+   128→/// </summary>
+   129→public enum EntityType
+   130→{
+   131→    /// <summary>
+   132→    /// Restaurant, cafe, bar, etc. (Menu product)
+   133→    /// </summary>
+   134→    Restaurant = 0,
+   135→
+   136→    /// <summary>
+   137→    /// Retail store, shop, etc. (Catalog product)
+   138→    /// </summary>
+   139→    Store = 1,
+   140→
+   141→    /// <summary>
+   142→    /// Event venue, conference center, etc. (Menu product)
+   143→    /// </summary>
+   144→    Venue = 2,
+   145→
+   146→    /// <summary>
+   147→    /// General organization, company, etc. (Cards product)
+   148→    /// </summary>
+   149→    Organization = 3
+   150→}
+   151→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

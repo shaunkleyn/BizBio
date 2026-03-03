@@ -1,0 +1,330 @@
+     1→using Microsoft.AspNetCore.Mvc;
+     2→using Microsoft.ApplicationInsights;
+     3→using BizBio.Core.Interfaces;
+     4→using BizBio.Core.DTOs;
+     5→
+     6→namespace BizBio.API.Controllers;
+     7→
+     8→[Route("api/v1/auth")]
+     9→[ApiController]
+    10→public class AuthController : ControllerBase
+    11→{
+    12→    private readonly IAuthService _authService;
+    13→    private readonly ILogger<AuthController> _logger;
+    14→    private readonly TelemetryClient _telemetryClient;
+    15→
+    16→    public AuthController(
+    17→        IAuthService authService,
+    18→        ILogger<AuthController> logger,
+    19→        TelemetryClient telemetryClient)
+    20→    {
+    21→        _authService = authService;
+    22→        _logger = logger;
+    23→        _telemetryClient = telemetryClient;
+    24→    }
+    25→
+    26→    /// <summary>
+    27→    /// Register a new user
+    28→    /// </summary>
+    29→    [HttpPost("register")]
+    30→    public async Task<IActionResult> Register([FromBody] RegisterDto dto)
+    31→    {
+    32→        try
+    33→        {
+    34→            if (!ModelState.IsValid)
+    35→            {
+    36→                _logger.LogWarning("Registration failed: Invalid model state for {Email}", dto.Email);
+    37→                return BadRequest(ModelState);
+    38→            }
+    39→
+    40→            _logger.LogInformation("Registration attempt for {Email}", dto.Email);
+    41→
+    42→            var result = await _authService.RegisterAsync(dto);
+    43→
+    44→            if (!result.Success)
+    45→            {
+    46→                _logger.LogWarning("Registration failed for {Email}: {Message}", dto.Email, result.Message);
+    47→                return BadRequest(new { message = result.Message });
+    48→            }
+    49→
+    50→            _logger.LogInformation("Registration successful for {Email}", dto.Email);
+    51→
+    52→            return Ok(new
+    53→            {
+    54→                message = "Registration successful! Please check your email to verify your account.",
+    55→                email = dto.Email
+    56→            });
+    57→        }
+    58→        catch (Exception ex)
+    59→        {
+    60→            _logger.LogError(ex, "Unexpected error during registration for {Email}", dto.Email);
+    61→            _telemetryClient.TrackException(ex, new Dictionary<string, string>
+    62→            {
+    63→                { "Controller", "AuthController" },
+    64→                { "Action", "Register" },
+    65→                { "Email", dto.Email }
+    66→            });
+    67→            return StatusCode(500, new { message = "An error occurred during registration. Please try again later." });
+    68→        }
+    69→    }
+    70→
+    71→    /// <summary>
+    72→    /// Login user
+    73→    /// </summary>
+    74→    [HttpPost("login")]
+    75→    public async Task<IActionResult> Login([FromBody] LoginDto dto)
+    76→    {
+    77→        try
+    78→        {
+    79→            if (!ModelState.IsValid)
+    80→            {
+    81→                _logger.LogWarning("Login failed: Invalid model state for {Email}", dto.Email);
+    82→                return BadRequest(ModelState);
+    83→            }
+    84→
+    85→            _logger.LogInformation("Login attempt for {Email}", dto.Email);
+    86→
+    87→            var result = await _authService.LoginAsync(dto);
+    88→
+    89→            if (!result.Success)
+    90→            {
+    91→                _logger.LogWarning("Login failed for {Email}: {Message}", dto.Email, result.Message);
+    92→                _telemetryClient.TrackEvent("LoginFailed", new Dictionary<string, string>
+    93→                {
+    94→                    { "Email", dto.Email },
+    95→                    { "Reason", result.Message ?? "Unknown" }
+    96→                });
+    97→                return Unauthorized(new { message = result.Message });
+    98→            }
+    99→
+   100→            _logger.LogInformation("Login successful for {Email}", dto.Email);
+   101→
+   102→            return Ok(new
+   103→            {
+   104→                token = result.Token,
+   105→                user = new
+   106→                {
+   107→                    id = result.User!.Id,
+   108→                    email = result.User.Email,
+   109→                    firstName = result.User.FirstName,
+   110→                    lastName = result.User.LastName
+   111→                }
+   112→            });
+   113→        }
+   114→        catch (Exception ex)
+   115→        {
+   116→            _logger.LogError(ex, "Unexpected error during login for {Email}", dto.Email);
+   117→            _telemetryClient.TrackException(ex, new Dictionary<string, string>
+   118→            {
+   119→                { "Controller", "AuthController" },
+   120→                { "Action", "Login" },
+   121→                { "Email", dto.Email }
+   122→            });
+   123→            return StatusCode(500, new { message = "An error occurred during login. Please try again later." });
+   124→        }
+   125→    }
+   126→
+   127→    /// <summary>
+   128→    /// Verify email address
+   129→    /// </summary>
+   130→    [HttpGet("verify-email")]
+   131→    public async Task<IActionResult> VerifyEmail([FromQuery] string token)
+   132→    {
+   133→        try
+   134→        {
+   135→            if (string.IsNullOrEmpty(token))
+   136→            {
+   137→                _logger.LogWarning("Email verification failed: Token is required");
+   138→                return BadRequest(new { message = "Token is required" });
+   139→            }
+   140→
+   141→            _logger.LogInformation("Email verification attempt with token");
+   142→
+   143→            var success = await _authService.VerifyEmailAsync(token);
+   144→
+   145→            if (!success.Success)
+   146→            {
+   147→                _logger.LogWarning("Email verification failed: Invalid or expired token");
+   148→                return BadRequest(new { message = "Invalid or expired token" });
+   149→            }
+   150→
+   151→            _logger.LogInformation("Email verified successfully");
+   152→
+   153→            return Ok(new { message = "Email verified successfully! You can now login." });
+   154→        }
+   155→        catch (Exception ex)
+   156→        {
+   157→            _logger.LogError(ex, "Unexpected error during email verification");
+   158→            _telemetryClient.TrackException(ex, new Dictionary<string, string>
+   159→            {
+   160→                { "Controller", "AuthController" },
+   161→                { "Action", "VerifyEmail" }
+   162→            });
+   163→            return StatusCode(500, new { message = "An error occurred during email verification. Please try again later." });
+   164→        }
+   165→    }
+   166→
+   167→    /// <summary>
+   168→    /// Development-only: Verify email by email address (bypasses token requirement)
+   169→    /// </summary>
+   170→    [HttpPost("dev-verify-email")]
+   171→    public async Task<IActionResult> DevVerifyEmail([FromBody] DevVerifyEmailDto dto)
+   172→    {
+   173→        // Only allow in Development environment
+   174→        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+   175→        if (environment != "Development")
+   176→        {
+   177→            return NotFound();
+   178→        }
+   179→
+   180→        try
+   181→        {
+   182→            if (string.IsNullOrEmpty(dto.Email))
+   183→            {
+   184→                return BadRequest(new { message = "Email is required" });
+   185→            }
+   186→
+   187→            _logger.LogWarning("DEV ONLY: Manual email verification for {Email}", dto.Email);
+   188→
+   189→            // Get user by email and manually verify
+   190→            var user = await _authService.GetUserByEmailAsync(dto.Email);
+   191→            if (user == null)
+   192→            {
+   193→                return NotFound(new { message = "User not found" });
+   194→            }
+   195→
+   196→            if (user.EmailVerified)
+   197→            {
+   198→                return Ok(new { message = "Email already verified" });
+   199→            }
+   200→
+   201→            await _authService.ManuallyVerifyEmailAsync(dto.Email);
+   202→
+   203→            _logger.LogInformation("DEV ONLY: Email verified successfully for {Email}", dto.Email);
+   204→
+   205→            return Ok(new { message = "Email verified successfully! (Development bypass)" });
+   206→        }
+   207→        catch (Exception ex)
+   208→        {
+   209→            _logger.LogError(ex, "DEV ONLY: Error during manual email verification for {Email}", dto.Email);
+   210→            return StatusCode(500, new { message = ex.Message });
+   211→        }
+   212→    }
+   213→
+   214→    /// <summary>
+   215→    /// Resend email verification
+   216→    /// </summary>
+   217→    [HttpPost("resend-verification")]
+   218→    public async Task<IActionResult> ResendVerification([FromBody] ResendVerificationDto dto)
+   219→    {
+   220→        try
+   221→        {
+   222→            if (string.IsNullOrEmpty(dto.Email))
+   223→            {
+   224→                _logger.LogWarning("Resend verification failed: Email is required");
+   225→                return BadRequest(new { message = "Email is required" });
+   226→            }
+   227→
+   228→            _logger.LogInformation("Resend verification request for {Email}", dto.Email);
+   229→
+   230→            var result = await _authService.ResendVerificationEmailAsync(dto.Email);
+   231→
+   232→            if (!result.Success)
+   233→            {
+   234→                _logger.LogWarning("Resend verification failed for {Email}: {Message}", dto.Email, result.Message);
+   235→                return BadRequest(new { message = result.Message });
+   236→            }
+   237→
+   238→            _logger.LogInformation("Verification email resent to {Email}", dto.Email);
+   239→
+   240→            return Ok(new { message = "Verification email has been sent. Please check your inbox." });
+   241→        }
+   242→        catch (Exception ex)
+   243→        {
+   244→            _logger.LogError(ex, "Unexpected error resending verification for {Email}", dto.Email);
+   245→            _telemetryClient.TrackException(ex, new Dictionary<string, string>
+   246→            {
+   247→                { "Controller", "AuthController" },
+   248→                { "Action", "ResendVerification" },
+   249→                { "Email", dto.Email }
+   250→            });
+   251→            return StatusCode(500, new { message = "An error occurred. Please try again later." });
+   252→        }
+   253→    }
+   254→
+   255→    /// <summary>
+   256→    /// Request password reset
+   257→    /// </summary>
+   258→    [HttpPost("forgot-password")]
+   259→    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
+   260→    {
+   261→        try
+   262→        {
+   263→            _logger.LogInformation("Password reset request for {Email}", dto.Email);
+   264→
+   265→            await _authService.RequestPasswordResetAsync(dto.Email);
+   266→
+   267→            return Ok(new
+   268→            {
+   269→                message = "If that email exists, we've sent password reset instructions."
+   270→            });
+   271→        }
+   272→        catch (Exception ex)
+   273→        {
+   274→            _logger.LogError(ex, "Unexpected error during password reset request for {Email}", dto.Email);
+   275→            _telemetryClient.TrackException(ex, new Dictionary<string, string>
+   276→            {
+   277→                { "Controller", "AuthController" },
+   278→                { "Action", "ForgotPassword" },
+   279→                { "Email", dto.Email }
+   280→            });
+   281→            return StatusCode(500, new { message = "An error occurred. Please try again later." });
+   282→        }
+   283→    }
+   284→
+   285→    /// <summary>
+   286→    /// Reset password
+   287→    /// </summary>
+   288→    [HttpPost("reset-password")]
+   289→    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
+   290→    {
+   291→        try
+   292→        {
+   293→            if (!ModelState.IsValid)
+   294→            {
+   295→                _logger.LogWarning("Password reset failed: Invalid model state");
+   296→                return BadRequest(ModelState);
+   297→            }
+   298→
+   299→            _logger.LogInformation("Password reset attempt");
+   300→
+   301→            var success = await _authService.ResetPasswordAsync(dto.Token, dto.NewPassword);
+   302→
+   303→            if (!success.Success)
+   304→            {
+   305→                _logger.LogWarning("Password reset failed: Invalid or expired token");
+   306→                return BadRequest(new { message = "Invalid or expired token" });
+   307→            }
+   308→
+   309→            _logger.LogInformation("Password reset successfully");
+   310→            _telemetryClient.TrackEvent("PasswordReset");
+   311→
+   312→            return Ok(new { message = "Password reset successfully! You can now login." });
+   313→        }
+   314→        catch (Exception ex)
+   315→        {
+   316→            _logger.LogError(ex, "Unexpected error during password reset");
+   317→            _telemetryClient.TrackException(ex, new Dictionary<string, string>
+   318→            {
+   319→                { "Controller", "AuthController" },
+   320→                { "Action", "ResetPassword" }
+   321→            });
+   322→            return StatusCode(500, new { message = "An error occurred. Please try again later." });
+   323→        }
+   324→    }
+   325→}
+   326→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

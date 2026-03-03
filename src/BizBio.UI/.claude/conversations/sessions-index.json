@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "sessionId": "3ea4720a-c01c-4bd3-9dfc-332218a600fb",
+      "fullPath": "C:\\Users\\shaunk\\.claude\\projects\\C--Development-github-bizbio2-BizBio-src-BizBio-UI\\3ea4720a-c01c-4bd3-9dfc-332218a600fb.jsonl",
+      "fileMtime": 1772516026685,
+      "firstPrompt": "how do i get SSH_PRIVATE_KEY",
+      "summary": "SSH Key Setup and npm Lock File Sync",
+      "messageCount": 3,
+      "created": "2026-03-02T11:50:18.502Z",
+      "modified": "2026-03-02T12:21:35.896Z",
+      "gitBranch": "feature/dynamic-templates-in-vue",
+      "projectPath": "C:\\Development\\github\\bizbio2\\BizBio\\src\\BizBio.UI",
+      "isSidechain": false
+    },
+    {
+      "sessionId": "4500d3bf-7dc3-4dcb-9d76-ec2438300ba8",
+      "fullPath": "C:\\Users\\shaunk\\.claude\\projects\\C--Development-github-bizbio2-BizBio-src-BizBio-UI\\4500d3bf-7dc3-4dcb-9d76-ec2438300ba8.jsonl",
+      "fileMtime": 1772518365432,
+      "firstPrompt": "i need you to save or remember this plan becuase im going to use it for a lot of trouble shooting in the next few days from various devices. you helped me yesterday with \"SNAPTAP_MIGRATION_PLAN.md\" an…",
+      "summary": "SnapTap Profile Routing Issues Troubleshooting Plan",
+      "messageCount": 13,
+      "created": "2026-03-03T05:21:53.976Z",
+      "modified": "2026-03-03T05:59:41.251Z",
+      "gitBranch": "feature/dynamic-templates-in-vue",
+      "projectPath": "C:\\Development\\github\\bizbio2\\BizBio\\src\\BizBio.UI",
+      "isSidechain": false
+    }
+  ],
+  "originalPath": "C:\\Development\\github\\bizbio2\\BizBio\\src\\BizBio.UI"
+}

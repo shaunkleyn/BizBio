@@ -1,0 +1,129 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\components\ItemFormModal.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   277→            </div>
+   278→          </div>
+   279→        </div>
+   280→
+   281→        <!-- Options Selection -->
+   282→        <div class="space-y-4">
+   283→          <div class="flex items-center justify-between">
+   284→            <div>
+   285→              <h3 class="text-lg font-semibold text-md-on-surface">Options (Required Choices)</h3>
+   286→              <p class="text-sm text-md-on-surface-variant mt-1">Select required customization options for this item</p>
+   287→            </div>
+   288→            <NuxtLink
+   289→              to="/menu/library/option-groups"
+   290→              target="_blank"
+   291→              class="text-sm text-md-tertiary hover:text-md-on-tertiary-container"
+   292→            >
+   293→              Manage Options
+   294→            </NuxtLink>
+   295→          </div>
+   296→
+   297→          <div v-if="loadingOptions" class="text-center py-8 bg-gray-50 rounded-lg">
+   298→            <i class="fas fa-spinner fa-spin text-2xl text-md-on-surface-variant opacity-70 mb-2"></i>
+   299→            <p class="text-md-on-surface-variant">Loading options...</p>
+   300→          </div>
+   301→
+   302→          <div v-else-if="availableOptionGroups.length === 0" class="text-center py-8 bg-gray-50 rounded-lg">
+   303→            <i class="fas fa-sliders-h text-3xl text-md-on-surface-variant opacity-50 mb-2"></i>
+   304→            <p class="text-md-on-surface-variant mb-2">No option groups available</p>
+   305→            <NuxtLink
+   306→              to="/menu/library/option-groups"
+   307→              target="_blank"
+   308→              class="text-sm text-md-tertiary hover:text-md-on-tertiary-container"
+   309→            >
+   310→              Create your first option group
+   311→            </NuxtLink>
+   312→          </div>
+   313→
+   314→          <div v-else class="space-y-2 max-h-60 overflow-y-auto border border-md-outline-variant rounded-lg p-4">
+   315→            <div
+   316→              v-for="group in availableOptionGroups"
+   317→              :key="group.id"
+   318→              class="flex items-start py-2 hover:bg-gray-50 rounded px-2"
+   319→            >
+   320→              <input
+   321→                type="checkbox"
+   322→                :id="`option-group-${group.id}`"
+   323→                :value="Number(group.id)"
+   324→                v-model="form.optionGroupIds"
+   325→                class="mt-1 h-4 w-4 text-md-tertiary border-md-outline rounded focus:ring-md-tertiary"
+   326→              />
+   327→              <label :for="`option-group-${group.id}`" class="ml-3 flex-1 cursor-pointer">
+   328→                <div class="text-sm font-medium text-md-on-surface">
+   329→                  {{ group.name }}
+   330→                  <span class="ml-1 px-2 py-0.5 bg-md-error-container text-md-on-error-container text-xs rounded-full">Required</span>
+   331→                </div>
+   332→                <div class="text-xs text-md-on-surface-variant">
+   333→                  {{ group.description }}
+   334→                  <span v-if="group.options && group.options.length > 0" class="ml-1">
+   335→                    ({{ group.options.length }} options)
+   336→                  </span>
+   337→                </div>
+   338→              </label>
+   339→            </div>
+   340→          </div>
+   341→        </div>
+   342→
+   343→        <!-- Extras Selection -->
+   344→        <div class="space-y-4">
+   345→          <div class="flex items-center justify-between">
+   346→            <div>
+   347→              <h3 class="text-lg font-semibold text-md-on-surface">Extras (Optional Add-ons)</h3>
+   348→              <p class="text-sm text-md-on-surface-variant mt-1">Select optional extras available for this item</p>
+   349→            </div>
+   350→            <NuxtLink
+   351→              to="/menu/library/extra-groups"
+   352→              target="_blank"
+   353→              class="text-sm text-md-primary hover:text-md-on-primary-container"
+   354→            >
+   355→              Manage Extras
+   356→            </NuxtLink>
+   357→          </div>
+   358→
+   359→          <div v-if="loadingExtras" class="text-center py-8 bg-gray-50 rounded-lg">
+   360→            <i class="fas fa-spinner fa-spin text-2xl text-md-on-surface-variant opacity-70 mb-2"></i>
+   361→            <p class="text-md-on-surface-variant">Loading extras...</p>
+   362→          </div>
+   363→
+   364→          <div v-else-if="availableExtraGroups.length === 0" class="text-center py-8 bg-gray-50 rounded-lg">
+   365→            <i class="fas fa-plus-circle text-3xl text-md-on-surface-variant opacity-50 mb-2"></i>
+   366→            <p class="text-md-on-surface-variant mb-2">No extra groups available</p>
+   367→            <NuxtLink
+   368→              to="/menu/library/extra-groups"
+   369→              target="_blank"
+   370→              class="text-sm text-md-primary hover:text-md-on-primary-container"
+   371→            >
+   372→              Create your first extra group
+   373→            </NuxtLink>
+   374→          </div>
+   375→
+   376→          <div v-else class="space-y-2 max-h-60 overflow-y-auto border border-md-outline-variant rounded-lg p-4">
+   377→            <div
+   378→              v-for="group in availableExtraGroups"
+   379→              :key="group.id"
+   380→              class="flex items-start py-2 hover:bg-gray-50 rounded px-2"
+   381→            >
+   382→              <input
+   383→                type="checkbox"
+   384→                :id="`extra-group-${group.id}`"
+   385→                :value="Number(group.id)"
+   386→                v-model="form.extraGroupIds"
+   387→                class="mt-1 h-4 w-4 text-md-primary border-md-outline rounded focus:ring-md-primary"
+   388→              />
+   389→              <label :for="`extra-group-${group.id}`" class="ml-3 flex-1 cursor-pointer">
+   390→                <div class="text-sm font-medium text-md-on-surface">{{ group.name }}</div>
+   391→                <div class="text-xs text-md-on-surface-variant">
+   392→                  {{ group.description }}
+   393→                  <span v-if="group.extras && group.extras.length > 0" class="ml-1">
+   394→                    ({{ group.extras.length }} extras)
+   395→                  </span>
+   396→                </div>
+   397→              </label>
+   398→            </div>
+   399→          </div>
+   400→        </div>
+   401→
+   402→      </form>
+   403→
+   404→      <!-- Footer with Gradient Background -->

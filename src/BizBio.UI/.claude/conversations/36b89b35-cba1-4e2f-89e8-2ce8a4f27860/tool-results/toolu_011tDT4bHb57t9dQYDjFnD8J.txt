@@ -1,0 +1,35 @@
+     1→﻿using System;
+     2→using System.Collections.Generic;
+     3→using System.ComponentModel.DataAnnotations;
+     4→using System.Linq;
+     5→using System.Text;
+     6→using System.Threading.Tasks;
+     7→
+     8→namespace BizBio.Core.Entities
+     9→{
+    10→    /// <summary>
+    11→    /// Unifies users and organizations/profiles for business card relationships
+    12→    /// Used to create relationships like "works_at", "manages", "colleague", "client_of", etc.
+    13→    /// This allows both individuals and organizations to have relationships with each other
+    14→    /// </summary>
+    15→    public class RelationshipEntity : BaseEntity
+    16→    {
+    17→        // EntityType: 1 = User, 2 = Profile/Organization
+    18→        public int EntityTypeId { get; set; }
+    19→
+    20→        // ReferenceId points to either User.Id or Profile.Id depending on EntityTypeId
+    21→        public int ReferenceId { get; set; }
+    22→
+    23→        [MaxLength(255)]
+    24→        public string? DisplayName { get; set; }
+    25→
+    26→        // Navigation properties
+    27→        public virtual ICollection<EntityRelationship> RelationshipsFrom { get; set; } = new List<EntityRelationship>();
+    28→        public virtual ICollection<EntityRelationship> RelationshipsTo { get; set; } = new List<EntityRelationship>();
+    29→    }
+    30→}
+    31→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

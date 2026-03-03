@@ -1,0 +1,21 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\menu\[slug].vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+     1→<template>
+     2→  <div class="min-h-screen bg-gray-50">
+     3→    <!-- Loading State -->
+     4→    <div v-if="loading" class="flex justify-center items-center h-screen bg-white">
+     5→      <div class="text-center">
+     6→        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+     7→        <p class="text-gray-600 font-medium">Loading menu...</p>
+     8→      </div>
+     9→    </div>
+    10→
+    11→    <!-- Error State -->
+    12→    <div v-else-if="error" class="flex flex-col justify-center items-center h-screen px-4 bg-white">
+    13→      <i class="fas fa-exclamation-circle text-6xl text-red-500 mb-4"></i>
+    14→      <h2 class="text-2xl font-bold text-gray-900 mb-2">Menu Not Found</h2>
+    15→      <p class="text-gray-600 text-center">{{ error }}</p>
+    16→    </div>
+    17→
+    18→    <!-- Menu Content -->
+    19→    <div v-else>
+    20→      <!-- Hero Section with Restaurant Image -->

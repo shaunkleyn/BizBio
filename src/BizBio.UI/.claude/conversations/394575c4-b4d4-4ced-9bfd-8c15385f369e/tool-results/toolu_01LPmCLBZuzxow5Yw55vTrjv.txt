@@ -1,0 +1,204 @@
+   200→        </div>
+   201→
+   202→        <!-- Variants -->
+   203→        <div class="space-y-4">
+   204→          <div class="flex items-center justify-between">
+   205→            <h3 class="text-lg font-semibold text-md-on-surface">Variants (Sizes/Options)</h3>
+   206→            <button
+   207→              type="button"
+   208→              @click="addVariant"
+   209→              class="px-4 py-2 bg-md-primary-container0 text-white rounded-lg hover:bg-md-primary transition-colors text-sm"
+   210→            >
+   211→              <i class="fas fa-plus mr-1"></i>
+   212→              Add Variant
+   213→            </button>
+   214→          </div>
+   215→
+   216→          <div v-if="form.variants.length === 0" class="text-center py-8 bg-gray-50 rounded-lg">
+   217→            <i class="fas fa-box text-3xl text-md-on-surface-variant opacity-50 mb-2"></i>
+   218→            <p class="text-md-on-surface-variant">No variants added. Click "Add Variant" to add sizes or options.</p>
+   219→          </div>
+   220→
+   221→          <div v-else class="space-y-3">
+   222→            <div
+   223→              v-for="(variant, index) in form.variants"
+   224→              :key="index"
+   225→              class="border border-md-outline-variant rounded-lg p-4 bg-gray-50"
+   226→            >
+   227→              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+   228→                <div>
+   229→                  <label class="block text-sm font-medium text-md-on-surface mb-1">
+   230→                    Name <span class="text-red-500">*</span>
+   231→                  </label>
+   232→                  <input
+   233→                    v-model="variant.title"
+   234→                    type="text"
+   235→                    required
+   236→                    placeholder="e.g., Small, Medium, Large"
+   237→                    class="w-full px-3 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+   238→                  />
+   239→                </div>
+   240→
+   241→                <div>
+   242→                  <label class="block text-sm font-medium text-md-on-surface mb-1">
+   243→                    Price (R) <span class="text-red-500">*</span>
+   244→                  </label>
+   245→                  <input
+   246→                    v-model.number="variant.price"
+   247→                    type="number"
+   248→                    step="0.01"
+   249→                    min="0"
+   250→                    required
+   251→                    placeholder="0.00"
+   252→                    class="w-full px-3 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+   253→                  />
+   254→                </div>
+   255→
+   256→                <div class="flex items-end gap-2">
+   257→                  <div class="flex-1">
+   258→                    <label class="flex items-center">
+   259→                      <input
+   260→                        v-model="variant.isDefault"
+   261→                        type="checkbox"
+   262→                        @change="updateDefaultVariant(index)"
+   263→                        class="mr-2 h-4 w-4 text-[var(--primary-color)] rounded"
+   264→                      />
+   265→                      <span class="text-sm font-medium text-md-on-surface">Default</span>
+   266→                    </label>
+   267→                  </div>
+   268→                  <button
+   269→                    type="button"
+   270→                    @click="removeVariant(index)"
+   271→                    class="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+   272→                  >
+   273→                    <i class="fas fa-trash"></i>
+   274→                  </button>
+   275→                </div>
+   276→              </div>
+   277→            </div>
+   278→          </div>
+   279→        </div>
+   280→
+   281→        <!-- Extras Selection -->
+   282→        <div class="space-y-4">
+   283→          <div class="flex items-center justify-between">
+   284→            <div>
+   285→              <h3 class="text-lg font-semibold text-md-on-surface">Extras & Modifiers</h3>
+   286→              <p class="text-sm text-md-on-surface-variant mt-1">Select which extras are available for this item</p>
+   287→            </div>
+   288→            <NuxtLink
+   289→              to="/menu/library/extra-groups"
+   290→              target="_blank"
+   291→              class="text-sm text-md-primary hover:text-md-on-primary-container"
+   292→            >
+   293→              Manage Extras
+   294→            </NuxtLink>
+   295→          </div>
+   296→
+   297→          <div v-if="loadingExtras" class="text-center py-8 bg-gray-50 rounded-lg">
+   298→            <i class="fas fa-spinner fa-spin text-2xl text-md-on-surface-variant opacity-70 mb-2"></i>
+   299→            <p class="text-md-on-surface-variant">Loading extras...</p>
+   300→          </div>
+   301→
+   302→          <div v-else-if="availableExtraGroups.length === 0" class="text-center py-8 bg-gray-50 rounded-lg">
+   303→            <i class="fas fa-plus-circle text-3xl text-md-on-surface-variant opacity-50 mb-2"></i>
+   304→            <p class="text-md-on-surface-variant mb-2">No extra groups available</p>
+   305→            <NuxtLink
+   306→              to="/menu/library/extra-groups"
+   307→              target="_blank"
+   308→              class="text-sm text-md-primary hover:text-md-on-primary-container"
+   309→            >
+   310→              Create your first extra group
+   311→            </NuxtLink>
+   312→          </div>
+   313→
+   314→          <div v-else class="space-y-2 max-h-60 overflow-y-auto border border-md-outline-variant rounded-lg p-4">
+   315→            <div
+   316→              v-for="group in availableExtraGroups"
+   317→              :key="group.id"
+   318→              class="flex items-start py-2 hover:bg-gray-50 rounded px-2"
+   319→            >
+   320→              <input
+   321→                type="checkbox"
+   322→                :id="`extra-group-${group.id}`"
+   323→                :value="Number(group.id)"
+   324→                v-model="form.extraGroupIds"
+   325→                class="mt-1 h-4 w-4 text-md-primary border-md-outline rounded focus:ring-md-primary"
+   326→              />
+   327→              <label :for="`extra-group-${group.id}`" class="ml-3 flex-1 cursor-pointer">
+   328→                <div class="text-sm font-medium text-md-on-surface">{{ group.name }}</div>
+   329→                <div class="text-xs text-md-on-surface-variant">
+   330→                  {{ group.description }}
+   331→                  <span v-if="group.extras && group.extras.length > 0" class="ml-1">
+   332→                    ({{ group.extras.length }} extras)
+   333→                  </span>
+   334→                </div>
+   335→              </label>
+   336→            </div>
+   337→          </div>
+   338→        </div>
+   339→
+   340→      </form>
+   341→
+   342→      <!-- Footer with Gradient Background -->
+   343→      <div class="modal-footer p-6">
+   344→        <div class="relative z-10 flex gap-3">
+   345→          <button
+   346→            type="button"
+   347→            @click="emit('close')"
+   348→            class="flex-1 px-6 py-3 bg-md-surface-container border border-md-outline-variant text-md-on-surface rounded-xl hover:bg-md-surface-container-high transition-all shadow-md-1 md-ripple font-medium"
+   349→          >
+   350→            Cancel
+   351→          </button>
+   352→          <button
+   353→            @click="saveItem"
+   354→            :disabled="saving || uploading"
+   355→            class="flex-1 px-6 py-3 btn-gradient text-white rounded-xl shadow-md-2 hover:shadow-glow-purple transition-all font-bold disabled:opacity-50 disabled:cursor-not-allowed md-ripple flex items-center justify-center gap-2"
+   356→          >
+   357→            <i v-if="saving || uploading" class="fas fa-spinner fa-spin"></i>
+   358→            <i v-else class="fas fa-save"></i>
+   359→            <span v-if="saving || uploading">
+   360→              {{ uploading ? 'Uploading...' : 'Saving...' }}
+   361→            </span>
+   362→            <span v-else>
+   363→              {{ item ? 'Update Item' : 'Create Item' }}
+   364→            </span>
+   365→          </button>
+   366→        </div>
+   367→      </div>
+   368→    </div>
+   369→  </div>
+   370→</template>
+   371→
+   372→<script setup lang="ts">
+   373→import { ref, reactive, onMounted } from 'vue'
+   374→import { useLibraryItemsApi, useUploadsApi } from '~/composables/useApi'
+   375→import { useToast } from '~/composables/useToast'
+   376→
+   377→const props = defineProps<{
+   378→  item?: any
+   379→  categories: any[]
+   380→}>()
+   381→
+   382→const emit = defineEmits<{
+   383→  close: []
+   384→  saved: []
+   385→}>()
+   386→
+   387→const libraryItemsApi = useLibraryItemsApi()
+   388→const uploadsApi = useUploadsApi()
+   389→const toast = useToast()
+   390→
+   391→const saving = ref(false)
+   392→const uploading = ref(false)
+   393→const loadingExtras = ref(false)
+   394→const tagInput = ref('')
+   395→const maxImages = ref(5) // TODO: Get from user's subscription
+   396→const availableExtraGroups = ref<any[]>([])
+   397→
+   398→const commonTags = [
+   399→  'Gluten-Free',
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

@@ -1,0 +1,29 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\menu\[slug].vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   415→const editingItem = ref<any>(null)
+   416→
+   417→const isAuthenticated = computed(() => authStore.isAuthenticated)
+   418→
+   419→const categories = computed(() => {
+   420→  if (!menuData.value?.categories) return []
+   421→  return menuData.value.categories.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+   422→})
+   423→
+   424→const highlightedItems = computed(() => {
+   425→  // Get items marked as highlighted/featured
+   426→  return items.value
+   427→    .filter(item => item.isActive && item.isFeatured)
+   428→    .sort((a, b) => a.sortOrder - b.sortOrder)
+   429→    .slice(0, 5) // Limit to 5 items
+   430→})
+   431→
+   432→const mostOrderedItems = computed(() => {
+   433→  // Get items marked as most ordered or popular
+   434→  return items.value
+   435→    .filter(item => item.isActive && (item.isPopular || item.orderCount > 0))
+   436→    .sort((a, b) => (b.orderCount || 0) - (a.orderCount || 0))
+   437→    .slice(0, 5) // Limit to 5 items
+   438→})
+   439→
+   440→// Watch active category and scroll tab into view
+   441→watch(activeCategory, async (newCategoryId) => {
+   442→  if (newCategoryId) {

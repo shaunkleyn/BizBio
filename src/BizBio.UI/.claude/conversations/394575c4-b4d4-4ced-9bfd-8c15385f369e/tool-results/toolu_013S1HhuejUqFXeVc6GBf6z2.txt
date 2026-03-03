@@ -1,0 +1,70 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.Core\Services\MenuMappingService.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    41→
+    42→        return menu;
+    43→    }
+    44→
+    45→    /// <summary>
+    46→    /// Builds the global options[] and extras[] arrays at menu level
+    47→    /// Returns maps of GroupId -> ArrayIndex for efficient lookup
+    48→    ///
+    49→    /// Now loads from BOTH systems:
+    50→    /// - CatalogItemOptionGroup tables (dedicated option groups)
+    51→    /// - CatalogItemExtraGroup tables (dedicated extra groups + legacy groups)
+    52→    /// </summary>
+    53→    private (
+    54→        List<OptionGroupDto> options,
+    55→        List<ExtraGroupDto> extras,
+    56→        Dictionary<int, int> optionIndexMap,
+    57→        Dictionary<int, int> extraIndexMap
+    58→    ) BuildGlobalModifierArrays(Catalog catalog)
+    59→    {
+    60→        var options = new List<OptionGroupDto>();
+    61→        var extras = new List<ExtraGroupDto>();
+    62→        var optionIndexMap = new Dictionary<int, int>();
+    63→        var extraIndexMap = new Dictionary<int, int>();
+    64→
+    65→        int optionIndex = 0;
+    66→        int extraIndex = 0;
+    67→
+    68→        // === 1. Load from dedicated Option Groups ===
+    69→        var allOptionGroups = catalog.Items
+    70→            .SelectMany(item => item.OptionGroupLinks)
+    71→            .Select(link => link.OptionGroup)
+    72→            .DistinctBy(g => g.Id)
+    73→            .OrderBy(g => g.DisplayOrder);
+    74→
+    75→        foreach (var group in allOptionGroups)
+    76→        {
+    77→            options.Add(MapOptionGroupToDto(group));
+    78→            optionIndexMap[group.Id] = optionIndex++;
+    79→        }
+    80→
+    81→        // === 2. Load from Extra Groups ===
+    82→        var allExtraGroups = catalog.Items
+    83→            .SelectMany(item => item.ExtraGroupLinks)
+    84→            .Select(link => link.ExtraGroup)
+    85→            .DistinctBy(g => g.Id)
+    86→            .OrderBy(g => g.DisplayOrder);
+    87→
+    88→        foreach (var group in allExtraGroups)
+    89→        {
+    90→            // Legacy support: Some extra groups might have MinRequired >= 1 (act as options)
+    91→            // This handles the case where you're migrating from single-table to dual-table approach
+    92→            if (group.MinRequired >= 1)
+    93→            {
+    94→                options.Add(MapExtraGroupToOptionDto(group));
+    95→                optionIndexMap[group.Id] = optionIndex++;
+    96→            }
+    97→            else
+    98→            {
+    99→                extras.Add(MapToExtraGroup(group));
+   100→                extraIndexMap[group.Id] = extraIndex++;
+   101→            }
+   102→        }
+   103→
+   104→        return (options, extras, optionIndexMap, extraIndexMap);
+   105→    }
+   106→
+   107→    private MenuSectionDto MapCategoryToSection(
+   108→        CatalogCategory category,
+   109→        Dictionary<int, int> optionIndexMap,

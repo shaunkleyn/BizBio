@@ -1,0 +1,22 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.Infrastructure\Data\ApplicationDbContext.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    11→        : base(options)
+    12→    {
+    13→    }
+    14→
+    15→    public DbSet<User> Users => Set<User>();
+    16→    public DbSet<SubscriptionTier> SubscriptionTiers => Set<SubscriptionTier>();
+    17→    public DbSet<UserSubscription> UserSubscriptions => Set<UserSubscription>();
+    18→    public DbSet<ProductSubscription> ProductSubscriptions => Set<ProductSubscription>();
+    19→    public DbSet<SubscriptionAddon> SubscriptionAddons => Set<SubscriptionAddon>();
+    20→    public DbSet<SubscriptionTierAddon> SubscriptionTierAddons => Set<SubscriptionTierAddon>();
+    21→    public DbSet<UserSubscriptionAddon> UserSubscriptionAddons => Set<UserSubscriptionAddon>();
+    22→    public DbSet<Entity> Entities => Set<Entity>();
+    23→    public DbSet<Restaurant> Restaurants => Set<Restaurant>();
+    24→    public DbSet<Profile> Profiles => Set<Profile>();
+    25→    public DbSet<Catalog> Catalogs => Set<Catalog>();
+    26→    public DbSet<Category> Categories_New => Set<Category>();
+    27→    public DbSet<CatalogCategory> CatalogCategories => Set<CatalogCategory>();
+    28→    public DbSet<CatalogItem> CatalogItems => Set<CatalogItem>();
+    29→    public DbSet<CatalogItemVariant> CatalogItemVariants => Set<CatalogItemVariant>();
+    30→    //public DbSet<CatalogItemAttribute> CatalogItemAttributes => Set<CatalogItemAttribute>();
+    31→    //public DbSet<CatalogItemAttributeValue> CatalogItemAttributeValues => Set<CatalogItemAttributeValue>();

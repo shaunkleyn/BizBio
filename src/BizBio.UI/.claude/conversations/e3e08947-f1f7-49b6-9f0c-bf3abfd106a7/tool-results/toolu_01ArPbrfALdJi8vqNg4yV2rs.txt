@@ -1,0 +1,21 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\dashboard\library\extra-groups.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   336→    saving.value = false
+   337→  }
+   338→}
+   339→
+   340→const editGroup = (group: any) => {
+   341→  editingGroup.value = group
+   342→  formData.value = {
+   343→    Name: group.name,
+   344→    Description: group.description || '',
+   345→    MinRequired: group.minRequired,
+   346→    MaxAllowed: group.maxAllowed,
+   347→    AllowMultipleQuantities: group.allowMultipleQuantities,
+   348→    DisplayOrder: group.displayOrder,
+   349→    ExtraIds: group.extras ? group.extras.map((item: any) => item.extraId) : []
+   350→  }
+   351→}
+   352→
+   353→const deleteGroup = async (id: number) => {
+   354→  if (!confirm('Are you sure you want to delete this extra group?')) return
+   355→

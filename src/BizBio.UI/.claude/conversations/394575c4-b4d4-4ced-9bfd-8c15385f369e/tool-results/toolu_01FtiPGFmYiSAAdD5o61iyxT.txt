@@ -1,0 +1,155 @@
+     1→namespace BizBio.Core.DTOs;
+     2→
+     3→/// <summary>
+     4→/// MRD-style menu response - efficient structure with array indexing
+     5→/// </summary>
+     6→public class MenuResponseDto
+     7→{
+     8→    public int Id { get; set; }
+     9→    public int? CatalogId { get; set; }
+    10→    public string CatalogType { get; set; } = "Menu"; // or "Restaurant"
+    11→    public string Name { get; set; } = null!;
+    12→    public string Status { get; set; } = "PUBLISHED";
+    13→
+    14→    public List<MenuSectionDto> Sections { get; set; } = new();
+    15→
+    16→    // MRD Pattern: Define options/extras once at menu level
+    17→    // Variants reference them by array index
+    18→    public List<ExtraGroupDto> Extras { get; set; } = new();
+    19→    public List<OptionGroupDto> Options { get; set; } = new();
+    20→}
+    21→
+    22→public class MenuSectionDto
+    23→{
+    24→    public int Id { get; set; }
+    25→    public string Name { get; set; } = null!;
+    26→    public string? Description { get; set; }
+    27→    public int OrderIndex { get; set; }
+    28→    public bool Visible { get; set; } = true;
+    29→
+    30→    public List<MenuItemDto> Items { get; set; } = new();
+    31→
+    32→    public AvailabilityDto Availability { get; set; } = new() { Status = "visible" };
+    33→    public string? HeaderImageUrl { get; set; }
+    34→    public string? HeaderStyling { get; set; }
+    35→}
+    36→
+    37→public class MenuItemDto
+    38→{
+    39→    public int Id { get; set; }
+    40→    public string Name { get; set; } = null!;
+    41→    public string? Description { get; set; }
+    42→    public int OrderIndex { get; set; }
+    43→
+    44→    public List<VariantDto> Variants { get; set; } = new();
+    45→
+    46→    public AvailabilityDto Availability { get; set; } = new() { Status = "visible" };
+    47→    public BusinessIdentityDto? BusinessIdentity { get; set; }
+    48→    public MediaDto? Media { get; set; }
+    49→    public bool Featured { get; set; }
+    50→}
+    51→
+    52→public class VariantDto
+    53→{
+    54→    public int Id { get; set; }
+    55→    public string Name { get; set; } = null!;
+    56→    public bool Default { get; set; }
+    57→    public decimal Price { get; set; }
+    58→    public decimal? OldPrice { get; set; }
+    59→
+    60→    // MRD Pattern: Reference options/extras by array index
+    61→    // [0, 1, 2] means this variant uses extras at index 0, 1, and 2 from the Extras[] array
+    62→    public List<int> OptionIndices { get; set; } = new();
+    63→    public List<int> ExtraIndices { get; set; } = new();
+    64→
+    65→    public AvailabilityDto Availability { get; set; } = new() { Status = "visible" };
+    66→    public BusinessIdentityDto? BusinessIdentity { get; set; }
+    67→    public int? PercentageDiscount { get; set; }
+    68→    public string? MenuDealAction { get; set; }
+    69→}
+    70→
+    71→/// <summary>
+    72→/// Options are REQUIRED choices (min_select >= 1)
+    73→/// Examples: "Choose a drink", "Select condiments", "Pick a side"
+    74→/// </summary>
+    75→public class OptionGroupDto
+    76→{
+    77→    public int Id { get; set; }
+    78→    public string Name { get; set; } = null!;
+    79→    public string Label { get; set; } = null!; // "Which cold drink flavour would you like?"
+    80→    public int MinimumSelect { get; set; } = 1;
+    81→    public int MaximumSelect { get; set; } = 1;
+    82→    public int OrderIndex { get; set; }
+    83→
+    84→    public List<OptionItemDto> Items { get; set; } = new();
+    85→
+    86→    public BusinessIdentityDto? BusinessIdentity { get; set; }
+    87→}
+    88→
+    89→/// <summary>
+    90→/// Extras are OPTIONAL add-ons (min_select = 0)
+    91→/// Examples: "Add extra cheese", "Would you like more?", "Upsells"
+    92→/// </summary>
+    93→public class ExtraGroupDto
+    94→{
+    95→    public int Id { get; set; }
+    96→    public string Name { get; set; } = null!;
+    97→    public string Label { get; set; } = null!; // "Would you like to add more?"
+    98→    public int MinimumSelect { get; set; } = 0;
+    99→    public int MaximumSelect { get; set; } = 99;
+   100→    public int OrderIndex { get; set; }
+   101→
+   102→    public List<ExtraItemDto> Items { get; set; } = new();
+   103→
+   104→    public BusinessIdentityDto? BusinessIdentity { get; set; }
+   105→}
+   106→
+   107→public class OptionItemDto
+   108→{
+   109→    public int Id { get; set; }
+   110→    public string Name { get; set; } = null!;
+   111→    public bool Default { get; set; }
+   112→    public decimal Price { get; set; } // Additional cost (can be 0)
+   113→    public int OrderIndex { get; set; }
+   114→
+   115→    public AvailabilityDto Availability { get; set; } = new() { Status = "visible" };
+   116→    public BusinessIdentityDto? BusinessIdentity { get; set; }
+   117→}
+   118→
+   119→public class ExtraItemDto
+   120→{
+   121→    public int Id { get; set; }
+   122→    public string Name { get; set; } = null!;
+   123→    public bool Default { get; set; }
+   124→    public decimal Price { get; set; }
+   125→    public int OrderIndex { get; set; }
+   126→
+   127→    public AvailabilityDto Availability { get; set; } = new() { Status = "visible" };
+   128→    public BusinessIdentityDto? BusinessIdentity { get; set; }
+   129→}
+   130→
+   131→public class AvailabilityDto
+   132→{
+   133→    public string Status { get; set; } = "visible"; // "visible", "hidden", "sold_out"
+   134→    public string Description { get; set; } = "Available (visible)";
+   135→}
+   136→
+   137→public class BusinessIdentityDto
+   138→{
+   139→    public string? Internal { get; set; }
+   140→    public string? External { get; set; }
+   141→}
+   142→
+   143→public class MediaDto
+   144→{
+   145→    public string Provider { get; set; } = "thumbor";
+   146→    public string BaseUrl { get; set; } = null!;
+   147→    public string? Filename { get; set; }
+   148→    public string? RawImage { get; set; }
+   149→    public string MimeType { get; set; } = "image";
+   150→}
+   151→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

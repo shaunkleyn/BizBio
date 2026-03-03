@@ -1,0 +1,30 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.Core\Entities\SubscriptionTier.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+     7→public class SubscriptionTier : BaseEntity
+     8→{
+     9→    //public int Id { get; set; }
+    10→
+    11→    public int ProductLineId { get; set; }
+    12→
+    13→    /// <summary>
+    14→    /// Product type this tier belongs to (Cards=0, Menu=1, Catalog=2)
+    15→    /// </summary>
+    16→    public ProductType ProductType { get; set; } = ProductType.Menu;
+    17→
+    18→    [Required]
+    19→    [MaxLength(100)]
+    20→    public string TierName { get; set; } = null!;
+    21→
+    22→    [Required]
+    23→    [MaxLength(50)]
+    24→    public string TierCode { get; set; } = null!;
+    25→
+    26→    [Required]
+    27→    [MaxLength(100)]
+    28→    public string DisplayName { get; set; } = null!;
+    29→
+    30→    [MaxLength(1000)]
+    31→    public string? Description { get; set; }
+    32→
+    33→    public decimal MonthlyPrice { get; set; }
+    34→
+    35→    public decimal AnnualPrice { get; set; }

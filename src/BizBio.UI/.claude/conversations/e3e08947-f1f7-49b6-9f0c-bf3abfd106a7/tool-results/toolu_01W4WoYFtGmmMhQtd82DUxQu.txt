@@ -1,0 +1,551 @@
+2108-
+2109-[stderr] 
+2110-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 32 times)
+2111-
+2112-[stderr] 
+2113:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/check-outdated-build.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\check-outdated-build.client'
+2114-
+2115-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+2116-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+2117-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+2118-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+2135-
+2136-[stderr] 
+2137-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 5 times)
+2138-
+2139-[stderr] 
+2140:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/revive-payload.server[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\revive-payload.server'
+2141-
+2142-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+2143-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+2144-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+2145-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+2156-
+2157-
+2158-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+2159-
+2160-[stderr] 
+2161:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/revive-payload.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\revive-payload.client'
+2162-
+2163-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+2164-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+2165-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+2166-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+2180-
+2181-[stderr] 
+2182-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 8 times)
+2183-
+2184-[stderr] 
+2185:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/chunk-reload.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\chunk-reload.client'
+2186-
+2187-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+2188-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+2189-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+2190-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+2207-
+2208-[stderr] 
+2209-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 33 times)
+2210-
+2211-[stderr] 
+2212:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/head/runtime/plugins/unhead[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\head\runtime\plugins\unhead'
+2213-
+2214-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+2215-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+2216-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+2217-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+2231-
+2232-
+2233-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+2234-
+2235-[stderr] 
+2236:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/router[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\router'
+2237-
+2238-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+2239-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+2240-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+2241-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+2243-    [90mat [39masync Promise.allSettled ([36mindex 1[39m)
+2244-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+2245-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+2246-
+2247-[stderr] 
+2248:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/prefetch.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\prefetch.client'
+2249-
+2250-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+2251-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+2252-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+2253-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+2264-
+2265-[stderr] 
+2266-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+2267-
+2268-[stderr] 
+2269:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/check-if-page-unused[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\check-if-page-unused'
+2270-
+2271-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+2272-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+2273-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+2274-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+2276-    [90mat [39masync Promise.allSettled ([36mindex 1[39m)
+2277-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+2278-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+2279-
+2280-[stderr] 
+2281:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/browser-devtools-timing.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\browser-devtools-timing.client'
+2282-
+2283-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+2284-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+2285-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+2286-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+2288-    [90mat [39masync Promise.allSettled ([36mindex 1[39m)
+2289-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+2290-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+2291-
+2292-[stderr] 
+2293:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/dev-server-logs[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\dev-server-logs'
+2294-
+2295-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+2296-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+2297-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+2298-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+2306-
+2307-
+2308-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+2309-
+2310-[stderr] 
+2311:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/check-if-layout-used[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\check-if-layout-used'
+2312-
+2313-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+2314-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+2315-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+2316-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+2441-
+2442-[stderr] 
+2443-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 31 times)
+2444-
+2445-[stderr] 
+2446:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/prerender.server[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\prerender.server'
+2447-
+2448-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+2449-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+2450-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+2451-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5581:27[39m)
+--
+2587-
+2588-[stderr] 
+2589-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 3 times)
+2590-
+2591-[stderr] 
+2592:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/prerender.server[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\prerender.server'
+2593-
+2594-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+2595-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+2596-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+2597-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+4682-
+4683-[stderr] 
+4684-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 62 times)
+4685-
+4686-[stderr] 
+4687:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/prerender.server[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\prerender.server'
+4688-
+4689-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+4690-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+4691-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+4692-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5581:27[39m)
+--
+4846-
+4847-[stderr] 
+4848-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 22 times)
+4849-
+4850-[stderr] 
+4851:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/prerender.server[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\prerender.server'
+4852-
+4853-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+4854-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+4855-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+4856-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+5724-
+5725-[stderr] 
+5726-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 18 times)
+5727-
+5728-[stderr] 
+5729:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/prerender.server[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\prerender.server'
+5730-
+5731-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+5732-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+5733-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+5734-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5581:27[39m)
+--
+5881-
+5882-[stderr] 
+5883-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 34 times)
+5884-
+5885-[stderr] 
+5886:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/prerender.server[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\prerender.server'
+5887-
+5888-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+5889-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+5890-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+5891-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+6861-
+6862-[stderr] 
+6863-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 10 times)
+6864-
+6865-[stderr] 
+6866:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/navigation-repaint.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\navigation-repaint.client'
+6867-
+6868-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+6869-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+6870-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+6871-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5562:27[39m)
+--
+6873-    [90mat [39masync Promise.allSettled ([36mindex 0[39m)
+6874-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+6875-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+6876-
+6877-
+6878:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/navigation-repaint.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\navigation-repaint.client'
+6879-
+6880-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+6881-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+6882-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+6883-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+6885-    [90mat [39masync Promise.allSettled ([36mindex 1[39m)
+6886-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+6887-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+6888-
+6889-
+6890:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/revive-payload.server[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\revive-payload.server'
+6891-
+6892-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+6893-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+6894-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+6895-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5581:27[39m)
+--
+6915-
+6916-[stderr] 
+6917-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 11 times)
+6918-
+6919-
+6920:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/check-outdated-build.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\check-outdated-build.client'
+6921-
+6922-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+6923-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+6924-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+6925-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5562:27[39m)
+--
+6927-    [90mat [39masync Promise.allSettled ([36mindex 0[39m)
+6928-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+6929-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+6930-
+6931-
+6932:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/check-outdated-build.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\check-outdated-build.client'
+6933-
+6934-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+6935-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+6936-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+6937-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+6939-    [90mat [39masync Promise.allSettled ([36mindex 1[39m)
+6940-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+6941-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+6942-
+6943-[stderr] 
+6944:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/revive-payload.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\revive-payload.client'
+6945-
+6946-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+6947-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+6948-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+6949-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5562:27[39m)
+--
+6951-    [90mat [39masync Promise.allSettled ([36mindex 0[39m)
+6952-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+6953-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+6954-
+6955-[stderr] 
+6956:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/revive-payload.server[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\revive-payload.server'
+6957-
+6958-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+6959-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+6960-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+6961-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+6963-    [90mat [39masync Promise.allSettled ([36mindex 1[39m)
+6964-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+6965-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+6966-
+6967-[stderr] 
+6968:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/chunk-reload.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\chunk-reload.client'
+6969-
+6970-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+6971-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+6972-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+6973-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5562:27[39m)
+--
+6975-    [90mat [39masync Promise.allSettled ([36mindex 0[39m)
+6976-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+6977-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+6978-
+6979-[stderr] 
+6980:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/revive-payload.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\revive-payload.client'
+6981-
+6982-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+6983-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+6984-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+6985-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+6990-
+6991-[stderr] 
+6992-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+6993-
+6994-[stderr] 
+6995:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/chunk-reload.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\chunk-reload.client'
+6996-
+6997-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+6998-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+6999-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7000-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+7020-
+7021-[stderr] 
+7022-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 7 times)
+7023-
+7024-[stderr] 
+7025:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/head/runtime/plugins/unhead[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\head\runtime\plugins\unhead'
+7026-
+7027-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7028-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7029-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7030-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5581:27[39m)
+--
+7032-    [90mat [39masync Promise.allSettled ([36mindex 2[39m)
+7033-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+7034-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+7035-
+7036-[stderr] 
+7037:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/router[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\router'
+7038-
+7039-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7040-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7041-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7042-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5581:27[39m)
+--
+7044-    [90mat [39masync Promise.allSettled ([36mindex 2[39m)
+7045-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+7046-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+7047-
+7048-[stderr] 
+7049:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/check-if-page-unused[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\check-if-page-unused'
+7050-
+7051-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7052-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7053-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7054-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5581:27[39m)
+--
+7074-
+7075-[stderr] 
+7076-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 26 times)
+7077-
+7078-[stderr] 
+7079:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/head/runtime/plugins/unhead[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\head\runtime\plugins\unhead'
+7080-
+7081-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7082-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7083-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7084-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5562:27[39m)
+--
+7086-    [90mat [39masync Promise.allSettled ([36mindex 0[39m)
+7087-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+7088-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+7089-
+7090-
+7091:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/dev-server-logs[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\dev-server-logs'
+7092-
+7093-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7094-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7095-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7096-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5581:27[39m)
+--
+7119-
+7120-[stderr] 
+7121-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 4 times)
+7122-
+7123-
+7124:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/head/runtime/plugins/unhead[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\head\runtime\plugins\unhead'
+7125-
+7126-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7127-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7128-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7129-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+7131-    [90mat [39masync Promise.allSettled ([36mindex 1[39m)
+7132-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+7133-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+7134-
+7135-
+7136:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/router[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\router'
+7137-
+7138-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7139-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7140-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7141-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5562:27[39m)
+--
+7143-    [90mat [39masync Promise.allSettled ([36mindex 0[39m)
+7144-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+7145-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+7146-
+7147-
+7148:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/check-if-layout-used[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\check-if-layout-used'
+7149-
+7150-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7151-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7152-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7153-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5581:27[39m)
+--
+7165-
+7166-
+7167-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+7168-
+7169-[stderr] 
+7170:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/router[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\router'
+7171-
+7172-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7173-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7174-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7175-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+7177-    [90mat [39masync Promise.allSettled ([36mindex 1[39m)
+7178-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+7179-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+7180-
+7181-[stderr] 
+7182:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/prefetch.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\prefetch.client'
+7183-
+7184-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7185-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7186-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7187-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5562:27[39m)
+--
+7189-    [90mat [39masync Promise.allSettled ([36mindex 0[39m)
+7190-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+7191-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+7192-
+7193-[stderr] 
+7194:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/prefetch.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\prefetch.client'
+7195-
+7196-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7197-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7198-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7199-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+7201-    [90mat [39masync Promise.allSettled ([36mindex 1[39m)
+7202-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+7203-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+7204-
+7205-[stderr] 
+7206:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/check-if-page-unused[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\check-if-page-unused'
+7207-
+7208-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7209-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7210-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7211-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5562:27[39m)
+--
+7216-
+7217-[stderr] 
+7218-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+7219-
+7220-[stderr] 
+7221:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/pages/runtime/plugins/check-if-page-unused[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\pages\runtime\plugins\check-if-page-unused'
+7222-
+7223-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7224-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7225-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7226-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+7228-    [90mat [39masync Promise.allSettled ([36mindex 1[39m)
+7229-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+7230-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+7231-
+7232-[stderr] 
+7233:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/browser-devtools-timing.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\browser-devtools-timing.client'
+7234-
+7235-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7236-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7237-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7238-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5562:27[39m)
+--
+7252-
+7253-[stderr] 
+7254-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 9 times)
+7255-
+7256-
+7257:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/browser-devtools-timing.client[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\browser-devtools-timing.client'
+7258-
+7259-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7260-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7261-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7262-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+7264-    [90mat [39masync Promise.allSettled ([36mindex 1[39m)
+7265-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+7266-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+7267-
+7268-
+7269:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/dev-server-logs[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\dev-server-logs'
+7270-
+7271-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7272-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7273-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7274-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5562:27[39m)
+--
+7276-    [90mat [39masync Promise.allSettled ([36mindex 0[39m)
+7277-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+7278-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+7279-
+7280-[stderr] 
+7281:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/dev-server-logs[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\dev-server-logs'
+7282-
+7283-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7284-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7285-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7286-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)
+--
+7288-    [90mat [39masync Promise.allSettled ([36mindex 1[39m)
+7289-    [90mat [39masync generateApp ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6093:3[39m)
+7290-    [90mat [39masync _applyPromised ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/node_modules/perfect-debounce/dist/index.mjs:54:10[39m)
+7291-
+7292-[stderr] 
+7293:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/check-if-layout-used[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\check-if-layout-used'
+7294-
+7295-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7296-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7297-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7298-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5562:27[39m)
+--
+7316-
+7317-[stderr] 
+7318-[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 59 times)
+7319-
+7320-[stderr] 
+7321:[43m[30m WARN [39m[49m Failed to parse static properties from plugin [36mnode_modules/nuxt/dist/app/plugins/check-if-layout-used[39m. ENOENT: no such file or directory, open 'C:\Development\github\bizbio2\BizBio\src\BizBio.UI\node_modules\nuxt\dist\app\plugins\check-if-layout-used'
+7322-
+7323-    [90mat [39masync open ([36mnode:internal/fs/promises:641:25[39m)
+7324-    [90mat [39masync Object.readFile ([36mnode:internal/fs/promises:1245:14[39m)
+7325-    [90mat [39masync annotatePlugins ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:6213:68[39m)
+7326-    [90mat [39masync Object.getContents ([36m\C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/index.mjs:5624:26[39m)

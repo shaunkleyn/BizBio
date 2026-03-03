@@ -1,0 +1,23 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.Core\Interfaces\IAuthService.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    18→    /// Authenticates a user with email and password credentials.
+    19→    /// </summary>
+    20→    Task<AuthResult> LoginAsync(LoginDto dto);
+    21→
+    22→    /// <summary>
+    23→    /// Verifies a user's email address using a verification token.
+    24→    /// </summary>
+    25→    Task<AuthResult> VerifyEmailAsync(string token);
+    26→
+    27→    /// <summary>
+    28→    /// Verifies a user's email address using a 6-digit verification code.
+    29→    /// </summary>
+    30→    Task<AuthResult> VerifyEmailWithCodeAsync(string email, string code);
+    31→
+    32→    /// <summary>
+    33→    /// Resends the email verification link to the specified email address.
+    34→    /// </summary>
+    35→    Task<AuthResult> ResendVerificationEmailAsync(string email);
+    36→
+    37→    /// <summary>
+    38→    /// Initiates a password reset process for the specified email address.
+    39→    /// </summary>

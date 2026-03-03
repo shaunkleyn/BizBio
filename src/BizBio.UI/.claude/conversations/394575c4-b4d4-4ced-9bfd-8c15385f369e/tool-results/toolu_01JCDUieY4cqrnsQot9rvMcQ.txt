@@ -1,0 +1,257 @@
+     1→namespace BizBio.API.Controllers;
+     2→
+     3→using Microsoft.AspNetCore.Mvc;
+     4→using Microsoft.EntityFrameworkCore;
+     5→using BizBio.Core.DTOs;
+     6→using BizBio.Core.Services;
+     7→using BizBio.Infrastructure.Data;
+     8→
+     9→/// <summary>
+    10→/// Example controller showing MRD-style menu API with efficient array indexing
+    11→/// This complements the existing MenuController with an alternative response format
+    12→/// </summary>
+    13→[ApiController]
+    14→[Route("api/v2/menu")]
+    15→public class MRDStyleMenuController : ControllerBase
+    16→{
+    17→    private readonly ApplicationDbContext _context;
+    18→    private readonly MenuMappingService _menuMapper;
+    19→
+    20→    public MRDStyleMenuController(ApplicationDbContext context, MenuMappingService menuMapper)
+    21→    {
+    22→        _context = context;
+    23→        _menuMapper = menuMapper;
+    24→    }
+    25→
+    26→    /// <summary>
+    27→    /// Get menu in MRD-style format with efficient array indexing
+    28→    /// Example: GET /api/v2/menu/123
+    29→    ///
+    30→    /// Returns menu with:
+    31→    /// - options[] and extras[] arrays defined once at top level
+    32→    /// - variants reference them via option_indices and extra_indices
+    33→    /// - Single query, minimal data transfer, simple frontend logic
+    34→    /// </summary>
+    35→    [HttpGet("{catalogId}")]
+    36→    public async Task<ActionResult<MenuResponseDto>> GetMenu(int catalogId)
+    37→    {
+    38→        var catalog = await _context.Catalogs
+    39→            .Include(c => c.Categories)
+    40→                .ThenInclude(cat => cat.CatalogItemCategories)
+    41→                    .ThenInclude(cic => cic.CatalogItem)
+    42→                        .ThenInclude(item => item.Variants)
+    43→            .Include(c => c.Categories)
+    44→                .ThenInclude(cat => cat.CatalogItemCategories)
+    45→                    .ThenInclude(cic => cic.CatalogItem)
+    46→                        .ThenInclude(item => item.ExtraGroupLinks)
+    47→                            .ThenInclude(link => link.ExtraGroup)
+    48→                                .ThenInclude(group => group.GroupItems)
+    49→                                    .ThenInclude(gi => gi.Extra)
+    50→            .FirstOrDefaultAsync(c => c.Id == catalogId);
+    51→
+    52→        if (catalog == null)
+    53→            return NotFound(new { error = "Menu not found" });
+    54→
+    55→        var menuDto = _menuMapper.MapCatalogToMenu(catalog);
+    56→
+    57→        return Ok(menuDto);
+    58→    }
+    59→
+    60→    /// <summary>
+    61→    /// Get menu by profile slug (public-facing URL)
+    62→    /// Example: GET /api/v2/menu/by-slug/my-restaurant
+    63→    /// </summary>
+    64→    [HttpGet("by-slug/{slug}")]
+    65→    public async Task<ActionResult<MenuResponseDto>> GetMenuBySlug(string slug)
+    66→    {
+    67→        var profile = await _context.Profiles
+    68→            .FirstOrDefaultAsync(p => p.Slug == slug && p.IsActive);
+    69→
+    70→        if (profile == null)
+    71→            return NotFound(new { error = "Profile not found" });
+    72→
+    73→        var catalog = await _context.Catalogs
+    74→            .Include(c => c.Categories)
+    75→                .ThenInclude(cat => cat.CatalogItemCategories)
+    76→                    .ThenInclude(cic => cic.CatalogItem)
+    77→                        .ThenInclude(item => item.Variants)
+    78→            .Include(c => c.Categories)
+    79→                .ThenInclude(cat => cat.CatalogItemCategories)
+    80→                    .ThenInclude(cic => cic.CatalogItem)
+    81→                        .ThenInclude(item => item.ExtraGroupLinks)
+    82→                            .ThenInclude(link => link.ExtraGroup)
+    83→                                .ThenInclude(group => group.GroupItems)
+    84→                                    .ThenInclude(gi => gi.Extra)
+    85→            .Where(c => c.ProfileId == profile.Id && c.IsPublic)
+    86→            .OrderByDescending(c => c.CreatedAt)
+    87→            .FirstOrDefaultAsync();
+    88→
+    89→        if (catalog == null)
+    90→            return NotFound(new { error = "No active menu found for this profile" });
+    91→
+    92→        var menuDto = _menuMapper.MapCatalogToMenu(catalog);
+    93→
+    94→        return Ok(menuDto);
+    95→    }
+    96→
+    97→    /// <summary>
+    98→    /// Calculate cart total from selected items (validates selections against menu)
+    99→    /// Example POST body:
+   100→    /// {
+   101→    ///   "items": [
+   102→    ///     {
+   103→    ///       "variantId": 123,
+   104→    ///       "quantity": 2,
+   105→    ///       "selectedExtras": [
+   106→    ///         { "extraId": 456, "quantity": 1 }
+   107→    ///       ],
+   108→    ///       "selectedOptions": [
+   109→    ///         { "optionId": 789 }
+   110→    ///       ]
+   111→    ///     }
+   112→    ///   ],
+   113→    ///   "deliveryFee": 20
+   114→    /// }
+   115→    /// </summary>
+   116→    [HttpPost("calculate-cart")]
+   117→    public async Task<ActionResult<CartCalculationResponse>> CalculateCart(
+   118→        [FromBody] CartCalculationRequest request)
+   119→    {
+   120→        var response = new CartCalculationResponse { Items = new List<CartItemCalculation>() };
+   121→        decimal subtotal = 0;
+   122→
+   123→        foreach (var cartItem in request.Items)
+   124→        {
+   125→            var variant = await _context.CatalogItemVariants
+   126→                .Include(v => v.CatalogItem)
+   127→                    .ThenInclude(i => i.ExtraGroupLinks)
+   128→                        .ThenInclude(l => l.ExtraGroup)
+   129→                            .ThenInclude(g => g.GroupItems)
+   130→                                .ThenInclude(gi => gi.Extra)
+   131→                .FirstOrDefaultAsync(v => v.Id == cartItem.VariantId);
+   132→
+   133→            if (variant == null)
+   134→            {
+   135→                return BadRequest(new { error = $"Variant {cartItem.VariantId} not found" });
+   136→            }
+   137→
+   138→            decimal itemTotal = variant.Price * cartItem.Quantity;
+   139→            var selectedExtras = new List<SelectedExtraDetail>();
+   140→
+   141→            // Validate and calculate options cost
+   142→            foreach (var optionSelection in cartItem.SelectedOptions)
+   143→            {
+   144→                var option = await _context.CatalogItemExtras
+   145→                    .FirstOrDefaultAsync(e => e.Id == optionSelection.OptionId);
+   146→
+   147→                if (option == null)
+   148→                    return BadRequest(new { error = $"Option {optionSelection.OptionId} not found" });
+   149→
+   150→                // Options are included in base price or add cost
+   151→                // This depends on your business logic
+   152→                itemTotal += option.BasePrice * cartItem.Quantity;
+   153→            }
+   154→
+   155→            // Calculate extras cost
+   156→            foreach (var extraSelection in cartItem.SelectedExtras)
+   157→            {
+   158→                var extra = await _context.CatalogItemExtras
+   159→                    .FirstOrDefaultAsync(e => e.Id == extraSelection.ExtraId);
+   160→
+   161→                if (extra == null)
+   162→                    continue;
+   163→
+   164→                decimal extraPrice = extra.BasePrice * extraSelection.Quantity;
+   165→                itemTotal += extraPrice * cartItem.Quantity;
+   166→
+   167→                selectedExtras.Add(new SelectedExtraDetail
+   168→                {
+   169→                    ExtraId = extra.Id,
+   170→                    Name = extra.Name,
+   171→                    Quantity = extraSelection.Quantity,
+   172→                    UnitPrice = extra.BasePrice,
+   173→                    TotalPrice = extraPrice
+   174→                });
+   175→            }
+   176→
+   177→            subtotal += itemTotal;
+   178→
+   179→            response.Items.Add(new CartItemCalculation
+   180→            {
+   181→                VariantId = variant.Id,
+   182→                ItemName = variant.CatalogItem.Name,
+   183→                VariantName = variant.Title,
+   184→                Quantity = cartItem.Quantity,
+   185→                BasePrice = variant.Price,
+   186→                SelectedExtras = selectedExtras,
+   187→                ItemTotal = itemTotal
+   188→            });
+   189→        }
+   190→
+   191→        response.Subtotal = subtotal;
+   192→        response.DeliveryFee = request.DeliveryFee ?? 0;
+   193→        response.Total = subtotal + response.DeliveryFee;
+   194→
+   195→        return Ok(response);
+   196→    }
+   197→}
+   198→
+   199→// DTOs for cart calculation
+   200→
+   201→public class CartCalculationRequest
+   202→{
+   203→    public List<CartItemRequest> Items { get; set; } = new();
+   204→    public decimal? DeliveryFee { get; set; }
+   205→}
+   206→
+   207→public class CartItemRequest
+   208→{
+   209→    public int VariantId { get; set; }
+   210→    public int Quantity { get; set; }
+   211→    public List<SelectedExtra> SelectedExtras { get; set; } = new();
+   212→    public List<SelectedOption> SelectedOptions { get; set; } = new();
+   213→}
+   214→
+   215→public class SelectedExtra
+   216→{
+   217→    public int ExtraId { get; set; }
+   218→    public int Quantity { get; set; } = 1;
+   219→}
+   220→
+   221→public class SelectedOption
+   222→{
+   223→    public int OptionId { get; set; }
+   224→}
+   225→
+   226→public class CartCalculationResponse
+   227→{
+   228→    public List<CartItemCalculation> Items { get; set; } = new();
+   229→    public decimal Subtotal { get; set; }
+   230→    public decimal DeliveryFee { get; set; }
+   231→    public decimal Total { get; set; }
+   232→}
+   233→
+   234→public class CartItemCalculation
+   235→{
+   236→    public int VariantId { get; set; }
+   237→    public string ItemName { get; set; } = null!;
+   238→    public string VariantName { get; set; } = null!;
+   239→    public int Quantity { get; set; }
+   240→    public decimal BasePrice { get; set; }
+   241→    public List<SelectedExtraDetail> SelectedExtras { get; set; } = new();
+   242→    public decimal ItemTotal { get; set; }
+   243→}
+   244→
+   245→public class SelectedExtraDetail
+   246→{
+   247→    public int ExtraId { get; set; }
+   248→    public string Name { get; set; } = null!;
+   249→    public int Quantity { get; set; }
+   250→    public decimal UnitPrice { get; set; }
+   251→    public decimal TotalPrice { get; set; }
+   252→}
+   253→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

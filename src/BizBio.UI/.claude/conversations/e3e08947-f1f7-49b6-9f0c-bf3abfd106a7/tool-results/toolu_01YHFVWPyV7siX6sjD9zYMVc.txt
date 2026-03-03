@@ -1,0 +1,9 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\components\GlobalHeader.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+     1→<template>
+     2→  <header class="bg-[var(--light-background-color)] shadow-md sticky top-0 z-50 border-b border-[var(--light-border-color)]">
+     3→    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     4→      <div class="flex justify-between items-center h-20">
+     5→        <!-- Logo -->
+     6→        <NuxtLink to="/dashboard" class="flex-shrink-0">
+     7→          <img
+     8→            src="/151.avif"

@@ -1,0 +1,4 @@
+total 17
+drwxr-xr-x 1 shaunk 1049089  0 Dec 18 19:29 .
+drwxr-xr-x 1 shaunk 1049089  0 Dec 19 21:17 ..
+-rw-r--r-- 1 shaunk 1049089 42 Dec 18 19:29 settings.json

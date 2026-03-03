@@ -1,0 +1,117 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\components\MenuSidebar.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    13→      </div>
+    14→
+    15→      <!-- Navigation Links -->
+    16→      <nav class="space-y-2">
+    17→        <NuxtLink
+    18→          to="/menu"
+    19→          :class="[
+    20→            'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+    21→            isActive('/menu') && !route.path.includes('/menu/')
+    22→              ? 'bg-[var(--primary-color)] bg-opacity-10 text-[var(--primary-color)] font-semibold'
+    23→              : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+    24→          ]"
+    25→        >
+    26→          <i class="fas fa-th-large w-5"></i>
+    27→          <span>Overview</span>
+    28→        </NuxtLink>
+    29→
+    30→        <NuxtLink
+    31→          to="/menu/menus"
+    32→          :class="[
+    33→            'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+    34→            isActive('/menu/menus')
+    35→              ? 'bg-[var(--primary-color)] bg-opacity-10 text-[var(--primary-color)] font-semibold'
+    36→              : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+    37→          ]"
+    38→        >
+    39→          <i class="fas fa-book-open w-5"></i>
+    40→          <span>Menus</span>
+    41→        </NuxtLink>
+    42→
+    43→        <!-- Library Submenu -->
+    44→        <div>
+    45→          <div class="text-xs font-semibold text-[var(--gray-text-color)] uppercase px-4 py-2 mt-4 mb-2">Library</div>
+    46→
+    47→          <NuxtLink
+    48→            to="/menu/library/items"
+    49→            :class="[
+    50→              'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+    51→              route.path === '/menu/library/items'
+    52→                ? 'bg-[var(--primary-color)] bg-opacity-10 text-[var(--primary-color)] font-semibold'
+    53→                : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+    54→            ]"
+    55→          >
+    56→            <i class="fas fa-utensils w-5"></i>
+    57→            <span>Items</span>
+    58→          </NuxtLink>
+    59→
+    60→          <NuxtLink
+    61→            to="/menu/library/extras"
+    62→            :class="[
+    63→              'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+    64→              route.path === '/menu/library/extras'
+    65→                ? 'bg-[var(--primary-color)] bg-opacity-10 text-[var(--primary-color)] font-semibold'
+    66→                : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+    67→            ]"
+    68→          >
+    69→            <i class="fas fa-plus-circle w-5"></i>
+    70→            <span>Extras</span>
+    71→          </NuxtLink>
+    72→
+    73→          <NuxtLink
+    74→            to="/menu/library/extra-groups"
+    75→            :class="[
+    76→              'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+    77→              route.path === '/menu/library/extra-groups'
+    78→                ? 'bg-[var(--primary-color)] bg-opacity-10 text-[var(--primary-color)] font-semibold'
+    79→                : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+    80→            ]"
+    81→          >
+    82→            <i class="fas fa-object-group w-5"></i>
+    83→            <span>Extra Groups</span>
+    84→          </NuxtLink>
+    85→        </div>
+    86→
+    87→        <NuxtLink
+    88→          to="/menu/categories"
+    89→          :class="[
+    90→            'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+    91→            isActive('/menu/categories')
+    92→              ? 'bg-[var(--primary-color)] bg-opacity-10 text-[var(--primary-color)] font-semibold'
+    93→              : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+    94→          ]"
+    95→        >
+    96→          <i class="fas fa-layer-group w-5"></i>
+    97→          <span>Categories</span>
+    98→        </NuxtLink>
+    99→
+   100→        <NuxtLink
+   101→          to="/menu/events"
+   102→          :class="[
+   103→            'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+   104→            isActive('/menu/events')
+   105→              ? 'bg-[var(--primary-color)] bg-opacity-10 text-[var(--primary-color)] font-semibold'
+   106→              : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+   107→          ]"
+   108→        >
+   109→          <i class="fas fa-calendar-alt w-5"></i>
+   110→          <span>Events</span>
+   111→        </NuxtLink>
+   112→
+   113→        <NuxtLink
+   114→          to="/menu/tables"
+   115→          :class="[
+   116→            'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
+   117→            isActive('/menu/tables')
+   118→              ? 'bg-[var(--primary-color)] bg-opacity-10 text-[var(--primary-color)] font-semibold'
+   119→              : 'text-[var(--dark-text-color)] hover:bg-[var(--medium-background-color)]'
+   120→          ]"
+   121→        >
+   122→          <i class="fas fa-qrcode w-5"></i>
+   123→          <span>QR Codes</span>
+   124→        </NuxtLink>
+   125→      </nav>
+   126→
+   127→      <!-- Stats Section -->
+   128→      <div class="mt-8 pt-6 border-t border-gray-200">

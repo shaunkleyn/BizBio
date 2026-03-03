@@ -1,0 +1,1139 @@
+     1→using Microsoft.EntityFrameworkCore;
+     2→using BizBio.Core.Entities;
+     3→using BizBio.Core.Entities.Lookups;
+     4→using BizBio.Core.Enums;
+     5→
+     6→namespace BizBio.Infrastructure.Data;
+     7→
+     8→public class ApplicationDbContext : DbContext
+     9→{
+    10→    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    11→        : base(options)
+    12→    {
+    13→    }
+    14→
+    15→    public DbSet<User> Users => Set<User>();
+    16→    public DbSet<SubscriptionTier> SubscriptionTiers => Set<SubscriptionTier>();
+    17→    public DbSet<UserSubscription> UserSubscriptions => Set<UserSubscription>();
+    18→    public DbSet<SubscriptionAddon> SubscriptionAddons => Set<SubscriptionAddon>();
+    19→    public DbSet<SubscriptionTierAddon> SubscriptionTierAddons => Set<SubscriptionTierAddon>();
+    20→    public DbSet<UserSubscriptionAddon> UserSubscriptionAddons => Set<UserSubscriptionAddon>();
+    21→    public DbSet<Restaurant> Restaurants => Set<Restaurant>();
+    22→    public DbSet<Profile> Profiles => Set<Profile>();
+    23→    public DbSet<Catalog> Catalogs => Set<Catalog>();
+    24→    public DbSet<CatalogCategory> Categories => Set<CatalogCategory>();
+    25→    public DbSet<CatalogItem> CatalogItems => Set<CatalogItem>();
+    26→    public DbSet<CatalogItemVariant> CatalogItemVariants => Set<CatalogItemVariant>();
+    27→    //public DbSet<CatalogItemAttribute> CatalogItemAttributes => Set<CatalogItemAttribute>();
+    28→    //public DbSet<CatalogItemAttributeValue> CatalogItemAttributeValues => Set<CatalogItemAttributeValue>();
+    29→    //public DbSet<CatalogItemVariantAttributeValue> CatalogItemVariantAttributeValues => Set<CatalogItemVariantAttributeValue>();
+    30→    public DbSet<CatalogItemInventory> CatalogItemInventories => Set<CatalogItemInventory>();
+    31→    public DbSet<CatalogItemVariantPrice> CatalogItemVariantPrices => Set<CatalogItemVariantPrice>();
+    32→    public DbSet<CatalogBundle> CatalogBundles => Set<CatalogBundle>();
+    33→    public DbSet<CatalogBundleStep> CatalogBundleSteps => Set<CatalogBundleStep>();
+    34→    public DbSet<CatalogBundleStepProduct> CatalogBundleStepProducts => Set<CatalogBundleStepProduct>();
+    35→    public DbSet<CatalogBundleOptionGroup> CatalogBundleOptionGroups => Set<CatalogBundleOptionGroup>();
+    36→    public DbSet<CatalogBundleOption> CatalogBundleOptions => Set<CatalogBundleOption>();
+    37→    public DbSet<CatalogBundleCategory> CatalogBundleCategories => Set<CatalogBundleCategory>();
+    38→    public DbSet<CatalogItemExtra> CatalogItemExtras => Set<CatalogItemExtra>();
+    39→    public DbSet<CatalogItemExtraGroup> CatalogItemExtraGroups => Set<CatalogItemExtraGroup>();
+    40→    public DbSet<CatalogItemExtraGroupItem> CatalogItemExtraGroupItems => Set<CatalogItemExtraGroupItem>();
+    41→    public DbSet<CatalogItemExtraGroupLink> CatalogItemExtraGroupLinks => Set<CatalogItemExtraGroupLink>();
+    42→    public DbSet<CatalogItemOption> CatalogItemOptions => Set<CatalogItemOption>();
+    43→    public DbSet<CatalogItemOptionGroup> CatalogItemOptionGroups => Set<CatalogItemOptionGroup>();
+    44→    public DbSet<CatalogItemOptionGroupItem> CatalogItemOptionGroupItems => Set<CatalogItemOptionGroupItem>();
+    45→    public DbSet<CatalogItemOptionGroupLink> CatalogItemOptionGroupLinks => Set<CatalogItemOptionGroupLink>();
+    46→    public DbSet<CatalogItemCategory> CatalogItemCategories => Set<CatalogItemCategory>();
+    47→    public DbSet<CatalogItemInstance> CatalogItemInstances => Set<CatalogItemInstance>();
+    48→    public DbSet<CatalogItemInstanceCategory> CatalogItemInstanceCategories => Set<CatalogItemInstanceCategory>();
+    49→    public DbSet<Bundle> Bundles => Set<Bundle>();
+    50→    public DbSet<BundleSection> BundleSections => Set<BundleSection>();
+    51→    public DbSet<BundleSectionItem> BundleSectionItems => Set<BundleSectionItem>();
+    52→    public DbSet<BundleCategory> BundleCategories => Set<BundleCategory>();
+    53→    public DbSet<RestaurantTable> RestaurantTables => Set<RestaurantTable>();
+    54→    public DbSet<NFCScan> NFCScans => Set<NFCScan>();
+    55→
+    56→    // Lookup Tables
+    57→    public DbSet<ProductLineLookup> ProductLines => Set<ProductLineLookup>();
+    58→    public DbSet<SubscriptionStatusLookup> SubscriptionStatuses => Set<SubscriptionStatusLookup>();
+    59→    public DbSet<BillingCycleLookup> BillingCycles => Set<BillingCycleLookup>();
+    60→    public DbSet<TableCategoryLookup> TableCategories => Set<TableCategoryLookup>();
+    61→    public DbSet<NFCTagTypeLookup> NFCTagTypes => Set<NFCTagTypeLookup>();
+    62→    public DbSet<NFCTagStatusLookup> NFCTagStatuses => Set<NFCTagStatusLookup>();
+    63→    public DbSet<DeviceTypeLookup> DeviceTypes => Set<DeviceTypeLookup>();
+    64→    public DbSet<CatalogItemPriceType> CatalogItemPriceTypes => Set<CatalogItemPriceType>();
+    65→
+    66→    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    67→    {
+    68→        base.OnModelCreating(modelBuilder);
+    69→
+    70→        // User Configuration
+    71→        modelBuilder.Entity<User>(entity =>
+    72→        {
+    73→            entity.ToTable("Users");
+    74→            entity.HasKey(e => e.Id);
+    75→            entity.HasIndex(e => e.Email).IsUnique();
+    76→            entity.HasIndex(e => e.EmailVerified);
+    77→            entity.HasIndex(e => e.IsActive);
+    78→
+    79→            entity.Property(e => e.Email).HasMaxLength(255).IsRequired();
+    80→            entity.Property(e => e.PasswordHash).HasMaxLength(255).IsRequired();
+    81→            entity.Property(e => e.FirstName).HasMaxLength(100).IsRequired();
+    82→            entity.Property(e => e.LastName).HasMaxLength(100).IsRequired();
+    83→            entity.Property(e => e.EmailVerificationToken).HasMaxLength(255);
+    84→            entity.Property(e => e.PasswordResetToken).HasMaxLength(255);
+    85→            entity.Property(e => e.Currency).HasMaxLength(3).HasDefaultValue("ZAR");
+    86→
+    87→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+    88→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+    89→        });
+    90→
+    91→        // SubscriptionTier Configuration
+    92→        modelBuilder.Entity<SubscriptionTier>(entity =>
+    93→        {
+    94→            entity.ToTable("SubscriptionTiers");
+    95→            entity.HasKey(e => e.Id);
+    96→            entity.HasIndex(e => e.TierCode).IsUnique();
+    97→            entity.HasIndex(e => e.ProductLineId);
+    98→            entity.HasIndex(e => e.IsActive);
+    99→
+   100→            entity.Property(e => e.TierCode).HasMaxLength(50).IsRequired();
+   101→            entity.Property(e => e.TierName).HasMaxLength(50).IsRequired();
+   102→            entity.Property(e => e.DisplayName).HasMaxLength(100).IsRequired();
+   103→            entity.Property(e => e.MonthlyPrice).HasPrecision(10, 2);
+   104→            entity.Property(e => e.AnnualPrice).HasPrecision(10, 2);
+   105→            entity.Property(e => e.AnnualDiscountPercent).HasPrecision(5, 2).HasDefaultValue(15.00m);
+   106→
+   107→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   108→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   109→
+   110→            entity.HasOne(e => e.ProductLine)
+   111→                .WithMany(p => p.SubscriptionTiers)
+   112→                .HasForeignKey(e => e.ProductLineId)
+   113→                .OnDelete(DeleteBehavior.Restrict);
+   114→        });
+   115→
+   116→        // UserSubscription Configuration
+   117→        modelBuilder.Entity<UserSubscription>(entity =>
+   118→        {
+   119→            entity.ToTable("UserSubscriptions");
+   120→            entity.HasKey(e => e.Id);
+   121→            entity.HasIndex(e => e.UserId);
+   122→            entity.HasIndex(e => e.TierId);
+   123→            entity.HasIndex(e => e.StatusId);
+   124→            entity.HasIndex(e => e.NextBillingDate);
+   125→            entity.HasIndex(e => e.TrialEndsAt);
+   126→
+   127→            entity.Property(e => e.Price).HasPrecision(10, 2);
+   128→            entity.Property(e => e.Currency).HasMaxLength(3).HasDefaultValue("ZAR");
+   129→            entity.Property(e => e.DiscountPercent).HasPrecision(5, 2).HasDefaultValue(0);
+   130→            entity.Property(e => e.LastPaymentAmount).HasPrecision(10, 2);
+   131→
+   132→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   133→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   134→
+   135→            entity.HasOne(e => e.User)
+   136→                .WithMany(u => u.Subscriptions)
+   137→                .HasForeignKey(e => e.UserId)
+   138→                .OnDelete(DeleteBehavior.Cascade);
+   139→
+   140→            entity.HasOne(e => e.Tier)
+   141→                .WithMany(t => t.Subscriptions)
+   142→                .HasForeignKey(e => e.TierId)
+   143→                .OnDelete(DeleteBehavior.Restrict);
+   144→
+   145→            entity.HasOne(e => e.Status)
+   146→                .WithMany(s => s.UserSubscriptions)
+   147→                .HasForeignKey(e => e.StatusId)
+   148→                .OnDelete(DeleteBehavior.Restrict);
+   149→
+   150→            entity.HasOne(e => e.BillingCycle)
+   151→                .WithMany(b => b.UserSubscriptions)
+   152→                .HasForeignKey(e => e.BillingCycleId)
+   153→                .OnDelete(DeleteBehavior.Restrict);
+   154→
+   155→            entity.HasOne(e => e.ProductLine)
+   156→                .WithMany()
+   157→                .HasForeignKey(e => e.ProductLineId)
+   158→                .OnDelete(DeleteBehavior.Restrict);
+   159→        });
+   160→
+   161→        // SubscriptionAddon Configuration
+   162→        modelBuilder.Entity<SubscriptionAddon>(entity =>
+   163→        {
+   164→            entity.ToTable("SubscriptionAddons");
+   165→            entity.HasKey(e => e.Id);
+   166→            entity.HasIndex(e => e.ProductLineId);
+   167→            entity.HasIndex(e => e.IsActive);
+   168→            entity.HasIndex(e => new { e.ProductLineId, e.SortOrder });
+   169→
+   170→            entity.Property(e => e.Name).HasMaxLength(100).IsRequired();
+   171→            entity.Property(e => e.Description).HasMaxLength(2000);
+   172→            entity.Property(e => e.MonthlyPrice).HasPrecision(10, 2);
+   173→            entity.Property(e => e.ConfigurationJson).HasMaxLength(4000);
+   174→
+   175→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   176→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   177→        });
+   178→
+   179→        // SubscriptionTierAddon Configuration
+   180→        modelBuilder.Entity<SubscriptionTierAddon>(entity =>
+   181→        {
+   182→            entity.ToTable("SubscriptionTierAddons");
+   183→            entity.HasKey(e => e.Id);
+   184→            entity.HasIndex(e => new { e.SubscriptionTierId, e.AddonId }).IsUnique();
+   185→            entity.HasIndex(e => e.IsActive);
+   186→
+   187→            entity.Property(e => e.DiscountPercentage).HasPrecision(5, 2);
+   188→
+   189→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   190→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   191→
+   192→            entity.HasOne(e => e.SubscriptionTier)
+   193→                .WithMany(t => t.TierAddons)
+   194→                .HasForeignKey(e => e.SubscriptionTierId)
+   195→                .OnDelete(DeleteBehavior.Cascade);
+   196→
+   197→            entity.HasOne(e => e.Addon)
+   198→                .WithMany(a => a.TierAddons)
+   199→                .HasForeignKey(e => e.AddonId)
+   200→                .OnDelete(DeleteBehavior.Cascade);
+   201→        });
+   202→
+   203→        // UserSubscriptionAddon Configuration
+   204→        modelBuilder.Entity<UserSubscriptionAddon>(entity =>
+   205→        {
+   206→            entity.ToTable("UserSubscriptionAddons");
+   207→            entity.HasKey(e => e.Id);
+   208→            entity.HasIndex(e => e.UserSubscriptionId);
+   209→            entity.HasIndex(e => e.AddonId);
+   210→            entity.HasIndex(e => e.IsActive);
+   211→            entity.HasIndex(e => new { e.UserSubscriptionId, e.AddonId, e.IsActiveAddon });
+   212→
+   213→            entity.Property(e => e.MonthlyPrice).HasPrecision(10, 2);
+   214→
+   215→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   216→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   217→
+   218→            entity.HasOne(e => e.UserSubscription)
+   219→                .WithMany(s => s.Addons)
+   220→                .HasForeignKey(e => e.UserSubscriptionId)
+   221→                .OnDelete(DeleteBehavior.Cascade);
+   222→
+   223→            entity.HasOne(e => e.Addon)
+   224→                .WithMany(a => a.UserSubscriptionAddons)
+   225→                .HasForeignKey(e => e.AddonId)
+   226→                .OnDelete(DeleteBehavior.Restrict);
+   227→        });
+   228→
+   229→        // Restaurant Configuration
+   230→        modelBuilder.Entity<Restaurant>(entity =>
+   231→        {
+   232→            entity.ToTable("Restaurants");
+   233→            entity.HasKey(e => e.Id);
+   234→            entity.HasIndex(e => e.UserId);
+   235→            entity.HasIndex(e => e.IsActive);
+   236→            entity.HasIndex(e => new { e.UserId, e.SortOrder });
+   237→
+   238→            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+   239→            entity.Property(e => e.Description).HasMaxLength(2000);
+   240→            entity.Property(e => e.Logo).HasMaxLength(500);
+   241→            entity.Property(e => e.Address).HasMaxLength(255);
+   242→            entity.Property(e => e.City).HasMaxLength(100);
+   243→            entity.Property(e => e.State).HasMaxLength(50);
+   244→            entity.Property(e => e.PostalCode).HasMaxLength(20);
+   245→            entity.Property(e => e.Country).HasMaxLength(2);
+   246→            entity.Property(e => e.Phone).HasMaxLength(20);
+   247→            entity.Property(e => e.Email).HasMaxLength(255);
+   248→            entity.Property(e => e.Website).HasMaxLength(500);
+   249→            entity.Property(e => e.Currency).HasMaxLength(3).HasDefaultValue("ZAR");
+   250→            entity.Property(e => e.Timezone).HasMaxLength(50);
+   251→
+   252→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   253→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   254→
+   255→            entity.HasOne(e => e.User)
+   256→                .WithMany()
+   257→                .HasForeignKey(e => e.UserId)
+   258→                .OnDelete(DeleteBehavior.Cascade);
+   259→        });
+   260→
+   261→        // Profile Configuration
+   262→        modelBuilder.Entity<Profile>(entity =>
+   263→        {
+   264→            entity.ToTable("Profiles");
+   265→            entity.HasKey(e => e.Id);
+   266→            entity.HasIndex(e => e.Slug).IsUnique();
+   267→            entity.HasIndex(e => e.UserId);
+   268→            entity.HasIndex(e => e.RestaurantId);
+   269→            entity.HasIndex(e => e.IsActive);
+   270→
+   271→            entity.Property(e => e.Slug).HasMaxLength(100).IsRequired();
+   272→            entity.Property(e => e.Name).HasMaxLength(200).IsRequired();
+   273→            entity.Property(e => e.ProfileType).HasMaxLength(50).IsRequired();
+   274→            entity.Property(e => e.Logo).HasMaxLength(500);
+   275→            entity.Property(e => e.ContactPhone).HasMaxLength(20);
+   276→            entity.Property(e => e.ContactEmail).HasMaxLength(255);
+   277→            entity.Property(e => e.Website).HasMaxLength(500);
+   278→            entity.Property(e => e.EventModeName).HasMaxLength(100);
+   279→
+   280→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   281→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   282→
+   283→            entity.HasOne(e => e.User)
+   284→                .WithMany(u => u.Profiles)
+   285→                .HasForeignKey(e => e.UserId)
+   286→                .OnDelete(DeleteBehavior.Cascade);
+   287→
+   288→            entity.HasOne(e => e.Restaurant)
+   289→                .WithMany(r => r.Profiles)
+   290→                .HasForeignKey(e => e.RestaurantId)
+   291→                .OnDelete(DeleteBehavior.Cascade);
+   292→        });
+   293→
+   294→        // Catalog Configuration
+   295→        modelBuilder.Entity<Catalog>(entity =>
+   296→        {
+   297→            entity.ToTable("Catalogs");
+   298→            entity.HasKey(e => e.Id);
+   299→            entity.HasIndex(e => e.ProfileId);
+   300→            entity.HasIndex(e => e.IsActive);
+   301→
+   302→            entity.Property(e => e.Name).HasMaxLength(200).IsRequired();
+   303→
+   304→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   305→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   306→
+   307→            entity.HasOne(e => e.Profile)
+   308→                .WithMany(p => p.Catalogs)
+   309→                .HasForeignKey(e => e.ProfileId)
+   310→                .OnDelete(DeleteBehavior.Cascade);
+   311→
+   312→            entity.HasMany(e => e.Categories)
+   313→                .WithOne(c => c.Catalog)
+   314→                .HasForeignKey(c => c.CatalogId)
+   315→                .OnDelete(DeleteBehavior.Cascade);
+   316→        });
+   317→
+   318→        // Category Configuration
+   319→        modelBuilder.Entity<CatalogCategory>(entity =>
+   320→        {
+   321→            entity.ToTable("Categories");
+   322→            entity.HasKey(e => e.Id);
+   323→            entity.HasIndex(e => e.CatalogId);
+   324→            entity.HasIndex(e => e.UserId);
+   325→            entity.HasIndex(e => e.ParentCategoryId);
+   326→            entity.HasIndex(e => e.IsActive);
+   327→            entity.HasIndex(e => new { e.CatalogId, e.SortOrder });
+   328→
+   329→            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+   330→            entity.Property(e => e.Description).HasMaxLength(2000);
+   331→            entity.Property(e => e.Icon).HasMaxLength(100);
+   332→            entity.Property(e => e.Images).HasMaxLength(5000);
+   333→
+   334→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   335→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   336→
+   337→            entity.HasOne(e => e.Catalog)
+   338→                .WithMany(c => c.Categories)
+   339→                .HasForeignKey(e => e.CatalogId)
+   340→                .OnDelete(DeleteBehavior.Cascade);
+   341→
+   342→            entity.HasOne(e => e.User)
+   343→                .WithMany()
+   344→                .HasForeignKey(e => e.UserId);
+   345→
+   346→            entity.HasOne(e => e.ParentCategory)
+   347→                .WithMany(c => c.SubCategories)
+   348→                .HasForeignKey(e => e.ParentCategoryId);
+   349→            
+   350→            // Explicitly ignore the old navigation property to prevent EF from creating relationships
+   351→            entity.Ignore(e => e.Items);
+   352→        });
+   353→
+   354→        // CatalogItem Configuration
+   355→        modelBuilder.Entity<CatalogItem>(entity =>
+   356→        {
+   357→            entity.ToTable("CatalogItems");
+   358→            entity.HasKey(e => e.Id);
+   359→            entity.HasIndex(e => e.CatalogId);
+   360→            entity.HasIndex(e => e.CategoryId);
+   361→            entity.HasIndex(e => e.BundleId);
+   362→            entity.HasIndex(e => e.ItemType);
+   363→            entity.HasIndex(e => e.IsActive);
+   364→            entity.HasIndex(e => e.AvailableInEventMode);
+   365→
+   366→            entity.Property(e => e.Name).HasMaxLength(200).IsRequired();
+   367→            entity.Property(e => e.Price).HasPrecision(10, 2);
+   368→            entity.Property(e => e.Images).HasMaxLength(2000); // JSON array stored as string
+   369→            entity.Property(e => e.ItemType).HasDefaultValue(CatalogItemType.Regular);
+   370→
+   371→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   372→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   373→
+   374→            entity.HasOne(e => e.Catalog)
+   375→                .WithMany(c => c.Items)
+   376→                .HasForeignKey(e => e.CatalogId)
+   377→                .OnDelete(DeleteBehavior.Cascade);
+   378→
+   379→            //entity.HasOne<CatalogCategory>()
+   380→            //    .WithMany(cat => cat.Items)
+   381→            //    .HasForeignKey(e => e.CategoryId)
+   382→            //    .OnDelete(DeleteBehavior.SetNull);
+   383→
+   384→            entity.HasOne(e => e.Bundle)
+   385→                .WithMany()
+   386→                .HasForeignKey(e => e.BundleId)
+   387→                .OnDelete(DeleteBehavior.Restrict);
+   388→
+   389→            entity.HasMany(e => e.Variants)
+   390→                .WithOne(v => v.CatalogItem)
+   391→                .HasForeignKey(v => v.CatalogItemId)
+   392→                .OnDelete(DeleteBehavior.Cascade);
+   393→        });
+   394→
+   395→        // CatalogItemVariant Configuration
+   396→        modelBuilder.Entity<CatalogItemVariant>(entity =>
+   397→        {
+   398→            entity.ToTable("CatalogItemVariants");
+   399→            entity.HasKey(e => e.Id);
+   400→            entity.HasIndex(e => e.CatalogItemId);
+   401→            entity.HasIndex(e => e.IsActive);
+   402→            entity.HasIndex(e => e.Sku);
+   403→
+   404→            entity.Property(e => e.Sku).HasMaxLength(50);
+   405→            entity.Property(e => e.Title).HasMaxLength(200).IsRequired();
+   406→            entity.Property(e => e.SizeUnit).HasMaxLength(10);
+   407→            entity.Property(e => e.UnitOfMeasure).HasMaxLength(10);
+   408→            entity.Property(e => e.Barcode).HasMaxLength(100);
+   409→            entity.Property(e => e.Price).HasPrecision(10, 2);
+   410→            entity.Property(e => e.Cost).HasPrecision(10, 2);
+   411→
+   412→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   413→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   414→
+   415→            // Relationship is configured from CatalogItem side
+   416→        });
+   417→
+   418→        // CatalogItemAttribute Configuration
+   419→        //modelBuilder.Entity<CatalogItemAttribute>(entity =>
+   420→        //{
+   421→        //    entity.ToTable("CatalogItemAttributes");
+   422→        //    entity.HasKey(e => e.Id);
+   423→        //    entity.HasIndex(e => e.Slug).IsUnique();
+   424→        //    entity.HasIndex(e => e.IsActive);
+   425→
+   426→        //    entity.Property(e => e.Name).HasMaxLength(100).IsRequired();
+   427→        //    entity.Property(e => e.Slug).HasMaxLength(100).IsRequired();
+   428→
+   429→        //    entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   430→        //    entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   431→        //});
+   432→
+   433→        //// CatalogItemAttributeValue Configuration
+   434→        //modelBuilder.Entity<CatalogItemAttributeValue>(entity =>
+   435→        //{
+   436→        //    entity.ToTable("CatalogItemAttributeValues");
+   437→        //    entity.HasKey(e => e.Id);
+   438→        //    entity.HasIndex(e => e.AttributeId);
+   439→        //    entity.HasIndex(e => e.IsActive);
+   440→
+   441→        //    entity.Property(e => e.Value).HasMaxLength(200).IsRequired();
+   442→
+   443→        //    entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   444→        //    entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   445→
+   446→        //    entity.HasOne(e => e.Attribute)
+   447→        //        .WithMany(a => a.AttributeValues)
+   448→        //        .HasForeignKey(e => e.AttributeId)
+   449→        //        .OnDelete(DeleteBehavior.Cascade);
+   450→        //});
+   451→
+   452→        //// CatalogItemVariantAttributeValue Configuration
+   453→        //modelBuilder.Entity<CatalogItemVariantAttributeValue>(entity =>
+   454→        //{
+   455→        //    entity.ToTable("CatalogItemVariantAttributeValues");
+   456→        //    entity.HasKey(e => e.Id);
+   457→        //    entity.HasIndex(e => new { e.VariantId, e.AttributeValueId }).IsUnique();
+   458→
+   459→        //    entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   460→        //    entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   461→
+   462→        //    entity.HasOne(e => e.Variant)
+   463→        //        .WithMany(v => v.VariantAttributeValues)
+   464→        //        .HasForeignKey(e => e.VariantId)
+   465→        //        .OnDelete(DeleteBehavior.Cascade);
+   466→
+   467→        //    entity.HasOne(e => e.AttributeValue)
+   468→        //        .WithMany(av => av.VariantAttributeValues)
+   469→        //        .HasForeignKey(e => e.AttributeValueId)
+   470→        //        .OnDelete(DeleteBehavior.Cascade);
+   471→        //});
+   472→
+   473→        // CatalogItemInventory Configuration
+   474→        modelBuilder.Entity<CatalogItemInventory>(entity =>
+   475→        {
+   476→            entity.ToTable("CatalogItemInventories");
+   477→            entity.HasKey(e => e.Id);
+   478→            entity.HasIndex(e => e.VariantId);
+   479→            entity.HasIndex(e => e.LocationId);
+   480→
+   481→            entity.Property(e => e.QtyAvailable).HasPrecision(10, 2);
+   482→            entity.Property(e => e.QtyReserved).HasPrecision(10, 2);
+   483→
+   484→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   485→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   486→
+   487→            entity.HasOne(e => e.Variant)
+   488→                .WithMany(v => v.Inventories)
+   489→                .HasForeignKey(e => e.VariantId)
+   490→                .OnDelete(DeleteBehavior.Cascade);
+   491→        });
+   492→
+   493→        // CatalogItemVariantPrice Configuration
+   494→        modelBuilder.Entity<CatalogItemVariantPrice>(entity =>
+   495→        {
+   496→            entity.ToTable("CatalogItemVariantPrices");
+   497→            entity.HasKey(e => e.Id);
+   498→            entity.HasIndex(e => e.VariantId);
+   499→            entity.HasIndex(e => e.PriceTypeId);
+   500→            entity.HasIndex(e => new { e.StartsAt, e.EndsAt });
+   501→
+   502→            entity.Property(e => e.Price).HasPrecision(10, 2);
+   503→
+   504→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   505→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   506→
+   507→            entity.HasOne(e => e.Variant)
+   508→                .WithMany(v => v.Prices)
+   509→                .HasForeignKey(e => e.VariantId)
+   510→                .OnDelete(DeleteBehavior.Cascade);
+   511→
+   512→            entity.HasOne(e => e.PriceType)
+   513→                .WithMany()
+   514→                .HasForeignKey(e => e.PriceTypeId)
+   515→                .OnDelete(DeleteBehavior.Restrict);
+   516→        });
+   517→
+   518→        // CatalogBundle Configuration
+   519→        modelBuilder.Entity<CatalogBundle>(entity =>
+   520→        {
+   521→            entity.ToTable("CatalogBundles");
+   522→            entity.HasKey(e => e.Id);
+   523→            entity.HasIndex(e => e.CatalogId);
+   524→            entity.HasIndex(e => e.Slug);
+   525→            entity.HasIndex(e => e.IsActive);
+   526→
+   527→            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+   528→            entity.Property(e => e.Slug).HasMaxLength(255);
+   529→            entity.Property(e => e.Description).HasMaxLength(2000);
+   530→            entity.Property(e => e.BasePrice).HasPrecision(12, 2);
+   531→            entity.Property(e => e.Images).HasMaxLength(5000);
+   532→
+   533→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   534→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   535→
+   536→            entity.HasOne(e => e.Catalog)
+   537→                .WithMany(c => c.Bundles)
+   538→                .HasForeignKey(e => e.CatalogId)
+   539→                .OnDelete(DeleteBehavior.Cascade);
+   540→
+   541→            entity.HasMany(e => e.Steps)
+   542→                .WithOne(s => s.Bundle)
+   543→                .HasForeignKey(s => s.BundleId)
+   544→                .OnDelete(DeleteBehavior.Cascade);
+   545→        });
+   546→
+   547→        // CatalogBundleStep Configuration
+   548→        modelBuilder.Entity<CatalogBundleStep>(entity =>
+   549→        {
+   550→            entity.ToTable("CatalogBundleSteps");
+   551→            entity.HasKey(e => e.Id);
+   552→            entity.HasIndex(e => e.BundleId);
+   553→            entity.HasIndex(e => new { e.BundleId, e.StepNumber });
+   554→
+   555→            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+   556→
+   557→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   558→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   559→
+   560→            entity.HasOne(e => e.Bundle)
+   561→                .WithMany(b => b.Steps)
+   562→                .HasForeignKey(e => e.BundleId)
+   563→                .OnDelete(DeleteBehavior.Cascade);
+   564→
+   565→            entity.HasMany(e => e.AllowedProducts)
+   566→                .WithOne(p => p.Step)
+   567→                .HasForeignKey(p => p.StepId)
+   568→                .OnDelete(DeleteBehavior.Cascade);
+   569→
+   570→            entity.HasMany(e => e.OptionGroups)
+   571→                .WithOne(g => g.Step)
+   572→                .HasForeignKey(g => g.StepId)
+   573→                .OnDelete(DeleteBehavior.Cascade);
+   574→        });
+   575→
+   576→        // CatalogBundleStepProduct Configuration
+   577→        modelBuilder.Entity<CatalogBundleStepProduct>(entity =>
+   578→        {
+   579→            entity.ToTable("CatalogBundleStepProducts");
+   580→            entity.HasKey(e => e.Id);
+   581→            entity.HasIndex(e => e.StepId);
+   582→            entity.HasIndex(e => e.ProductId);
+   583→            entity.HasIndex(e => new { e.StepId, e.ProductId }).IsUnique();
+   584→
+   585→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   586→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   587→
+   588→            entity.HasOne(e => e.Step)
+   589→                .WithMany(s => s.AllowedProducts)
+   590→                .HasForeignKey(e => e.StepId)
+   591→                .OnDelete(DeleteBehavior.Cascade);
+   592→
+   593→            entity.HasOne(e => e.Product)
+   594→                .WithMany()
+   595→                .HasForeignKey(e => e.ProductId)
+   596→                .OnDelete(DeleteBehavior.Cascade);
+   597→        });
+   598→
+   599→        // CatalogBundleOptionGroup Configuration
+   600→        modelBuilder.Entity<CatalogBundleOptionGroup>(entity =>
+   601→        {
+   602→            entity.ToTable("CatalogBundleOptionGroups");
+   603→            entity.HasKey(e => e.Id);
+   604→            entity.HasIndex(e => e.StepId);
+   605→
+   606→            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+   607→
+   608→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   609→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   610→
+   611→            entity.HasOne(e => e.Step)
+   612→                .WithMany(s => s.OptionGroups)
+   613→                .HasForeignKey(e => e.StepId)
+   614→                .OnDelete(DeleteBehavior.Cascade);
+   615→
+   616→            entity.HasMany(e => e.Options)
+   617→                .WithOne(o => o.OptionGroup)
+   618→                .HasForeignKey(o => o.OptionGroupId)
+   619→                .OnDelete(DeleteBehavior.Cascade);
+   620→        });
+   621→
+   622→        // CatalogBundleOption Configuration
+   623→        modelBuilder.Entity<CatalogBundleOption>(entity =>
+   624→        {
+   625→            entity.ToTable("CatalogBundleOptions");
+   626→            entity.HasKey(e => e.Id);
+   627→            entity.HasIndex(e => e.OptionGroupId);
+   628→
+   629→            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+   630→            entity.Property(e => e.PriceModifier).HasPrecision(12, 2).HasDefaultValue(0M);
+   631→
+   632→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   633→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   634→
+   635→            entity.HasOne(e => e.OptionGroup)
+   636→                .WithMany(g => g.Options)
+   637→                .HasForeignKey(e => e.OptionGroupId)
+   638→                .OnDelete(DeleteBehavior.Cascade);
+   639→        });
+   640→
+   641→        // CatalogBundleCategory Configuration
+   642→        modelBuilder.Entity<CatalogBundleCategory>(entity =>
+   643→        {
+   644→            entity.ToTable("CatalogBundleCategories");
+   645→            entity.HasKey(e => e.Id);
+   646→            entity.HasIndex(e => new { e.CatalogBundleId, e.CategoryId }).IsUnique();
+   647→            entity.HasIndex(e => e.IsActive);
+   648→
+   649→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   650→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   651→
+   652→            entity.HasOne(e => e.CatalogBundle)
+   653→                .WithMany(b => b.CatalogBundleCategories)
+   654→                .HasForeignKey(e => e.CatalogBundleId)
+   655→                .OnDelete(DeleteBehavior.Cascade);
+   656→
+   657→            entity.HasOne(e => e.Category)
+   658→                .WithMany()
+   659→                .HasForeignKey(e => e.CategoryId)
+   660→                .OnDelete(DeleteBehavior.Cascade);
+   661→        });
+   662→
+   663→        // RestaurantTable Configuration
+   664→        modelBuilder.Entity<RestaurantTable>(entity =>
+   665→        {
+   666→            entity.ToTable("RestaurantTables");
+   667→            entity.HasKey(e => e.Id);
+   668→            entity.HasIndex(e => e.ProfileId);
+   669→            entity.HasIndex(e => e.NFCTagCode).IsUnique();
+   670→            entity.HasIndex(e => e.IsActive);
+   671→
+   672→            entity.Property(e => e.TableName).HasMaxLength(100);
+   673→            entity.Property(e => e.NFCTagCode).HasMaxLength(50);
+   674→            entity.Property(e => e.Images).HasMaxLength(2000); // JSON array
+   675→
+   676→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   677→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   678→
+   679→            entity.HasOne(e => e.Profile)
+   680→                .WithMany(p => p.RestaurantTables)
+   681→                .HasForeignKey(e => e.ProfileId)
+   682→                .OnDelete(DeleteBehavior.Cascade);
+   683→
+   684→            entity.HasOne(e => e.TableCategory)
+   685→                .WithMany(c => c.RestaurantTables)
+   686→                .HasForeignKey(e => e.TableCategoryId)
+   687→                .OnDelete(DeleteBehavior.Restrict);
+   688→
+   689→            entity.HasOne(e => e.NFCTagType)
+   690→                .WithMany(t => t.RestaurantTables)
+   691→                .HasForeignKey(e => e.NFCTagTypeId)
+   692→                .OnDelete(DeleteBehavior.Restrict);
+   693→
+   694→            entity.HasOne(e => e.NFCTagStatus)
+   695→                .WithMany(s => s.RestaurantTables)
+   696→                .HasForeignKey(e => e.NFCTagStatusId)
+   697→                .OnDelete(DeleteBehavior.Restrict);
+   698→
+   699→            // Ensure unique table numbers per profile
+   700→            entity.HasIndex(e => new { e.ProfileId, e.TableNumber }).IsUnique();
+   701→        });
+   702→
+   703→        // NFCScan Configuration
+   704→        modelBuilder.Entity<NFCScan>(entity =>
+   705→        {
+   706→            entity.ToTable("NFCScans");
+   707→            entity.HasKey(e => e.Id);
+   708→            entity.HasIndex(e => new { e.ProfileId, e.ScannedAt });
+   709→            entity.HasIndex(e => new { e.TableId, e.ScannedAt });
+   710→            entity.HasIndex(e => e.NFCTagCode);
+   711→            entity.HasIndex(e => e.ScannedAt);
+   712→
+   713→            entity.Property(e => e.NFCTagCode).HasMaxLength(50).IsRequired();
+   714→            entity.Property(e => e.IPAddress).HasMaxLength(45);
+   715→            entity.Property(e => e.Country).HasMaxLength(2);
+   716→            entity.Property(e => e.City).HasMaxLength(100);
+   717→            entity.Property(e => e.SessionId).HasMaxLength(100);
+   718→
+   719→            entity.Property(e => e.ScannedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   720→
+   721→            entity.HasOne(e => e.Profile)
+   722→                .WithMany()
+   723→                .HasForeignKey(e => e.ProfileId)
+   724→                .OnDelete(DeleteBehavior.Cascade);
+   725→
+   726→            entity.HasOne(e => e.Table)
+   727→                .WithMany(t => t.NFCScans)
+   728→                .HasForeignKey(e => e.TableId)
+   729→                .OnDelete(DeleteBehavior.SetNull);
+   730→
+   731→            entity.HasOne(e => e.DeviceType)
+   732→                .WithMany(d => d.NFCScans)
+   733→                .HasForeignKey(e => e.DeviceTypeId)
+   734→                .OnDelete(DeleteBehavior.Restrict);
+   735→        });
+   736→
+   737→        // CatalogItemExtra Configuration
+   738→        modelBuilder.Entity<CatalogItemExtra>(entity =>
+   739→        {
+   740→            entity.ToTable("CatalogItemExtras");
+   741→            entity.HasKey(e => e.Id);
+   742→            entity.HasIndex(e => e.UserId);
+   743→            entity.HasIndex(e => e.CatalogId);
+   744→            entity.HasIndex(e => e.IsActive);
+   745→
+   746→            entity.Property(e => e.Name).HasMaxLength(200).IsRequired();
+   747→            entity.Property(e => e.Description).HasMaxLength(1000);
+   748→            entity.Property(e => e.Code).HasMaxLength(100);
+   749→            entity.Property(e => e.ImageUrl).HasMaxLength(500);
+   750→            entity.Property(e => e.BasePrice).HasPrecision(10, 2);
+   751→
+   752→            entity.HasOne(e => e.User)
+   753→                .WithMany()
+   754→                .HasForeignKey(e => e.UserId)
+   755→                .OnDelete(DeleteBehavior.Cascade);
+   756→
+   757→            entity.HasOne(e => e.Catalog)
+   758→                .WithMany()
+   759→                .HasForeignKey(e => e.CatalogId)
+   760→                .OnDelete(DeleteBehavior.Cascade);
+   761→        });
+   762→
+   763→        // CatalogItemExtraGroup Configuration
+   764→        modelBuilder.Entity<CatalogItemExtraGroup>(entity =>
+   765→        {
+   766→            entity.ToTable("CatalogItemExtraGroups");
+   767→            entity.HasKey(e => e.Id);
+   768→            entity.HasIndex(e => e.UserId);
+   769→            entity.HasIndex(e => e.CatalogId);
+   770→            entity.HasIndex(e => e.IsActive);
+   771→
+   772→            entity.Property(e => e.Name).HasMaxLength(200).IsRequired();
+   773→            entity.Property(e => e.Description).HasMaxLength(1000);
+   774→
+   775→            entity.HasOne(e => e.User)
+   776→                .WithMany()
+   777→                .HasForeignKey(e => e.UserId)
+   778→                .OnDelete(DeleteBehavior.Cascade);
+   779→
+   780→            entity.HasOne(e => e.Catalog)
+   781→                .WithMany()
+   782→                .HasForeignKey(e => e.CatalogId)
+   783→                .OnDelete(DeleteBehavior.Cascade);
+   784→        });
+   785→
+   786→        // CatalogItemExtraGroupItem Configuration
+   787→        modelBuilder.Entity<CatalogItemExtraGroupItem>(entity =>
+   788→        {
+   789→            entity.ToTable("CatalogItemExtraGroupItems");
+   790→            entity.HasKey(e => e.Id);
+   791→            entity.HasIndex(e => new { e.ExtraGroupId, e.ExtraId }).IsUnique();
+   792→
+   793→            entity.Property(e => e.PriceOverride).HasPrecision(10, 2);
+   794→
+   795→            entity.HasOne(e => e.ExtraGroup)
+   796→                .WithMany(g => g.GroupItems)
+   797→                .HasForeignKey(e => e.ExtraGroupId)
+   798→                .OnDelete(DeleteBehavior.Cascade);
+   799→
+   800→            entity.HasOne(e => e.Extra)
+   801→                .WithMany(ex => ex.ExtraGroupItems)
+   802→                .HasForeignKey(e => e.ExtraId)
+   803→                .OnDelete(DeleteBehavior.Restrict);
+   804→        });
+   805→
+   806→        // CatalogItemExtraGroupLink Configuration
+   807→        modelBuilder.Entity<CatalogItemExtraGroupLink>(entity =>
+   808→        {
+   809→            entity.ToTable("CatalogItemExtraGroupLinks");
+   810→            entity.HasKey(e => e.Id);
+   811→            entity.HasIndex(e => e.CatalogItemId);
+   812→            entity.HasIndex(e => e.ExtraGroupId);
+   813→            entity.HasIndex(e => e.VariantId);
+   814→
+   815→            entity.HasOne(e => e.CatalogItem)
+   816→                .WithMany(c => c.ExtraGroupLinks)
+   817→                .HasForeignKey(e => e.CatalogItemId)
+   818→                .OnDelete(DeleteBehavior.Cascade);
+   819→
+   820→            entity.HasOne(e => e.ExtraGroup)
+   821→                .WithMany(g => g.ItemLinks)
+   822→                .HasForeignKey(e => e.ExtraGroupId)
+   823→                .OnDelete(DeleteBehavior.Cascade);
+   824→
+   825→            entity.HasOne(e => e.Variant)
+   826→                .WithMany()
+   827→                .HasForeignKey(e => e.VariantId)
+   828→                .OnDelete(DeleteBehavior.SetNull);
+   829→        });
+   830→
+   831→        // CatalogItemOption Configuration
+   832→        modelBuilder.Entity<CatalogItemOption>(entity =>
+   833→        {
+   834→            entity.ToTable("CatalogItemOptions");
+   835→            entity.HasKey(e => e.Id);
+   836→            entity.HasIndex(e => e.UserId);
+   837→            entity.HasIndex(e => e.CatalogId);
+   838→            entity.HasIndex(e => e.IsActive);
+   839→
+   840→            entity.Property(e => e.Name).HasMaxLength(200).IsRequired();
+   841→            entity.Property(e => e.Description).HasMaxLength(1000);
+   842→            entity.Property(e => e.ImageUrl).HasMaxLength(500);
+   843→            entity.Property(e => e.PriceModifier).HasPrecision(10, 2);
+   844→
+   845→            entity.HasOne(e => e.User)
+   846→                .WithMany()
+   847→                .HasForeignKey(e => e.UserId)
+   848→                .OnDelete(DeleteBehavior.Cascade);
+   849→
+   850→            entity.HasOne(e => e.Catalog)
+   851→                .WithMany()
+   852→                .HasForeignKey(e => e.CatalogId)
+   853→                .OnDelete(DeleteBehavior.Cascade);
+   854→        });
+   855→
+   856→        // CatalogItemOptionGroup Configuration
+   857→        modelBuilder.Entity<CatalogItemOptionGroup>(entity =>
+   858→        {
+   859→            entity.ToTable("CatalogItemOptionGroups");
+   860→            entity.HasKey(e => e.Id);
+   861→            entity.HasIndex(e => e.UserId);
+   862→            entity.HasIndex(e => e.CatalogId);
+   863→            entity.HasIndex(e => e.IsActive);
+   864→
+   865→            entity.Property(e => e.Name).HasMaxLength(200).IsRequired();
+   866→            entity.Property(e => e.Description).HasMaxLength(1000);
+   867→
+   868→            entity.HasOne(e => e.User)
+   869→                .WithMany()
+   870→                .HasForeignKey(e => e.UserId)
+   871→                .OnDelete(DeleteBehavior.Cascade);
+   872→
+   873→            entity.HasOne(e => e.Catalog)
+   874→                .WithMany()
+   875→                .HasForeignKey(e => e.CatalogId)
+   876→                .OnDelete(DeleteBehavior.Cascade);
+   877→        });
+   878→
+   879→        // CatalogItemOptionGroupItem Configuration
+   880→        modelBuilder.Entity<CatalogItemOptionGroupItem>(entity =>
+   881→        {
+   882→            entity.ToTable("CatalogItemOptionGroupItems");
+   883→            entity.HasKey(e => e.Id);
+   884→            entity.HasIndex(e => new { e.OptionGroupId, e.OptionId }).IsUnique();
+   885→
+   886→            entity.HasOne(e => e.OptionGroup)
+   887→                .WithMany(g => g.GroupItems)
+   888→                .HasForeignKey(e => e.OptionGroupId)
+   889→                .OnDelete(DeleteBehavior.Cascade);
+   890→
+   891→            entity.HasOne(e => e.Option)
+   892→                .WithMany(o => o.OptionGroupItems)
+   893→                .HasForeignKey(e => e.OptionId)
+   894→                .OnDelete(DeleteBehavior.Restrict);
+   895→        });
+   896→
+   897→        // CatalogItemOptionGroupLink Configuration
+   898→        modelBuilder.Entity<CatalogItemOptionGroupLink>(entity =>
+   899→        {
+   900→            entity.ToTable("CatalogItemOptionGroupLinks");
+   901→            entity.HasKey(e => e.Id);
+   902→            entity.HasIndex(e => e.CatalogItemId);
+   903→            entity.HasIndex(e => e.OptionGroupId);
+   904→            entity.HasIndex(e => e.VariantId);
+   905→
+   906→            entity.HasOne(e => e.CatalogItem)
+   907→                .WithMany(c => c.OptionGroupLinks)
+   908→                .HasForeignKey(e => e.CatalogItemId)
+   909→                .OnDelete(DeleteBehavior.Cascade);
+   910→
+   911→            entity.HasOne(e => e.OptionGroup)
+   912→                .WithMany(g => g.ItemLinks)
+   913→                .HasForeignKey(e => e.OptionGroupId)
+   914→                .OnDelete(DeleteBehavior.Cascade);
+   915→
+   916→            entity.HasOne(e => e.Variant)
+   917→                .WithMany()
+   918→                .HasForeignKey(e => e.VariantId)
+   919→                .OnDelete(DeleteBehavior.SetNull);
+   920→        });
+   921→
+   922→        // Lookup Table Configurations
+   923→        ConfigureLookupTable<ProductLineLookup>(modelBuilder, "ProductLines");
+   924→        ConfigureLookupTable<SubscriptionStatusLookup>(modelBuilder, "SubscriptionStatuses");
+   925→        ConfigureLookupTable<BillingCycleLookup>(modelBuilder, "BillingCycles");
+   926→        ConfigureLookupTable<TableCategoryLookup>(modelBuilder, "TableCategories");
+   927→        ConfigureLookupTable<NFCTagTypeLookup>(modelBuilder, "NFCTagTypes");
+   928→        ConfigureLookupTable<NFCTagStatusLookup>(modelBuilder, "NFCTagStatuses");
+   929→        ConfigureLookupTable<DeviceTypeLookup>(modelBuilder, "DeviceTypes");
+   930→
+   931→        // CatalogItemPriceType lookup table
+   932→        modelBuilder.Entity<CatalogItemPriceType>(entity =>
+   933→        {
+   934→            entity.ToTable("CatalogItemPriceTypes");
+   935→            entity.HasKey(e => e.Id);
+   936→            entity.HasIndex(e => e.Slug).IsUnique();
+   937→            entity.Property(e => e.Name).HasMaxLength(50).IsRequired();
+   938→            entity.Property(e => e.Slug).HasMaxLength(50).IsRequired();
+   939→        });
+   940→
+   941→        // CatalogItemCategory Configuration
+   942→        modelBuilder.Entity<CatalogItemCategory>(entity =>
+   943→        {
+   944→            entity.ToTable("CatalogItemCategory");
+   945→            entity.HasKey(e => e.Id);
+   946→            entity.HasIndex(e => new { e.CatalogItemId, e.CategoryId }).IsUnique();
+   947→            entity.HasIndex(e => e.IsActive);
+   948→
+   949→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   950→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   951→            
+   952→            entity.Property(e => e.CatalogItemId).HasColumnName("CatalogItemId");
+   953→            entity.Property(e => e.CategoryId).HasColumnName("CategoryId");
+   954→
+   955→            entity.HasOne(e => e.CatalogItem)
+   956→                .WithMany(c => c.CatalogItemCategories)
+   957→                .HasForeignKey(e => e.CatalogItemId)
+   958→                .OnDelete(DeleteBehavior.Cascade);
+   959→
+   960→            entity.HasOne(e => e.Category)
+   961→                .WithMany(c => c.CatalogItemCategories)
+   962→                .HasForeignKey(e => e.CategoryId)
+   963→                .OnDelete(DeleteBehavior.Cascade);
+   964→        });
+   965→
+   966→        // CatalogItemInstance Configuration (Phase 2 - Live Sync)
+   967→        modelBuilder.Entity<CatalogItemInstance>(entity =>
+   968→        {
+   969→            entity.ToTable("CatalogItemInstances");
+   970→            entity.HasKey(e => e.Id);
+   971→            entity.HasIndex(e => e.CatalogId);
+   972→            entity.HasIndex(e => e.LibraryItemId);
+   973→            entity.HasIndex(e => new { e.CatalogId, e.LibraryItemId });
+   974→            entity.HasIndex(e => e.IsActive);
+   975→            entity.HasIndex(e => e.IsVisible);
+   976→
+   977→            entity.Property(e => e.PriceOverride).HasPrecision(10, 2);
+   978→            entity.Property(e => e.NameOverride).HasMaxLength(255);
+   979→            entity.Property(e => e.DescriptionOverride).HasMaxLength(2000);
+   980→
+   981→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+   982→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+   983→
+   984→            entity.HasOne(e => e.Catalog)
+   985→                .WithMany()
+   986→                .HasForeignKey(e => e.CatalogId)
+   987→                .OnDelete(DeleteBehavior.Cascade);
+   988→
+   989→            entity.HasOne(e => e.LibraryItem)
+   990→                .WithMany()
+   991→                .HasForeignKey(e => e.LibraryItemId)
+   992→                .OnDelete(DeleteBehavior.Restrict);
+   993→        });
+   994→
+   995→        // CatalogItemInstanceCategory Configuration (Phase 2 - Category mapping for instances)
+   996→        modelBuilder.Entity<CatalogItemInstanceCategory>(entity =>
+   997→        {
+   998→            entity.ToTable("CatalogItemInstanceCategories");
+   999→            entity.HasKey(e => e.Id);
+  1000→            entity.HasIndex(e => new { e.InstanceId, e.CategoryId }).IsUnique();
+  1001→            entity.HasIndex(e => e.IsActive);
+  1002→
+  1003→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+  1004→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+  1005→
+  1006→            entity.HasOne(e => e.Instance)
+  1007→                .WithMany(i => i.Categories)
+  1008→                .HasForeignKey(e => e.InstanceId)
+  1009→                .OnDelete(DeleteBehavior.Cascade);
+  1010→
+  1011→            entity.HasOne(e => e.Category)
+  1012→                .WithMany()
+  1013→                .HasForeignKey(e => e.CategoryId)
+  1014→                .OnDelete(DeleteBehavior.Cascade);
+  1015→        });
+  1016→
+  1017→        // Bundle Configuration
+  1018→        modelBuilder.Entity<Bundle>(entity =>
+  1019→        {
+  1020→            entity.ToTable("Bundles");
+  1021→            entity.HasKey(e => e.Id);
+  1022→            entity.HasIndex(e => e.CatalogId);
+  1023→            entity.HasIndex(e => e.UserId);
+  1024→            entity.HasIndex(e => e.IsActive);
+  1025→
+  1026→            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+  1027→            entity.Property(e => e.Description).HasMaxLength(2000);
+  1028→            entity.Property(e => e.BasePrice).HasPrecision(12, 2);
+  1029→            entity.Property(e => e.Images).HasMaxLength(5000);
+  1030→
+  1031→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+  1032→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+  1033→
+  1034→            entity.HasOne(e => e.Catalog)
+  1035→                .WithMany()
+  1036→                .HasForeignKey(e => e.CatalogId)
+  1037→                .OnDelete(DeleteBehavior.Cascade);
+  1038→
+  1039→            entity.HasOne(e => e.User)
+  1040→                .WithMany()
+  1041→                .HasForeignKey(e => e.UserId)
+  1042→                .OnDelete(DeleteBehavior.Cascade);
+  1043→
+  1044→            entity.HasMany(e => e.Sections)
+  1045→                .WithOne(s => s.Bundle)
+  1046→                .HasForeignKey(s => s.BundleId)
+  1047→                .OnDelete(DeleteBehavior.Cascade);
+  1048→        });
+  1049→
+  1050→        // BundleSection Configuration
+  1051→        modelBuilder.Entity<BundleSection>(entity =>
+  1052→        {
+  1053→            entity.ToTable("BundleSections");
+  1054→            entity.HasKey(e => e.Id);
+  1055→            entity.HasIndex(e => e.BundleId);
+  1056→            entity.HasIndex(e => e.IsActive);
+  1057→
+  1058→            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+  1059→            entity.Property(e => e.Description).HasMaxLength(2000);
+  1060→
+  1061→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+  1062→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+  1063→
+  1064→            entity.HasOne(e => e.Bundle)
+  1065→                .WithMany(b => b.Sections)
+  1066→                .HasForeignKey(e => e.BundleId)
+  1067→                .OnDelete(DeleteBehavior.Cascade);
+  1068→
+  1069→            entity.HasMany(e => e.Items)
+  1070→                .WithOne(i => i.Section)
+  1071→                .HasForeignKey(i => i.SectionId)
+  1072→                .OnDelete(DeleteBehavior.Cascade);
+  1073→        });
+  1074→
+  1075→        // BundleSectionItem Configuration
+  1076→        modelBuilder.Entity<BundleSectionItem>(entity =>
+  1077→        {
+  1078→            entity.ToTable("BundleSectionItems");
+  1079→            entity.HasKey(e => e.Id);
+  1080→            entity.HasIndex(e => e.SectionId);
+  1081→            entity.HasIndex(e => e.CatalogItemId);
+  1082→            entity.HasIndex(e => e.IsActive);
+  1083→
+  1084→            entity.Property(e => e.Quantity).HasPrecision(10, 2);
+  1085→            entity.Property(e => e.PriceAdjustment).HasPrecision(10, 2);
+  1086→
+  1087→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+  1088→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+  1089→
+  1090→            entity.HasOne(e => e.Section)
+  1091→                .WithMany(s => s.Items)
+  1092→                .HasForeignKey(e => e.SectionId)
+  1093→                .OnDelete(DeleteBehavior.Cascade);
+  1094→
+  1095→            entity.HasOne(e => e.CatalogItem)
+  1096→                .WithMany()
+  1097→                .HasForeignKey(e => e.CatalogItemId)
+  1098→                .OnDelete(DeleteBehavior.Restrict);
+  1099→        });
+  1100→
+  1101→        // BundleCategory Configuration
+  1102→        modelBuilder.Entity<BundleCategory>(entity =>
+  1103→        {
+  1104→            entity.ToTable("BundleCategories");
+  1105→            entity.HasKey(e => e.Id);
+  1106→            entity.HasIndex(e => new { e.BundleId, e.CategoryId }).IsUnique();
+  1107→            entity.HasIndex(e => e.IsActive);
+  1108→
+  1109→            entity.Property(e => e.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
+  1110→            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+  1111→
+  1112→            entity.HasOne(e => e.Bundle)
+  1113→                .WithMany(b => b.Categories)
+  1114→                .HasForeignKey(e => e.BundleId)
+  1115→                .OnDelete(DeleteBehavior.Cascade);
+  1116→
+  1117→            entity.HasOne(e => e.Category)
+  1118→                .WithMany()
+  1119→                .HasForeignKey(e => e.CategoryId)
+  1120→                .OnDelete(DeleteBehavior.Cascade);
+  1121→        });
+  1122→    }
+  1123→
+  1124→    private void ConfigureLookupTable<T>(ModelBuilder modelBuilder, string tableName) where T : EnumLookup
+  1125→    {
+  1126→        modelBuilder.Entity<T>(entity =>
+  1127→        {
+  1128→            entity.ToTable(tableName);
+  1129→            entity.HasKey(e => e.Id);
+  1130→            entity.HasIndex(e => e.Name).IsUnique();
+  1131→            entity.Property(e => e.Name).HasMaxLength(50).IsRequired();
+  1132→            entity.Property(e => e.Description).HasMaxLength(500);
+  1133→        });
+  1134→    }
+  1135→}
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

@@ -1,0 +1,251 @@
+     1→using BizBio.API.Filters;
+     2→using BizBio.API.Telemetry;
+     3→using BizBio.Core.Interfaces;
+     4→using BizBio.Infrastructure.Data;
+     5→using BizBio.Infrastructure.Repositories;
+     6→using BizBio.Infrastructure.Services;
+     7→using Microsoft.ApplicationInsights;
+     8→using Microsoft.ApplicationInsights.Extensibility;
+     9→using Microsoft.AspNetCore.Authentication.JwtBearer;
+    10→using Microsoft.AspNetCore.HttpOverrides;
+    11→using Microsoft.EntityFrameworkCore;
+    12→using Microsoft.IdentityModel.Tokens;
+    13→using Microsoft.OpenApi.Models;
+    14→using System.Text;
+    15→
+    16→var builder = WebApplication.CreateBuilder(args);
+    17→
+    18→// Configure Application Insights Logging Integration
+    19→builder.Logging.AddApplicationInsights(
+    20→    configureTelemetryConfiguration: (config) =>
+    21→        config.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"],
+    22→    configureApplicationInsightsLoggerOptions: (options) => { }
+    23→);
+    24→
+    25→// Add services to the container
+    26→builder.Services.AddControllers(options =>
+    27→{
+    28→    options.Filters.Add<ApplicationInsightsExceptionFilter>();
+    29→});
+    30→
+    31→// Database Configuration
+    32→// AutoDetect works with both MySQL and MariaDB
+    33→var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    34→builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    35→    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
+    36→        mysqlOptions => mysqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+    37→
+    38→// JWT Authentication Configuration
+    39→var jwtSettings = builder.Configuration.GetSection("JWT");
+    40→var secretKey = jwtSettings["Secret"] ?? throw new InvalidOperationException("JWT Secret not configured");
+    41→
+    42→builder.Services.AddAuthentication(options =>
+    43→{
+    44→    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    45→    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    46→})
+    47→.AddJwtBearer(options =>
+    48→{
+    49→    options.TokenValidationParameters = new TokenValidationParameters
+    50→    {
+    51→        ValidateIssuer = true,
+    52→        ValidateAudience = true,
+    53→        ValidateLifetime = true,
+    54→        ValidateIssuerSigningKey = true,
+    55→        ValidIssuer = jwtSettings["Issuer"],
+    56→        ValidAudience = jwtSettings["Audience"],
+    57→        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+    58→    };
+    59→});
+    60→
+    61→// CORS Configuration
+    62→builder.Services.AddCors(options =>
+    63→{
+    64→    options.AddPolicy("AllowFrontend", policy =>
+    65→    {
+    66→        policy
+    67→        .WithOrigins(
+    68→            "http://localhost:3000",
+    69→            "http://154.66.198.20:3000",
+    70→            "http://127.0.0.1:3000",
+    71→            "http://localhost:5173",
+    72→            "http://localhost:5000",
+    73→            "https://localhost:5443",
+    74→            "https://bizbio.co.za",
+    75→            "https://www.bizbio.co.za",
+    76→            "https://api.bizbio.co.za",
+    77→            "https://ui.bizbio.co.za"
+    78→        )
+    79→        .AllowAnyMethod()
+    80→        .AllowAnyHeader()
+    81→        .AllowCredentials();
+    82→    });
+    83→});
+    84→
+    85→// Repository Registration
+    86→builder.Services.AddScoped<IUserRepository, UserRepository>();
+    87→builder.Services.AddScoped<ISubscriptionTierRepository, SubscriptionTierRepository>();
+    88→builder.Services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
+    89→builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+    90→builder.Services.AddScoped<ICatalogRepository, CatalogRepository>();
+    91→builder.Services.AddScoped<ICatalogBundleRepository, CatalogBundleRepository>();
+    92→builder.Services.AddScoped<IRestaurantTableRepository, RestaurantTableRepository>();
+    93→
+    94→// Service Registration
+    95→builder.Services.AddScoped<IAuthService, AuthService>();
+    96→builder.Services.AddScoped<IEmailService, EmailService>();
+    97→builder.Services.AddScoped<IPaymentService, PayFastService>();
+    98→builder.Services.AddScoped<IFileUploadService, FileUploadService>();
+    99→
+   100→// Session Configuration (for NFC scan tracking)
+   101→builder.Services.AddMemoryCache();
+   102→builder.Services.AddSingleton<ICacheService, CacheService>();
+   103→builder.Services.AddDistributedMemoryCache();
+   104→builder.Services.AddSession(options =>
+   105→{
+   106→    options.IdleTimeout = TimeSpan.FromHours(2);
+   107→    options.Cookie.HttpOnly = true;
+   108→    options.Cookie.IsEssential = true;
+   109→});
+   110→
+   111→// Swagger/OpenAPI Configuration
+   112→builder.Services.AddEndpointsApiExplorer();
+   113→builder.Services.AddSwaggerGen(options =>
+   114→{
+   115→    options.SwaggerDoc("v1", new OpenApiInfo
+   116→    {
+   117→        Title = "BizBio API",
+   118→        Version = "v1",
+   119→        Description = "BizBio Platform API - Digital Business Cards, Menus & Catalogs",
+   120→        Contact = new OpenApiContact
+   121→        {
+   122→            Name = "BizBio Support",
+   123→            Email = "support@bizbio.co.za"
+   124→        }
+   125→        
+   126→    });
+   127→
+   128→    //options.AddServer(new OpenApiServer
+   129→    //{
+   130→    //    Url = "https://api.bizbio.co.za"
+   131→    //});
+   132→
+   133→    // JWT Bearer Authentication in Swagger
+   134→    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+   135→    {
+   136→        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token.",
+   137→        Name = "Authorization",
+   138→        In = ParameterLocation.Header,
+   139→        Type = SecuritySchemeType.ApiKey,
+   140→        Scheme = "Bearer"
+   141→    });
+   142→
+   143→    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+   144→    {
+   145→        {
+   146→            new OpenApiSecurityScheme
+   147→            {
+   148→                Reference = new OpenApiReference
+   149→                {
+   150→                    Type = ReferenceType.SecurityScheme,
+   151→                    Id = "Bearer"
+   152→                }
+   153→            },
+   154→            Array.Empty<string>()
+   155→        }
+   156→    });
+   157→});
+   158→
+   159→// Configure Application Insights Telemetry
+   160→builder.Services.AddApplicationInsightsTelemetry(options =>
+   161→{
+   162→    options.ConnectionString = builder.Configuration["ApplicationInsights:ConnectionString"];
+   163→    options.EnableAdaptiveSampling = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableAdaptiveSampling", true);
+   164→    options.EnablePerformanceCounterCollectionModule = builder.Configuration.GetValue<bool>("ApplicationInsights:EnablePerformanceCounterCollectionModule", true);
+   165→    options.EnableDependencyTrackingTelemetryModule = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableDependencyTrackingTelemetryModule", true);
+   166→    options.EnableEventCounterCollectionModule = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableEventCounterCollectionModule", true);
+   167→    options.EnableQuickPulseMetricStream = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableQuickPulseMetricStream", true);
+   168→    options.EnableHeartbeat = builder.Configuration.GetValue<bool>("ApplicationInsights:EnableHeartbeat", true);
+   169→    options.AddAutoCollectedMetricExtractor = builder.Configuration.GetValue<bool>("ApplicationInsights:AddAutoCollectedMetricExtractor", true);
+   170→});
+   171→
+   172→// Register custom telemetry initializer
+   173→builder.Services.AddSingleton<ITelemetryInitializer, BizBioTelemetryInitializer>();
+   174→
+   175→// Ensure TelemetryClient is registered (AddApplicationInsightsTelemetry should do this, but make it explicit)
+   176→builder.Services.AddSingleton<TelemetryClient>();
+   177→
+   178→var app = builder.Build();
+   179→
+   180→// Configure the HTTP request pipeline
+   181→//if (app.Environment.IsDevelopment())
+   182→//{
+   183→    app.UseSwagger();
+   184→    app.UseSwaggerUI(options =>
+   185→    {
+   186→        options.SwaggerEndpoint("/swagger/v1/swagger.json", "BizBio API v1");
+   187→        options.RoutePrefix = string.Empty; // Serve Swagger UI at root
+   188→    });
+   189→//}
+   190→
+   191→app.UseForwardedHeaders(new ForwardedHeadersOptions
+   192→{
+   193→    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+   194→});
+   195→
+   196→app.UseCors("AllowFrontend");
+   197→
+   198→//app.UseHttpsRedirection();
+   199→
+   200→// Serve static files from the uploads directory
+   201→var uploadPath = builder.Configuration["FileUpload:Path"] ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+   202→app.UseStaticFiles(new StaticFileOptions
+   203→{
+   204→    FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(uploadPath),
+   205→    RequestPath = "/uploads"
+   206→});
+   207→
+   208→app.UseAuthentication();
+   209→app.UseAuthorization();
+   210→
+   211→app.UseSession();
+   212→
+   213→app.MapControllers();
+   214→
+   215→// Health check endpoint
+   216→app.MapGet("/health", () => Results.Ok(new
+   217→{
+   218→    status = "healthy",
+   219→    timestamp = DateTime.UtcNow,
+   220→    version = "1.0.0"
+   221→}));
+   222→
+   223→// Seed the database
+   224→using (var scope = app.Services.CreateScope())
+   225→{
+   226→    var services = scope.ServiceProvider;
+   227→    try
+   228→    {
+   229→        var context = services.GetRequiredService<ApplicationDbContext>();
+   230→
+   231→        // Apply any pending migrations
+   232→        await context.Database.MigrateAsync();
+   233→
+   234→        // Seed the database
+   235→        await DbSeeder.SeedAsync(context);
+   236→
+   237→        Console.WriteLine("Database seeded successfully");
+   238→    }
+   239→    catch (Exception ex)
+   240→    {
+   241→        var logger = services.GetRequiredService<ILogger<Program>>();
+   242→        logger.LogError(ex, "An error occurred while seeding the database");
+   243→    }
+   244→}
+   245→
+   246→app.Run();
+   247→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

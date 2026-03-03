@@ -1,0 +1,8 @@
+Found 7 files
+pages\menu\library\extra-groups.vue
+pages\menu\library\option-groups.vue
+components\ItemDetailModal.vue
+components\ItemFormModal.vue
+pages\dashboard\bundles\create.vue
+components\MenuSidebar.vue
+components\BundleConfigModal.vue

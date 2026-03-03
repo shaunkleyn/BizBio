@@ -1,0 +1,33 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\menu\[slug].vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   349→}
+   350→
+   351→let scrollListener: (() => void) | null = null
+   352→
+   353→function setupScrollSpy() {
+   354→  scrollListener = () => {
+   355→    const categoryElements = categories.value.map(cat => ({
+   356→      id: cat.id,
+   357→      element: document.getElementById(`category-${cat.id}`)
+   358→    }))
+   359→
+   360→    // Account for sticky category tabs when detecting active section
+   361→    const headerOffset = 120 // Category tabs + category title
+   362→    const scrollPosition = window.scrollY + headerOffset
+   363→
+   364→    for (let i = categoryElements.length - 1; i >= 0; i--) {
+   365→      const cat = categoryElements[i]
+   366→      if (cat.element && cat.element.offsetTop <= scrollPosition) {
+   367→        if (activeCategory.value !== cat.id) {
+   368→          activeCategory.value = cat.id
+   369→        }
+   370→        break
+   371→      }
+   372→    }
+   373→  }
+   374→
+   375→  window.addEventListener('scroll', scrollListener, { passive: true })
+   376→}
+   377→
+   378→function cleanupScrollSpy() {
+   379→  if (scrollListener) {
+   380→    window.removeEventListener('scroll', scrollListener)

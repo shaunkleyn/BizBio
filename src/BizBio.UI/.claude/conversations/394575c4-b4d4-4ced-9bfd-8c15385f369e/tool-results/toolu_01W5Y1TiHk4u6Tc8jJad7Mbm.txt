@@ -1,0 +1,545 @@
+     1→/**
+     2→ * Frontend Cart Implementation Example
+     3→ * Shows how to use MRD-style menu API for cart management
+     4→ */
+     5→
+     6→// ==================== TYPE DEFINITIONS ====================
+     7→
+     8→interface Menu {
+     9→  id: number
+    10→  name: string
+    11→  sections: MenuSection[]
+    12→  options: OptionGroup[]  // ← Global options array
+    13→  extras: ExtraGroup[]    // ← Global extras array
+    14→}
+    15→
+    16→interface MenuSection {
+    17→  id: number
+    18→  name: string
+    19→  items: MenuItem[]
+    20→}
+    21→
+    22→interface MenuItem {
+    23→  id: number
+    24→  name: string
+    25→  description?: string
+    26→  variants: Variant[]
+    27→  media?: Media
+    28→}
+    29→
+    30→interface Variant {
+    31→  id: number
+    32→  name: string
+    33→  price: number
+    34→  oldPrice?: number
+    35→  default: boolean
+    36→  optionIndices: number[]  // ← References menu.options[index]
+    37→  extraIndices: number[]   // ← References menu.extras[index]
+    38→}
+    39→
+    40→interface OptionGroup {
+    41→  id: number
+    42→  name: string
+    43→  label: string
+    44→  minimumSelect: number  // Usually >= 1 (required)
+    45→  maximumSelect: number
+    46→  items: ModifierItem[]
+    47→}
+    48→
+    49→interface ExtraGroup {
+    50→  id: number
+    51→  name: string
+    52→  label: string
+    53→  minimumSelect: number  // Usually 0 (optional)
+    54→  maximumSelect: number
+    55→  items: ModifierItem[]
+    56→}
+    57→
+    58→interface ModifierItem {
+    59→  id: number
+    60→  name: string
+    61→  price: number
+    62→  default: boolean
+    63→}
+    64→
+    65→interface Media {
+    66→  baseUrl: string
+    67→  rawImage: string
+    68→}
+    69→
+    70→// ==================== CART TYPES ====================
+    71→
+    72→interface CartItem {
+    73→  menuItemId: number
+    74→  menuItemName: string
+    75→  variantId: number
+    76→  variantName: string
+    77→  quantity: number
+    78→  basePrice: number
+    79→
+    80→  // Selected modifiers
+    81→  selectedOptions: SelectedOption[]
+    82→  selectedExtras: SelectedExtra[]
+    83→
+    84→  // Calculated
+    85→  itemTotal: number
+    86→}
+    87→
+    88→interface SelectedOption {
+    89→  groupId: number
+    90→  groupName: string
+    91→  optionId: number
+    92→  optionName: string
+    93→  price: number
+    94→}
+    95→
+    96→interface SelectedExtra {
+    97→  groupId: number
+    98→  groupName: string
+    99→  extraId: number
+   100→  extraName: string
+   101→  quantity: number
+   102→  unitPrice: number
+   103→  totalPrice: number
+   104→}
+   105→
+   106→// ==================== CART STORE (Vue/Nuxt) ====================
+   107→
+   108→import { defineStore } from 'pinia'
+   109→
+   110→export const useCartStore = defineStore('cart', {
+   111→  state: () => ({
+   112→    items: [] as CartItem[],
+   113→    menu: null as Menu | null,
+   114→  }),
+   115→
+   116→  getters: {
+   117→    cartSubtotal(): number {
+   118→      return this.items.reduce((sum, item) => sum + item.itemTotal, 0)
+   119→    },
+   120→
+   121→    cartTotal(): number {
+   122→      const deliveryFee = 20 // Could be dynamic
+   123→      return this.cartSubtotal + deliveryFee
+   124→    },
+   125→
+   126→    cartItemCount(): number {
+   127→      return this.items.reduce((sum, item) => sum + item.quantity, 0)
+   128→    },
+   129→  },
+   130→
+   131→  actions: {
+   132→    /**
+   133→     * Load menu from API
+   134→     */
+   135→    async loadMenu(slug: string) {
+   136→      const response = await fetch(`/api/v2/menu/by-slug/${slug}`)
+   137→      this.menu = await response.json()
+   138→    },
+   139→
+   140→    /**
+   141→     * Add item to cart with modifier selection
+   142→     * This shows the MRD pattern in action!
+   143→     */
+   144→    async addItemToCart(menuItem: MenuItem, variant: Variant) {
+   145→      if (!this.menu) throw new Error('Menu not loaded')
+   146→
+   147→      const selectedOptions: SelectedOption[] = []
+   148→      const selectedExtras: SelectedExtra[] = []
+   149→
+   150→      // ==================== HANDLE OPTIONS (Required) ====================
+   151→
+   152→      // variant.optionIndices = [0, 1] means this variant uses:
+   153→      // - menu.options[0]
+   154→      // - menu.options[1]
+   155→
+   156→      for (const optionIndex of variant.optionIndices) {
+   157→        const optionGroup = this.menu.options[optionIndex] // ← Direct array access!
+   158→
+   159→        // Show picker UI to user (modal, dropdown, etc.)
+   160→        const selectedOption = await this.showOptionPicker(optionGroup)
+   161→
+   162→        if (!selectedOption) {
+   163→          throw new Error(`${optionGroup.label} is required`)
+   164→        }
+   165→
+   166→        selectedOptions.push({
+   167→          groupId: optionGroup.id,
+   168→          groupName: optionGroup.name,
+   169→          optionId: selectedOption.id,
+   170→          optionName: selectedOption.name,
+   171→          price: selectedOption.price,
+   172→        })
+   173→      }
+   174→
+   175→      // ==================== HANDLE EXTRAS (Optional) ====================
+   176→
+   177→      // variant.extraIndices = [0, 1, 2] means this variant can have:
+   178→      // - menu.extras[0]
+   179→      // - menu.extras[1]
+   180→      // - menu.extras[2]
+   181→
+   182→      for (const extraIndex of variant.extraIndices) {
+   183→        const extraGroup = this.menu.extras[extraIndex] // ← Direct array access!
+   184→
+   185→        // Show optional extras picker (user can skip)
+   186→        const selectedExtraItems = await this.showExtrasPicker(extraGroup)
+   187→
+   188→        selectedExtraItems.forEach((extra) => {
+   189→          selectedExtras.push({
+   190→            groupId: extraGroup.id,
+   191→            groupName: extraGroup.name,
+   192→            extraId: extra.item.id,
+   193→            extraName: extra.item.name,
+   194→            quantity: extra.quantity,
+   195→            unitPrice: extra.item.price,
+   196→            totalPrice: extra.item.price * extra.quantity,
+   197→          })
+   198→        })
+   199→      }
+   200→
+   201→      // ==================== CALCULATE TOTAL ====================
+   202→
+   203→      const itemTotal = this.calculateItemTotal(
+   204→        variant.price,
+   205→        selectedOptions,
+   206→        selectedExtras,
+   207→        1 // quantity
+   208→      )
+   209→
+   210→      // ==================== ADD TO CART ====================
+   211→
+   212→      const cartItem: CartItem = {
+   213→        menuItemId: menuItem.id,
+   214→        menuItemName: menuItem.name,
+   215→        variantId: variant.id,
+   216→        variantName: variant.name,
+   217→        quantity: 1,
+   218→        basePrice: variant.price,
+   219→        selectedOptions,
+   220→        selectedExtras,
+   221→        itemTotal,
+   222→      }
+   223→
+   224→      this.items.push(cartItem)
+   225→    },
+   226→
+   227→    /**
+   228→     * Calculate item total price
+   229→     */
+   230→    calculateItemTotal(
+   231→      basePrice: number,
+   232→      options: SelectedOption[],
+   233→      extras: SelectedExtra[],
+   234→      quantity: number
+   235→    ): number {
+   236→      let total = basePrice
+   237→
+   238→      // Add option costs
+   239→      options.forEach((option) => {
+   240→        total += option.price
+   241→      })
+   242→
+   243→      // Add extras costs
+   244→      extras.forEach((extra) => {
+   245→        total += extra.totalPrice
+   246→      })
+   247→
+   248→      return total * quantity
+   249→    },
+   250→
+   251→    /**
+   252→     * Update item quantity
+   253→     */
+   254→    updateQuantity(index: number, quantity: number) {
+   255→      if (quantity <= 0) {
+   256→        this.items.splice(index, 1)
+   257→        return
+   258→      }
+   259→
+   260→      const item = this.items[index]
+   261→      item.quantity = quantity
+   262→
+   263→      // Recalculate total
+   264→      item.itemTotal = this.calculateItemTotal(
+   265→        item.basePrice,
+   266→        item.selectedOptions,
+   267→        item.selectedExtras,
+   268→        quantity
+   269→      )
+   270→    },
+   271→
+   272→    /**
+   273→     * Remove item from cart
+   274→     */
+   275→    removeItem(index: number) {
+   276→      this.items.splice(index, 1)
+   277→    },
+   278→
+   279→    /**
+   280→     * Clear entire cart
+   281→     */
+   282→    clearCart() {
+   283→      this.items = []
+   284→    },
+   285→
+   286→    /**
+   287→     * Validate cart with backend and get final totals
+   288→     */
+   289→    async validateCart() {
+   290→      const requestBody = {
+   291→        items: this.items.map((item) => ({
+   292→          variantId: item.variantId,
+   293→          quantity: item.quantity,
+   294→          selectedOptions: item.selectedOptions.map((opt) => ({
+   295→            optionId: opt.optionId,
+   296→          })),
+   297→          selectedExtras: item.selectedExtras.map((ext) => ({
+   298→            extraId: ext.extraId,
+   299→            quantity: ext.quantity,
+   300→          })),
+   301→        })),
+   302→        deliveryFee: 20,
+   303→      }
+   304→
+   305→      const response = await fetch('/api/v2/menu/calculate-cart', {
+   306→        method: 'POST',
+   307→        headers: { 'Content-Type': 'application/json' },
+   308→        body: JSON.stringify(requestBody),
+   309→      })
+   310→
+   311→      if (!response.ok) {
+   312→        const error = await response.json()
+   313→        throw new Error(error.error || 'Cart validation failed')
+   314→      }
+   315→
+   316→      return await response.json()
+   317→    },
+   318→
+   319→    /**
+   320→     * Show option picker UI (implement with your UI library)
+   321→     */
+   322→    async showOptionPicker(optionGroup: OptionGroup): Promise<ModifierItem | null> {
+   323→      // Example: Show modal with radio buttons
+   324→      return new Promise((resolve) => {
+   325→        // Your UI implementation here
+   326→        // For demo, just return first item
+   327→        const firstItem = optionGroup.items[0]
+   328→        resolve(firstItem)
+   329→      })
+   330→    },
+   331→
+   332→    /**
+   333→     * Show extras picker UI (implement with your UI library)
+   334→     */
+   335→    async showExtrasPicker(
+   336→      extraGroup: ExtraGroup
+   337→    ): Promise<Array<{ item: ModifierItem; quantity: number }>> {
+   338→      // Example: Show modal with checkboxes and quantity pickers
+   339→      return new Promise((resolve) => {
+   340→        // Your UI implementation here
+   341→        // For demo, return empty (user skips all extras)
+   342→        resolve([])
+   343→      })
+   344→    },
+   345→  },
+   346→})
+   347→
+   348→// ==================== EXAMPLE USAGE IN COMPONENT ====================
+   349→
+   350→/**
+   351→ * Example: Product Page Component
+   352→ */
+   353→/*
+   354→<script setup lang="ts">
+   355→import { useCartStore } from '~/stores/cart'
+   356→import { ref, computed } from 'vue'
+   357→
+   358→const cartStore = useCartStore()
+   359→const selectedVariant = ref<Variant | null>(null)
+   360→
+   361→const props = defineProps<{
+   362→  menuItem: MenuItem
+   363→}>()
+   364→
+   365→// Auto-select default variant
+   366→onMounted(() => {
+   367→  selectedVariant.value = props.menuItem.variants.find(v => v.default) || props.menuItem.variants[0]
+   368→})
+   369→
+   370→async function addToCart() {
+   371→  if (!selectedVariant.value) return
+   372→
+   373→  try {
+   374→    await cartStore.addItemToCart(props.menuItem, selectedVariant.value)
+   375→    // Show success message
+   376→    console.log('Added to cart!')
+   377→  } catch (error) {
+   378→    // Show error message
+   379→    console.error('Failed to add to cart:', error)
+   380→  }
+   381→}
+   382→
+   383→// Preview what options/extras this variant will need
+   384→const requiredOptions = computed(() => {
+   385→  if (!selectedVariant.value || !cartStore.menu) return []
+   386→
+   387→  return selectedVariant.value.optionIndices.map(index =>
+   388→    cartStore.menu!.options[index]
+   389→  )
+   390→})
+   391→
+   392→const availableExtras = computed(() => {
+   393→  if (!selectedVariant.value || !cartStore.menu) return []
+   394→
+   395→  return selectedVariant.value.extraIndices.map(index =>
+   396→    cartStore.menu!.extras[index]
+   397→  )
+   398→})
+   399→</script>
+   400→
+   401→<template>
+   402→  <div class="product-page">
+   403→    <h1>{{ menuItem.name }}</h1>
+   404→    <p>{{ menuItem.description }}</p>
+   405→
+   406→    <!-- Variant Selector -->
+   407→    <div class="variant-selector">
+   408→      <label>Size:</label>
+   409→      <select v-model="selectedVariant">
+   410→        <option v-for="variant in menuItem.variants" :key="variant.id" :value="variant">
+   411→          {{ variant.name }} - R{{ variant.price }}
+   412→        </option>
+   413→      </select>
+   414→    </div>
+   415→
+   416→    <!-- Show what the user will be asked to select -->
+   417→    <div v-if="selectedVariant" class="modifier-preview">
+   418→      <h3>Customization Options:</h3>
+   419→
+   420→      <div v-if="requiredOptions.length">
+   421→        <h4>Required Choices:</h4>
+   422→        <ul>
+   423→          <li v-for="option in requiredOptions" :key="option.id">
+   424→            {{ option.label }}
+   425→          </li>
+   426→        </ul>
+   427→      </div>
+   428→
+   429→      <div v-if="availableExtras.length">
+   430→        <h4>Optional Add-ons:</h4>
+   431→        <ul>
+   432→          <li v-for="extra in availableExtras" :key="extra.id">
+   433→            {{ extra.label }}
+   434→          </li>
+   435→        </ul>
+   436→      </div>
+   437→    </div>
+   438→
+   439→    <button @click="addToCart" class="add-to-cart-btn">
+   440→      Add to Cart - R{{ selectedVariant?.price }}
+   441→    </button>
+   442→  </div>
+   443→</template>
+   444→*/
+   445→
+   446→// ==================== EXAMPLE: CART DISPLAY ====================
+   447→
+   448→/**
+   449→ * Example: Cart Summary Component
+   450→ */
+   451→/*
+   452→<script setup lang="ts">
+   453→import { useCartStore } from '~/stores/cart'
+   454→
+   455→const cartStore = useCartStore()
+   456→
+   457→function formatPrice(amount: number): string {
+   458→  return `R${amount.toFixed(2)}`
+   459→}
+   460→
+   461→async function checkout() {
+   462→  try {
+   463→    // Validate cart with backend
+   464→    const validation = await cartStore.validateCart()
+   465→    console.log('Cart validated:', validation)
+   466→
+   467→    // Proceed to payment
+   468→    // navigateTo('/checkout')
+   469→  } catch (error) {
+   470→    console.error('Cart validation failed:', error)
+   471→    alert('There was a problem with your cart. Please review your items.')
+   472→  }
+   473→}
+   474→</script>
+   475→
+   476→<template>
+   477→  <div class="cart">
+   478→    <h2>Your Cart ({{ cartStore.cartItemCount }} items)</h2>
+   479→
+   480→    <div v-for="(item, index) in cartStore.items" :key="index" class="cart-item">
+   481→      <div class="item-details">
+   482→        <h3>{{ item.menuItemName }}</h3>
+   483→        <p class="variant">{{ item.variantName }}</p>
+   484→
+   485→        <!-- Show selected options -->
+   486→        <div v-if="item.selectedOptions.length" class="modifiers">
+   487→          <strong>Selections:</strong>
+   488→          <ul>
+   489→            <li v-for="option in item.selectedOptions" :key="option.optionId">
+   490→              {{ option.groupName }}: {{ option.optionName }}
+   491→              <span v-if="option.price > 0">(+{{ formatPrice(option.price) }})</span>
+   492→            </li>
+   493→          </ul>
+   494→        </div>
+   495→
+   496→        <!-- Show selected extras -->
+   497→        <div v-if="item.selectedExtras.length" class="modifiers">
+   498→          <strong>Extras:</strong>
+   499→          <ul>
+   500→            <li v-for="extra in item.selectedExtras" :key="extra.extraId">
+   501→              {{ extra.quantity }}x {{ extra.extraName }} (+{{ formatPrice(extra.totalPrice) }})
+   502→            </li>
+   503→          </ul>
+   504→        </div>
+   505→      </div>
+   506→
+   507→      <div class="item-actions">
+   508→        <div class="quantity">
+   509→          <button @click="cartStore.updateQuantity(index, item.quantity - 1)">-</button>
+   510→          <span>{{ item.quantity }}</span>
+   511→          <button @click="cartStore.updateQuantity(index, item.quantity + 1)">+</button>
+   512→        </div>
+   513→        <p class="price">{{ formatPrice(item.itemTotal) }}</p>
+   514→        <button @click="cartStore.removeItem(index)" class="remove-btn">Remove</button>
+   515→      </div>
+   516→    </div>
+   517→
+   518→    <div class="cart-summary">
+   519→      <div class="line-item">
+   520→        <span>Subtotal:</span>
+   521→        <span>{{ formatPrice(cartStore.cartSubtotal) }}</span>
+   522→      </div>
+   523→      <div class="line-item">
+   524→        <span>Delivery Fee:</span>
+   525→        <span>{{ formatPrice(20) }}</span>
+   526→      </div>
+   527→      <div class="line-item total">
+   528→        <strong>Total:</strong>
+   529→        <strong>{{ formatPrice(cartStore.cartTotal) }}</strong>
+   530→      </div>
+   531→    </div>
+   532→
+   533→    <button @click="checkout" class="checkout-btn">
+   534→      Proceed to Checkout
+   535→    </button>
+   536→  </div>
+   537→</template>
+   538→*/
+   539→
+   540→export {}
+   541→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

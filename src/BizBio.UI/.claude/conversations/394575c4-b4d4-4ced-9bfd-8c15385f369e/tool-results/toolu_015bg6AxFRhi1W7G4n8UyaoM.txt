@@ -1,0 +1,27 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\menu\[slug].vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   328→    .filter(item => item.categoryId === categoryId && item.isActive)
+   329→    .sort((a, b) => a.sortOrder - b.sortOrder)
+   330→}
+   331→
+   332→function scrollToCategory(categoryId: number) {
+   333→  const element = document.getElementById(`category-${categoryId}`)
+   334→  if (element) {
+   335→    // Account for sticky category tabs (52px + border)
+   336→    const tabsHeight = 52
+   337→    const offset = tabsHeight + 5 // Extra padding
+   338→    const elementPosition = element.getBoundingClientRect().top
+   339→    const offsetPosition = elementPosition + window.pageYOffset - offset
+   340→
+   341→    window.scrollTo({
+   342→      top: offsetPosition,
+   343→      behavior: 'smooth'
+   344→    })
+   345→
+   346→    // Update active category immediately for better UX
+   347→    activeCategory.value = categoryId
+   348→  }
+   349→}
+   350→
+   351→let scrollListener: (() => void) | null = null
+   352→
+   353→function setupScrollSpy() {

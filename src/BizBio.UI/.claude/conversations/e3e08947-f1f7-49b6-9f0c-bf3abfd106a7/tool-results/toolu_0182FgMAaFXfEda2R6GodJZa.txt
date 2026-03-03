@@ -1,0 +1,204 @@
+     1→using Microsoft.AspNetCore.Authorization;
+     2→using Microsoft.AspNetCore.Mvc;
+     3→using Microsoft.EntityFrameworkCore;
+     4→using BizBio.Infrastructure.Data;
+     5→using BizBio.Core.Entities;
+     6→using System.Security.Claims;
+     7→
+     8→namespace BizBio.API.Controllers;
+     9→
+    10→[Route("api/v1/library/extras")]
+    11→[ApiController]
+    12→[Authorize]
+    13→public class ExtrasController : ControllerBase
+    14→{
+    15→    private readonly ApplicationDbContext _context;
+    16→    private readonly ILogger<ExtrasController> _logger;
+    17→
+    18→    public ExtrasController(ApplicationDbContext context, ILogger<ExtrasController> logger)
+    19→    {
+    20→        _context = context;
+    21→        _logger = logger;
+    22→    }
+    23→
+    24→    private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+    25→
+    26→    /// <summary>
+    27→    /// Get all extras for the current user
+    28→    /// </summary>
+    29→    [HttpGet]
+    30→    public async Task<IActionResult> GetExtras()
+    31→    {
+    32→        try
+    33→        {
+    34→            var userId = GetUserId();
+    35→            var extras = await _context.CatalogItemExtras
+    36→                .Where(e => e.UserId == userId && e.CatalogId == null && e.IsActive)
+    37→                .OrderBy(e => e.DisplayOrder)
+    38→                .ThenBy(e => e.Name)
+    39→                .ToListAsync();
+    40→
+    41→            return Ok(new { success = true, data = extras });
+    42→        }
+    43→        catch (Exception ex)
+    44→        {
+    45→            _logger.LogError(ex, "Error fetching extras");
+    46→            return StatusCode(500, new { success = false, error = "Failed to fetch extras" });
+    47→        }
+    48→    }
+    49→
+    50→    /// <summary>
+    51→    /// Get a single extra by ID
+    52→    /// </summary>
+    53→    [HttpGet("{id}")]
+    54→    public async Task<IActionResult> GetExtra(int id)
+    55→    {
+    56→        try
+    57→        {
+    58→            var userId = GetUserId();
+    59→            var extra = await _context.CatalogItemExtras
+    60→                .FirstOrDefaultAsync(e => e.Id == id && e.UserId == userId && e.IsActive);
+    61→
+    62→            if (extra == null)
+    63→                return NotFound(new { success = false, error = "Extra not found" });
+    64→
+    65→            return Ok(new { success = true, data = extra });
+    66→        }
+    67→        catch (Exception ex)
+    68→        {
+    69→            _logger.LogError(ex, "Error fetching extra {Id}", id);
+    70→            return StatusCode(500, new { success = false, error = "Failed to fetch extra" });
+    71→        }
+    72→    }
+    73→
+    74→    /// <summary>
+    75→    /// Create a new extra
+    76→    /// </summary>
+    77→    [HttpPost]
+    78→    public async Task<IActionResult> CreateExtra([FromBody] CreateExtraDto dto)
+    79→    {
+    80→        try
+    81→        {
+    82→            var userId = GetUserId();
+    83→            var userIdString = userId.ToString();
+    84→
+    85→            var extra = new CatalogItemExtra
+    86→            {
+    87→                UserId = userId,
+    88→                Name = dto.Name,
+    89→                Description = dto.Description,
+    90→                Code = dto.Code,
+    91→                BasePrice = dto.BasePrice,
+    92→                ImageUrl = dto.ImageUrl,
+    93→                DisplayOrder = dto.DisplayOrder,
+    94→                IsActive = true,
+    95→                CreatedAt = DateTime.UtcNow,
+    96→                UpdatedAt = DateTime.UtcNow,
+    97→                CreatedBy = userIdString,
+    98→                UpdatedBy = userIdString
+    99→            };
+   100→
+   101→            _context.CatalogItemExtras.Add(extra);
+   102→            await _context.SaveChangesAsync();
+   103→
+   104→            return CreatedAtAction(nameof(GetExtra), new { id = extra.Id },
+   105→                new { success = true, data = extra });
+   106→        }
+   107→        catch (Exception ex)
+   108→        {
+   109→            _logger.LogError(ex, "Error creating extra");
+   110→            return StatusCode(500, new { success = false, error = "Failed to create extra" });
+   111→        }
+   112→    }
+   113→
+   114→    /// <summary>
+   115→    /// Update an existing extra
+   116→    /// </summary>
+   117→    [HttpPut("{id}")]
+   118→    public async Task<IActionResult> UpdateExtra(int id, [FromBody] UpdateExtraDto dto)
+   119→    {
+   120→        try
+   121→        {
+   122→            var userId = GetUserId();
+   123→            var userIdString = userId.ToString();
+   124→            var extra = await _context.CatalogItemExtras
+   125→                .FirstOrDefaultAsync(e => e.Id == id && e.UserId == userId);
+   126→
+   127→            if (extra == null)
+   128→                return NotFound(new { success = false, error = "Extra not found" });
+   129→
+   130→            extra.Name = dto.Name;
+   131→            extra.Description = dto.Description;
+   132→            extra.Code = dto.Code;
+   133→            extra.BasePrice = dto.BasePrice;
+   134→            extra.ImageUrl = dto.ImageUrl;
+   135→            extra.DisplayOrder = dto.DisplayOrder;
+   136→            extra.UpdatedAt = DateTime.UtcNow;
+   137→            extra.UpdatedBy = userIdString;
+   138→
+   139→            await _context.SaveChangesAsync();
+   140→
+   141→            return Ok(new { success = true, data = extra });
+   142→        }
+   143→        catch (Exception ex)
+   144→        {
+   145→            _logger.LogError(ex, "Error updating extra {Id}", id);
+   146→            return StatusCode(500, new { success = false, error = "Failed to update extra" });
+   147→        }
+   148→    }
+   149→
+   150→    /// <summary>
+   151→    /// Delete an extra
+   152→    /// </summary>
+   153→    [HttpDelete("{id}")]
+   154→    public async Task<IActionResult> DeleteExtra(int id)
+   155→    {
+   156→        try
+   157→        {
+   158→            var userId = GetUserId();
+   159→            var userIdString = userId.ToString();
+   160→            var extra = await _context.CatalogItemExtras
+   161→                .FirstOrDefaultAsync(e => e.Id == id && e.UserId == userId);
+   162→
+   163→            if (extra == null)
+   164→                return NotFound(new { success = false, error = "Extra not found" });
+   165→
+   166→            extra.IsActive = false;
+   167→            extra.UpdatedAt = DateTime.UtcNow;
+   168→            extra.UpdatedBy = userIdString;
+   169→            await _context.SaveChangesAsync();
+   170→
+   171→            return Ok(new { success = true, message = "Extra deleted successfully" });
+   172→        }
+   173→        catch (Exception ex)
+   174→        {
+   175→            _logger.LogError(ex, "Error deleting extra {Id}", id);
+   176→            return StatusCode(500, new { success = false, error = "Failed to delete extra" });
+   177→        }
+   178→    }
+   179→}
+   180→
+   181→public class CreateExtraDto
+   182→{
+   183→    public string Name { get; set; } = null!;
+   184→    public string? Description { get; set; }
+   185→    public string? Code { get; set; }
+   186→    public decimal BasePrice { get; set; }
+   187→    public string? ImageUrl { get; set; }
+   188→    public int DisplayOrder { get; set; }
+   189→}
+   190→
+   191→public class UpdateExtraDto
+   192→{
+   193→    public string Name { get; set; } = null!;
+   194→    public string? Description { get; set; }
+   195→    public string? Code { get; set; }
+   196→    public decimal BasePrice { get; set; }
+   197→    public string? ImageUrl { get; set; }
+   198→    public int DisplayOrder { get; set; }
+   199→}
+   200→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

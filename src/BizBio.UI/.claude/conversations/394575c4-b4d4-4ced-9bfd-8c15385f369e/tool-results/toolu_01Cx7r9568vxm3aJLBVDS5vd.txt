@@ -1,0 +1,270 @@
+     1→namespace BizBio.Core.Services;
+     2→
+     3→using BizBio.Core.DTOs;
+     4→using BizBio.Core.Entities;
+     5→
+     6→/// <summary>
+     7→/// Maps database entities to MRD-style menu DTOs with array indexing pattern
+     8→/// </summary>
+     9→public class MenuMappingService
+    10→{
+    11→    /// <summary>
+    12→    /// Converts a Catalog to MRD-style MenuResponseDto
+    13→    /// Key feature: Options/Extras are defined once, variants reference them by index
+    14→    /// </summary>
+    15→    public MenuResponseDto MapCatalogToMenu(Catalog catalog)
+    16→    {
+    17→        var menu = new MenuResponseDto
+    18→        {
+    19→            Id = catalog.Id,
+    20→            CatalogId = catalog.Id,
+    21→            Name = catalog.Name,
+    22→            Status = "PUBLISHED"
+    23→        };
+    24→
+    25→        // Step 1: Build the global options/extras arrays
+    26→        // These will be referenced by variants via array indices
+    27→        var (optionGroups, extraGroups, optionGroupIndexMap, extraGroupIndexMap) =
+    28→            BuildGlobalModifierArrays(catalog);
+    29→
+    30→        menu.Options = optionGroups;
+    31→        menu.Extras = extraGroups;
+    32→
+    33→        // Step 2: Map categories to sections
+    34→        menu.Sections = catalog.Categories
+    35→            .OrderBy(c => c.SortOrder)
+    36→            .Select(category => MapCategoryToSection(
+    37→                category,
+    38→                optionGroupIndexMap,
+    39→                extraGroupIndexMap))
+    40→            .ToList();
+    41→
+    42→        return menu;
+    43→    }
+    44→
+    45→    /// <summary>
+    46→    /// Builds the global options[] and extras[] arrays at menu level
+    47→    /// Returns maps of GroupId -> ArrayIndex for efficient lookup
+    48→    /// </summary>
+    49→    private (
+    50→        List<OptionGroupDto> options,
+    51→        List<ExtraGroupDto> extras,
+    52→        Dictionary<int, int> optionIndexMap,
+    53→        Dictionary<int, int> extraIndexMap
+    54→    ) BuildGlobalModifierArrays(Catalog catalog)
+    55→    {
+    56→        var options = new List<OptionGroupDto>();
+    57→        var extras = new List<ExtraGroupDto>();
+    58→        var optionIndexMap = new Dictionary<int, int>();
+    59→        var extraIndexMap = new Dictionary<int, int>();
+    60→
+    61→        // Get all unique extra groups used in this catalog
+    62→        var allExtraGroups = catalog.Items
+    63→            .SelectMany(item => item.ExtraGroupLinks)
+    64→            .Select(link => link.ExtraGroup)
+    65→            .DistinctBy(g => g.Id)
+    66→            .OrderBy(g => g.DisplayOrder);
+    67→
+    68→        int optionIndex = 0;
+    69→        int extraIndex = 0;
+    70→
+    71→        foreach (var group in allExtraGroups)
+    72→        {
+    73→            // Separate into Options (required) vs Extras (optional)
+    74→            // Options have MinRequired >= 1
+    75→            if (group.MinRequired >= 1)
+    76→            {
+    77→                options.Add(MapToOptionGroup(group));
+    78→                optionIndexMap[group.Id] = optionIndex++;
+    79→            }
+    80→            else
+    81→            {
+    82→                extras.Add(MapToExtraGroup(group));
+    83→                extraIndexMap[group.Id] = extraIndex++;
+    84→            }
+    85→        }
+    86→
+    87→        return (options, extras, optionIndexMap, extraIndexMap);
+    88→    }
+    89→
+    90→    private MenuSectionDto MapCategoryToSection(
+    91→        CatalogCategory category,
+    92→        Dictionary<int, int> optionIndexMap,
+    93→        Dictionary<int, int> extraIndexMap)
+    94→    {
+    95→        return new MenuSectionDto
+    96→        {
+    97→            Id = category.Id,
+    98→            Name = category.Name,
+    99→            Description = category.Description,
+   100→            OrderIndex = category.SortOrder,
+   101→            Visible = true,
+   102→            Items = category.CatalogItemCategories
+   103→                .Select(cic => cic.CatalogItem)
+   104→                .OrderBy(item => item.SortOrder)
+   105→                .Select(item => MapItemToMenuItemDto(item, optionIndexMap, extraIndexMap))
+   106→                .ToList()
+   107→        };
+   108→    }
+   109→
+   110→    private MenuItemDto MapItemToMenuItemDto(
+   111→        CatalogItem item,
+   112→        Dictionary<int, int> optionIndexMap,
+   113→        Dictionary<int, int> extraIndexMap)
+   114→    {
+   115→        return new MenuItemDto
+   116→        {
+   117→            Id = item.Id,
+   118→            Name = item.Name,
+   119→            Description = item.Description,
+   120→            OrderIndex = item.SortOrder,
+   121→            Featured = false,
+   122→            Variants = item.Variants
+   123→                .OrderBy(v => v.IsDefault ? 0 : 1)
+   124→                .ThenBy(v => v.Price)
+   125→                .Select(v => MapVariantToDto(v, item, optionIndexMap, extraIndexMap))
+   126→                .ToList(),
+   127→            Media = ParseMediaFromImages(item.Images),
+   128→            BusinessIdentity = new BusinessIdentityDto
+   129→            {
+   130→                Internal = $"ITEM/{item.Id}",
+   131→                External = item.SourceLibraryItemId?.ToString()
+   132→            }
+   133→        };
+   134→    }
+   135→
+   136→    private VariantDto MapVariantToDto(
+   137→        CatalogItemVariant variant,
+   138→        CatalogItem item,
+   139→        Dictionary<int, int> optionIndexMap,
+   140→        Dictionary<int, int> extraIndexMap)
+   141→    {
+   142→        // Build option_indices and extra_indices arrays
+   143→        var optionIndices = new List<int>();
+   144→        var extraIndices = new List<int>();
+   145→
+   146→        foreach (var link in item.ExtraGroupLinks)
+   147→        {
+   148→            // Check if this extra group applies to this specific variant
+   149→            // or if it's linked to the item level (applies to all variants)
+   150→            if (link.VariantId == null || link.VariantId == variant.Id)
+   151→            {
+   152→                var groupId = link.ExtraGroupId;
+   153→
+   154→                // Add to appropriate indices list
+   155→                if (optionIndexMap.ContainsKey(groupId))
+   156→                {
+   157→                    optionIndices.Add(optionIndexMap[groupId]);
+   158→                }
+   159→                else if (extraIndexMap.ContainsKey(groupId))
+   160→                {
+   161→                    extraIndices.Add(extraIndexMap[groupId]);
+   162→                }
+   163→            }
+   164→        }
+   165→
+   166→        return new VariantDto
+   167→        {
+   168→            Id = variant.Id,
+   169→            Name = variant.Title,
+   170→            Default = variant.IsDefault,
+   171→            Price = variant.Price,
+   172→            OldPrice = null, // Calculate from promotional pricing if needed
+   173→            OptionIndices = optionIndices.OrderBy(i => i).ToList(),
+   174→            ExtraIndices = extraIndices.OrderBy(i => i).ToList(),
+   175→            BusinessIdentity = new BusinessIdentityDto
+   176→            {
+   177→                External = variant.Sku
+   178→            }
+   179→        };
+   180→    }
+   181→
+   182→    private OptionGroupDto MapToOptionGroup(CatalogItemExtraGroup group)
+   183→    {
+   184→        return new OptionGroupDto
+   185→        {
+   186→            Id = group.Id,
+   187→            Name = group.Name,
+   188→            Label = group.Description ?? $"Please select {group.Name.ToLower()}",
+   189→            MinimumSelect = group.MinRequired,
+   190→            MaximumSelect = group.MaxAllowed > 0 ? group.MaxAllowed : 1,
+   191→            OrderIndex = group.DisplayOrder,
+   192→            Items = group.GroupItems
+   193→                .OrderBy(gi => gi.DisplayOrder)
+   194→                .Select(gi => new OptionItemDto
+   195→                {
+   196→                    Id = gi.Extra.Id,
+   197→                    Name = gi.Extra.Name,
+   198→                    Default = false,
+   199→                    Price = gi.PriceOverride ?? gi.Extra.BasePrice,
+   200→                    OrderIndex = gi.DisplayOrder,
+   201→                    BusinessIdentity = new BusinessIdentityDto
+   202→                    {
+   203→                        External = gi.Extra.Code
+   204→                    }
+   205→                })
+   206→                .ToList()
+   207→        };
+   208→    }
+   209→
+   210→    private ExtraGroupDto MapToExtraGroup(CatalogItemExtraGroup group)
+   211→    {
+   212→        return new ExtraGroupDto
+   213→        {
+   214→            Id = group.Id,
+   215→            Name = group.Name,
+   216→            Label = group.Description ?? "Would you like to add more?",
+   217→            MinimumSelect = group.MinRequired,
+   218→            MaximumSelect = group.MaxAllowed > 0 ? group.MaxAllowed : 99,
+   219→            OrderIndex = group.DisplayOrder,
+   220→            Items = group.GroupItems
+   221→                .OrderBy(gi => gi.DisplayOrder)
+   222→                .Select(gi => new ExtraItemDto
+   223→                {
+   224→                    Id = gi.Extra.Id,
+   225→                    Name = gi.Extra.Name,
+   226→                    Default = false,
+   227→                    Price = gi.PriceOverride ?? gi.Extra.BasePrice,
+   228→                    OrderIndex = gi.DisplayOrder,
+   229→                    BusinessIdentity = new BusinessIdentityDto
+   230→                    {
+   231→                        External = gi.Extra.Code
+   232→                    }
+   233→                })
+   234→                .ToList()
+   235→        };
+   236→    }
+   237→
+   238→    private MediaDto? ParseMediaFromImages(string? imagesJson)
+   239→    {
+   240→        if (string.IsNullOrEmpty(imagesJson))
+   241→            return null;
+   242→
+   243→        try
+   244→        {
+   245→            // Assuming Images is JSON array: ["url1.jpg", "url2.jpg"]
+   246→            var urls = System.Text.Json.JsonSerializer.Deserialize<List<string>>(imagesJson);
+   247→            var firstImage = urls?.FirstOrDefault();
+   248→
+   249→            if (string.IsNullOrEmpty(firstImage))
+   250→                return null;
+   251→
+   252→            return new MediaDto
+   253→            {
+   254→                Provider = "local",
+   255→                BaseUrl = "/images", // Configure this based on your CDN
+   256→                RawImage = firstImage,
+   257→                MimeType = "image"
+   258→            };
+   259→        }
+   260→        catch
+   261→        {
+   262→            return null;
+   263→        }
+   264→    }
+   265→}
+   266→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

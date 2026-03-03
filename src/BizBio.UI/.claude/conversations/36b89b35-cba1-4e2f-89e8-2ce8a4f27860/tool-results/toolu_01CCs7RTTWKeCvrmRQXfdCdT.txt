@@ -1,0 +1,1174 @@
+     1→# BizBio Multi-Product Subscription Architecture - Implementation Plan
+     2→
+     3→## Overview
+     4→Transform BizBio from single-subscription to multi-product subscription model with unified entity management.
+     5→
+     6→## Core Architectural Principles
+     7→
+     8→### 1. Products
+     9→Three distinct subscription products:
+    10→- **Cards** - Digital business card profiles
+    11→- **Menu** - Restaurant/venue menu management
+    12→- **Catalog** - Product catalog for stores/businesses
+    13→
+    14→Each product has own subscription tier with independent trial periods, billed together monthly.
+    15→
+    16→### 2. Entity Unification
+    17→Single `Entities` table replaces separate Restaurant/Company/Profile tables:
+    18→- Entity represents the business/organization/venue
+    19→- EntityType enum distinguishes Restaurant/Store/Venue/Organization
+    20→- Each entity can have multiple catalogs/menus (per tier limits)
+    21→
+    22→### 3. Library/Menu/Catalog Terminology
+    23→**Important**: Library, Menu, and Catalog are the **same thing** - just different UI terminology:
+    24→- "Library" = user's private items (IsActive=false or no catalog assignment)
+    25→- "Menu" = published catalog for restaurants (IsActive=true)
+    26→- "Catalog" = published catalog for stores (IsActive=true)
+    27→
+    28→All stored in single `Catalogs` table. No CatalogType needed.
+    29→
+    30→### 4. Price Override Pattern
+    31→Menu items can be shared across catalogs with price overrides:
+    32→- CatalogItem has `ParentCatalogItemId` (nullable)
+    33→- If null = master/template item
+    34→- If set = reference to master with optional price override
+    35→- `PriceOverride` (nullable decimal) - null means use parent price
+    36→
+    37→---
+    38→
+    39→## Database Schema
+    40→
+    41→### New Tables
+    42→
+    43→#### Entities Table
+    44→Replaces separate Restaurant/Company/Profile tables.
+    45→
+    46→```sql
+    47→CREATE TABLE Entities (
+    48→    Id INT PRIMARY KEY IDENTITY,
+    49→    UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
+    50→    EntityType INT NOT NULL,  -- 0=Restaurant, 1=Store, 2=Venue, 3=Organization
+    51→    Name NVARCHAR(255) NOT NULL,
+    52→    Slug NVARCHAR(255) NOT NULL UNIQUE,
+    53→    Description NVARCHAR(2000),
+    54→    Logo NVARCHAR(500),
+    55→
+    56→    -- Contact Info
+    57→    Address NVARCHAR(255),
+    58→    City NVARCHAR(100),
+    59→    PostalCode NVARCHAR(20),
+    60→    Phone NVARCHAR(20),
+    61→    Email NVARCHAR(255),
+    62→    Website NVARCHAR(500),
+    63→
+    64→    -- Settings
+    65→    Currency NVARCHAR(3) DEFAULT 'ZAR',
+    66→    Timezone NVARCHAR(50) DEFAULT 'Africa/Johannesburg',
+    67→
+    68→    -- Metadata
+    69→    SortOrder INT DEFAULT 0,
+    70→    IsActive BIT DEFAULT 1,
+    71→    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    72→    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    73→    CreatedBy NVARCHAR(50),
+    74→    UpdatedBy NVARCHAR(50),
+    75→
+    76→    INDEX IX_Entities_UserId (UserId),
+    77→    INDEX IX_Entities_Slug (Slug),
+    78→    INDEX IX_Entities_EntityType (EntityType)
+    79→);
+    80→```
+    81→
+    82→#### ProductSubscriptions Table
+    83→Replaces single Subscriptions table with per-product subscriptions.
+    84→
+    85→```sql
+    86→CREATE TABLE ProductSubscriptions (
+    87→    Id INT PRIMARY KEY IDENTITY,
+    88→    UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
+    89→    ProductType INT NOT NULL,  -- 0=Cards, 1=Menu, 2=Catalog
+    90→    TierId INT NOT NULL FOREIGN KEY REFERENCES SubscriptionTiers(Id),
+    91→
+    92→    -- Trial tracking per product
+    93→    IsTrialActive BIT DEFAULT 1,
+    94→    TrialStartDate DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+    95→    TrialEndDate DATETIME2 NOT NULL,
+    96→    TrialDaysRemaining AS DATEDIFF(DAY, GETUTCDATE(), TrialEndDate),
+    97→
+    98→    -- Billing
+    99→    Status INT NOT NULL DEFAULT 0,  -- 0=Trial, 1=Active, 2=Cancelled, 3=Expired
+   100→    BillingCycle INT DEFAULT 0,  -- 0=Monthly, 1=Yearly
+   101→    CurrentPeriodStart DATETIME2,
+   102→    CurrentPeriodEnd DATETIME2,
+   103→    NextBillingDate DATETIME2,
+   104→
+   105→    -- Metadata
+   106→    IsActive BIT DEFAULT 1,
+   107→    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+   108→    UpdatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+   109→    CancelledAt DATETIME2,
+   110→
+   111→    UNIQUE (UserId, ProductType),  -- One subscription per product per user
+   112→    INDEX IX_ProductSubscriptions_UserId (UserId),
+   113→    INDEX IX_ProductSubscriptions_Status (Status)
+   114→);
+   115→```
+   116→
+   117→#### CatalogCategories Table
+   118→Junction table linking Categories to Catalogs (many-to-many).
+   119→
+   120→```sql
+   121→CREATE TABLE CatalogCategories (
+   122→    Id INT PRIMARY KEY IDENTITY,
+   123→    CatalogId INT NOT NULL FOREIGN KEY REFERENCES Catalogs(Id) ON DELETE CASCADE,
+   124→    CategoryId INT NOT NULL FOREIGN KEY REFERENCES Categories(Id) ON DELETE CASCADE,
+   125→    SortOrder INT DEFAULT 0,
+   126→
+   127→    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
+   128→
+   129→    UNIQUE (CatalogId, CategoryId),
+   130→    INDEX IX_CatalogCategories_CatalogId (CatalogId),
+   131→    INDEX IX_CatalogCategories_CategoryId (CategoryId)
+   132→);
+   133→```
+   134→
+   135→### Updated Tables
+   136→
+   137→#### Catalogs Table
+   138→Add EntityId reference, remove ProfileId.
+   139→
+   140→```sql
+   141→ALTER TABLE Catalogs ADD EntityId INT NULL
+   142→    FOREIGN KEY REFERENCES Entities(Id) ON DELETE CASCADE;
+   143→
+   144→-- Migration: Create default entity for each profile, update catalogs
+   145→-- (See migration section below)
+   146→
+   147→ALTER TABLE Catalogs ALTER COLUMN EntityId INT NOT NULL;
+   148→ALTER TABLE Catalogs DROP CONSTRAINT FK_Catalogs_Profiles;
+   149→ALTER TABLE Catalogs DROP COLUMN ProfileId;
+   150→
+   151→-- Add index
+   152→CREATE INDEX IX_Catalogs_EntityId ON Catalogs(EntityId);
+   153→```
+   154→
+   155→#### CatalogItems Table
+   156→Add ParentCatalogItemId and PriceOverride for item sharing.
+   157→
+   158→```sql
+   159→ALTER TABLE CatalogItems ADD ParentCatalogItemId INT NULL
+   160→    FOREIGN KEY REFERENCES CatalogItems(Id);
+   161→ALTER TABLE CatalogItems ADD PriceOverride DECIMAL(18,2) NULL;
+   162→
+   163→CREATE INDEX IX_CatalogItems_ParentCatalogItemId ON CatalogItems(ParentCatalogItemId);
+   164→```
+   165→
+   166→**Price Resolution Logic:**
+   167→```csharp
+   168→public decimal EffectivePrice
+   169→{
+   170→    get
+   171→    {
+   172→        if (PriceOverride.HasValue) return PriceOverride.Value;
+   173→        if (ParentCatalogItemId.HasValue && ParentCatalogItem != null)
+   174→            return ParentCatalogItem.EffectivePrice;
+   175→        return Price;
+   176→    }
+   177→}
+   178→```
+   179→
+   180→#### Categories Table
+   181→Categories are now entity-level (each entity has its own categories).
+   182→
+   183→```sql
+   184→-- Add EntityId to Categories table
+   185→ALTER TABLE Categories ADD EntityId INT NULL
+   186→    FOREIGN KEY REFERENCES Entities(Id) ON DELETE CASCADE;
+   187→
+   188→-- Migration: Link existing categories to their entity via catalog
+   189→UPDATE c
+   190→SET c.EntityId = cat.EntityId
+   191→FROM Categories c
+   192→INNER JOIN CatalogCategories cc ON cc.CategoryId = c.Id
+   193→INNER JOIN Catalogs cat ON cat.Id = cc.CatalogId;
+   194→
+   195→-- Make EntityId required
+   196→ALTER TABLE Categories ALTER COLUMN EntityId INT NOT NULL;
+   197→
+   198→-- Remove UserId (categories now owned by entity, not user)
+   199→ALTER TABLE Categories DROP COLUMN UserId;
+   200→
+   201→CREATE INDEX IX_Categories_EntityId ON Categories(EntityId);
+   202→```
+   203→
+   204→#### SubscriptionTiers Table
+   205→Add product-specific limits.
+   206→
+   207→```sql
+   208→ALTER TABLE SubscriptionTiers ADD ProductType INT NOT NULL DEFAULT 1;  -- 1=Menu initially
+   209→ALTER TABLE SubscriptionTiers ADD MaxEntities INT DEFAULT 1;
+   210→ALTER TABLE SubscriptionTiers ADD MaxCatalogsPerEntity INT DEFAULT 3;
+   211→ALTER TABLE SubscriptionTiers ADD MaxLibraryItems INT DEFAULT 50;
+   212→ALTER TABLE SubscriptionTiers ADD MaxCategoriesPerCatalog INT DEFAULT 10;
+   213→ALTER TABLE SubscriptionTiers ADD MaxBundles INT DEFAULT 0;
+   214→
+   215→CREATE INDEX IX_SubscriptionTiers_ProductType ON SubscriptionTiers(ProductType);
+   216→```
+   217→
+   218→**Tier Examples:**
+   219→```
+   220→Menu Product Tiers:
+   221→- Free: 1 entity, 1 catalog, 20 items, 5 categories (7-day trial)
+   222→- Starter: 1 entity, 3 catalogs, 50 items, 10 categories, 5 bundles (7-day trial, R99/month)
+   223→- Professional: 3 entities, 10 catalogs, 200 items, unlimited categories, 20 bundles (7-day trial, R299/month)
+   224→- Enterprise: Unlimited entities, unlimited catalogs, unlimited items, unlimited bundles (7-day trial, R599/month)
+   225→
+   226→Cards Product Tiers:
+   227→- Free: 1 entity (profile), basic features (7-day trial)
+   228→- Pro: 5 entities (profiles), advanced features (7-day trial, R149/month)
+   229→
+   230→Catalog Product Tiers:
+   231→- Free: 1 entity, 1 catalog, 50 products (7-day trial)
+   232→- Business: 3 entities, 10 catalogs, 500 products (7-day trial, R199/month)
+   233→```
+   234→
+   235→---
+   236→
+   237→## Entity Types Enum
+   238→
+   239→```csharp
+   240→public enum EntityType
+   241→{
+   242→    Restaurant = 0,
+   243→    Store = 1,
+   244→    Venue = 2,
+   245→    Organization = 3
+   246→}
+   247→```
+   248→
+   249→**Usage:**
+   250→- Menu product → typically Restaurant/Venue
+   251→- Catalog product → typically Store/Organization
+   252→- Cards product → any type (represents the business)
+   253→
+   254→---
+   255→
+   256→## URL Structure
+   257→
+   258→### Frontend (Menu Viewing)
+   259→
+   260→#### Single Catalog Per Entity
+   261→```
+   262→/{entity_slug}
+   263→Example: /the-cocktail-lounge
+   264→```
+   265→
+   266→#### Multiple Catalogs Per Entity
+   267→**Both formats must be supported:**
+   268→
+   269→Format 1 (Underscore):
+   270→```
+   271→/{entity_slug}_{catalog_slug}
+   272→Example: /the-cocktail-lounge_evening-menu
+   273→```
+   274→
+   275→Format 2 (Slash):
+   276→```
+   277→/{entity_slug}/{catalog_slug}
+   278→Example: /the-cocktail-lounge/evening-menu
+   279→```
+   280→
+   281→**Frontend Routing Logic:**
+   282→```csharp
+   283→// Try underscore format first: entity_catalog
+   284→var parts = slug.Split('_');
+   285→if (parts.Length == 2)
+   286→{
+   287→    var catalog = await _context.Catalogs
+   288→        .Include(c => c.Entity)
+   289→        .FirstOrDefaultAsync(c => c.Entity.Slug == parts[0] && c.Slug == parts[1] && c.IsActive);
+   290→    if (catalog != null) return catalog;
+   291→}
+   292→
+   293→// Try slash format: entity/catalog
+   294→if (!string.IsNullOrEmpty(catalogSlug))
+   295→{
+   296→    var catalog = await _context.Catalogs
+   297→        .Include(c => c.Entity)
+   298→        .FirstOrDefaultAsync(c => c.Entity.Slug == entitySlug && c.Slug == catalogSlug && c.IsActive);
+   299→    if (catalog != null) return catalog;
+   300→}
+   301→
+   302→// No catalog slug, get default (first active catalog for entity)
+   303→return await _context.Catalogs
+   304→    .Where(c => c.Entity.Slug == entitySlug && c.IsActive)
+   305→    .OrderBy(c => c.SortOrder)
+   306→    .FirstOrDefaultAsync();
+   307→```
+   308→
+   309→### API Endpoints
+   310→API uses slash format exclusively:
+   311→```
+   312→GET /api/v1/entities/{entityId}/catalogs/{catalogId}
+   313→PUT /api/v1/entities/{entityId}/catalogs/{catalogId}
+   314→```
+   315→
+   316→---
+   317→
+   318→## Menu Creation Wizard Flow
+   319→
+   320→### First Menu Creation (No Entities Exist)
+   321→**Step 1: Subscription Check**
+   322→- Check if user has Menu product subscription
+   323→- Show trial status or upgrade prompt
+   324→
+   325→**Step 2: Entity Creation** (New Step)
+   326→```
+   327→Create Your Restaurant/Venue
+   328→
+   329→Name: [The Cocktail Lounge]
+   330→Type: [Restaurant ▼] (dropdown: Restaurant/Venue/Store/Organization)
+   331→Slug: [the-cocktail-lounge] (auto-generated, editable)
+   332→
+   333→Description: [Optional description]
+   334→Address: [Optional]
+   335→City: [Optional]
+   336→Phone: [Optional]
+   337→```
+   338→
+   339→**Step 3: Menu Details**
+   340→```
+   341→Menu Details
+   342→
+   343→Name: [Evening Menu]
+   344→Slug: [evening-menu] (auto-generated from entity + menu name)
+   345→Description: [Our signature cocktails and appetizers]
+   346→```
+   347→
+   348→**Step 4: Categories**
+   349→- Create categories for this menu
+   350→- Inline creation: Click "Add Category" → modal opens → save → modal closes
+   351→
+   352→**Step 5: Menu Items**
+   353→- Add items to categories
+   354→- Inline creation: Click "Add Item" → modal → save → close
+   355→- Nested inline creation:
+   356→  - Creating item → need category? → modal over modal
+   357→  - Creating item → need option group? → modal over modal
+   358→  - Creating option group → need options? → modal over modal over modal
+   359→
+   360→### Subsequent Menu Creation (Entities Exist)
+   361→**Step 1: Subscription Check**
+   362→- Same as above
+   363→
+   364→**Step 2: Select Entity** (Changed)
+   365→```
+   366→Select Restaurant/Venue
+   367→
+   368→[ ] The Cocktail Lounge (Restaurant)
+   369→[ ] Le Petit Bistro (Restaurant)
+   370→[+] Create New Entity
+   371→```
+   372→
+   373→If "Create New Entity" selected → show entity creation form (same as first-time flow)
+   374→
+   375→**Step 3-5: Same as above**
+   376→
+   377→---
+   378→
+   379→## Inline Modal Creation Pattern
+   380→
+   381→### Stacked Modals for Dependencies
+   382→When creating an item, user may need to create supporting entities inline:
+   383→
+   384→```
+   385→[Item Form Modal - Z-index: 1000]
+   386→  ↓ User clicks "Create New Category"
+   387→  [Category Form Modal - Z-index: 1001]
+   388→    → User saves category
+   389→    → Category modal closes
+   390→    → Category appears in item form dropdown
+   391→  ↓ User clicks "Create Option Group"
+   392→  [Option Group Form Modal - Z-index: 1001]
+   393→    ↓ User clicks "Add Option"
+   394→    [Option Form Modal - Z-index: 1002]
+   395→      → User saves option
+   396→      → Option modal closes
+   397→      → Option appears in option group
+   398→    → User saves option group
+   399→    → Option group modal closes
+   400→    → Option group appears in item form
+   401→```
+   402→
+   403→**Implementation Notes:**
+   404→- Each modal level increments z-index by 1
+   405→- Parent modal remains visible (dimmed) behind child modal
+   406→- Use Teleport to body for proper stacking
+   407→- Track modal stack in component state
+   408→- ESC key closes topmost modal only
+   409→
+   410→---
+   411→
+   412→## Library Item Sharing Pattern
+   413→
+   414→### Scenario: Restaurant with Multiple Menus
+   415→```
+   416→Entity: "The Cocktail Lounge"
+   417→├─ Catalog: "Evening Menu"
+   418→│  ├─ Mojito (Price: R95) [master item]
+   419→│  └─ Caesar Salad (Price: R85) [master item]
+   420→│
+   421→└─ Catalog: "Happy Hour Menu"
+   422→   ├─ Mojito (Price Override: R65) [references master, different price]
+   423→   └─ Caesar Salad (Price: R85) [references master, same price]
+   424→```
+   425→
+   426→**Database Representation:**
+   427→```sql
+   428→-- Master items (ParentCatalogItemId = NULL)
+   429→INSERT INTO CatalogItems (Name, Price, CatalogId, ParentCatalogItemId)
+   430→VALUES ('Mojito', 95.00, 1, NULL);  -- ID: 100
+   431→
+   432→INSERT INTO CatalogItems (Name, Price, CatalogId, ParentCatalogItemId)
+   433→VALUES ('Caesar Salad', 85.00, 1, NULL);  -- ID: 101
+   434→
+   435→-- Happy Hour references with override
+   436→INSERT INTO CatalogItems (Name, Price, CatalogId, ParentCatalogItemId, PriceOverride)
+   437→VALUES ('Mojito', 95.00, 2, 100, 65.00);  -- Override price to R65
+   438→
+   439→INSERT INTO CatalogItems (Name, Price, CatalogId, ParentCatalogItemId, PriceOverride)
+   440→VALUES ('Caesar Salad', 85.00, 2, 101, NULL);  -- No override, use parent price
+   441→```
+   442→
+   443→### Cross-Entity Sharing
+   444→**Decision**: Item sharing is limited to same entity only.
+   445→
+   446→When user wants to use an item from Entity A in Entity B:
+   447→- **Copy only** - Creates new master item in Entity B catalog
+   448→- No ParentCatalogItemId link across entities
+   449→- Changes to Entity A item don't affect Entity B
+   450→- User can manually sync changes if needed
+   451→
+   452→**Rationale**: Keeps data ownership clear, prevents confusion when different entities (e.g., different restaurants) want different pricing/descriptions for similar items.
+   453→
+   454→---
+   455→
+   456→## Subscription Billing Logic
+   457→
+   458→### Trial Periods
+   459→Each product has independent 7-day trial:
+   460→```
+   461→User signs up on Jan 1:
+   462→- Menu product trial: Jan 1-7
+   463→- User adds Catalog product on Jan 3
+   464→- Catalog product trial: Jan 3-9
+   465→
+   466→All trials must end before billing starts
+   467→First billing date: Jan 10 (after both trials end)
+   468→```
+   469→
+   470→### Pro-Rata Billing
+   471→When adding product mid-billing cycle:
+   472→```
+   473→Billing cycle: Jan 1-31
+   474→Menu subscription: R299/month
+   475→
+   476→User adds Catalog on Jan 15 (after trial ends):
+   477→- Catalog full price: R199/month
+   478→- Days remaining in cycle: 16 days
+   479→- Pro-rata amount: R199 × (16/31) = R102.71
+   480→
+   481→Next bill (Jan 31):
+   482→- Menu: R299
+   483→- Catalog (pro-rata): R102.71
+   484→- Total: R401.71
+   485→
+   486→Feb 1 onwards:
+   487→- Menu: R299
+   488→- Catalog: R199
+   489→- Total: R498/month
+   490→```
+   491→
+   492→### Combined Billing
+   493→All active product subscriptions billed together on same date:
+   494→```
+   495→Invoice #123 - Jan 31, 2025
+   496→─────────────────────────────
+   497→Menu - Professional Plan       R299.00
+   498→Catalog - Business Plan        R199.00
+   499→Cards - Pro Plan               R149.00
+   500→                          ─────────────
+   501→Subtotal                       R647.00
+   502→VAT (15%)                       R97.05
+   503→                          ─────────────
+   504→Total Due                      R744.05
+   505→```
+   506→
+   507→---
+   508→
+   509→## API Changes
+   510→
+   511→### New Controllers
+   512→
+   513→#### EntitiesController
+   514→```csharp
+   515→[Route("api/v1/entities")]
+   516→[Authorize]
+   517→public class EntitiesController : ControllerBase
+   518→{
+   519→    [HttpGet]
+   520→    Task<IActionResult> GetMyEntities(int? productType = null)
+   521→    // Get all entities for current user, optionally filter by product type
+   522→
+   523→    [HttpGet("{id}")]
+   524→    Task<IActionResult> GetEntity(int id)
+   525→
+   526→    [HttpPost]
+   527→    Task<IActionResult> CreateEntity(CreateEntityDto dto)
+   528→    // Check MaxEntities limit for current product subscription
+   529→
+   530→    [HttpPut("{id}")]
+   531→    Task<IActionResult> UpdateEntity(int id, UpdateEntityDto dto)
+   532→
+   533→    [HttpDelete("{id}")]
+   534→    Task<IActionResult> DeleteEntity(int id)
+   535→    // Cascade delete all catalogs for this entity
+   536→
+   537→    [HttpGet("{id}/catalogs")]
+   538→    Task<IActionResult> GetEntityCatalogs(int id)
+   539→}
+   540→```
+   541→
+   542→#### ProductSubscriptionsController
+   543→```csharp
+   544→[Route("api/v1/subscriptions")]
+   545→[Authorize]
+   546→public class ProductSubscriptionsController : ControllerBase
+   547→{
+   548→    [HttpGet]
+   549→    Task<IActionResult> GetMySubscriptions()
+   550→    // Returns all product subscriptions for current user
+   551→
+   552→    [HttpGet("{productType}")]
+   553→    Task<IActionResult> GetProductSubscription(ProductType productType)
+   554→    // Get specific product subscription (Cards/Menu/Catalog)
+   555→
+   556→    [HttpPost]
+   557→    Task<IActionResult> SubscribeToProduct(SubscribeToProductDto dto)
+   558→    // Add new product subscription, calculate pro-rata if applicable
+   559→
+   560→    [HttpPut("{productType}/upgrade")]
+   561→    Task<IActionResult> UpgradeTier(ProductType productType, int newTierId)
+   562→
+   563→    [HttpPost("{productType}/cancel")]
+   564→    Task<IActionResult> CancelProductSubscription(ProductType productType)
+   565→
+   566→    [HttpGet("invoice-preview")]
+   567→    Task<IActionResult> GetInvoicePreview()
+   568→    // Show combined billing for all active products
+   569→}
+   570→```
+   571→
+   572→### Updated Controllers
+   573→
+   574→#### CatalogsController
+   575→```csharp
+   576→// Update all methods to use EntityId instead of ProfileId
+   577→
+   578→[HttpPost]
+   579→Task<IActionResult> CreateCatalog(CreateCatalogDto dto)
+   580→// Check MaxCatalogsPerEntity limit
+   581→// Verify user owns the entity
+   582→
+   583→[HttpPut("{id}/categories")]
+   584→Task<IActionResult> UpdateCatalogCategories(int id, UpdateCategoriesDto dto)
+   585→// Update CatalogCategories join table
+   586→```
+   587→
+   588→#### CatalogItemsController
+   589→```csharp
+   590→[HttpPost("{catalogId}/items")]
+   591→Task<IActionResult> AddItemToCatalog(int catalogId, AddItemDto dto)
+   592→// If dto.ParentCatalogItemId provided, verify parent belongs to same entity
+   593→// Create reference with optional price override
+   594→// If null, create master item
+   595→
+   596→[HttpPut("{id}/price-override")]
+   597→Task<IActionResult> UpdatePriceOverride(int id, decimal? priceOverride)
+   598→// Update PriceOverride for referenced item
+   599→
+   600→[HttpPost("{id}/copy-to-catalog")]
+   601→Task<IActionResult> CopyItemToAnotherCatalog(int id, CopyItemDto dto)
+   602→// Create master copy (no parent reference) in target catalog
+   603→// Works across entities (copy only, no reference)
+   604→```
+   605→
+   606→#### CategoriesController
+   607→```csharp
+   608→[Route("api/v1/categories")]
+   609→[Authorize]
+   610→public class CategoriesController : ControllerBase
+   611→{
+   612→    [HttpGet("entity/{entityId}")]
+   613→    Task<IActionResult> GetEntityCategories(int entityId)
+   614→    // Get all categories for this entity
+   615→
+   616→    [HttpPost]
+   617→    Task<IActionResult> CreateCategory(CreateCategoryDto dto)
+   618→    // Verify user owns the entity
+   619→    // Check MaxCategoriesPerCatalog limit
+   620→
+   621→    [HttpPut("{id}")]
+   622→    Task<IActionResult> UpdateCategory(int id, UpdateCategoryDto dto)
+   623→
+   624→    [HttpDelete("{id}")]
+   625→    Task<IActionResult> DeleteCategory(int id)
+   626→    // Remove from CatalogCategories join table entries first
+   627→}
+   628→```
+   629→
+   630→---
+   631→
+   632→## Frontend Changes
+   633→
+   634→### New Composables
+   635→
+   636→#### `useApi.ts` - Add Entity and Product Subscription APIs
+   637→```typescript
+   638→// Entities API
+   639→export const useEntitiesApi = () => {
+   640→  const api = useApi()
+   641→
+   642→  return {
+   643→    getMyEntities: (productType?: number) => {
+   644→      const params = productType !== undefined ? `?productType=${productType}` : ''
+   645→      return api.get(`/entities${params}`)
+   646→    },
+   647→    getEntity: (id: number) => api.get(`/entities/${id}`),
+   648→    createEntity: (data: any) => api.post('/entities', data),
+   649→    updateEntity: (id: number, data: any) => api.put(`/entities/${id}`, data),
+   650→    deleteEntity: (id: number) => api.delete(`/entities/${id}`),
+   651→    getEntityCatalogs: (id: number) => api.get(`/entities/${id}/catalogs`)
+   652→  }
+   653→}
+   654→
+   655→// Product Subscriptions API
+   656→export const useProductSubscriptionsApi = () => {
+   657→  const api = useApi()
+   658→
+   659→  return {
+   660→    getMySubscriptions: () => api.get('/subscriptions'),
+   661→    getProductSubscription: (productType: number) =>
+   662→      api.get(`/subscriptions/${productType}`),
+   663→    subscribeToProduct: (data: any) => api.post('/subscriptions', data),
+   664→    upgradeTier: (productType: number, newTierId: number) =>
+   665→      api.put(`/subscriptions/${productType}/upgrade`, { newTierId }),
+   666→    cancelProductSubscription: (productType: number) =>
+   667→      api.post(`/subscriptions/${productType}/cancel`),
+   668→    getInvoicePreview: () => api.get('/subscriptions/invoice-preview')
+   669→  }
+   670→}
+   671→
+   672→// Categories API (Entity-level)
+   673→export const useCategoriesApi = () => {
+   674→  const api = useApi()
+   675→
+   676→  return {
+   677→    getEntityCategories: (entityId: number) =>
+   678→      api.get(`/categories/entity/${entityId}`),
+   679→    createCategory: (data: any) => api.post('/categories', data),
+   680→    updateCategory: (id: number, data: any) => api.put(`/categories/${id}`, data),
+   681→    deleteCategory: (id: number) => api.delete(`/categories/${id}`)
+   682→  }
+   683→}
+   684→```
+   685→
+   686→### Updated Components
+   687→
+   688→#### `MenuCreationWizard.vue`
+   689→Add Step 2 for entity selection/creation:
+   690→```vue
+   691→<template>
+   692→  <div v-if="currentStep === 2" class="wizard-step">
+   693→    <h3>Select or Create Entity</h3>
+   694→
+   695→    <!-- Existing entities -->
+   696→    <div v-if="entities.length > 0" class="entity-list">
+   697→      <div
+   698→        v-for="entity in entities"
+   699→        :key="entity.id"
+   700→        class="entity-option"
+   701→        :class="{ selected: formData.entityId === entity.id }"
+   702→        @click="selectEntity(entity.id)"
+   703→      >
+   704→        <img v-if="entity.logo" :src="entity.logo" />
+   705→        <div>
+   706→          <h4>{{ entity.name }}</h4>
+   707→          <p>{{ entityTypeLabel(entity.entityType) }}</p>
+   708→        </div>
+   709→      </div>
+   710→    </div>
+   711→
+   712→    <!-- Create new entity -->
+   713→    <button @click="showEntityForm = true" class="btn-create-entity">
+   714→      <i class="fas fa-plus"></i> Create New Entity
+   715→    </button>
+   716→
+   717→    <!-- Entity creation form (inline) -->
+   718→    <div v-if="showEntityForm" class="entity-form">
+   719→      <input v-model="newEntity.name" placeholder="Entity name" />
+   720→      <select v-model="newEntity.entityType">
+   721→        <option value="0">Restaurant</option>
+   722→        <option value="1">Store</option>
+   723→        <option value="2">Venue</option>
+   724→        <option value="3">Organization</option>
+   725→      </select>
+   726→      <input v-model="newEntity.slug" placeholder="URL slug" />
+   727→      <!-- Additional fields... -->
+   728→      <button @click="createEntity">Save Entity</button>
+   729→    </div>
+   730→  </div>
+   731→</template>
+   732→
+   733→<script setup lang="ts">
+   734→const entities = ref([])
+   735→const showEntityForm = ref(false)
+   736→const newEntity = ref({
+   737→  name: '',
+   738→  entityType: 0,
+   739→  slug: ''
+   740→})
+   741→
+   742→onMounted(async () => {
+   743→  // Load user's entities for Menu product
+   744→  const response = await entitiesApi.getMyEntities(1) // 1 = Menu product
+   745→  entities.value = response.data?.entities || []
+   746→
+   747→  // If no entities, auto-show creation form
+   748→  if (entities.value.length === 0) {
+   749→    showEntityForm.value = true
+   750→  }
+   751→})
+   752→
+   753→// When entity is selected, load its categories
+   754→watch(() => formData.value.entityId, async (entityId) => {
+   755→  if (entityId) {
+   756→    const response = await categoriesApi.getEntityCategories(entityId)
+   757→    categories.value = response.data?.categories || []
+   758→  }
+   759→})
+   760→
+   761→const createEntity = async () => {
+   762→  const response = await entitiesApi.createEntity(newEntity.value)
+   763→  if (response.success) {
+   764→    entities.value.push(response.data.entity)
+   765→    formData.value.entityId = response.data.entity.id
+   766→    showEntityForm.value = false
+   767→  }
+   768→}
+   769→</script>
+   770→```
+   771→
+   772→#### `ItemFormModal.vue`
+   773→Add inline category/option group creation:
+   774→```vue
+   775→<template>
+   776→  <BaseModal :show="show" @close="$emit('close')">
+   777→    <form @submit.prevent="saveItem">
+   778→      <!-- Category selection with inline create -->
+   779→      <div class="form-group">
+   780→        <label>Category</label>
+   781→        <select v-model="itemForm.categoryId">
+   782→          <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+   783→            {{ cat.name }}
+   784→          </option>
+   785→        </select>
+   786→        <button type="button" @click="showCategoryModal = true">
+   787→          <i class="fas fa-plus"></i> Create Category
+   788→        </button>
+   789→      </div>
+   790→
+   791→      <!-- Option Groups -->
+   792→      <div class="form-group">
+   793→        <label>Option Groups</label>
+   794→        <div v-for="group in itemForm.optionGroups" :key="group.id">
+   795→          {{ group.name }}
+   796→        </div>
+   797→        <button type="button" @click="showOptionGroupModal = true">
+   798→          <i class="fas fa-plus"></i> Add Option Group
+   799→        </button>
+   800→      </div>
+   801→
+   802→      <button type="submit">Save Item</button>
+   803→    </form>
+   804→
+   805→    <!-- Nested modal: Category creation -->
+   806→    <CategoryFormModal
+   807→      :show="showCategoryModal"
+   808→      @close="showCategoryModal = false"
+   809→      @created="handleCategoryCreated"
+   810→      style="z-index: 1001"
+   811→    />
+   812→
+   813→    <!-- Nested modal: Option Group creation -->
+   814→    <OptionGroupFormModal
+   815→      :show="showOptionGroupModal"
+   816→      @close="showOptionGroupModal = false"
+   817→      @created="handleOptionGroupCreated"
+   818→      style="z-index: 1001"
+   819→    />
+   820→  </BaseModal>
+   821→</template>
+   822→
+   823→<script setup lang="ts">
+   824→const showCategoryModal = ref(false)
+   825→const showOptionGroupModal = ref(false)
+   826→
+   827→// Props should include entityId
+   828→const props = defineProps<{
+   829→  show: boolean
+   830→  entityId: number
+   831→  item?: any
+   832→}>()
+   833→
+   834→// Load categories for this entity
+   835→onMounted(async () => {
+   836→  if (props.entityId) {
+   837→    const response = await categoriesApi.getEntityCategories(props.entityId)
+   838→    categories.value = response.data?.categories || []
+   839→  }
+   840→})
+   841→
+   842→const handleCategoryCreated = (category: any) => {
+   843→  categories.value.push(category)
+   844→  itemForm.value.categoryId = category.id
+   845→  showCategoryModal.value = false
+   846→}
+   847→
+   848→const handleOptionGroupCreated = (group: any) => {
+   849→  itemForm.value.optionGroups.push(group)
+   850→  showOptionGroupModal.value = false
+   851→}
+   852→</script>
+   853→```
+   854→
+   855→#### `pages/dashboard/index.vue`
+   856→Show all product subscriptions:
+   857→```vue
+   858→<template>
+   859→  <div class="subscription-overview">
+   860→    <div v-for="sub in subscriptions" :key="sub.productType" class="product-card">
+   861→      <h3>{{ productName(sub.productType) }}</h3>
+   862→      <p>{{ tierName(sub.tierId) }}</p>
+   863→
+   864→      <div v-if="sub.isTrialActive" class="trial-banner">
+   865→        Trial: {{ sub.trialDaysRemaining }} days remaining
+   866→      </div>
+   867→
+   868→      <div class="usage-stats">
+   869→        <p>Entities: {{ sub.usage.entities }} / {{ sub.limits.maxEntities }}</p>
+   870→        <p>Catalogs: {{ sub.usage.catalogs }} / {{ sub.limits.maxCatalogs }}</p>
+   871→      </div>
+   872→
+   873→      <button @click="managePlan(sub.productType)">Manage Plan</button>
+   874→    </div>
+   875→
+   876→    <!-- Add product subscription -->
+   877→    <div class="add-product-card">
+   878→      <h3>Add Product</h3>
+   879→      <button @click="subscribeToCards">Add Cards</button>
+   880→      <button @click="subscribeToCatalog">Add Catalog</button>
+   881→    </div>
+   882→  </div>
+   883→</template>
+   884→```
+   885→
+   886→---
+   887→
+   888→## Data Migration Strategy
+   889→
+   890→### Phase 1: Create New Tables
+   891→```sql
+   892→-- Run all CREATE TABLE statements from schema section
+   893→-- All new tables created without breaking existing functionality
+   894→```
+   895→
+   896→### Phase 2: Create Default Entities
+   897→```sql
+   898→-- For each distinct UserId in Profiles, create a default entity
+   899→INSERT INTO Entities (UserId, EntityType, Name, Slug, CreatedAt, UpdatedAt)
+   900→SELECT DISTINCT
+   901→    p.UserId,
+   902→    0 as EntityType,  -- Default to Restaurant
+   903→    'Main Restaurant' as Name,
+   904→    LOWER(REPLACE(u.Email, '@', '-')) + '-default' as Slug,
+   905→    GETUTCDATE(),
+   906→    GETUTCDATE()
+   907→FROM Profiles p
+   908→INNER JOIN Users u ON p.UserId = u.Id
+   909→WHERE p.UserId IS NOT NULL;
+   910→```
+   911→
+   912→### Phase 3: Migrate Catalogs to Entities
+   913→```sql
+   914→-- Add EntityId column (nullable)
+   915→ALTER TABLE Catalogs ADD EntityId INT NULL;
+   916→
+   917→-- Link catalogs to their user's default entity
+   918→UPDATE c
+   919→SET c.EntityId = e.Id
+   920→FROM Catalogs c
+   921→INNER JOIN Profiles p ON c.ProfileId = p.Id
+   922→INNER JOIN Entities e ON e.UserId = p.UserId AND e.Name = 'Main Restaurant';
+   923→
+   924→-- Make EntityId required
+   925→ALTER TABLE Catalogs ALTER COLUMN EntityId INT NOT NULL;
+   926→
+   927→-- Add foreign key
+   928→ALTER TABLE Catalogs ADD CONSTRAINT FK_Catalogs_Entities
+   929→    FOREIGN KEY (EntityId) REFERENCES Entities(Id) ON DELETE CASCADE;
+   930→
+   931→-- Drop old ProfileId column
+   932→ALTER TABLE Catalogs DROP CONSTRAINT FK_Catalogs_Profiles;
+   933→ALTER TABLE Catalogs DROP COLUMN ProfileId;
+   934→```
+   935→
+   936→### Phase 4: Create Product Subscriptions
+   937→```sql
+   938→-- For each user with active subscription, create Menu product subscription
+   939→INSERT INTO ProductSubscriptions (
+   940→    UserId,
+   941→    ProductType,
+   942→    TierId,
+   943→    IsTrialActive,
+   944→    TrialStartDate,
+   945→    TrialEndDate,
+   946→    Status,
+   947→    CreatedAt,
+   948→    UpdatedAt
+   949→)
+   950→SELECT
+   951→    s.UserId,
+   952→    1 as ProductType,  -- Menu product
+   953→    s.TierId,
+   954→    s.IsTrialActive,
+   955→    s.TrialStartDate,
+   956→    s.TrialEndDate,
+   957→    s.Status,
+   958→    s.CreatedAt,
+   959→    GETUTCDATE()
+   960→FROM Subscriptions s
+   961→WHERE s.IsActive = 1;
+   962→```
+   963→
+   964→### Phase 5: Create Subscription Tiers for Each Product
+   965→```sql
+   966→-- Copy existing tiers for Menu product
+   967→UPDATE SubscriptionTiers SET ProductType = 1 WHERE ProductType = 0;
+   968→
+   969→-- Create Cards product tiers
+   970→INSERT INTO SubscriptionTiers (Name, ProductType, Price, BillingCycle, Features, MaxEntities, TrialDays)
+   971→VALUES
+   972→('Cards Free', 0, 0, 0, 'Basic digital business card', 1, 7),
+   973→('Cards Pro', 0, 149, 0, 'Advanced features, 5 profiles', 5, 7);
+   974→
+   975→-- Create Catalog product tiers
+   976→INSERT INTO SubscriptionTiers (Name, ProductType, Price, BillingCycle, Features, MaxEntities, MaxCatalogsPerEntity, MaxLibraryItems, TrialDays)
+   977→VALUES
+   978→('Catalog Free', 2, 0, 0, 'Basic catalog, 50 products', 1, 1, 50, 7),
+   979→('Catalog Business', 2, 199, 0, 'Advanced catalog, 500 products', 3, 10, 500, 7);
+   980→```
+   981→
+   982→### Phase 6: Migrate Categories to Entity-Level
+   983→```sql
+   984→-- Add EntityId to Categories (nullable first)
+   985→ALTER TABLE Categories ADD EntityId INT NULL;
+   986→
+   987→-- Link categories to entities via their catalogs
+   988→UPDATE c
+   989→SET c.EntityId = cat.EntityId
+   990→FROM Categories c
+   991→INNER JOIN CatalogCategories cc ON cc.CategoryId = c.Id
+   992→INNER JOIN Catalogs cat ON cat.Id = cc.CatalogId;
+   993→
+   994→-- For categories not yet in CatalogCategories, link via old CatalogId if exists
+   995→UPDATE c
+   996→SET c.EntityId = cat.EntityId
+   997→FROM Categories c
+   998→INNER JOIN Catalogs cat ON cat.Id = c.CatalogId
+   999→WHERE c.EntityId IS NULL AND c.CatalogId IS NOT NULL;
+  1000→
+  1001→-- Make EntityId required
+  1002→ALTER TABLE Categories ALTER COLUMN EntityId INT NOT NULL;
+  1003→
+  1004→-- Add foreign key and index
+  1005→ALTER TABLE Categories ADD CONSTRAINT FK_Categories_Entities
+  1006→    FOREIGN KEY (EntityId) REFERENCES Entities(Id) ON DELETE CASCADE;
+  1007→CREATE INDEX IX_Categories_EntityId ON Categories(EntityId);
+  1008→
+  1009→-- Remove UserId (categories now owned by entity, not user)
+  1010→ALTER TABLE Categories DROP COLUMN UserId;
+  1011→
+  1012→-- Create CatalogCategories join table entries if not already done
+  1013→INSERT INTO CatalogCategories (CatalogId, CategoryId, SortOrder, CreatedAt)
+  1014→SELECT DISTINCT
+  1015→    c.CatalogId,
+  1016→    cat.Id as CategoryId,
+  1017→    cat.SortOrder,
+  1018→    GETUTCDATE()
+  1019→FROM Categories cat
+  1020→INNER JOIN Catalogs c ON c.EntityId = cat.EntityId
+  1021→WHERE NOT EXISTS (
+  1022→    SELECT 1 FROM CatalogCategories cc
+  1023→    WHERE cc.CatalogId = c.Id AND cc.CategoryId = cat.Id
+  1024→);
+  1025→
+  1026→-- Remove old CatalogId from Categories if it exists
+  1027→IF EXISTS (SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Categories') AND name = 'CatalogId')
+  1028→BEGIN
+  1029→    ALTER TABLE Categories DROP COLUMN CatalogId;
+  1030→END
+  1031→```
+  1032→
+  1033→---
+  1034→
+  1035→## Implementation Phases
+  1036→
+  1037→### Phase 1: Database & Core Backend (Week 1-2)
+  1038→- [ ] Create Entities table and migration
+  1039→- [ ] Create ProductSubscriptions table
+  1040→- [ ] Create CatalogCategories table
+  1041→- [ ] Update Catalogs table (add EntityId)
+  1042→- [ ] Update CatalogItems table (add ParentCatalogItemId, PriceOverride)
+  1043→- [ ] Update SubscriptionTiers table (add product limits)
+  1044→- [ ] Run data migrations
+  1045→- [ ] Create EntitiesController
+  1046→- [ ] Create ProductSubscriptionsController
+  1047→- [ ] Update CatalogsController
+  1048→- [ ] Add price override logic to CatalogItemsController
+  1049→
+  1050→### Phase 2: Frontend Foundation (Week 2-3)
+  1051→- [ ] Add useEntitiesApi composable
+  1052→- [ ] Add useProductSubscriptionsApi composable
+  1053→- [ ] Update MenuCreationWizard with entity step
+  1054→- [ ] Create EntitySelector component
+  1055→- [ ] Create EntityFormModal component
+  1056→- [ ] Update subscription check logic for multiple products
+  1057→
+  1058→### Phase 3: Inline Creation UX (Week 3-4)
+  1059→- [ ] Implement stacked modal system (z-index management)
+  1060→- [ ] Add inline category creation to ItemFormModal
+  1061→- [ ] Add inline option group creation to ItemFormModal
+  1062→- [ ] Add inline option creation to OptionGroupFormModal
+  1063→- [ ] Add inline extra group/extra creation
+  1064→
+  1065→### Phase 4: Multi-Product Dashboard (Week 4-5)
+  1066→- [ ] Update dashboard to show all product subscriptions
+  1067→- [ ] Add product subscription cards with usage stats
+  1068→- [ ] Create combined billing invoice preview
+  1069→- [ ] Add upgrade/downgrade flows per product
+  1070→- [ ] Add "Add Product" subscription flow
+  1071→
+  1072→### Phase 5: Library Sharing & Overrides (Week 5-6)
+  1073→- [ ] Implement price override UI in catalog item editor
+  1074→- [ ] Add "Copy to another catalog" functionality
+  1075→- [ ] Show parent item indicator for referenced items
+  1076→- [ ] Add "Reset to default price" button for overrides
+  1077→- [ ] Create "Item usage" view (shows which catalogs use this item)
+  1078→
+  1079→### Phase 6: URL Routing & Polish (Week 6-7)
+  1080→- [ ] Implement dynamic routing for /{entity_slug}/{catalog_slug}
+  1081→- [ ] Add fallback for single-catalog entities
+  1082→- [ ] Update all navigation links
+  1083→- [ ] Add SEO metadata for entity/catalog pages
+  1084→- [ ] Testing and bug fixes
+  1085→
+  1086→---
+  1087→
+  1088→## Risk Mitigation
+  1089→
+  1090→### Risk 1: Data Migration Complexity
+  1091→**Impact:** High - Could corrupt existing data
+  1092→**Mitigation:**
+  1093→- Full database backup before migration
+  1094→- Run migrations on staging environment first
+  1095→- Write rollback scripts for each migration step
+  1096→- Validate data integrity with queries after each phase
+  1097→
+  1098→### Risk 2: Breaking Changes to Existing Frontend
+  1099→**Impact:** Medium - Users may experience downtime
+  1100→**Mitigation:**
+  1101→- Maintain backward compatibility in API during transition
+  1102→- Feature flags for new entity-based flows
+  1103→- Gradual rollout to beta users first
+  1104→- Keep old ProfileId temporarily as deprecated field
+  1105→
+  1106→### Risk 3: User Confusion with Multi-Product Subscriptions
+  1107→**Impact:** Medium - Users may not understand billing
+  1108→**Mitigation:**
+  1109→- Clear onboarding flow explaining product separation
+  1110→- Detailed invoice preview before charging
+  1111→- In-app help tooltips and documentation
+  1112→- Email notifications before first combined billing
+  1113→
+  1114→### Risk 4: Performance Degradation with Price Overrides
+  1115→**Impact:** Low - Recursive queries for parent prices
+  1116→**Mitigation:**
+  1117→- Add database index on ParentCatalogItemId
+  1118→- Implement caching for frequently accessed items
+  1119→- Limit parent chain depth (max 1 level deep)
+  1120→- Use computed EffectivePrice property
+  1121→
+  1122→---
+  1123→
+  1124→## Success Criteria
+  1125→
+  1126→### Technical
+  1127→- [ ] All existing functionality works after migration
+  1128→- [ ] No data loss or corruption
+  1129→- [ ] API response times under 500ms for catalog loads
+  1130→- [ ] Zero downtime deployment
+  1131→
+  1132→### User Experience
+  1133→- [ ] Users can create multiple entities
+  1134→- [ ] Users can subscribe to multiple products
+  1135→- [ ] Inline creation flows work for categories/option groups
+  1136→- [ ] Price overrides work correctly
+  1137→- [ ] Combined billing shows correct amounts
+  1138→
+  1139→### Business
+  1140→- [ ] Users upgrade to multi-product subscriptions
+  1141→- [ ] Reduced support tickets about entity/menu confusion
+  1142→- [ ] Successful pro-rata billing for mid-cycle additions
+  1143→
+  1144→---
+  1145→
+  1146→## Decisions Made
+  1147→
+  1148→1. **Cross-entity item sharing**: Same entity only - ParentCatalogItemId references only work within same entity
+  1149→
+  1150→2. **Entity limit enforcement**: Free tier allows 1 entity (no forced upgrade)
+  1151→
+  1152→3. **Category sharing scope**: Entity-level - each entity has its own categories (Categories table has EntityId FK)
+  1153→
+  1154→4. **URL format**:
+  1155→   - **Frontend viewing**: Support both `/{entity_slug}_{catalog_slug}` AND `/{entity_slug}/{catalog_slug}` for multiple catalogs
+  1156→   - **Single catalog**: `/{entity_slug}` only
+  1157→   - **API**: `/{entity}/{catalog}` format exclusively
+  1158→
+  1159→5. **Bundle assignment**: Catalog-level - bundles belong to specific catalog (not shared across entity's catalogs)
+  1160→
+  1161→---
+  1162→
+  1163→## Next Steps
+  1164→
+  1165→1. **Review this plan** - Confirm all clarifications are correctly incorporated
+  1166→2. **Discuss open questions** - Get decisions on ambiguous points
+  1167→3. **Create detailed task breakdown** - Break each phase into specific tickets
+  1168→4. **Set up development branch** - Create `feature/multi-product-architecture` branch
+  1169→5. **Begin Phase 1 implementation** - Start with database schema and migrations
+  1170→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

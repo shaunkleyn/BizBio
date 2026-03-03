@@ -1,0 +1,68 @@
+     1→namespace BizBio.Core.Entities;
+     2→
+     3→using System.ComponentModel.DataAnnotations;
+     4→using System.ComponentModel.DataAnnotations.Schema;
+     5→
+     6→public class User : BaseEntity
+     7→{
+     8→    //public int Id { get; set; }
+     9→
+    10→    [Required]
+    11→    [MaxLength(255)]
+    12→    public string Email { get; set; } = null!;
+    13→
+    14→    [Required]
+    15→    [MaxLength(255)]
+    16→    public string PasswordHash { get; set; } = null!;
+    17→
+    18→    [Required]
+    19→    [MaxLength(100)]
+    20→    public string FirstName { get; set; } = null!;
+    21→
+    22→    [Required]
+    23→    [MaxLength(100)]
+    24→    public string LastName { get; set; } = null!;
+    25→
+    26→    public bool EmailVerified { get; set; } = false;
+    27→
+    28→    // IsActive is inherited from BaseEntity
+    29→    // public bool IsActive { get; set; } = true;
+    30→
+    31→    [MaxLength(255)]
+    32→    public string? EmailVerificationToken { get; set; }
+    33→
+    34→    public DateTime? EmailVerificationTokenExpiry { get; set; }
+    35→
+    36→    [MaxLength(255)]
+    37→    public string? PasswordResetToken { get; set; }
+    38→
+    39→    public DateTime? PasswordResetTokenExpiry { get; set; }
+    40→
+    41→    public DateTime? LastPasswordChangeAt { get; set; }
+    42→
+    43→    public DateTime? LastLoginAt { get; set; }
+    44→
+    45→    public int FailedLoginAttempts { get; set; } = 0;
+    46→
+    47→    public DateTime? LockoutEnd { get; set; }
+    48→
+    49→    [MaxLength(3)]
+    50→    public string Currency { get; set; } = "ZAR";
+    51→
+    52→    //public DateTime CreatedAt { get; set; }
+    53→
+    54→    //public DateTime UpdatedAt { get; set; }
+    55→
+    56→    [NotMapped]
+    57→    public string FullName => $"{FirstName} {LastName}";
+    58→
+    59→    // Navigation properties
+    60→    public virtual ICollection<UserSubscription> Subscriptions { get; set; } = new List<UserSubscription>();
+    61→
+    62→    public virtual ICollection<Profile> Profiles { get; set; } = new List<Profile>();
+    63→}
+    64→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

@@ -1,0 +1,189 @@
+     1→import { defineStore } from 'pinia'
+     2→
+     3→interface User {
+     4→  id: string
+     5→  email: string
+     6→  firstName: string
+     7→  lastName: string
+     8→  [key: string]: any
+     9→}
+    10→
+    11→interface AuthState {
+    12→  user: User | null
+    13→  token: string | null
+    14→  loading: boolean
+    15→  error: string | null
+    16→}
+    17→
+    18→export const useAuthStore = defineStore('auth', {
+    19→  state: (): AuthState => ({
+    20→    user: null,
+    21→    token: null,
+    22→    loading: false,
+    23→    error: null
+    24→  }),
+    25→
+    26→  getters: {
+    27→    isAuthenticated: (state) => !!state.token,
+    28→    currentUser: (state) => state.user
+    29→  },
+    30→
+    31→  actions: {
+    32→    // Initialize auth state from localStorage
+    33→    initAuth() {
+    34→      if (import.meta.client) {
+    35→        const storedUser = localStorage.getItem('user')
+    36→        const storedToken = localStorage.getItem('token')
+    37→
+    38→        if (storedUser && storedToken) {
+    39→          this.user = JSON.parse(storedUser)
+    40→          this.token = storedToken
+    41→        }
+    42→      }
+    43→    },
+    44→
+    45→    async register(userData: any) {
+    46→      this.loading = true
+    47→      this.error = null
+    48→
+    49→      try {
+    50→        const authApi = useAuthApi()
+    51→        const response = await authApi.register(userData)
+    52→        return { success: true, data: response }
+    53→      } catch (error: any) {
+    54→        this.error = error.response?.data?.message || error.message || 'Registration failed'
+    55→        return { success: false, error: this.error }
+    56→      } finally {
+    57→        this.loading = false
+    58→      }
+    59→    },
+    60→
+    61→    async login(credentials: any) {
+    62→      this.loading = true
+    63→      this.error = null
+    64→
+    65→      try {
+    66→        const authApi = useAuthApi()
+    67→        const response = await authApi.login(credentials)
+    68→
+    69→        // Check if response has success property
+    70→        if (response.success === false) {
+    71→          this.error = response.message || response.error || 'Login failed'
+    72→          return { success: false, error: this.error }
+    73→        }
+    74→
+    75→        // Handle different response structures
+    76→        // Could be { success: true, data: { user, token } } or { success: true, user, token }
+    77→        let user, token
+    78→        if (response.data) {
+    79→          // Structure: { success: true, data: { user, token } }
+    80→          user = response.data.user
+    81→          token = response.data.token
+    82→        } else {
+    83→          // Structure: { success: true, user, token }
+    84→          user = response.user
+    85→          token = response.token
+    86→        }
+    87→
+    88→        if (!user || !token) {
+    89→          this.error = 'Invalid response from server'
+    90→          return { success: false, error: this.error }
+    91→        }
+    92→
+    93→        this.user = user
+    94→        this.token = token
+    95→
+    96→        if (import.meta.client) {
+    97→          localStorage.setItem('user', JSON.stringify(user))
+    98→          localStorage.setItem('token', token)
+    99→        }
+   100→
+   101→        return { success: true, data: { user, token } }
+   102→      } catch (error: any) {
+   103→        this.error = error.response?.data?.message || error.message || 'Login failed'
+   104→        return { success: false, error: this.error }
+   105→      } finally {
+   106→        this.loading = false
+   107→      }
+   108→    },
+   109→
+   110→    async verifyEmail(token: string) {
+   111→      this.loading = true
+   112→      this.error = null
+   113→
+   114→      try {
+   115→        const authApi = useAuthApi()
+   116→        const response = await authApi.verifyEmail(token)
+   117→        return { success: true, data: response }
+   118→      } catch (error: any) {
+   119→        this.error = error.response?.data?.message || error.message || 'Email verification failed'
+   120→        return { success: false, error: this.error }
+   121→      } finally {
+   122→        this.loading = false
+   123→      }
+   124→    },
+   125→
+   126→    async resendVerification(email: string) {
+   127→      this.loading = true
+   128→      this.error = null
+   129→
+   130→      try {
+   131→        const authApi = useAuthApi()
+   132→        const response = await authApi.resendVerification(email)
+   133→        return { success: true, data: response }
+   134→      } catch (error: any) {
+   135→        this.error = error.response?.data?.message || error.message || 'Failed to resend verification email'
+   136→        return { success: false, error: this.error }
+   137→      } finally {
+   138→        this.loading = false
+   139→      }
+   140→    },
+   141→
+   142→    async forgotPassword(email: string) {
+   143→      this.loading = true
+   144→      this.error = null
+   145→
+   146→      try {
+   147→        const authApi = useAuthApi()
+   148→        const response = await authApi.forgotPassword(email)
+   149→        return { success: true, data: response }
+   150→      } catch (error: any) {
+   151→        this.error = error.response?.data?.message || error.message || 'Password reset request failed'
+   152→        return { success: false, error: this.error }
+   153→      } finally {
+   154→        this.loading = false
+   155→      }
+   156→    },
+   157→
+   158→    async resetPassword(token: string, newPassword: string) {
+   159→      this.loading = true
+   160→      this.error = null
+   161→
+   162→      try {
+   163→        const authApi = useAuthApi()
+   164→        const response = await authApi.resetPassword(token, newPassword)
+   165→        return { success: true, data: response }
+   166→      } catch (error: any) {
+   167→        this.error = error.response?.data?.message || error.message || 'Password reset failed'
+   168→        return { success: false, error: this.error }
+   169→      } finally {
+   170→        this.loading = false
+   171→      }
+   172→    },
+   173→
+   174→    logout() {
+   175→      this.user = null
+   176→      this.token = null
+   177→
+   178→      if (import.meta.client) {
+   179→        localStorage.removeItem('user')
+   180→        localStorage.removeItem('token')
+   181→      }
+   182→    }
+   183→  }
+   184→})
+   185→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

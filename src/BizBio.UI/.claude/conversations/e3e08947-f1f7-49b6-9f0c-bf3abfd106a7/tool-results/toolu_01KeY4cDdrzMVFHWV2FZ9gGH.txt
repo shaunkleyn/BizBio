@@ -1,0 +1,28 @@
+Lifecycle scripts included in bizbio-frontend@1.0.0:
+  postinstall
+    nuxt prepare
+  start
+    node .output/server/index.mjs
+available via `npm run-script`:
+  dev
+    nuxt dev
+  build
+    nuxt build
+  generate
+    nuxt generate
+  preview
+    nuxt preview
+  pm2:start
+    pm2 start ecosystem.config.cjs --env production
+  pm2:stop
+    pm2 stop bizbio-frontend
+  pm2:restart
+    pm2 restart bizbio-frontend
+  pm2:delete
+    pm2 delete bizbio-frontend
+  pm2:logs
+    pm2 logs bizbio-frontend
+  pm2:monit
+    pm2 monit
+  deploy
+    npm run build && npm run pm2:restart

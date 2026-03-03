@@ -1,0 +1,24 @@
+     1→namespace BizBio.Core.Entities;
+     2→
+     3→/// <summary>
+     4→/// Links extra groups to catalog items (which extras are available for which items)
+     5→/// </summary>
+     6→public class CatalogItemExtraGroupLink : BaseEntity
+     7→{
+     8→    public int CatalogItemId { get; set; }
+     9→    public int ExtraGroupId { get; set; }
+    10→
+    11→    public int? VariantId { get; set; } // Optional: Link to specific variant
+    12→
+    13→    public int DisplayOrder { get; set; }
+    14→
+    15→    // Navigation properties
+    16→    public virtual CatalogItem CatalogItem { get; set; } = null!;
+    17→    public virtual CatalogItemExtraGroup ExtraGroup { get; set; } = null!;
+    18→    public virtual CatalogItemVariant? Variant { get; set; }
+    19→}
+    20→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

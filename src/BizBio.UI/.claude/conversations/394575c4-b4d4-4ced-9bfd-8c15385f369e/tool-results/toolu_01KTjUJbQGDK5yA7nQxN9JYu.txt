@@ -1,0 +1,52 @@
+     1→namespace BizBio.Core.Entities;
+     2→
+     3→using System.ComponentModel.DataAnnotations;
+     4→
+     5→/// <summary>
+     6→/// Group of options that belong together (e.g., "Choose Size", "Remove Ingredients", "Cooking Preference")
+     7→/// Defines selection rules (min/max required) for product customization
+     8→/// </summary>
+     9→public class CatalogItemOptionGroup : BaseEntity
+    10→{
+    11→    // Nullable for library groups (UserId set) or catalog-specific groups (CatalogId set)
+    12→    public int? UserId { get; set; }
+    13→    public int? CatalogId { get; set; }
+    14→
+    15→    [Required]
+    16→    [MaxLength(200)]
+    17→    public string Name { get; set; } = null!;
+    18→
+    19→    [MaxLength(1000)]
+    20→    public string? Description { get; set; }
+    21→
+    22→    /// <summary>
+    23→    /// Minimum number of options required (1 = required, 0 = optional)
+    24→    /// e.g., "Choose Size" would have MinRequired = 1
+    25→    /// </summary>
+    26→    public int MinRequired { get; set; } = 1;
+    27→
+    28→    /// <summary>
+    29→    /// Maximum number of options allowed (1 = single choice, 0 = unlimited)
+    30→    /// e.g., "Choose Size" would have MaxAllowed = 1
+    31→    /// "Remove Toppings" might have MaxAllowed = 0 (unlimited)
+    32→    /// </summary>
+    33→    public int MaxAllowed { get; set; } = 1;
+    34→
+    35→    /// <summary>
+    36→    /// Whether this option group must be configured (enforces MinRequired > 0)
+    37→    /// </summary>
+    38→    public bool IsRequired { get; set; } = true;
+    39→
+    40→    public int DisplayOrder { get; set; }
+    41→
+    42→    // Navigation properties
+    43→    public virtual User? User { get; set; }
+    44→    public virtual Catalog? Catalog { get; set; }
+    45→    public virtual ICollection<CatalogItemOptionGroupItem> GroupItems { get; set; } = new List<CatalogItemOptionGroupItem>();
+    46→    public virtual ICollection<CatalogItemOptionGroupLink> ItemLinks { get; set; } = new List<CatalogItemOptionGroupLink>();
+    47→}
+    48→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

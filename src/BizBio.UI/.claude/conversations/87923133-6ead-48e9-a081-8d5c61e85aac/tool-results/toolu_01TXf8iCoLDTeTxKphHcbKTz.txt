@@ -1,0 +1,113 @@
+     1→using BizBio.Core.DTOs;
+     2→using BizBio.Core.Entities;
+     3→
+     4→namespace BizBio.Core.Interfaces;
+     5→
+     6→/// <summary>
+     7→/// Service interface for authentication operations including registration, login,
+     8→/// email verification, and password reset functionality.
+     9→/// </summary>
+    10→public interface IAuthService
+    11→{
+    12→    /// <summary>
+    13→    /// Registers a new user with the provided registration details.
+    14→    /// </summary>
+    15→    Task<AuthResult> RegisterAsync(RegisterDto dto);
+    16→
+    17→    /// <summary>
+    18→    /// Authenticates a user with email and password credentials.
+    19→    /// </summary>
+    20→    Task<AuthResult> LoginAsync(LoginDto dto);
+    21→
+    22→    /// <summary>
+    23→    /// Verifies a user's email address using a verification token.
+    24→    /// </summary>
+    25→    Task<AuthResult> VerifyEmailAsync(string token);
+    26→
+    27→    /// <summary>
+    28→    /// Resends the email verification link to the specified email address.
+    29→    /// </summary>
+    30→    Task<AuthResult> ResendVerificationEmailAsync(string email);
+    31→
+    32→    /// <summary>
+    33→    /// Initiates a password reset process for the specified email address.
+    34→    /// </summary>
+    35→    Task<AuthResult> RequestPasswordResetAsync(string email);
+    36→
+    37→    /// <summary>
+    38→    /// Resets a user's password using a reset token and new password.
+    39→    /// </summary>
+    40→    Task<AuthResult> ResetPasswordAsync(string token, string newPassword);
+    41→
+    42→    /// <summary>
+    43→    /// Gets a user by email address (for development purposes).
+    44→    /// </summary>
+    45→    Task<User?> GetUserByEmailAsync(string email);
+    46→
+    47→    /// <summary>
+    48→    /// Manually verifies a user's email address (for development purposes).
+    49→    /// </summary>
+    50→    Task ManuallyVerifyEmailAsync(string email);
+    51→}
+    52→
+    53→/// <summary>
+    54→/// Represents the result of an authentication operation.
+    55→/// </summary>
+    56→public class AuthResult
+    57→{
+    58→    /// <summary>
+    59→    /// Gets or sets a value indicating whether the operation was successful.
+    60→    /// </summary>
+    61→    public bool Success { get; set; }
+    62→
+    63→    /// <summary>
+    64→    /// Gets or sets an optional message providing details about the result.
+    65→    /// </summary>
+    66→    public string? Message { get; set; }
+    67→
+    68→    /// <summary>
+    69→    /// Gets or sets the authenticated user object, if applicable.
+    70→    /// </summary>
+    71→    public User? User { get; set; }
+    72→
+    73→    /// <summary>
+    74→    /// Gets or sets the JWT authentication token, if applicable.
+    75→    /// </summary>
+    76→    public string? Token { get; set; }
+    77→
+    78→    /// <summary>
+    79→    /// Creates a successful authentication result with optional token.
+    80→    /// </summary>
+    81→    /// <param name="user">The authenticated user</param>
+    82→    /// <param name="token">The JWT token (optional)</param>
+    83→    /// <returns>A successful AuthResult</returns>
+    84→    public static AuthResult SuccessResult(User user, string? token = null)
+    85→    {
+    86→        return new AuthResult
+    87→        {
+    88→            Success = true,
+    89→            User = user,
+    90→            Token = token,
+    91→            Message = "Operation completed successfully"
+    92→        };
+    93→    }
+    94→
+    95→    /// <summary>
+    96→    /// Creates a failed authentication result with an error message.
+    97→    /// </summary>
+    98→    /// <param name="message">The error message</param>
+    99→    /// <returns>A failed AuthResult</returns>
+   100→    public static AuthResult FailureResult(string message)
+   101→    {
+   102→        return new AuthResult
+   103→        {
+   104→            Success = false,
+   105→            Message = message
+   106→        };
+   107→    }
+   108→}
+   109→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

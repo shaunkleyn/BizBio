@@ -1,0 +1,331 @@
+     1→using Microsoft.AspNetCore.Authorization;
+     2→using Microsoft.AspNetCore.Mvc;
+     3→using Microsoft.EntityFrameworkCore;
+     4→using BizBio.Infrastructure.Data;
+     5→using BizBio.Core.Entities;
+     6→using System.Security.Claims;
+     7→
+     8→namespace BizBio.API.Controllers;
+     9→
+    10→[Route("api/v1/library/extra-groups")]
+    11→[ApiController]
+    12→[Authorize]
+    13→public class ExtraGroupsController : ControllerBase
+    14→{
+    15→    private readonly ApplicationDbContext _context;
+    16→    private readonly ILogger<ExtraGroupsController> _logger;
+    17→
+    18→    public ExtraGroupsController(ApplicationDbContext context, ILogger<ExtraGroupsController> logger)
+    19→    {
+    20→        _context = context;
+    21→        _logger = logger;
+    22→    }
+    23→
+    24→    private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+    25→
+    26→    /// <summary>
+    27→    /// Get all extra groups for the current user
+    28→    /// </summary>
+    29→    [HttpGet]
+    30→    public async Task<IActionResult> GetExtraGroups()
+    31→    {
+    32→        try
+    33→        {
+    34→            var userId = GetUserId();
+    35→            var groups = await _context.CatalogItemExtraGroups
+    36→                .Where(g => g.UserId == userId && g.CatalogId == null && g.IsActive)
+    37→                .Include(g => g.GroupItems)
+    38→                    .ThenInclude(gi => gi.Extra)
+    39→                .OrderBy(g => g.DisplayOrder)
+    40→                .ThenBy(g => g.Name)
+    41→                .Select(g => new
+    42→                {
+    43→                    g.Id,
+    44→                    g.Name,
+    45→                    g.Description,
+    46→                    g.MinRequired,
+    47→                    g.MaxAllowed,
+    48→                    g.AllowMultipleQuantities,
+    49→                    g.DisplayOrder,
+    50→                    g.IsActive,
+    51→                    g.CreatedAt,
+    52→                    g.UpdatedAt,
+    53→                    Extras = g.GroupItems.Select(gi => new
+    54→                    {
+    55→                        gi.Id,
+    56→                        gi.ExtraId,
+    57→                        gi.DisplayOrder,
+    58→                        gi.PriceOverride,
+    59→                        Extra = new
+    60→                        {
+    61→                            gi.Extra.Id,
+    62→                            gi.Extra.Name,
+    63→                            gi.Extra.Description,
+    64→                            gi.Extra.Code,
+    65→                            gi.Extra.BasePrice,
+    66→                            gi.Extra.ImageUrl
+    67→                        }
+    68→                    }).OrderBy(e => e.DisplayOrder).ToList()
+    69→                })
+    70→                .ToListAsync();
+    71→
+    72→            return Ok(new { success = true, data = groups });
+    73→        }
+    74→        catch (Exception ex)
+    75→        {
+    76→            _logger.LogError(ex, "Error fetching extra groups");
+    77→            return StatusCode(500, new { success = false, error = "Failed to fetch extra groups" });
+    78→        }
+    79→    }
+    80→
+    81→    /// <summary>
+    82→    /// Get a single extra group by ID
+    83→    /// </summary>
+    84→    [HttpGet("{id}")]
+    85→    public async Task<IActionResult> GetExtraGroup(int id)
+    86→    {
+    87→        try
+    88→        {
+    89→            var userId = GetUserId();
+    90→            var group = await _context.CatalogItemExtraGroups
+    91→                .Where(g => g.Id == id && g.UserId == userId && g.IsActive)
+    92→                .Include(g => g.GroupItems)
+    93→                    .ThenInclude(gi => gi.Extra)
+    94→                .Select(g => new
+    95→                {
+    96→                    g.Id,
+    97→                    g.Name,
+    98→                    g.Description,
+    99→                    g.MinRequired,
+   100→                    g.MaxAllowed,
+   101→                    g.AllowMultipleQuantities,
+   102→                    g.DisplayOrder,
+   103→                    g.IsActive,
+   104→                    g.CreatedAt,
+   105→                    g.UpdatedAt,
+   106→                    Extras = g.GroupItems.Select(gi => new
+   107→                    {
+   108→                        gi.Id,
+   109→                        gi.ExtraId,
+   110→                        gi.DisplayOrder,
+   111→                        gi.PriceOverride,
+   112→                        Extra = new
+   113→                        {
+   114→                            gi.Extra.Id,
+   115→                            gi.Extra.Name,
+   116→                            gi.Extra.Description,
+   117→                            gi.Extra.Code,
+   118→                            gi.Extra.BasePrice,
+   119→                            gi.Extra.ImageUrl
+   120→                        }
+   121→                    }).OrderBy(e => e.DisplayOrder).ToList()
+   122→                })
+   123→                .FirstOrDefaultAsync();
+   124→
+   125→            if (group == null)
+   126→                return NotFound(new { success = false, error = "Extra group not found" });
+   127→
+   128→            return Ok(new { success = true, data = group });
+   129→        }
+   130→        catch (Exception ex)
+   131→        {
+   132→            _logger.LogError(ex, "Error fetching extra group {Id}", id);
+   133→            return StatusCode(500, new { success = false, error = "Failed to fetch extra group" });
+   134→        }
+   135→    }
+   136→
+   137→    /// <summary>
+   138→    /// Create a new extra group
+   139→    /// </summary>
+   140→    [HttpPost]
+   141→    public async Task<IActionResult> CreateExtraGroup([FromBody] CreateExtraGroupDto dto)
+   142→    {
+   143→        try
+   144→        {
+   145→            var userId = GetUserId();
+   146→            var userIdString = userId.ToString();
+   147→
+   148→            var group = new CatalogItemExtraGroup
+   149→            {
+   150→                UserId = userId,
+   151→                Name = dto.Name,
+   152→                Description = dto.Description,
+   153→                MinRequired = dto.MinRequired,
+   154→                MaxAllowed = dto.MaxAllowed,
+   155→                AllowMultipleQuantities = dto.AllowMultipleQuantities,
+   156→                DisplayOrder = dto.DisplayOrder,
+   157→                IsActive = true,
+   158→                CreatedAt = DateTime.UtcNow,
+   159→                UpdatedAt = DateTime.UtcNow,
+   160→                CreatedBy = userIdString,
+   161→                UpdatedBy = userIdString
+   162→            };
+   163→
+   164→            _context.CatalogItemExtraGroups.Add(group);
+   165→            await _context.SaveChangesAsync();
+   166→
+   167→            // Add extras to the group
+   168→            if (dto.ExtraIds != null && dto.ExtraIds.Any())
+   169→            {
+   170→                var displayOrder = 0;
+   171→                foreach (var extraId in dto.ExtraIds)
+   172→                {
+   173→                    var groupItem = new CatalogItemExtraGroupItem
+   174→                    {
+   175→                        ExtraGroupId = group.Id,
+   176→                        ExtraId = extraId,
+   177→                        DisplayOrder = displayOrder++,
+   178→                        IsActive = true,
+   179→                        CreatedAt = DateTime.UtcNow,
+   180→                        UpdatedAt = DateTime.UtcNow,
+   181→                        CreatedBy = userIdString,
+   182→                        UpdatedBy = userIdString
+   183→                    };
+   184→                    _context.CatalogItemExtraGroupItems.Add(groupItem);
+   185→                }
+   186→                await _context.SaveChangesAsync();
+   187→            }
+   188→
+   189→            // Reload with extras
+   190→            var createdGroup = await _context.CatalogItemExtraGroups
+   191→                .Where(g => g.Id == group.Id)
+   192→                .Include(g => g.GroupItems)
+   193→                    .ThenInclude(gi => gi.Extra)
+   194→                .FirstOrDefaultAsync();
+   195→
+   196→            return CreatedAtAction(nameof(GetExtraGroup), new { id = group.Id },
+   197→                new { success = true, data = createdGroup });
+   198→        }
+   199→        catch (Exception ex)
+   200→        {
+   201→            _logger.LogError(ex, "Error creating extra group");
+   202→            return StatusCode(500, new { success = false, error = "Failed to create extra group" });
+   203→        }
+   204→    }
+   205→
+   206→    /// <summary>
+   207→    /// Update an existing extra group
+   208→    /// </summary>
+   209→    [HttpPut("{id}")]
+   210→    public async Task<IActionResult> UpdateExtraGroup(int id, [FromBody] UpdateExtraGroupDto dto)
+   211→    {
+   212→        try
+   213→        {
+   214→            var userId = GetUserId();
+   215→            var userIdString = userId.ToString();
+   216→            var group = await _context.CatalogItemExtraGroups
+   217→                .Include(g => g.GroupItems)
+   218→                .FirstOrDefaultAsync(g => g.Id == id && g.UserId == userId);
+   219→
+   220→            if (group == null)
+   221→                return NotFound(new { success = false, error = "Extra group not found" });
+   222→
+   223→            group.Name = dto.Name;
+   224→            group.Description = dto.Description;
+   225→            group.MinRequired = dto.MinRequired;
+   226→            group.MaxAllowed = dto.MaxAllowed;
+   227→            group.AllowMultipleQuantities = dto.AllowMultipleQuantities;
+   228→            group.DisplayOrder = dto.DisplayOrder;
+   229→            group.UpdatedAt = DateTime.UtcNow;
+   230→            group.UpdatedBy = userIdString;
+   231→
+   232→            // Update extras in the group
+   233→            if (dto.ExtraIds != null)
+   234→            {
+   235→                // Remove existing items
+   236→                _context.CatalogItemExtraGroupItems.RemoveRange(group.GroupItems);
+   237→
+   238→                // Add new items
+   239→                var displayOrder = 0;
+   240→                foreach (var extraId in dto.ExtraIds)
+   241→                {
+   242→                    var groupItem = new CatalogItemExtraGroupItem
+   243→                    {
+   244→                        ExtraGroupId = group.Id,
+   245→                        ExtraId = extraId,
+   246→                        DisplayOrder = displayOrder++,
+   247→                        IsActive = true,
+   248→                        CreatedAt = DateTime.UtcNow,
+   249→                        UpdatedAt = DateTime.UtcNow,
+   250→                        CreatedBy = userIdString,
+   251→                        UpdatedBy = userIdString
+   252→                    };
+   253→                    _context.CatalogItemExtraGroupItems.Add(groupItem);
+   254→                }
+   255→            }
+   256→
+   257→            await _context.SaveChangesAsync();
+   258→
+   259→            // Reload with extras
+   260→            var updatedGroup = await _context.CatalogItemExtraGroups
+   261→                .Where(g => g.Id == group.Id)
+   262→                .Include(g => g.GroupItems)
+   263→                    .ThenInclude(gi => gi.Extra)
+   264→                .FirstOrDefaultAsync();
+   265→
+   266→            return Ok(new { success = true, data = updatedGroup });
+   267→        }
+   268→        catch (Exception ex)
+   269→        {
+   270→            _logger.LogError(ex, "Error updating extra group {Id}", id);
+   271→            return StatusCode(500, new { success = false, error = "Failed to update extra group" });
+   272→        }
+   273→    }
+   274→
+   275→    /// <summary>
+   276→    /// Delete an extra group
+   277→    /// </summary>
+   278→    [HttpDelete("{id}")]
+   279→    public async Task<IActionResult> DeleteExtraGroup(int id)
+   280→    {
+   281→        try
+   282→        {
+   283→            var userId = GetUserId();
+   284→            var userIdString = userId.ToString();
+   285→            var group = await _context.CatalogItemExtraGroups
+   286→                .FirstOrDefaultAsync(g => g.Id == id && g.UserId == userId);
+   287→
+   288→            if (group == null)
+   289→                return NotFound(new { success = false, error = "Extra group not found" });
+   290→
+   291→            group.IsActive = false;
+   292→            group.UpdatedAt = DateTime.UtcNow;
+   293→            group.UpdatedBy = userIdString;
+   294→            await _context.SaveChangesAsync();
+   295→
+   296→            return Ok(new { success = true, message = "Extra group deleted successfully" });
+   297→        }
+   298→        catch (Exception ex)
+   299→        {
+   300→            _logger.LogError(ex, "Error deleting extra group {Id}", id);
+   301→            return StatusCode(500, new { success = false, error = "Failed to delete extra group" });
+   302→        }
+   303→    }
+   304→}
+   305→
+   306→public class CreateExtraGroupDto
+   307→{
+   308→    public string Name { get; set; } = null!;
+   309→    public string? Description { get; set; }
+   310→    public int MinRequired { get; set; }
+   311→    public int MaxAllowed { get; set; }
+   312→    public bool AllowMultipleQuantities { get; set; } = true;
+   313→    public int DisplayOrder { get; set; }
+   314→    public List<int>? ExtraIds { get; set; }
+   315→}
+   316→
+   317→public class UpdateExtraGroupDto
+   318→{
+   319→    public string Name { get; set; } = null!;
+   320→    public string? Description { get; set; }
+   321→    public int MinRequired { get; set; }
+   322→    public int MaxAllowed { get; set; }
+   323→    public bool AllowMultipleQuantities { get; set; } = true;
+   324→    public int DisplayOrder { get; set; }
+   325→    public List<int>? ExtraIds { get; set; }
+   326→}
+   327→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

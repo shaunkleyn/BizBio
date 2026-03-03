@@ -1,0 +1,76 @@
+     1→namespace BizBio.Core.Entities;
+     2→
+     3→using System.ComponentModel.DataAnnotations;
+     4→
+     5→public enum CatalogItemType
+     6→{
+     7→    Regular = 0,
+     8→    Bundle = 1
+     9→}
+    10→
+    11→public class CatalogItem : BaseEntity
+    12→{
+    13→    //public int Id { get; set; }
+    14→
+    15→    // Nullable CatalogId - null means it's a library item not yet assigned to a catalog
+    16→    public int? CatalogId { get; set; }
+    17→
+    18→    // UserId for library items (items owned by user but not in a specific catalog)
+    19→    public int? UserId { get; set; }
+    20→
+    21→    // DEPRECATED: Use CatalogItemCategories for many-to-many relationship instead
+    22→    // Keeping for backward compatibility during migration
+    23→    public int? CategoryId { get; set; }
+    24→
+    25→    public CatalogItemType ItemType { get; set; } = CatalogItemType.Regular;
+    26→
+    27→    public int? BundleId { get; set; }
+    28→
+    29→    [Required]
+    30→    [MaxLength(255)]
+    31→    public string Name { get; set; } = null!;
+    32→
+    33→    [MaxLength(2000)]
+    34→    public string? Description { get; set; }
+    35→
+    36→    public decimal Price { get; set; }
+    37→
+    38→    [MaxLength(5000)]
+    39→    public string? Images { get; set; } // JSON array as string
+    40→
+    41→    // Tags for allergens, dietary info (JSON array: ["Gluten-Free", "Vegan", "Nut Allergy", etc.])
+    42→    [MaxLength(2000)]
+    43→    public string? Tags { get; set; }
+    44→
+    45→    public bool AvailableInEventMode { get; set; } = true;
+    46→
+    47→    public bool EventModeOnly { get; set; } = false;
+    48→
+    49→    //public bool IsActive { get; set; } = true;
+    50→
+    51→    public int SortOrder { get; set; } = 0;
+    52→
+    53→    // Reference to source library item (when item is copied from library to catalog)
+    54→    public int? SourceLibraryItemId { get; set; }
+    55→
+    56→    //public DateTime CreatedAt { get; set; }
+    57→
+    58→    //public DateTime UpdatedAt { get; set; }
+    59→
+    60→    // Navigation properties
+    61→    public virtual Catalog? Catalog { get; set; }
+    62→    public virtual CatalogBundle? Bundle { get; set; }
+    63→    public virtual User? User { get; set; }
+    64→    public virtual ICollection<CatalogItemVariant> Variants { get; set; } = new List<CatalogItemVariant>();
+    65→    public virtual ICollection<CatalogItemExtraGroupLink> ExtraGroupLinks { get; set; } = new List<CatalogItemExtraGroupLink>();
+    66→    public virtual ICollection<CatalogItemOptionGroupLink> OptionGroupLinks { get; set; } = new List<CatalogItemOptionGroupLink>();
+    67→
+    68→    // Many-to-many with CatalogCategory through CatalogItemCategory
+    69→    // Supports items appearing in multiple categories (e.g., bundle in "Specials" and "Burgers")
+    70→    public virtual ICollection<CatalogItemCategory> CatalogItemCategories { get; set; } = new List<CatalogItemCategory>();
+    71→}
+    72→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

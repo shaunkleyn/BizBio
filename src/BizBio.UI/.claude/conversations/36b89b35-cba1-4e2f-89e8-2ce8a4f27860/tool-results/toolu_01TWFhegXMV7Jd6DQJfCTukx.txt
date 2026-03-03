@@ -1,0 +1,44 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.Core\Entities\Catalog.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+     1→namespace BizBio.Core.Entities;
+     2→
+     3→using System.ComponentModel.DataAnnotations;
+     4→
+     5→public class Catalog : BaseEntity
+     6→{
+     7→    /// <summary>
+     8→    /// The entity (Restaurant/Store/Venue/Organization) this catalog belongs to
+     9→    /// </summary>
+    10→    public int EntityId { get; set; }
+    11→
+    12→    [Required]
+    13→    [MaxLength(255)]
+    14→    public string Name { get; set; } = null!;
+    15→
+    16→    /// <summary>
+    17→    /// URL-friendly slug for catalog routing
+    18→    /// </summary>
+    19→    [MaxLength(255)]
+    20→    public string? Slug { get; set; }
+    21→
+    22→    [MaxLength(2000)]
+    23→    public string? Description { get; set; }
+    24→
+    25→    /// <summary>
+    26→    /// Sort order for displaying multiple catalogs
+    27→    /// </summary>
+    28→    public int SortOrder { get; set; } = 0;
+    29→
+    30→    public DateTime ValidFrom { get; set; }
+    31→    public DateTime ValidTo { get; set; }
+    32→    public bool IsPublic { get; set; }
+    33→
+    34→    // Navigation properties
+    35→
+    36→    /// <summary>
+    37→    /// The entity (Restaurant/Store/Venue/Organization) this catalog belongs to
+    38→    /// </summary>
+    39→    public virtual Entity Entity { get; set; } = null!;
+    40→
+    41→    public virtual ICollection<CatalogItem> Items { get; set; } = new List<CatalogItem>();
+    42→    public virtual ICollection<CatalogCategory> Categories { get; set; } = new List<CatalogCategory>();
+    43→    public virtual ICollection<CatalogVersion> Versions { get; set; } = new List<CatalogVersion>();

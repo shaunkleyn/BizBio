@@ -1,0 +1,71 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.Core\Services\MenuMappingService.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   149→            }
+   150→        };
+   151→    }
+   152→
+   153→    private VariantDto MapVariantToDto(
+   154→        CatalogItemVariant variant,
+   155→        CatalogItem item,
+   156→        Dictionary<int, int> optionIndexMap,
+   157→        Dictionary<int, int> extraIndexMap)
+   158→    {
+   159→        // Build option_indices and extra_indices arrays
+   160→        var optionIndices = new List<int>();
+   161→        var extraIndices = new List<int>();
+   162→
+   163→        // === 1. Load from OptionGroupLinks (dedicated options system) ===
+   164→        foreach (var link in item.OptionGroupLinks)
+   165→        {
+   166→            // Check if this option group applies to this specific variant
+   167→            // or if it's linked to the item level (applies to all variants)
+   168→            if (link.VariantId == null || link.VariantId == variant.Id)
+   169→            {
+   170→                var groupId = link.OptionGroupId;
+   171→
+   172→                if (optionIndexMap.ContainsKey(groupId))
+   173→                {
+   174→                    optionIndices.Add(optionIndexMap[groupId]);
+   175→                }
+   176→            }
+   177→        }
+   178→
+   179→        // === 2. Load from ExtraGroupLinks (extras system + legacy options) ===
+   180→        foreach (var link in item.ExtraGroupLinks)
+   181→        {
+   182→            // Check if this extra group applies to this specific variant
+   183→            // or if it's linked to the item level (applies to all variants)
+   184→            if (link.VariantId == null || link.VariantId == variant.Id)
+   185→            {
+   186→                var groupId = link.ExtraGroupId;
+   187→
+   188→                // Add to appropriate indices list based on which map contains it
+   189→                if (optionIndexMap.ContainsKey(groupId))
+   190→                {
+   191→                    optionIndices.Add(optionIndexMap[groupId]);
+   192→                }
+   193→                else if (extraIndexMap.ContainsKey(groupId))
+   194→                {
+   195→                    extraIndices.Add(extraIndexMap[groupId]);
+   196→                }
+   197→            }
+   198→        }
+   199→
+   200→        return new VariantDto
+   201→        {
+   202→            Id = variant.Id,
+   203→            Name = variant.Title,
+   204→            Default = variant.IsDefault,
+   205→            Price = variant.Price,
+   206→            OldPrice = null, // Calculate from promotional pricing if needed
+   207→            OptionIndices = optionIndices.Distinct().OrderBy(i => i).ToList(),
+   208→            ExtraIndices = extraIndices.Distinct().OrderBy(i => i).ToList(),
+   209→            BusinessIdentity = new BusinessIdentityDto
+   210→            {
+   211→                External = variant.Sku
+   212→            }
+   213→        };
+   214→    }
+   215→
+   216→    private OptionGroupDto MapToOptionGroup(CatalogItemExtraGroup group)
+   217→    {
+   218→        return new OptionGroupDto

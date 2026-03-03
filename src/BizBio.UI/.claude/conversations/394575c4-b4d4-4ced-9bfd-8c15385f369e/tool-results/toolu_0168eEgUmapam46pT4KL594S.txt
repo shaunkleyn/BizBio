@@ -1,0 +1,33 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.API\Controllers\MRDStyleMenuController.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   151→
+   152→            decimal itemTotal = variant.Price * cartItem.Quantity;
+   153→            var selectedExtras = new List<SelectedExtraDetail>();
+   154→
+   155→            // Validate and calculate options cost
+   156→            foreach (var optionSelection in cartItem.SelectedOptions)
+   157→            {
+   158→                // Try dedicated options table first
+   159→                var option = await _context.CatalogItemOptions
+   160→                    .FirstOrDefaultAsync(o => o.Id == optionSelection.OptionId);
+   161→
+   162→                if (option != null)
+   163→                {
+   164→                    // Options use PriceModifier (can be positive, negative, or zero)
+   165→                    itemTotal += option.PriceModifier * cartItem.Quantity;
+   166→                }
+   167→                else
+   168→                {
+   169→                    // Legacy: Check extras table (for old option groups with MinRequired >= 1)
+   170→                    var legacyOption = await _context.CatalogItemExtras
+   171→                        .FirstOrDefaultAsync(e => e.Id == optionSelection.OptionId);
+   172→
+   173→                    if (legacyOption == null)
+   174→                        return BadRequest(new { error = $"Option {optionSelection.OptionId} not found" });
+   175→
+   176→                    itemTotal += legacyOption.BasePrice * cartItem.Quantity;
+   177→                }
+   178→            }
+   179→
+   180→            // Calculate extras cost
+   181→            foreach (var extraSelection in cartItem.SelectedExtras)
+   182→            {

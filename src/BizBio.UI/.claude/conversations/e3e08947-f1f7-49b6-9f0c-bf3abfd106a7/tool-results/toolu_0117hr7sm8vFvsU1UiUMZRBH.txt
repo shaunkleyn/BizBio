@@ -1,0 +1,6 @@
+Exit code 1
+npm error Missing script: "build:dev"
+npm error
+npm error To see a list of scripts, run:
+npm error   npm run
+npm error A complete log of this run can be found in: C:\Users\shaunk\AppData\Local\npm-cache\_logs\2025-12-19T18_01_38_974Z-debug-0.log

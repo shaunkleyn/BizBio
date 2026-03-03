@@ -1,0 +1,31 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.API\Controllers\MRDStyleMenuController.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    76→
+    77→        if (profile == null)
+    78→            return NotFound(new { error = "Profile not found" });
+    79→
+    80→        var catalog = await _context.Catalogs
+    81→            .Include(c => c.Categories)
+    82→                .ThenInclude(cat => cat.CatalogItemCategories)
+    83→                    .ThenInclude(cic => cic.CatalogItem)
+    84→                        .ThenInclude(item => item.Variants)
+    85→            .Include(c => c.Categories)
+    86→                .ThenInclude(cat => cat.CatalogItemCategories)
+    87→                    .ThenInclude(cic => cic.CatalogItem)
+    88→                        .ThenInclude(item => item.ExtraGroupLinks)
+    89→                            .ThenInclude(link => link.ExtraGroup)
+    90→                                .ThenInclude(group => group.GroupItems)
+    91→                                    .ThenInclude(gi => gi.Extra)
+    92→            .Include(c => c.Categories)
+    93→                .ThenInclude(cat => cat.CatalogItemCategories)
+    94→                    .ThenInclude(cic => cic.CatalogItem)
+    95→                        .ThenInclude(item => item.OptionGroupLinks)
+    96→                            .ThenInclude(link => link.OptionGroup)
+    97→                                .ThenInclude(group => group.GroupItems)
+    98→                                    .ThenInclude(gi => gi.Option)
+    99→            .Where(c => c.ProfileId == profile.Id && c.IsPublic)
+   100→            .OrderByDescending(c => c.CreatedAt)
+   101→            .FirstOrDefaultAsync();
+   102→
+   103→        if (catalog == null)
+   104→            return NotFound(new { error = "No active menu found for this profile" });
+   105→

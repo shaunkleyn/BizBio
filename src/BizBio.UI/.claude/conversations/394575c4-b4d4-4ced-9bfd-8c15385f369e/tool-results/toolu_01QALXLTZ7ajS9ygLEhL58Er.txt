@@ -1,0 +1,29 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.API\Controllers\MRDStyleMenuController.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    34→    /// </summary>
+    35→    [HttpGet("{catalogId}")]
+    36→    public async Task<ActionResult<MenuResponseDto>> GetMenu(int catalogId)
+    37→    {
+    38→        var catalog = await _context.Catalogs
+    39→            .Include(c => c.Categories)
+    40→                .ThenInclude(cat => cat.CatalogItemCategories)
+    41→                    .ThenInclude(cic => cic.CatalogItem)
+    42→                        .ThenInclude(item => item.Variants)
+    43→            .Include(c => c.Categories)
+    44→                .ThenInclude(cat => cat.CatalogItemCategories)
+    45→                    .ThenInclude(cic => cic.CatalogItem)
+    46→                        .ThenInclude(item => item.ExtraGroupLinks)
+    47→                            .ThenInclude(link => link.ExtraGroup)
+    48→                                .ThenInclude(group => group.GroupItems)
+    49→                                    .ThenInclude(gi => gi.Extra)
+    50→            .Include(c => c.Categories)
+    51→                .ThenInclude(cat => cat.CatalogItemCategories)
+    52→                    .ThenInclude(cic => cic.CatalogItem)
+    53→                        .ThenInclude(item => item.OptionGroupLinks)
+    54→                            .ThenInclude(link => link.OptionGroup)
+    55→                                .ThenInclude(group => group.GroupItems)
+    56→                                    .ThenInclude(gi => gi.Option)
+    57→            .FirstOrDefaultAsync(c => c.Id == catalogId);
+    58→
+    59→        if (catalog == null)
+    60→            return NotFound(new { error = "Menu not found" });
+    61→

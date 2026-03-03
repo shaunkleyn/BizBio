@@ -1,0 +1,27 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\components\MenuSidebar.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   123→          <span>QR Codes</span>
+   124→        </NuxtLink>
+   125→      </nav>
+   126→
+   127→      <!-- Stats Section -->
+   128→      <div class="mt-8 pt-6 border-t border-[var(--light-border-color)]">
+   129→        <h3 class="text-xs font-semibold text-[var(--gray-text-color)] uppercase mb-3">Quick Stats</h3>
+   130→        <div class="space-y-2">
+   131→          <div class="flex justify-between text-sm">
+   132→            <span class="text-[var(--gray-text-color)]">Active Menus</span>
+   133→            <span class="font-semibold text-[var(--dark-text-color)]">{{ stats?.menus || 0 }}</span>
+   134→          </div>
+   135→          <div class="flex justify-between text-sm">
+   136→            <span class="text-[var(--gray-text-color)]">Total Items</span>
+   137→            <span class="font-semibold text-[var(--dark-text-color)]">{{ stats?.items || 0 }}</span>
+   138→          </div>
+   139→          <div class="flex justify-between text-sm">
+   140→            <span class="text-[var(--gray-text-color)]">Categories</span>
+   141→            <span class="font-semibold text-[var(--dark-text-color)]">{{ stats?.categories || 0 }}</span>
+   142→          </div>
+   143→        </div>
+   144→      </div>
+   145→    </div>
+   146→  </aside>
+   147→</template>
+   148→

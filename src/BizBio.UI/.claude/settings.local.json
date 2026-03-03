@@ -69,7 +69,8 @@
       "Bash(echo === $\\(basename \"$template\"\\) ===:*)",
       "Bash(echo === Template $i ===:*)",
       "WebFetch(domain:www.snaptap.co.za)",
-      "WebFetch(domain:www.npmjs.com)"
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:snaptap.co.za)"
     ],
     "deny": [],
     "ask": []

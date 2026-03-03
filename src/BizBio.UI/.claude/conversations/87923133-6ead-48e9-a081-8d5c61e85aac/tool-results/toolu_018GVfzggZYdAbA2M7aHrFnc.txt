@@ -1,0 +1,304 @@
+     1→using System.Diagnostics;
+     2→using System.Net;
+     3→using System.Net.Mail;
+     4→using BizBio.Core.Interfaces;
+     5→using Microsoft.ApplicationInsights;
+     6→using Microsoft.ApplicationInsights.DataContracts;
+     7→using Microsoft.Extensions.Configuration;
+     8→using Microsoft.Extensions.Logging;
+     9→
+    10→namespace BizBio.Infrastructure.Services;
+    11→
+    12→public class EmailService : IEmailService
+    13→{
+    14→    private readonly IConfiguration _configuration;
+    15→    private readonly ILogger<EmailService> _logger;
+    16→    private readonly TelemetryClient _telemetryClient;
+    17→    private readonly string _smtpHost;
+    18→    private readonly int _smtpPort;
+    19→    private readonly string _smtpUsername;
+    20→    private readonly string _smtpPassword;
+    21→    private readonly string _fromEmail;
+    22→    private readonly string _fromName;
+    23→
+    24→    public EmailService(
+    25→        IConfiguration configuration,
+    26→        ILogger<EmailService> logger,
+    27→        TelemetryClient telemetryClient)
+    28→    {
+    29→        _configuration = configuration;
+    30→        _logger = logger;
+    31→        _telemetryClient = telemetryClient;
+    32→        _smtpHost = configuration["Email:SmtpHost"] ?? "smtp.domains.co.za";
+    33→        _smtpPort = int.Parse(configuration["Email:SmtpPort"] ?? "587");
+    34→        _smtpUsername = configuration["Email:SmtpUsername"] ?? "";
+    35→        _smtpPassword = configuration["Email:SmtpPassword"] ?? "";
+    36→        _fromEmail = configuration["Email:FromEmail"] ?? "";
+    37→        _fromName = configuration["Email:FromName"] ?? "BizBio";
+    38→    }
+    39→
+    40→    public async Task SendEmailAsync(string toEmail, string subject, string htmlBody)
+    41→    {
+    42→        var stopwatch = Stopwatch.StartNew();
+    43→
+    44→        try
+    45→        {
+    46→            _logger.LogInformation("Attempting to send email to {Email} with subject: {Subject}", toEmail, subject);
+    47→            _logger.LogDebug("SMTP Host: {Host}:{Port}, User: {User}", _smtpHost, _smtpPort, _smtpUsername);
+    48→
+    49→            // Track dependency for SMTP call
+    50→            var dependency = new DependencyTelemetry
+    51→            {
+    52→                Name = "SMTP Email Send",
+    53→                Type = "SMTP",
+    54→                Target = $"{_smtpHost}:{_smtpPort}",
+    55→                Data = subject
+    56→            };
+    57→
+    58→            using var smtpClient = new SmtpClient(_smtpHost, _smtpPort)
+    59→            {
+    60→                EnableSsl = true,
+    61→                Credentials = new NetworkCredential(_smtpUsername, _smtpPassword),
+    62→                Timeout = 30000, // 30 seconds
+    63→                DeliveryMethod = SmtpDeliveryMethod.Network,
+    64→                UseDefaultCredentials = false
+    65→            };
+    66→
+    67→            using var mailMessage = new MailMessage
+    68→            {
+    69→                From = new MailAddress(_fromEmail, _fromName),
+    70→                Subject = subject,
+    71→                Body = htmlBody,
+    72→                IsBodyHtml = true
+    73→            };
+    74→
+    75→            mailMessage.To.Add(toEmail);
+    76→
+    77→            await smtpClient.SendMailAsync(mailMessage);
+    78→
+    79→            _logger.LogInformation("Email sent successfully to {Email}", toEmail);
+    80→
+    81→            dependency.Success = true;
+    82→            dependency.Duration = stopwatch.Elapsed;
+    83→            _telemetryClient.TrackDependency(dependency);
+    84→
+    85→            _telemetryClient.TrackEvent("EmailSent", new Dictionary<string, string>
+    86→            {
+    87→                { "To", toEmail },
+    88→                { "Subject", subject },
+    89→                { "SmtpHost", _smtpHost }
+    90→            });
+    91→        }
+    92→        catch (SmtpException smtpEx)
+    93→        {
+    94→            _logger.LogError(smtpEx, "SMTP error sending email to {Email}. Status: {Status}", toEmail, smtpEx.StatusCode);
+    95→
+    96→            var dependency = new DependencyTelemetry
+    97→            {
+    98→                Name = "SMTP Email Send",
+    99→                Type = "SMTP",
+   100→                Target = $"{_smtpHost}:{_smtpPort}",
+   101→                Data = subject,
+   102→                Success = false,
+   103→                Duration = stopwatch.Elapsed
+   104→            };
+   105→            _telemetryClient.TrackDependency(dependency);
+   106→
+   107→            _telemetryClient.TrackException(smtpEx, new Dictionary<string, string>
+   108→            {
+   109→                { "Operation", "SendEmail" },
+   110→                { "To", toEmail },
+   111→                { "Subject", subject },
+   112→                { "SmtpStatusCode", smtpEx.StatusCode.ToString() }
+   113→            });
+   114→            throw;
+   115→        }
+   116→        catch (Exception ex)
+   117→        {
+   118→            _logger.LogError(ex, "Failed to send email to {Email}", toEmail);
+   119→
+   120→            _telemetryClient.TrackException(ex, new Dictionary<string, string>
+   121→            {
+   122→                { "Operation", "SendEmail" },
+   123→                { "To", toEmail },
+   124→                { "Subject", subject }
+   125→            });
+   126→            throw;
+   127→        }
+   128→    }
+   129→
+   130→    public async Task SendVerificationEmailAsync(string toEmail, string userName, string verificationToken)
+   131→    {
+   132→        var subject = "Verify Your BizBio Account";
+   133→
+   134→        var htmlBody = $@"
+   135→<!DOCTYPE html>
+   136→<html>
+   137→<head>
+   138→    <style>
+   139→        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; }}
+   140→        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+   141→        .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }}
+   142→        .content {{ background: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }}
+   143→        .button {{ display: inline-block; background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }}
+   144→        .footer {{ text-align: center; margin-top: 30px; color: #666; font-size: 12px; }}
+   145→    </style>
+   146→</head>
+   147→<body>
+   148→    <div class='container'>
+   149→        <div class='header'>
+   150→            <h1>Welcome to BizBio!</h1>
+   151→        </div>
+   152→        <div class='content'>
+   153→            <h2>Hi {userName},</h2>
+   154→            <p>Thank you for creating your BizBio account. We're excited to have you on board!</p>
+   155→            <p>To complete your registration and verify your email address, please click the button below:</p>
+   156→            <div style='text-align: center;'>
+   157→                <a href='https://bizbio.co.za/verify-email?token={verificationToken}' class='button'>Verify Email Address</a>
+   158→            </div>
+   159→            <p>Or copy and paste this link into your browser:</p>
+   160→            <p style='background: white; padding: 15px; border-radius: 5px; word-break: break-all;'>
+   161→                https://bizbio.co.za/verify-email?token={verificationToken}
+   162→            </p>
+   163→            <p><strong>This link will expire in 24 hours.</strong></p>
+   164→            <p>If you didn't create a BizBio account, you can safely ignore this email.</p>
+   165→            <hr style='border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;'>
+   166→            <p style='font-size: 12px; color: #666;'>
+   167→                <strong>&#128161; Tip:</strong> Can't find this email? Check your spam or junk folder and mark it as ""Not Spam"" to ensure you receive future emails from us.
+   168→            </p>
+   169→        </div>
+   170→        <div class='footer'>
+   171→            <p>&copy; 2025 BizBio. All rights reserved.</p>
+   172→            <p>BizBio - Digital Business Cards &amp; Smart Menus</p>
+   173→        </div>
+   174→    </div>
+   175→</body>
+   176→</html>";
+   177→
+   178→        await SendEmailAsync(toEmail, subject, htmlBody);
+   179→    }
+   180→
+   181→    public async Task SendPasswordResetEmailAsync(string toEmail, string userName, string resetToken)
+   182→    {
+   183→        var subject = "Reset Your BizBio Password";
+   184→
+   185→        var htmlBody = $@"
+   186→<!DOCTYPE html>
+   187→<html>
+   188→<head>
+   189→    <style>
+   190→        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; }}
+   191→        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+   192→        .header {{ background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }}
+   193→        .content {{ background: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }}
+   194→        .button {{ display: inline-block; background: #f5576c; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }}
+   195→        .footer {{ text-align: center; margin-top: 30px; color: #666; font-size: 12px; }}
+   196→        .warning {{ background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; }}
+   197→    </style>
+   198→</head>
+   199→<body>
+   200→    <div class='container'>
+   201→        <div class='header'>
+   202→            <h1>Password Reset Request</h1>
+   203→        </div>
+   204→        <div class='content'>
+   205→            <h2>Hi {userName},</h2>
+   206→            <p>We received a request to reset your BizBio account password.</p>
+   207→            <p>Click the button below to reset your password:</p>
+   208→            <div style='text-align: center;'>
+   209→                <a href='https://bizbio.co.za/reset-password?token={resetToken}' class='button'>Reset Password</a>
+   210→            </div>
+   211→            <p>Or copy and paste this link into your browser:</p>
+   212→            <p style='background: white; padding: 15px; border-radius: 5px; word-break: break-all;'>
+   213→                https://bizbio.co.za/reset-password?token={resetToken}
+   214→            </p>
+   215→            <div class='warning'>
+   216→                <strong>⚠️ Security Notice:</strong>
+   217→                <ul style='margin: 10px 0 0 0;'>
+   218→                    <li>This link will expire in 1 hour</li>
+   219→                    <li>If you didn't request this reset, please ignore this email</li>
+   220→                    <li>Your password won't change unless you click the link above</li>
+   221→                </ul>
+   222→            </div>
+   223→            <hr style='border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;'>
+   224→            <p style='font-size: 12px; color: #666;'>
+   225→                <strong>&#128161; Tip:</strong> Can't find this email? Check your spam or junk folder and mark it as ""Not Spam"" to ensure you receive future emails from us.
+   226→            </p>
+   227→        </div>
+   228→        <div class='footer'>
+   229→            <p>&copy; 2025 BizBio. All rights reserved.</p>
+   230→            <p>If you have any questions, contact us at support@bizbio.co.za</p>
+   231→        </div>
+   232→    </div>
+   233→</body>
+   234→</html>";
+   235→
+   236→        await SendEmailAsync(toEmail, subject, htmlBody);
+   237→    }
+   238→
+   239→    public async Task SendWelcomeEmailAsync(string toEmail, string userName)
+   240→    {
+   241→        var subject = "Welcome to BizBio - Let's Get Started!";
+   242→
+   243→        var htmlBody = $@"
+   244→<!DOCTYPE html>
+   245→<html>
+   246→<head>
+   247→    <style>
+   248→        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; }}
+   249→        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+   250→        .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }}
+   251→        .content {{ background: #f9f9f9; padding: 30px; border-radius: 0 0 8px 8px; }}
+   252→        .button {{ display: inline-block; background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }}
+   253→        .feature-box {{ background: white; padding: 20px; margin: 15px 0; border-radius: 5px; border-left: 4px solid #667eea; }}
+   254→        .footer {{ text-align: center; margin-top: 30px; color: #666; font-size: 12px; }}
+   255→    </style>
+   256→</head>
+   257→<body>
+   258→    <div class='container'>
+   259→        <div class='header'>
+   260→            <h1>🎉 Welcome to BizBio!</h1>
+   261→        </div>
+   262→        <div class='content'>
+   263→            <h2>Hi {userName},</h2>
+   264→            <p>Your email has been verified successfully! You're now ready to start building your digital presence.</p>
+   265→
+   266→            <h3>What You Can Do Now:</h3>
+   267→
+   268→            <div class='feature-box'>
+   269→                <h4>📇 Create Your Digital Business Card</h4>
+   270→                <p>Design a professional digital business card that you can share instantly.</p>
+   271→            </div>
+   272→
+   273→            <div class='feature-box'>
+   274→                <h4>🍽️ Build Your Smart Menu</h4>
+   275→                <p>Create an interactive menu for your restaurant with NFC table integration.</p>
+   276→            </div>
+   277→
+   278→            <div class='feature-box'>
+   279→                <h4>🏪 Showcase Your Catalog</h4>
+   280→                <p>Display your products and services in an elegant digital catalog.</p>
+   281→            </div>
+   282→
+   283→            <div style='text-align: center;'>
+   284→                <a href='https://bizbio.co.za/dashboard' class='button'>Go to Dashboard</a>
+   285→            </div>
+   286→
+   287→            <p style='margin-top: 30px;'>Need help getting started? Check out our <a href='https://bizbio.co.za/help'>Help Center</a> or reply to this email.</p>
+   288→        </div>
+   289→        <div class='footer'>
+   290→            <p>&copy; 2025 BizBio. All rights reserved.</p>
+   291→            <p>Elevate your business with digital innovation</p>
+   292→        </div>
+   293→    </div>
+   294→</body>
+   295→</html>";
+   296→
+   297→        await SendEmailAsync(toEmail, subject, htmlBody);
+   298→    }
+   299→}
+   300→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

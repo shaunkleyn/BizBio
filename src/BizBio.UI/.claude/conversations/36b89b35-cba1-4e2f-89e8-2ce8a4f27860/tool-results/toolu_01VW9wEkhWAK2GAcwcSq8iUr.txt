@@ -1,0 +1,58 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.Core\Entities\CatalogItem.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    49→    //public bool IsActive { get; set; } = true;
+    50→
+    51→    public int SortOrder { get; set; } = 0;
+    52→
+    53→    // Reference to source library item (when item is copied from library to catalog)
+    54→    public int? SourceLibraryItemId { get; set; }
+    55→
+    56→    /// <summary>
+    57→    /// Reference to parent catalog item for item sharing within same entity.
+    58→    /// Null = master/template item. If set = reference to master with optional price override.
+    59→    /// </summary>
+    60→    public int? ParentCatalogItemId { get; set; }
+    61→
+    62→    /// <summary>
+    63→    /// Price override for referenced items. Null = use parent price.
+    64→    /// Only applicable when ParentCatalogItemId is set.
+    65→    /// </summary>
+    66→    public decimal? PriceOverride { get; set; }
+    67→
+    68→    //public DateTime CreatedAt { get; set; }
+    69→
+    70→    //public DateTime UpdatedAt { get; set; }
+    71→
+    72→    /// <summary>
+    73→    /// Computed property that returns the effective price based on override hierarchy.
+    74→    /// Priority: PriceOverride > ParentCatalogItem.EffectivePrice > Price
+    75→    /// </summary>
+    76→    public decimal EffectivePrice
+    77→    {
+    78→        get
+    79→        {
+    80→            if (PriceOverride.HasValue)
+    81→                return PriceOverride.Value;
+    82→
+    83→            if (ParentCatalogItemId.HasValue && ParentCatalogItem != null)
+    84→                return ParentCatalogItem.EffectivePrice;
+    85→
+    86→            return Price;
+    87→        }
+    88→    }
+    89→
+    90→    // Navigation properties
+    91→    public virtual Catalog? Catalog { get; set; }
+    92→
+    93→    /// <summary>
+    94→    /// Parent catalog item for item sharing (self-referencing)
+    95→    /// </summary>
+    96→    public virtual CatalogItem? ParentCatalogItem { get; set; }
+    97→
+    98→    /// <summary>
+    99→    /// Child catalog items that reference this item as parent
+   100→    /// </summary>
+   101→    public virtual ICollection<CatalogItem> ChildCatalogItems { get; set; } = new List<CatalogItem>();
+   102→    public virtual CatalogBundle? Bundle { get; set; }
+   103→    public virtual User? User { get; set; }
+   104→    public virtual ICollection<CatalogItemVariant> Variants { get; set; } = new List<CatalogItemVariant>();
+   105→    public virtual ICollection<CatalogItemExtraGroupLink> ExtraGroupLinks { get; set; } = new List<CatalogItemExtraGroupLink>();

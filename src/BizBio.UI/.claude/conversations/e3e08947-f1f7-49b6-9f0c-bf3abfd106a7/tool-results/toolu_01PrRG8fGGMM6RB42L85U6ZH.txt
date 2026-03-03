@@ -1,0 +1,16 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\dashboard\library\extra-groups.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   197→                  v-for="extra in availableExtras"
+   198→                  :key="extra.id"
+   199→                  class="flex items-center py-2 hover:bg-gray-50 rounded px-2"
+   200→                >
+   201→                  <input
+   202→                    type="checkbox"
+   203→                    :id="`extra-${extra.id}`"
+   204→                    :value="extra.id"
+   205→                    v-model="formData.ExtraIds"
+   206→                    class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+   207→                  />
+   208→                  <label :for="`extra-${extra.id}`" class="ml-3 flex-1 flex justify-between items-center cursor-pointer">
+   209→                    <span class="text-sm text-gray-800">{{ extra.name }}</span>
+   210→                    <span class="text-sm text-gray-500">R{{ extra.basePrice.toFixed(2) }}</span>
+   211→                  </label>

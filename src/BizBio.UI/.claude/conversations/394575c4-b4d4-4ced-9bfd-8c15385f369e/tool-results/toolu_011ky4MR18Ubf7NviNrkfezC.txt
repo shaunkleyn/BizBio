@@ -1,0 +1,37 @@
+# Roman's Pizza Norkem Park - Page Structure Analysis
+
+## Restaurant Information Section
+The top displays:
+- Restaurant name: "Roman's Pizza Norkem Park"
+- Rating: 4.6 stars with 17,082 reviews
+- Address: "0 James Wright Ave, Kempton Park, Gauteng 1618"
+- Operating hours (Monday-Sunday, varying 9:30 AM - 9:15 PM closures)
+- Cuisine tags: Pizza, Pasta, Salad, Dessert, Mediterranean, Non-Alcoholic, Fast Food, American, Fruit
+
+## Featured Carousel Sections
+
+Two main carousel sections appear in sequence:
+
+1. **Highlights** - Single featured item
+2. **Most Ordered 💯** - Five items displayed
+
+## Carousel Display Style
+Items use card-based layout featuring:
+- Item name
+- Price range ("From R###.##")
+- Brief description (where applicable)
+- "Add" button for each item
+- Product images included in menu structure
+
+## Navigation & Interaction
+The page utilizes a tab-based section navigation system with clickable links like `[Special](?section=247)` and `[Pizzas](?section=321)`, allowing users to jump between menu categories rather than traditional carousel arrows or dots.
+
+## Section Order (Top to Bottom)
+1. Highlights
+2. Most Ordered
+3. Special (8 items)
+4. Pizzas (33 items)
+5. Starter through Water sections
+
+## Badges & Tags
+Items marked as "New" appear: "Four in One - New" and "Beef Pizza - New Recipe"

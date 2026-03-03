@@ -1,0 +1,14 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.API\Controllers\ExtrasController.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    30→    public async Task<IActionResult> GetExtras()
+    31→    {
+    32→        try
+    33→        {
+    34→            var userId = GetUserId();
+    35→            var extras = await _context.CatalogItemExtras
+    36→                .Where(e => e.UserId == userId && e.CatalogId == null && e.IsActive)
+    37→                .OrderBy(e => e.Id)
+    38→                .ToListAsync();
+    39→
+    40→            return Ok(new { success = true, data = extras });
+    41→        }
+    42→        catch (Exception ex)

@@ -1,0 +1,9 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\layouts\menu.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+     1→<template>
+     2→  <div class="min-h-screen bg-[var(--medium-background-color)]">
+     3→    <!-- Global Header -->
+     4→    <GlobalHeader />
+     5→
+     6→    <div class="flex">
+     7→      <!-- Menu Sidebar -->
+     8→      <MenuSidebar :stats="stats" />

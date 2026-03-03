@@ -1,0 +1,104 @@
+     1→using System.IdentityModel.Tokens.Jwt;
+     2→using System.Security.Claims;
+     3→using System.Security.Cryptography;
+     4→using System.Text;
+     5→using BCrypt.Net;
+     6→using BizBio.Core.DTOs;
+     7→using BizBio.Core.Entities;
+     8→using BizBio.Core.Interfaces;
+     9→using Microsoft.ApplicationInsights;
+    10→using Microsoft.ApplicationInsights.DataContracts;
+    11→using Microsoft.Extensions.Configuration;
+    12→using Microsoft.Extensions.Logging;
+    13→using Microsoft.IdentityModel.Tokens;
+    14→
+    15→namespace BizBio.Infrastructure.Services;
+    16→
+    17→/// <summary>
+    18→/// Implementation of the authentication service handling user registration, login,
+    19→/// email verification, and password reset operations.
+    20→/// </summary>
+    21→public class AuthService : IAuthService
+    22→{
+    23→    private readonly IUserRepository _userRepository;
+    24→    private readonly IConfiguration _configuration;
+    25→    private readonly IEmailService _emailService;
+    26→    private readonly ILogger<AuthService> _logger;
+    27→    private readonly TelemetryClient _telemetryClient;
+    28→
+    29→    /// <summary>
+    30→    /// Initializes a new instance of the AuthService class.
+    31→    /// </summary>
+    32→    /// <param name="userRepository">Repository for user data access</param>
+    33→    /// <param name="configuration">Application configuration</param>
+    34→    /// <param name="emailService">Email service for sending notifications</param>
+    35→    /// <param name="logger">Logger instance</param>
+    36→    /// <param name="telemetryClient">Application Insights telemetry client</param>
+    37→    public AuthService(
+    38→        IUserRepository userRepository,
+    39→        IConfiguration configuration,
+    40→        IEmailService emailService,
+    41→        ILogger<AuthService> logger,
+    42→        TelemetryClient telemetryClient)
+    43→    {
+    44→        _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+    45→        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    46→        _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
+    47→        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    48→        _telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
+    49→    }
+    50→
+    51→    /// <summary>
+    52→    /// Registers a new user with validation and email verification token generation.
+    53→    /// </summary>
+    54→    /// <param name="dto">Registration details</param>
+    55→    /// <returns>AuthResult with success status and user information</returns>
+    56→    public async Task<AuthResult> RegisterAsync(RegisterDto dto)
+    57→    {
+    58→        if (dto == null)
+    59→            return AuthResult.FailureResult("Registration data cannot be null");
+    60→
+    61→        // Check if email already exists
+    62→        var existingUser = await _userRepository.GetByEmailAsync(dto.Email);
+    63→        if (existingUser != null)
+    64→            return AuthResult.FailureResult("Email is already registered");
+    65→
+    66→        try
+    67→        {
+    68→            // Hash the password
+    69→            var passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+    70→
+    71→            // Generate email verification token
+    72→            var verificationToken = GenerateSecureToken();
+    73→            var verificationTokenExpiry = DateTime.UtcNow.AddHours(24);
+    74→
+    75→            // Create new user
+    76→            var user = new User
+    77→            {
+    78→                Email = dto.Email,
+    79→                PasswordHash = passwordHash,
+    80→                FirstName = dto.FirstName,
+    81→                LastName = dto.LastName,
+    82→                EmailVerified = false,
+    83→                IsActive = true,
+    84→                EmailVerificationToken = verificationToken,
+    85→                EmailVerificationTokenExpiry = verificationTokenExpiry,
+    86→                CreatedAt = DateTime.UtcNow,
+    87→                UpdatedAt = DateTime.UtcNow,
+    88→                CreatedBy = dto.Email, // User created themselves
+    89→                UpdatedBy = dto.Email,
+    90→                FailedLoginAttempts = 0
+    91→            };
+    92→
+    93→            // Save user to repository
+    94→            await _userRepository.AddAsync(user);
+    95→            await _userRepository.SaveChangesAsync();
+    96→
+    97→            // Send verification email
+    98→            _logger.LogInformation("About to send verification email to {Email}", user.Email);
+    99→            try
+   100→            {
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

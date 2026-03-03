@@ -1,0 +1,262 @@
+     1→# Migration 001: Multi-Product Architecture - Ready for Testing
+     2→
+     3→## Status: ✓ Scripts Created - Awaiting Rollback Testing
+     4→
+     5→**Date**: 2025-12-30
+     6→**Author**: System
+     7→**Risk Level**: HIGH (Major architectural change)
+     8→
+     9→---
+    10→
+    11→## What's Been Created
+    12→
+    13→### 1. Migration Script (Forward)
+    14→**File**: `src/BizBio.Infrastructure/Migrations/Migration_001_MultiProductArchitecture.sql`
+    15→**Size**: 637 lines
+    16→**Purpose**: Migrates database from single-subscription to multi-product architecture
+    17→
+    18→**Changes**:
+    19→- Creates 3 new tables: Entities, ProductSubscriptions, CatalogCategories
+    20→- Adds EntityId to Catalogs and Categories tables
+    21→- Adds ParentCatalogItemId and PriceOverride to CatalogItems
+    22→- Adds product limits to SubscriptionTiers
+    23→- Migrates existing Profiles → Entities
+    24→- Migrates existing Subscriptions → ProductSubscriptions
+    25→- Links all existing data to new structure
+    26→
+    27→### 2. Rollback Script (Reverse)
+    28→**File**: `src/BizBio.Infrastructure/Migrations/Rollback_001_MultiProductArchitecture.sql`
+    29→**Size**: 334 lines
+    30→**Purpose**: Safely reverses all migration changes
+    31→
+    32→**Changes**:
+    33→- Drops all new tables
+    34→- Removes all new columns
+    35→- Restores Categories.UserId column
+    36→- Validates rollback success
+    37→
+    38→### 3. Test/Validation Script
+    39→**File**: `src/BizBio.Infrastructure/Migrations/Test_Rollback_001.sql`
+    40→**Size**: 383 lines
+    41→**Purpose**: Automated testing of rollback functionality
+    42→
+    43→**Features**:
+    44→- Captures database state before migration
+    45→- Validates migration success
+    46→- Validates rollback success
+    47→- Compares pre/post states
+    48→- Detects data loss
+    49→- Comprehensive test report
+    50→
+    51→---
+    52→
+    53→## CRITICAL: Next Steps Before Running Migration
+    54→
+    55→### ⚠ Step 1: Backup Your Database
+    56→
+    57→**REQUIRED** before any testing:
+    58→
+    59→```sql
+    60→-- Full backup
+    61→BACKUP DATABASE BizBio
+    62→TO DISK = 'C:\Backups\BizBio_PreMigration001_' + CONVERT(VARCHAR(8), GETDATE(), 112) + '.bak'
+    63→WITH FORMAT, COMPRESSION;
+    64→```
+    65→
+    66→Verify backup succeeded:
+    67→```sql
+    68→RESTORE VERIFYONLY
+    69→FROM DISK = 'C:\Backups\BizBio_PreMigration001_YYYYMMDD.bak';
+    70→```
+    71→
+    72→### ⚠ Step 2: Test Rollback on Development Database
+    73→
+    74→**DO NOT SKIP THIS STEP!**
+    75→
+    76→#### Option A: Automated Test (Recommended)
+    77→1. Connect to your development database (NOT production)
+    78→2. Execute: `Test_Rollback_001.sql`
+    79→3. When prompted, execute: `Migration_001_MultiProductArchitecture.sql`
+    80→4. When prompted, execute: `Rollback_001_MultiProductArchitecture.sql`
+    81→5. Review test report
+    82→
+    83→#### Option B: Manual Test
+    84→```sql
+    85→-- 1. Capture current database state
+    86→SELECT
+    87→    TABLE_NAME,
+    88→    (SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES t WHERE t.TABLE_NAME = s.TABLE_NAME) as RecordCount
+    89→FROM INFORMATION_SCHEMA.TABLES s
+    90→WHERE TABLE_TYPE = 'BASE TABLE'
+    91→ORDER BY TABLE_NAME;
+    92→
+    93→-- 2. Execute migration
+    94→-- Run: Migration_001_MultiProductArchitecture.sql
+    95→
+    96→-- 3. Verify migration succeeded
+    97→SELECT 'Entities' as TableName, COUNT(*) as Records FROM Entities
+    98→UNION ALL
+    99→SELECT 'ProductSubscriptions', COUNT(*) FROM ProductSubscriptions
+   100→UNION ALL
+   101→SELECT 'CatalogCategories', COUNT(*) FROM CatalogCategories;
+   102→
+   103→-- 4. Execute rollback
+   104→-- Run: Rollback_001_MultiProductArchitecture.sql
+   105→
+   106→-- 5. Verify rollback succeeded
+   107→SELECT
+   108→    'Entities table removed' as Check,
+   109→    CASE WHEN NOT EXISTS(SELECT * FROM sys.tables WHERE name = 'Entities')
+   110→        THEN '✓ PASS' ELSE '✗ FAIL' END as Result
+   111→UNION ALL
+   112→SELECT
+   113→    'ProductSubscriptions table removed',
+   114→    CASE WHEN NOT EXISTS(SELECT * FROM sys.tables WHERE name = 'ProductSubscriptions')
+   115→        THEN '✓ PASS' ELSE '✗ FAIL' END
+   116→UNION ALL
+   117→SELECT
+   118→    'CatalogCategories table removed',
+   119→    CASE WHEN NOT EXISTS(SELECT * FROM sys.tables WHERE name = 'CatalogCategories')
+   120→        THEN '✓ PASS' ELSE '✗ FAIL' END
+   121→UNION ALL
+   122→SELECT
+   123→    'Categories.UserId restored',
+   124→    CASE WHEN EXISTS(SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Categories') AND name = 'UserId')
+   125→        THEN '✓ PASS' ELSE '✗ FAIL' END
+   126→UNION ALL
+   127→SELECT
+   128→    'Categories.EntityId removed',
+   129→    CASE WHEN NOT EXISTS(SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Categories') AND name = 'EntityId')
+   130→        THEN '✓ PASS' ELSE '✗ FAIL' END
+   131→UNION ALL
+   132→SELECT
+   133→    'Catalogs.EntityId removed',
+   134→    CASE WHEN NOT EXISTS(SELECT * FROM sys.columns WHERE object_id = OBJECT_ID('Catalogs') AND name = 'EntityId')
+   135→        THEN '✓ PASS' ELSE '✗ FAIL' END;
+   136→```
+   137→
+   138→### Expected Rollback Test Results
+   139→
+   140→**All must be PASS before proceeding**:
+   141→- ✓ Entities table removed
+   142→- ✓ ProductSubscriptions table removed
+   143→- ✓ CatalogCategories table removed
+   144→- ✓ Categories.UserId restored
+   145→- ✓ Categories.EntityId removed
+   146→- ✓ Catalogs.EntityId removed
+   147→- ✓ CatalogItems.ParentCatalogItemId removed
+   148→- ✓ CatalogItems.PriceOverride removed
+   149→- ✓ All SubscriptionTiers new columns removed
+   150→- ✓ No data loss (record counts match pre-migration)
+   151→
+   152→---
+   153→
+   154→## Migration Safety Features
+   155→
+   156→### Transaction Wrapped
+   157→- Entire migration runs in single transaction
+   158→- Any error triggers automatic rollback
+   159→- Database remains in consistent state
+   160→
+   161→### Validation at Each Phase
+   162→- Checks for existing tables/columns before creating
+   163→- Validates data migration success
+   164→- Reports orphaned records
+   165→- Final validation before commit
+   166→
+   167→### Fallback Handling
+   168→- Creates default entities for users without profiles
+   169→- Links orphaned catalogs to fallback entities
+   170→- Preserves all existing data
+   171→
+   172→### Detailed Logging
+   173→- PRINT statements at each step
+   174→- Record counts after each operation
+   175→- Error messages with context
+   176→- Success confirmation
+   177→
+   178→---
+   179→
+   180→## Post-Rollback Test: Next Steps
+   181→
+   182→### If All Tests Pass ✓
+   183→1. Document rollback test results in `IMPLEMENTATION-LOG.md`
+   184→2. Review migration plan one final time
+   185→3. Schedule migration execution window
+   186→4. Run migration on development database
+   187→5. Test application functionality
+   188→6. Create C# entity classes
+   189→7. Update API controllers
+   190→8. Test API endpoints
+   191→
+   192→### If Any Tests Fail ✗
+   193→1. **DO NOT RUN MIGRATION ON PRODUCTION**
+   194→2. Review failed test output
+   195→3. Identify root cause
+   196→4. Fix migration/rollback scripts
+   197→5. Re-test rollback until all tests pass
+   198→
+   199→---
+   200→
+   201→## Migration Execution Checklist
+   202→
+   203→When ready to run migration (after rollback tested):
+   204→
+   205→- [ ] Full database backup completed and verified
+   206→- [ ] Rollback script tested successfully
+   207→- [ ] All rollback tests passed
+   208→- [ ] Application stopped (no active connections)
+   209→- [ ] Maintenance window scheduled
+   210→- [ ] Team notified of migration
+   211→- [ ] Rollback procedure documented
+   212→- [ ] Execute migration script
+   213→- [ ] Verify migration success
+   214→- [ ] Test application startup
+   215→- [ ] Monitor for errors
+   216→- [ ] Document migration completion time
+   217→
+   218→---
+   219→
+   220→## Rollback Procedure (If Migration Fails)
+   221→
+   222→1. **Immediately stop application**
+   223→2. **Execute rollback script**:
+   224→   ```sql
+   225→   -- Run: Rollback_001_MultiProductArchitecture.sql
+   226→   ```
+   227→3. **Verify rollback succeeded** using validation queries above
+   228→4. **Restart application** on old schema
+   229→5. **Document failure** in `IMPLEMENTATION-LOG.md`
+   230→6. **Review migration script** for errors
+   231→7. **Fix and re-test** before retry
+   232→
+   233→---
+   234→
+   235→## Contact & Support
+   236→
+   237→**Implementation Log**: `IMPLEMENTATION-LOG.md`
+   238→**Implementation Plan**: `REVISED-IMPLEMENTATION-PLAN.md`
+   239→**Migration Scripts**: `src/BizBio.Infrastructure/Migrations/`
+   240→
+   241→**Questions Before Proceeding**:
+   242→1. Do you have a recent database backup?
+   243→2. Is this a development/test database?
+   244→3. Are you comfortable executing SQL scripts?
+   245→4. Do you want me to guide you through rollback testing?
+   246→
+   247→---
+   248→
+   249→## Summary
+   250→
+   251→✓ **Migration script created** - Comprehensive, transaction-safe
+   252→✓ **Rollback script created** - Fully reverses all changes
+   253→✓ **Test script created** - Validates rollback works
+   254→⚠ **Rollback testing required** - Do not skip this step!
+   255→⏳ **Awaiting user confirmation** - Ready to test when you are
+   256→
+   257→**Recommendation**: Test rollback on development database copy first, then proceed with full migration only after successful rollback test.
+   258→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

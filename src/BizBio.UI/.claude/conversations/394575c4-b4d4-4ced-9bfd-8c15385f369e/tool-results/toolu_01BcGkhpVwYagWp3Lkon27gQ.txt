@@ -1,0 +1,204 @@
+     1→<template>
+     2→  <div
+     3→    class="modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4 animate-fadeSlide"
+     4→    @click.self="emit('close')"
+     5→  >
+     6→    <div
+     7→      class="modal-content mesh-card bg-md-surface rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden border border-md-outline-variant shadow-md-5"
+     8→    >
+     9→      <!-- Header with Gradient -->
+    10→      <div class="modal-header p-6">
+    11→        <div class="flex justify-between items-center relative z-10">
+    12→          <div>
+    13→            <h2 class="text-2xl font-heading font-bold gradient-text">
+    14→              {{ item ? 'Edit Item' : 'Add New Item' }}
+    15→            </h2>
+    16→            <p class="text-sm text-md-on-surface-variant mt-1">
+    17→              {{ item ? 'Update item details' : 'Create a new menu item' }}
+    18→            </p>
+    19→          </div>
+    20→          <button
+    21→            @click="emit('close')"
+    22→            class="modal-close-btn md-ripple shadow-md-1"
+    23→          >
+    24→            <i class="fas fa-times"></i>
+    25→          </button>
+    26→        </div>
+    27→      </div>
+    28→
+    29→      <!-- Form - Scrollable Body -->
+    30→      <form @submit.prevent="saveItem" class="flex-1 overflow-y-auto p-6 space-y-6">
+    31→        <!-- Images Upload -->
+    32→        <div class="space-y-4">
+    33→          <div class="flex items-center justify-between">
+    34→            <h3 class="text-lg font-semibold text-md-on-surface">Images</h3>
+    35→            <span class="text-sm text-md-on-surface-variant">
+    36→              Max {{ maxImages }} images
+    37→            </span>
+    38→          </div>
+    39→
+    40→          <!-- Image Upload Area -->
+    41→          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    42→            <!-- Existing Images -->
+    43→            <div
+    44→              v-for="(image, index) in form.images"
+    45→              :key="index"
+    46→              class="relative aspect-square rounded-lg overflow-hidden border-2 border-md-outline-variant hover:border-[var(--primary-color)] transition-colors"
+    47→            >
+    48→              <img :src="image" alt="Item image" class="w-full h-full object-cover" />
+    49→              <button
+    50→                type="button"
+    51→                @click="removeImage(index)"
+    52→                class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+    53→              >
+    54→                <i class="fas fa-times"></i>
+    55→              </button>
+    56→            </div>
+    57→
+    58→            <!-- Upload Button -->
+    59→            <label
+    60→              v-if="form.images.length < maxImages"
+    61→              class="aspect-square rounded-lg border-2 border-dashed border-md-outline hover:border-[var(--primary-color)] transition-colors cursor-pointer flex flex-col items-center justify-center bg-gray-50 hover:bg-gray-100"
+    62→            >
+    63→              <i class="fas fa-cloud-upload text-3xl text-md-on-surface-variant opacity-70 mb-2"></i>
+    64→              <span class="text-sm text-md-on-surface-variant">Upload Image</span>
+    65→              <input
+    66→                type="file"
+    67→                accept="image/*"
+    68→                @change="handleImageUpload"
+    69→                class="hidden"
+    70→              />
+    71→            </label>
+    72→          </div>
+    73→        </div>
+    74→
+    75→        <!-- Basic Info -->
+    76→        <div class="space-y-4">
+    77→          <h3 class="text-lg font-semibold text-md-on-surface">Basic Information</h3>
+    78→
+    79→          <!-- Name -->
+    80→          <div>
+    81→            <label class="block text-sm font-medium text-md-on-surface mb-1">
+    82→              Item Name <span class="text-red-500">*</span>
+    83→            </label>
+    84→            <input
+    85→              v-model="form.name"
+    86→              type="text"
+    87→              required
+    88→              placeholder="e.g., Margherita Pizza"
+    89→              class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+    90→            />
+    91→          </div>
+    92→
+    93→          <!-- Description -->
+    94→          <div>
+    95→            <label class="block text-sm font-medium text-md-on-surface mb-1">
+    96→              Description
+    97→            </label>
+    98→            <textarea
+    99→              v-model="form.description"
+   100→              rows="3"
+   101→              placeholder="Describe your item..."
+   102→              class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] resize-none"
+   103→            ></textarea>
+   104→          </div>
+   105→
+   106→          <!-- Category & Price -->
+   107→          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+   108→            <div>
+   109→              <label class="block text-sm font-medium text-md-on-surface mb-1">
+   110→                Category
+   111→              </label>
+   112→              <select
+   113→                v-model="form.categoryId"
+   114→                class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+   115→              >
+   116→                <option :value="null">No Category</option>
+   117→                <option v-for="category in categories" :key="category.id" :value="category.id">
+   118→                  {{ category.name }}
+   119→                </option>
+   120→              </select>
+   121→            </div>
+   122→
+   123→            <div>
+   124→              <label class="block text-sm font-medium text-md-on-surface mb-1">
+   125→                Base Price (R) <span class="text-red-500">*</span>
+   126→              </label>
+   127→              <input
+   128→                v-model.number="form.price"
+   129→                type="number"
+   130→                step="0.01"
+   131→                min="0"
+   132→                required
+   133→                placeholder="0.00"
+   134→                class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+   135→              />
+   136→            </div>
+   137→          </div>
+   138→        </div>
+   139→
+   140→        <!-- Allergens & Dietary Tags -->
+   141→        <div class="space-y-4">
+   142→          <div class="flex items-center justify-between">
+   143→            <h3 class="text-lg font-semibold text-md-on-surface">Allergens & Dietary Info</h3>
+   144→          </div>
+   145→
+   146→          <!-- Quick Select Tags -->
+   147→          <div class="flex flex-wrap gap-2">
+   148→            <button
+   149→              v-for="tag in commonTags"
+   150→              :key="tag"
+   151→              type="button"
+   152→              @click="toggleTag(tag)"
+   153→              :class="[
+   154→                'px-3 py-1.5 rounded-full text-sm font-medium transition-all',
+   155→                form.tags.includes(tag)
+   156→                  ? 'bg-green-500 text-white shadow-md'
+   157→                  : 'bg-gray-100 text-md-on-surface hover:bg-gray-200'
+   158→              ]"
+   159→            >
+   160→              <i v-if="form.tags.includes(tag)" class="fas fa-check mr-1"></i>
+   161→              {{ tag }}
+   162→            </button>
+   163→          </div>
+   164→
+   165→          <!-- Custom Tag Input -->
+   166→          <div>
+   167→            <label class="block text-sm font-medium text-md-on-surface mb-1">
+   168→              Add Custom Tags (press Enter or use comma)
+   169→            </label>
+   170→            <input
+   171→              v-model="tagInput"
+   172→              type="text"
+   173→              placeholder="Type tag and press Enter or use comma..."
+   174→              class="w-full px-4 py-2 border border-md-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+   175→              @keydown.enter.prevent="addTagFromInput"
+   176→              @input="handleTagInput"
+   177→            />
+   178→          </div>
+   179→
+   180→          <!-- Selected Tags as Pills -->
+   181→          <div v-if="form.tags.length > 0" class="space-y-2">
+   182→            <label class="block text-sm font-medium text-md-on-surface">Selected Tags</label>
+   183→            <div class="flex flex-wrap gap-2">
+   184→              <span
+   185→                v-for="tag in form.tags"
+   186→                :key="tag"
+   187→                class="inline-flex items-center gap-2 px-3 py-1.5 bg-md-primary-container text-md-on-primary-container rounded-full text-sm font-medium"
+   188→              >
+   189→                {{ tag }}
+   190→                <button
+   191→                  type="button"
+   192→                  @click="removeTag(tag)"
+   193→                  class="hover:text-md-on-primary-container"
+   194→                >
+   195→                  <i class="fas fa-times text-xs"></i>
+   196→                </button>
+   197→              </span>
+   198→            </div>
+   199→          </div>
+   200→        </div>
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

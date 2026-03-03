@@ -1,0 +1,145 @@
+     1→namespace BizBio.Core.Entities;
+     2→
+     3→using BizBio.Core.Entities.Lookups;
+     4→using BizBio.Core.Enums;
+     5→using System.ComponentModel.DataAnnotations;
+     6→
+     7→public class SubscriptionTier : BaseEntity
+     8→{
+     9→    //public int Id { get; set; }
+    10→
+    11→    public int ProductLineId { get; set; }
+    12→
+    13→    [Required]
+    14→    [MaxLength(100)]
+    15→    public string TierName { get; set; } = null!;
+    16→
+    17→    [Required]
+    18→    [MaxLength(50)]
+    19→    public string TierCode { get; set; } = null!;
+    20→
+    21→    [Required]
+    22→    [MaxLength(100)]
+    23→    public string DisplayName { get; set; } = null!;
+    24→
+    25→    [MaxLength(1000)]
+    26→    public string? Description { get; set; }
+    27→
+    28→    public decimal MonthlyPrice { get; set; }
+    29→
+    30→    public decimal AnnualPrice { get; set; }
+    31→
+    32→    public decimal AnnualDiscountPercent { get; set; } = 15.00m;
+    33→
+    34→    // Feature limits
+    35→    public int MaxProfiles { get; set; }
+    36→
+    37→    public int MaxCatalogItems { get; set; }
+    38→
+    39→    public int MaxLocations { get; set; }
+    40→
+    41→    public int MaxTeamMembers { get; set; }
+    42→
+    43→    public int MaxDocuments { get; set; }
+    44→
+    45→    public int MaxDocumentSizeMB { get; set; }
+    46→
+    47→    public int MaxImagesPerItem { get; set; }
+    48→
+    49→    /// <summary>
+    50→    /// Maximum number of restaurants a user can create
+    51→    /// </summary>
+    52→    public int MaxRestaurants { get; set; } = 1;
+    53→
+    54→    /// <summary>
+    55→    /// Maximum number of library items (shared across all restaurants)
+    56→    /// </summary>
+    57→    public int MaxLibraryItems { get; set; } = 50;
+    58→
+    59→    /// <summary>
+    60→    /// Maximum number of profiles/menus per restaurant
+    61→    /// </summary>
+    62→    public int MaxProfilesPerRestaurant { get; set; } = 3;
+    63→
+    64→    // Feature flags
+    65→    public bool CustomBranding { get; set; }
+    66→
+    67→    public bool RemoveBranding { get; set; }
+    68→
+    69→    public bool Analytics { get; set; }
+    70→
+    71→    public bool AdvancedAnalytics { get; set; }
+    72→
+    73→    public bool ApiAccess { get; set; }
+    74→
+    75→    public bool WhiteLabel { get; set; }
+    76→
+    77→    public bool CustomDomain { get; set; }
+    78→
+    79→    public bool CustomSubdomain { get; set; }
+    80→
+    81→    public bool PrioritySupport { get; set; }
+    82→
+    83→    public bool PhoneSupport { get; set; }
+    84→
+    85→    public bool DedicatedManager { get; set; }
+    86→
+    87→    // Catalog features
+    88→    public bool ItemVariants { get; set; }
+    89→
+    90→    public bool ItemAddons { get; set; }
+    91→
+    92→    public bool AllergenInfo { get; set; }
+    93→
+    94→    public bool DietaryTags { get; set; }
+    95→
+    96→    public bool MenuScheduling { get; set; }
+    97→
+    98→    public bool MultiLanguage { get; set; }
+    99→
+   100→    public bool NutritionalInfo { get; set; }
+   101→
+   102→    public bool Bundles { get; set; }
+   103→
+   104→    // Retail features
+   105→    public bool InventoryTracking { get; set; }
+   106→
+   107→    public bool MultiLocationInventory { get; set; }
+   108→
+   109→    public bool BulkOperations { get; set; }
+   110→
+   111→    public bool BarcodeGeneration { get; set; }
+   112→
+   113→    public bool B2BFeatures { get; set; }
+   114→
+   115→    // Professional features
+   116→    public bool OrganizationalHierarchy { get; set; }
+   117→
+   118→    public bool TeamManagement { get; set; }
+   119→
+   120→    public bool SSOIntegration { get; set; }
+   121→
+   122→    // Display and metadata
+   123→    public int DisplayOrder { get; set; }
+   124→
+   125→    //public bool IsActive { get; set; }
+   126→
+   127→    public bool IsPopular { get; set; }
+   128→
+   129→    [MaxLength(500)]
+   130→    public string? RecommendedFor { get; set; }
+   131→
+   132→    //public DateTime CreatedAt { get; set; }
+   133→
+   134→    //public DateTime UpdatedAt { get; set; }
+   135→
+   136→    // Navigation properties
+   137→    public virtual ICollection<UserSubscription> Subscriptions { get; set; } = new List<UserSubscription>();
+   138→    public virtual ICollection<SubscriptionTierAddon> TierAddons { get; set; } = new List<SubscriptionTierAddon>();
+   139→    public virtual ProductLineLookup ProductLine { get; set; } = null!;
+   140→}
+   141→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

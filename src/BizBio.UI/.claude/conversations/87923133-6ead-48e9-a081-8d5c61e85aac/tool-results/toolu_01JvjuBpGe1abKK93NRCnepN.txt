@@ -1,0 +1,18 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.Core\Entities\User.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    27→
+    28→    // IsActive is inherited from BaseEntity
+    29→    // public bool IsActive { get; set; } = true;
+    30→
+    31→    [MaxLength(255)]
+    32→    public string? EmailVerificationToken { get; set; }
+    33→
+    34→    public DateTime? EmailVerificationTokenExpiry { get; set; }
+    35→
+    36→    [MaxLength(6)]
+    37→    public string? EmailVerificationCode { get; set; }
+    38→
+    39→    public DateTime? EmailVerificationCodeExpiry { get; set; }
+    40→
+    41→    [MaxLength(255)]
+    42→    public string? PasswordResetToken { get; set; }
+    43→

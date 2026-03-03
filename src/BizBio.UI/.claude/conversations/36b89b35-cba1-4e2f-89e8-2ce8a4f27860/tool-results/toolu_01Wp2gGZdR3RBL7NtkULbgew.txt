@@ -1,0 +1,50 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.Core\Entities\SubscriptionTier.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    50→    public int MaxDocumentSizeMB { get; set; }
+    51→
+    52→    public int MaxImagesPerItem { get; set; }
+    53→
+    54→    /// <summary>
+    55→    /// Maximum number of restaurants a user can create
+    56→    /// </summary>
+    57→    public int MaxRestaurants { get; set; } = 1;
+    58→
+    59→    /// <summary>
+    60→    /// Maximum number of entities (Restaurant/Store/Venue/Organization) a user can create for this product
+    61→    /// </summary>
+    62→    public int MaxEntities { get; set; } = 1;
+    63→
+    64→    /// <summary>
+    65→    /// Maximum number of catalogs per entity
+    66→    /// </summary>
+    67→    public int MaxCatalogsPerEntity { get; set; } = 3;
+    68→
+    69→    /// <summary>
+    70→    /// Maximum number of library items (shared across all restaurants)
+    71→    /// </summary>
+    72→    public int MaxLibraryItems { get; set; } = 50;
+    73→
+    74→    /// <summary>
+    75→    /// Maximum number of categories per catalog
+    76→    /// </summary>
+    77→    public int MaxCategoriesPerCatalog { get; set; } = 10;
+    78→
+    79→    /// <summary>
+    80→    /// Maximum number of bundles
+    81→    /// </summary>
+    82→    public int MaxBundles { get; set; } = 0;
+    83→
+    84→    /// <summary>
+    85→    /// Maximum number of profiles/menus per restaurant
+    86→    /// </summary>
+    87→    public int MaxProfilesPerRestaurant { get; set; } = 3;
+    88→
+    89→    /// <summary>
+    90→    /// Trial period in days
+    91→    /// </summary>
+    92→    public int TrialDays { get; set; } = 7;
+    93→
+    94→    // Feature flags
+    95→    public bool CustomBranding { get; set; }
+    96→
+    97→    public bool RemoveBranding { get; set; }
+    98→

@@ -1,0 +1,470 @@
+     1→<template>
+     2→  <div class="min-h-screen bg-[var(--light-background-color)]">
+     3→    <!-- Loading State -->
+     4→    <div v-if="loading" class="flex justify-center items-center h-screen">
+     5→      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--primary-color)]"></div>
+     6→    </div>
+     7→
+     8→    <!-- Error State -->
+     9→    <div v-else-if="error" class="flex flex-col justify-center items-center h-screen px-4">
+    10→      <i class="fas fa-exclamation-circle text-6xl text-red-500 mb-4"></i>
+    11→      <h2 class="text-2xl font-bold text-[var(--dark-text-color)] mb-2">Menu Not Found</h2>
+    12→      <p class="text-[var(--gray-text-color)] text-center">{{ error }}</p>
+    13→    </div>
+    14→
+    15→    <!-- Menu Content -->
+    16→    <div v-else>
+    17→      <!-- Hero Section with Restaurant Image -->
+    18→      <div v-if="menuData?.coverImage" class="relative h-48 md:h-64 bg-gradient-to-br from-gray-300 to-gray-400">
+    19→        <img
+    20→          :src="menuData.coverImage"
+    21→          :alt="menuData.name"
+    22→          class="w-full h-full object-cover"
+    23→        />
+    24→        <button
+    25→          @click="goBack"
+    26→          class="absolute top-4 left-4 w-10 h-10 bg-md-surface bg-opacity-90 rounded-full shadow-lg flex items-center justify-center hover:bg-opacity-100 transition-all"
+    27→        >
+    28→          <i class="fas fa-arrow-left text-md-on-surface"></i>
+    29→        </button>
+    30→        <button
+    31→          v-if="isAuthenticated"
+    32→          @click="toggleEditMode"
+    33→          class="absolute top-4 right-4 px-4 py-2 bg-md-surface bg-opacity-90 rounded-full shadow-lg hover:bg-opacity-100 transition-all text-sm font-medium"
+    34→        >
+    35→          <i class="fas fa-edit mr-2"></i>
+    36→          {{ editMode ? 'Done' : 'Edit' }}
+    37→        </button>
+    38→      </div>
+    39→
+    40→      <!-- Restaurant Info Header -->
+    41→      <div class="bg-md-surface shadow-sm">
+    42→        <div class="max-w-7xl mx-auto px-4 py-4">
+    43→          <div class="flex items-start justify-between mb-2">
+    44→            <div class="flex-1">
+    45→              <h1 class="text-2xl md:text-3xl font-bold text-[var(--dark-text-color)] mb-1">
+    46→                {{ menuData?.name || 'Menu' }}
+    47→              </h1>
+    48→              <p v-if="menuData?.businessName" class="text-sm text-[var(--gray-text-color)] mb-2">
+    49→                {{ menuData.businessName }}
+    50→              </p>
+    51→              <div class="flex items-center gap-4 text-sm text-[var(--gray-text-color)] flex-wrap">
+    52→                <div v-if="menuData?.rating" class="flex items-center gap-1">
+    53→                  <i class="fas fa-star text-yellow-500"></i>
+    54→                  <span class="font-semibold">{{ menuData.rating }}</span>
+    55→                  <span v-if="menuData?.reviewCount">({{ menuData.reviewCount }})</span>
+    56→                </div>
+    57→                <div v-if="menuData?.deliveryTime">
+    58→                  <i class="fas fa-clock mr-1"></i>
+    59→                  {{ menuData.deliveryTime }}
+    60→                </div>
+    61→                <div v-if="menuData?.distance">
+    62→                  <i class="fas fa-map-marker-alt mr-1"></i>
+    63→                  {{ menuData.distance }}
+    64→                </div>
+    65→              </div>
+    66→            </div>
+    67→            <button
+    68→              @click="cartStore.toggleCart()"
+    69→              class="relative ml-4 p-3 bg-[var(--primary-color)] text-white rounded-full hover:opacity-90 transition-opacity flex-shrink-0"
+    70→            >
+    71→              <i class="fas fa-search"></i>
+    72→            </button>
+    73→          </div>
+    74→
+    75→          <p v-if="menuData?.description" class="text-sm text-[var(--gray-text-color)] mt-2">
+    76→            {{ menuData.description }}
+    77→          </p>
+    78→
+    79→          <!-- Delivery Info Banner -->
+    80→          <div v-if="menuData?.deliveryInfo" class="mt-3 p-3 bg-red-50 border-l-4 border-red-500 rounded">
+    81→            <div class="flex items-center gap-2 text-sm text-red-700">
+    82→              <i class="fas fa-motorcycle"></i>
+    83→              <span class="font-medium">{{ menuData.deliveryInfo }}</span>
+    84→            </div>
+    85→          </div>
+    86→        </div>
+    87→      </div>
+    88→
+    89→      <!-- Category Tabs (Sticky) -->
+    90→      <div v-if="categories.length > 0" class="sticky top-16 z-30 bg-md-surface shadow-md border-b border-md-outline-variant">
+    91→        <div class="overflow-x-auto hide-scrollbar">
+    92→          <div class="flex space-x-1 px-4 py-3 min-w-max">
+    93→            <button
+    94→              v-for="category in categories"
+    95→              :key="category.id"
+    96→              :data-category-id="category.id"
+    97→              @click="scrollToCategory(category.id)"
+    98→              :class="[
+    99→                'px-5 py-2.5 text-sm font-semibold whitespace-nowrap transition-all relative rounded-xl',
+   100→                activeCategory === category.id
+   101→                  ? 'bg-gradient-to-r from-md-primary to-md-secondary text-white shadow-md-2'
+   102→                  : 'text-md-on-surface-variant hover:bg-md-surface-container-high hover:text-md-on-surface'
+   103→              ]"
+   104→            >
+   105→              {{ category.name }}
+   106→              <span
+   107→                v-if="activeCategory === category.id"
+   108→                class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-md-primary rounded-full"
+   109→              ></span>
+   110→            </button>
+   111→          </div>
+   112→        </div>
+   113→      </div>
+   114→
+   115→      <!-- Menu Items by Category -->
+   116→      <div class="max-w-7xl mx-auto pb-24">
+   117→        <div
+   118→          v-for="category in categories"
+   119→          :key="category.id"
+   120→          :id="`category-${category.id}`"
+   121→          class="mb-6"
+   122→        >
+   123→          <h2 class="text-xl font-bold text-[var(--dark-text-color)] px-4 py-4 bg-[var(--light-background-color)] sticky top-14 z-10">
+   124→            {{ category.name }}
+   125→          </h2>
+   126→
+   127→          <div class="bg-md-surface divide-y divide-gray-100">
+   128→            <div
+   129→              v-for="item in getCategoryItems(category.id)"
+   130→              :key="item.id"
+   131→              @click="openItemDetail(item)"
+   132→              class="px-4 py-4 hover:bg-md-surface-container transition-colors cursor-pointer relative"
+   133→            >
+   134→              <div class="flex gap-4">
+   135→                <!-- Item Info -->
+   136→                <div class="flex-1 min-w-0">
+   137→                  <div class="flex items-start gap-2 mb-1">
+   138→                    <h3 class="text-base font-semibold text-[var(--dark-text-color)]">{{ item.name }}</h3>
+   139→                    <span
+   140→                      v-if="item.itemType === 1"
+   141→                      class="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs font-semibold rounded flex-shrink-0"
+   142→                    >
+   143→                      BUNDLE
+   144→                    </span>
+   145→                  </div>
+   146→                  <p v-if="item.description" class="text-sm text-[var(--gray-text-color)] line-clamp-2 mb-2">
+   147→                    {{ item.description }}
+   148→                  </p>
+   149→                  <div class="flex items-center gap-2">
+   150→                    <span class="text-base font-bold text-[var(--dark-text-color)]">
+   151→                      From R{{ item.price.toFixed(2) }}
+   152→                    </span>
+   153→                  </div>
+   154→                  <!-- Edit Button (when in edit mode) -->
+   155→                  <button
+   156→                    v-if="editMode"
+   157→                    @click.stop="editItem(item)"
+   158→                    class="mt-2 px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors"
+   159→                  >
+   160→                    <i class="fas fa-edit mr-1"></i>
+   161→                    Edit Item
+   162→                  </button>
+   163→                </div>
+   164→
+   165→                <!-- Item Image -->
+   166→                <div class="flex-shrink-0 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg overflow-hidden">
+   167→                  <img
+   168→                    v-if="item.images && item.images.length > 0"
+   169→                    :src="item.images[0]"
+   170→                    :alt="item.name"
+   171→                    class="w-full h-full object-cover"
+   172→                  />
+   173→                  <div v-else class="w-full h-full flex items-center justify-center">
+   174→                    <i class="fas fa-utensils text-2xl md:text-3xl text-md-on-surface-variant opacity-70"></i>
+   175→                  </div>
+   176→                </div>
+   177→              </div>
+   178→            </div>
+   179→          </div>
+   180→
+   181→          <!-- Empty Category -->
+   182→          <div v-if="getCategoryItems(category.id).length === 0" class="text-center py-12 text-[var(--gray-text-color)] bg-md-surface">
+   183→            <i class="fas fa-box-open text-5xl mb-3 opacity-50"></i>
+   184→            <p class="text-sm">No items in this category</p>
+   185→          </div>
+   186→        </div>
+   187→      </div>
+   188→
+   189→      <!-- Floating Cart Button (Mobile) -->
+   190→      <div
+   191→        v-if="cartStore.itemCount > 0"
+   192→        @click="cartStore.openCart()"
+   193→        class="fixed bottom-6 left-4 right-4 md:left-auto md:right-6 md:max-w-md z-30 bg-[var(--primary-color)] text-white rounded-2xl shadow-2xl px-6 py-4 cursor-pointer hover:opacity-95 transition-opacity"
+   194→      >
+   195→        <div class="flex items-center justify-between">
+   196→          <div class="flex items-center gap-3">
+   197→            <div class="w-10 h-10 bg-md-surface bg-opacity-20 rounded-full flex items-center justify-center">
+   198→              <i class="fas fa-shopping-cart text-lg"></i>
+   199→            </div>
+   200→            <span class="font-semibold text-lg">{{ cartStore.itemCount }} {{ cartStore.itemCount === 1 ? 'item' : 'items' }}</span>
+   201→          </div>
+   202→          <div class="font-bold text-xl">R{{ cartStore.total.toFixed(2) }}</div>
+   203→        </div>
+   204→      </div>
+   205→    </div>
+   206→
+   207→    <!-- Item Detail Modal -->
+   208→    <ItemDetailModal
+   209→      v-if="selectedItem && !selectedItem.isBundle"
+   210→      :item="selectedItem"
+   211→      :menu-slug="route.params.slug as string"
+   212→      :edit-mode="editMode"
+   213→      @close="selectedItem = null"
+   214→      @edit="editItem"
+   215→    />
+   216→
+   217→    <!-- Bundle Configuration Modal -->
+   218→    <BundleConfigModal
+   219→      v-if="selectedBundle"
+   220→      :is-open="!!selectedBundle"
+   221→      :bundle="selectedBundle"
+   222→      @close="selectedBundle = null"
+   223→      @add-to-cart="handleBundleAddToCart"
+   224→    />
+   225→
+   226→    <!-- Cart Drawer -->
+   227→    <CartDrawer />
+   228→
+   229→    <!-- Item Form Modal (for editing) -->
+   230→    <ItemFormModal
+   231→      v-if="editingItem"
+   232→      :item="editingItem"
+   233→      @close="editingItem = null"
+   234→      @saved="handleItemSaved"
+   235→    />
+   236→  </div>
+   237→</template>
+   238→
+   239→<script setup lang="ts">
+   240→import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
+   241→import { useRoute, useRouter } from 'vue-router'
+   242→import { useMenusApi } from '~/composables/useApi'
+   243→import { useCartStore } from '~/stores/cart'
+   244→import { useAuthStore } from '~/stores/auth'
+   245→import { useToast } from '~/composables/useToast'
+   246→
+   247→const route = useRoute()
+   248→const router = useRouter()
+   249→const menusApi = useMenusApi()
+   250→const cartStore = useCartStore()
+   251→const authStore = useAuthStore()
+   252→const toast = useToast()
+   253→
+   254→const loading = ref(true)
+   255→const error = ref<string | null>(null)
+   256→const menuData = ref<any>(null)
+   257→const items = ref<any[]>([])
+   258→const selectedItem = ref<any>(null)
+   259→const selectedBundle = ref<any>(null)
+   260→const activeCategory = ref<number | null>(null)
+   261→const editMode = ref(false)
+   262→const editingItem = ref<any>(null)
+   263→
+   264→const isAuthenticated = computed(() => authStore.isAuthenticated)
+   265→
+   266→const categories = computed(() => {
+   267→  if (!menuData.value?.categories) return []
+   268→  return menuData.value.categories.sort((a: any, b: any) => a.sortOrder - b.sortOrder)
+   269→})
+   270→
+   271→// Watch active category and scroll tab into view
+   272→watch(activeCategory, async (newCategoryId) => {
+   273→  if (newCategoryId) {
+   274→    await nextTick()
+   275→    const activeButton = document.querySelector(`button[data-category-id="${newCategoryId}"]`)
+   276→    if (activeButton) {
+   277→      activeButton.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+   278→    }
+   279→  }
+   280→})
+   281→
+   282→onMounted(async () => {
+   283→  await loadMenu()
+   284→  setupScrollSpy()
+   285→})
+   286→
+   287→onUnmounted(() => {
+   288→  cleanupScrollSpy()
+   289→})
+   290→
+   291→async function loadMenu() {
+   292→  try {
+   293→    loading.value = true
+   294→    const slug = route.params.slug as string
+   295→    const response = await menusApi.getMenuBySlug(slug)
+   296→    console.log('Menu response:', response)
+   297→    menuData.value = response.data.restaurant
+   298→    items.value = response.data.menu || []
+   299→
+   300→    // Set first category as active
+   301→    if (categories.value.length > 0) {
+   302→      activeCategory.value = categories.value[0].id
+   303→    }
+   304→  } catch (err: any) {
+   305→    console.error('Error loading menu:', err)
+   306→    error.value = err.response?.data?.error || 'Failed to load menu'
+   307→  } finally {
+   308→    loading.value = false
+   309→  }
+   310→}
+   311→
+   312→function getCategoryItems(categoryId: number) {
+   313→  return items.value
+   314→    .filter(item => item.categoryId === categoryId && item.isActive)
+   315→    .sort((a, b) => a.sortOrder - b.sortOrder)
+   316→}
+   317→
+   318→function scrollToCategory(categoryId: number) {
+   319→  const element = document.getElementById(`category-${categoryId}`)
+   320→  if (element) {
+   321→    // Account for both global header (64px) and sticky category tabs (~60px)
+   322→    const headerHeight = 64 // Global header
+   323→    const tabsHeight = 60 // Category tabs
+   324→    const offset = headerHeight + tabsHeight + 10 // Extra padding
+   325→    const elementPosition = element.getBoundingClientRect().top
+   326→    const offsetPosition = elementPosition + window.pageYOffset - offset
+   327→
+   328→    window.scrollTo({
+   329→      top: offsetPosition,
+   330→      behavior: 'smooth'
+   331→    })
+   332→    
+   333→    // Update active category immediately for better UX
+   334→    activeCategory.value = categoryId
+   335→  }
+   336→}
+   337→
+   338→let scrollListener: (() => void) | null = null
+   339→
+   340→function setupScrollSpy() {
+   341→  scrollListener = () => {
+   342→    const categoryElements = categories.value.map(cat => ({
+   343→      id: cat.id,
+   344→      element: document.getElementById(`category-${cat.id}`)
+   345→    }))
+   346→
+   347→    // Account for headers when detecting active section
+   348→    const headerOffset = 140 // Global header + category tabs
+   349→    const scrollPosition = window.scrollY + headerOffset
+   350→
+   351→    for (let i = categoryElements.length - 1; i >= 0; i--) {
+   352→      const cat = categoryElements[i]
+   353→      if (cat.element && cat.element.offsetTop <= scrollPosition) {
+   354→        if (activeCategory.value !== cat.id) {
+   355→          activeCategory.value = cat.id
+   356→        }
+   357→        break
+   358→      }
+   359→    }
+   360→  }
+   361→
+   362→  window.addEventListener('scroll', scrollListener, { passive: true })
+   363→}
+   364→
+   365→function cleanupScrollSpy() {
+   366→  if (scrollListener) {
+   367→    window.removeEventListener('scroll', scrollListener)
+   368→  }
+   369→}
+   370→
+   371→function openItemDetail(item: any) {
+   372→  if (item.itemType === 1) {
+   373→    // Bundle item - open bundle configuration modal
+   374→    openBundleConfig(item)
+   375→  } else {
+   376→    // Regular item - open item detail modal
+   377→    selectedItem.value = item
+   378→  }
+   379→}
+   380→
+   381→async function openBundleConfig(item: any) {
+   382→  // TODO: Load full bundle data with steps and options from API
+   383→  // For now, assume item has bundleId and we need to fetch the bundle details
+   384→  try {
+   385→    // Placeholder: In production, fetch bundle data from API
+   386→    // const response = await bundlesApi.getBundle(catalogId, item.bundleId)
+   387→    // selectedBundle.value = response.data
+   388→
+   389→    // For now, set a mock bundle structure
+   390→    selectedBundle.value = {
+   391→      id: item.id,
+   392→      name: item.name,
+   393→      description: item.description,
+   394→      basePrice: item.price,
+   395→      images: item.images,
+   396→      steps: item.bundleSteps || [] // Assuming bundle steps are loaded with the item
+   397→    }
+   398→  } catch (error) {
+   399→    console.error('Error loading bundle:', error)
+   400→    toast.error('Failed to load bundle configuration')
+   401→  }
+   402→}
+   403→
+   404→function handleBundleAddToCart(bundleData: any) {
+   405→  cartStore.addBundleItem(bundleData)
+   406→  toast.success(`${bundleData.bundle.name} added to cart!`)
+   407→  cartStore.openCart()
+   408→}
+   409→
+   410→function quickAddToCart(item: any) {
+   411→  cartStore.addItem({
+   412→    catalogItemId: item.id,
+   413→    name: item.name,
+   414→    description: item.description,
+   415→    basePrice: item.price,
+   416→    quantity: 1,
+   417→    options: [],
+   418→    image: item.images,
+   419→    isBundle: item.itemType === 1
+   420→  })
+   421→  toast.success(`${item.name} added to cart`)
+   422→}
+   423→
+   424→function goBack() {
+   425→  router.back()
+   426→}
+   427→
+   428→function toggleEditMode() {
+   429→  editMode.value = !editMode.value
+   430→  if (!editMode.value) {
+   431→    editingItem.value = null
+   432→  }
+   433→}
+   434→
+   435→function editItem(item: any) {
+   436→  editingItem.value = item
+   437→}
+   438→
+   439→async function handleItemSaved() {
+   440→  editingItem.value = null
+   441→  await loadMenu()
+   442→  toast.success('Item updated successfully')
+   443→}
+   444→</script>
+   445→
+   446→<style scoped>
+   447→.hide-scrollbar {
+   448→  -ms-overflow-style: none;
+   449→  scrollbar-width: none;
+   450→}
+   451→
+   452→.hide-scrollbar::-webkit-scrollbar {
+   453→  display: none;
+   454→}
+   455→
+   456→.line-clamp-2 {
+   457→  display: -webkit-box;
+   458→  -webkit-line-clamp: 2;
+   459→  -webkit-box-orient: vertical;
+   460→  overflow: hidden;
+   461→}
+   462→</style>
+   463→
+   464→
+   465→
+   466→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

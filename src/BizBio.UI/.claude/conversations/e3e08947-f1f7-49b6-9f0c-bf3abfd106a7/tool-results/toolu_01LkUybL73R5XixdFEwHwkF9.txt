@@ -1,0 +1,104 @@
+  4000→
+  4001→[stderr] 
+  4002→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4003→
+  4004→[stderr] 
+  4005→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4006→
+  4007→[stderr] 
+  4008→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 14 times)
+  4009→
+  4010→[stderr] 
+  4011→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4012→
+  4013→
+  4014→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4015→
+  4016→[stderr] 
+  4017→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4018→
+  4019→[stderr] 
+  4020→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4021→
+  4022→
+  4023→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4024→
+  4025→[stderr] 
+  4026→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 12 times)
+  4027→
+  4028→[stderr] 
+  4029→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4030→
+  4031→[stderr] 
+  4032→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4033→
+  4034→[stderr] 
+  4035→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4036→
+  4037→[stderr] 
+  4038→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4039→
+  4040→
+  4041→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4042→
+  4043→
+  4044→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4045→
+  4046→[stderr] 
+  4047→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 40 times)
+  4048→
+  4049→[stderr] 
+  4050→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4051→
+  4052→[stderr] 
+  4053→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4054→
+  4055→[stderr] 
+  4056→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4057→
+  4058→
+  4059→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4060→
+  4061→
+  4062→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4063→
+  4064→[stderr] 
+  4065→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 9 times)
+  4066→
+  4067→[stderr] 
+  4068→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4069→
+  4070→[stderr] 
+  4071→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4072→
+  4073→[stderr] 
+  4074→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4075→
+  4076→[stderr] 
+  4077→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4078→
+  4079→[stderr] 
+  4080→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4081→
+  4082→
+  4083→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4084→
+  4085→
+  4086→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4087→
+  4088→[stderr] 
+  4089→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it. (repeated 8 times)
+  4090→
+  4091→[stderr] 
+  4092→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4093→
+  4094→[stderr] 
+  4095→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4096→
+  4097→
+  4098→[43m[30m WARN [39m[49m 'manifest-route-rule' middleware already exists at 'C:/Development/github/bizbio2/BizBio/src/BizBio.UI/node_modules/nuxt/dist/app/middleware/manifest-route-rule.js'. You can set [36moverride: true[39m to replace it.
+  4099→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

@@ -1,0 +1,158 @@
+     1→using System.ComponentModel.DataAnnotations;
+     2→using System.Text.Json.Serialization;
+     3→
+     4→namespace BizBio.Core.Entities;
+     5→
+     6→/// <summary>
+     7→/// Represents a user's subscription to a specific product (Cards, Menu, or Catalog).
+     8→/// Replaces single UserSubscription with per-product subscriptions that can be managed independently.
+     9→/// Each product has its own trial period but billing is combined monthly.
+    10→/// </summary>
+    11→public class ProductSubscription : BaseEntity
+    12→{
+    13→    /// <summary>
+    14→    /// The user who owns this subscription
+    15→    /// </summary>
+    16→    public int UserId { get; set; }
+    17→
+    18→    /// <summary>
+    19→    /// Product type (Cards=0, Menu=1, Catalog=2)
+    20→    /// </summary>
+    21→    public ProductType ProductType { get; set; }
+    22→
+    23→    /// <summary>
+    24→    /// Subscription tier ID
+    25→    /// </summary>
+    26→    public int TierId { get; set; }
+    27→
+    28→    // Trial tracking per product
+    29→
+    30→    /// <summary>
+    31→    /// Whether the trial is currently active
+    32→    /// </summary>
+    33→    public bool IsTrialActive { get; set; } = true;
+    34→
+    35→    /// <summary>
+    36→    /// When the trial started
+    37→    /// </summary>
+    38→    public DateTime TrialStartDate { get; set; }
+    39→
+    40→    /// <summary>
+    41→    /// When the trial ends
+    42→    /// </summary>
+    43→    public DateTime TrialEndDate { get; set; }
+    44→
+    45→    // Billing
+    46→
+    47→    /// <summary>
+    48→    /// Subscription status (Trial=0, Active=1, Cancelled=2, Expired=3)
+    49→    /// </summary>
+    50→    public SubscriptionStatus Status { get; set; } = SubscriptionStatus.Trial;
+    51→
+    52→    /// <summary>
+    53→    /// Billing cycle (Monthly=0, Yearly=1)
+    54→    /// </summary>
+    55→    public BillingCycle BillingCycle { get; set; } = BillingCycle.Monthly;
+    56→
+    57→    /// <summary>
+    58→    /// Start of current billing period
+    59→    /// </summary>
+    60→    public DateTime? CurrentPeriodStart { get; set; }
+    61→
+    62→    /// <summary>
+    63→    /// End of current billing period
+    64→    /// </summary>
+    65→    public DateTime? CurrentPeriodEnd { get; set; }
+    66→
+    67→    /// <summary>
+    68→    /// Next billing date
+    69→    /// </summary>
+    70→    public DateTime? NextBillingDate { get; set; }
+    71→
+    72→    /// <summary>
+    73→    /// When the subscription was cancelled (if applicable)
+    74→    /// </summary>
+    75→    public DateTime? CancelledAt { get; set; }
+    76→
+    77→    // Navigation properties
+    78→
+    79→    /// <summary>
+    80→    /// The user who owns this subscription
+    81→    /// </summary>
+    82→    [JsonIgnore]
+    83→    public virtual User User { get; set; } = null!;
+    84→
+    85→    /// <summary>
+    86→    /// The subscription tier
+    87→    /// </summary>
+    88→    [JsonIgnore]
+    89→    public virtual SubscriptionTier Tier { get; set; } = null!;
+    90→}
+    91→
+    92→/// <summary>
+    93→/// Product types in the multi-product subscription model
+    94→/// </summary>
+    95→public enum ProductType
+    96→{
+    97→    /// <summary>
+    98→    /// Digital business cards product
+    99→    /// </summary>
+   100→    Cards = 0,
+   101→
+   102→    /// <summary>
+   103→    /// Restaurant/venue menu product
+   104→    /// </summary>
+   105→    Menu = 1,
+   106→
+   107→    /// <summary>
+   108→    /// Product catalog for stores
+   109→    /// </summary>
+   110→    Catalog = 2
+   111→}
+   112→
+   113→/// <summary>
+   114→/// Subscription status enumeration
+   115→/// </summary>
+   116→public enum SubscriptionStatus
+   117→{
+   118→    /// <summary>
+   119→    /// Trial period active
+   120→    /// </summary>
+   121→    Trial = 0,
+   122→
+   123→    /// <summary>
+   124→    /// Active paid subscription
+   125→    /// </summary>
+   126→    Active = 1,
+   127→
+   128→    /// <summary>
+   129→    /// Subscription cancelled
+   130→    /// </summary>
+   131→    Cancelled = 2,
+   132→
+   133→    /// <summary>
+   134→    /// Subscription expired
+   135→    /// </summary>
+   136→    Expired = 3
+   137→}
+   138→
+   139→/// <summary>
+   140→/// Billing cycle enumeration
+   141→/// </summary>
+   142→public enum BillingCycle
+   143→{
+   144→    /// <summary>
+   145→    /// Monthly billing
+   146→    /// </summary>
+   147→    Monthly = 0,
+   148→
+   149→    /// <summary>
+   150→    /// Yearly billing
+   151→    /// </summary>
+   152→    Yearly = 1
+   153→}
+   154→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

@@ -1,0 +1,55 @@
+     1→import { defineNuxtModule } from '@nuxt/kit';
+     2→
+     3→export default defineNuxtModule({
+     4→  meta: {
+     5→    name: 'fix-windows-path',
+     6→  },
+     7→  setup(options, nuxt) {
+     8→    // Workaround for Windows paths with spaces causing issues in Nuxt components transform
+     9→    // The issue is in @nuxt/kit where it passes virtual module IDs to the ignore package
+    10→    // which expects relative file paths
+    11→
+    12→    // Disable the components auto-import transform for virtual modules
+    13→    nuxt.hook('modules:done', () => {
+    14→      nuxt.options.components = nuxt.options.components || { dirs: [] };
+    15→
+    16→      // Add a custom transformInclude filter to skip virtual modules
+    17→      nuxt.hook('vite:extendConfig', (config) => {
+    18→        if (!config.plugins) config.plugins = [];
+    19→
+    20→        // Find and modify the nuxt:components:imports plugin
+    21→        const componentsIndex = config.plugins.findIndex((p: any) =>
+    22→          p && p.name === 'nuxt:components:imports'
+    23→        );
+    24→
+    25→        if (componentsIndex !== -1) {
+    26→          const originalPlugin = config.plugins[componentsIndex] as any;
+    27→
+    28→          // Wrap the transformInclude function to skip virtual modules
+    29→          if (originalPlugin && typeof originalPlugin.transformInclude === 'function') {
+    30→            const originalTransformInclude = originalPlugin.transformInclude;
+    31→            originalPlugin.transformInclude = function(id: string) {
+    32→              // Skip virtual modules that cause path issues
+    33→              if (
+    34→                id.includes(':') || // Virtual module prefixes
+    35→                id.startsWith('\0') || // Rollup virtual modules
+    36→                id.includes(' vite/') || // Malformed Vite paths
+    37→                id.includes(' plugin-') || // Malformed plugin paths
+    38→                id.startsWith('vite/') || // Vite internal modules
+    39→                id.startsWith('plugin-') // Plugin virtual modules
+    40→              ) {
+    41→                return false;
+    42→              }
+    43→              return originalTransformInclude.call(this, id);
+    44→            };
+    45→          }
+    46→        }
+    47→      });
+    48→    });
+    49→  },
+    50→});
+    51→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

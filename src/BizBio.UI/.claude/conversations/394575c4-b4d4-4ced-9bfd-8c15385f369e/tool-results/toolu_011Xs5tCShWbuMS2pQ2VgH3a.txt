@@ -1,0 +1,231 @@
+   390→
+   391→const saving = ref(false)
+   392→const uploading = ref(false)
+   393→const loadingExtras = ref(false)
+   394→const tagInput = ref('')
+   395→const maxImages = ref(5) // TODO: Get from user's subscription
+   396→const availableExtraGroups = ref<any[]>([])
+   397→
+   398→const commonTags = [
+   399→  'Gluten-Free',
+   400→  'Vegan',
+   401→  'Vegetarian',
+   402→  'Dairy-Free',
+   403→  'Nut-Free',
+   404→  'Halal',
+   405→  'Kosher',
+   406→  'Spicy',
+   407→  'Organic',
+   408→  'Sugar-Free'
+   409→]
+   410→
+   411→const form = reactive({
+   412→  name: '',
+   413→  description: '',
+   414→  categoryId: null as number | null,
+   415→  price: 0,
+   416→  images: [] as string[],
+   417→  tags: [] as string[],
+   418→  variants: [] as any[],
+   419→  extraGroupIds: [] as number[]
+   420→})
+   421→
+   422→onMounted(async () => {
+   423→  if (props.item) {
+   424→    form.name = props.item.name
+   425→    form.description = props.item.description || ''
+   426→    form.categoryId = props.item.categoryId
+   427→    form.price = props.item.price
+   428→    form.images = props.item.images || []
+   429→    form.tags = props.item.tags || []
+   430→    form.variants = props.item.variants?.map((v: any) => ({ ...v })) || []
+   431→    form.extraGroupIds = props.item.extraGroups?.map((g: any) => {
+   432→      // Handle both camelCase and PascalCase, ensure it's a number
+   433→      const id = g.extraGroupId || g.ExtraGroupId
+   434→      return typeof id === 'number' ? id : parseInt(id)
+   435→    }).filter((id: any) => !isNaN(id)) || []
+   436→  }
+   437→
+   438→  // Fetch available extra groups
+   439→  await fetchExtraGroups()
+   440→})
+   441→
+   442→async function fetchExtraGroups() {
+   443→  loadingExtras.value = true
+   444→  try {
+   445→    const api = useApi()
+   446→    const response = await api.get('/library/extra-groups')
+   447→    console.log('Extra groups response:', response)
+   448→    if (response.success) {
+   449→      // Ensure we always set an array
+   450→      if (Array.isArray(response.data)) {
+   451→        availableExtraGroups.value = response.data
+   452→      } else if (response.data && Array.isArray(response.data.extraGroups)) {
+   453→        availableExtraGroups.value = response.data.extraGroups
+   454→      } else {
+   455→        availableExtraGroups.value = []
+   456→      }
+   457→    }
+   458→  } catch (error) {
+   459→    console.error('Error fetching extra groups:', error)
+   460→    availableExtraGroups.value = []
+   461→  } finally {
+   462→    loadingExtras.value = false
+   463→  }
+   464→}
+   465→
+   466→function toggleTag(tag: string) {
+   467→  const index = form.tags.indexOf(tag)
+   468→  if (index > -1) {
+   469→    form.tags.splice(index, 1)
+   470→  } else {
+   471→    form.tags.push(tag)
+   472→  }
+   473→}
+   474→
+   475→function handleTagInput(event: Event) {
+   476→  const input = event.target as HTMLInputElement
+   477→  const value = input.value
+   478→
+   479→  // Check for comma
+   480→  if (value.includes(',')) {
+   481→    const tags = value.split(',').map(t => t.trim()).filter(t => t)
+   482→    tags.forEach(tag => {
+   483→      if (tag && !form.tags.includes(tag)) {
+   484→        form.tags.push(tag)
+   485→      }
+   486→    })
+   487→    tagInput.value = ''
+   488→  }
+   489→}
+   490→
+   491→function addTagFromInput() {
+   492→  const tag = tagInput.value.trim()
+   493→  if (tag && !form.tags.includes(tag)) {
+   494→    form.tags.push(tag)
+   495→    tagInput.value = ''
+   496→  }
+   497→}
+   498→
+   499→function removeTag(tag: string) {
+   500→  const index = form.tags.indexOf(tag)
+   501→  if (index > -1) {
+   502→    form.tags.splice(index, 1)
+   503→  }
+   504→}
+   505→
+   506→async function handleImageUpload(event: Event) {
+   507→  const input = event.target as HTMLInputElement
+   508→  const file = input.files?.[0]
+   509→  if (!file) return
+   510→
+   511→  if (form.images.length >= maxImages.value) {
+   512→    toast.error(`Maximum ${maxImages.value} images allowed`)
+   513→    return
+   514→  }
+   515→
+   516→  try {
+   517→    uploading.value = true
+   518→    const response = await uploadsApi.uploadMenuImage(file)
+   519→    const imageUrl = response.data.url || response.url
+   520→    form.images.push(imageUrl)
+   521→    toast.success('Image uploaded successfully')
+   522→  } catch (error) {
+   523→    console.error('Error uploading image:', error)
+   524→    toast.error('Failed to upload image')
+   525→  } finally {
+   526→    uploading.value = false
+   527→    input.value = '' // Reset input
+   528→  }
+   529→}
+   530→
+   531→function removeImage(index: number) {
+   532→  form.images.splice(index, 1)
+   533→}
+   534→
+   535→function addVariant() {
+   536→  form.variants.push({
+   537→    title: '',
+   538→    price: form.price,
+   539→    isDefault: form.variants.length === 0
+   540→  })
+   541→}
+   542→
+   543→function updateDefaultVariant(index: number) {
+   544→  // If this variant is set to default, unset others
+   545→  if (form.variants[index].isDefault) {
+   546→    form.variants.forEach((v, i) => {
+   547→      if (i !== index) v.isDefault = false
+   548→    })
+   549→  }
+   550→}
+   551→
+   552→function removeVariant(index: number) {
+   553→  form.variants.splice(index, 1)
+   554→  // If we removed the default, make the first one default
+   555→  if (form.variants.length > 0 && !form.variants.some(v => v.isDefault)) {
+   556→    form.variants[0].isDefault = true
+   557→  }
+   558→}
+   559→
+   560→async function saveItem() {
+   561→  try {
+   562→    saving.value = true
+   563→
+   564→    const data = {
+   565→      name: form.name,
+   566→      description: form.description || null,
+   567→      categoryId: form.categoryId,
+   568→      price: form.price,
+   569→      images: form.images.length > 0 ? form.images : null,
+   570→      tags: form.tags.length > 0 ? form.tags : null,
+   571→      itemType: 0, // Regular item
+   572→      sortOrder: 0,
+   573→      availableInEventMode: true,
+   574→      eventModeOnly: false,
+   575→      variants: form.variants.length > 0 ? form.variants.map(v => ({
+   576→        title: v.title,
+   577→        price: v.price,
+   578→        cost: v.cost || null,
+   579→        sizeValue: v.sizeValue || null,
+   580→        sizeUnit: v.sizeUnit || null,
+   581→        unitOfMeasure: v.unitOfMeasure || null,
+   582→        sku: v.sku || null,
+   583→        barcode: v.barcode || null,
+   584→        isDefault: v.isDefault || false,
+   585→        weightG: v.weightG || null
+   586→      })) : [],
+   587→      extraGroupIds: form.extraGroupIds.length > 0
+   588→        ? form.extraGroupIds.map(id => Number(id)).filter(id => !isNaN(id))
+   589→        : []
+   590→    }
+   591→
+   592→    console.log('Saving item with data:', data)
+   593→
+   594→    if (props.item) {
+   595→      await libraryItemsApi.updateItem(props.item.id, data)
+   596→      toast.success('Item updated successfully')
+   597→    } else {
+   598→      await libraryItemsApi.createItem(data)
+   599→      toast.success('Item created successfully')
+   600→    }
+   601→
+   602→    emit('saved')
+   603→  } catch (error: any) {
+   604→    console.error('Error saving item:', error)
+   605→    console.error('Error response:', error.response?.data)
+   606→    toast.error(error.response?.data?.title || error.message || 'Failed to save item')
+   607→  } finally {
+   608→    saving.value = false
+   609→  }
+   610→}
+   611→</script>
+   612→
+   613→
+   614→
+   615→
+   616→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

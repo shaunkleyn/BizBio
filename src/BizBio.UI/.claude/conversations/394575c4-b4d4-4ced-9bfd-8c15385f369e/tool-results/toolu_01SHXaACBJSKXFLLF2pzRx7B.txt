@@ -1,0 +1,39 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\components\ItemFormModal.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   659→async function saveItem() {
+   660→  try {
+   661→    saving.value = true
+   662→
+   663→    const data = {
+   664→      name: form.name,
+   665→      description: form.description || null,
+   666→      categoryId: form.categoryId,
+   667→      price: form.price,
+   668→      images: form.images.length > 0 ? form.images : null,
+   669→      tags: form.tags.length > 0 ? form.tags : null,
+   670→      itemType: 0, // Regular item
+   671→      sortOrder: 0,
+   672→      availableInEventMode: true,
+   673→      eventModeOnly: false,
+   674→      variants: form.variants.length > 0 ? form.variants.map(v => ({
+   675→        title: v.title,
+   676→        price: v.price,
+   677→        cost: v.cost || null,
+   678→        sizeValue: v.sizeValue || null,
+   679→        sizeUnit: v.sizeUnit || null,
+   680→        unitOfMeasure: v.unitOfMeasure || null,
+   681→        sku: v.sku || null,
+   682→        barcode: v.barcode || null,
+   683→        isDefault: v.isDefault || false,
+   684→        weightG: v.weightG || null
+   685→      })) : [],
+   686→      optionGroupIds: form.optionGroupIds.length > 0
+   687→        ? form.optionGroupIds.map(id => Number(id)).filter(id => !isNaN(id))
+   688→        : [],
+   689→      extraGroupIds: form.extraGroupIds.length > 0
+   690→        ? form.extraGroupIds.map(id => Number(id)).filter(id => !isNaN(id))
+   691→        : []
+   692→    }
+   693→
+   694→    console.log('Saving item with data:', data)
+   695→
+   696→    if (props.item) {

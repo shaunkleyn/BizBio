@@ -1,0 +1,20 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\components\ItemFormModal.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   471→  'Organic',
+   472→  'Sugar-Free'
+   473→]
+   474→
+   475→const form = reactive({
+   476→  name: '',
+   477→  description: '',
+   478→  categoryId: null as number | null,
+   479→  price: 0,
+   480→  images: [] as string[],
+   481→  tags: [] as string[],
+   482→  variants: [] as any[],
+   483→  optionGroupIds: [] as number[],
+   484→  extraGroupIds: [] as number[]
+   485→})
+   486→
+   487→onMounted(async () => {
+   488→  if (props.item) {
+   489→    form.name = props.item.name

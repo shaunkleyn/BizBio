@@ -1,0 +1,45 @@
+     1→namespace BizBio.Core.Entities;
+     2→
+     3→using System.ComponentModel.DataAnnotations;
+     4→
+     5→public class Catalog : BaseEntity
+     6→{
+     7→    public int OwnerType { get; set; }
+     8→    public int OwnerId { get; set; }
+     9→    public int ProductId { get; set; }
+    10→    public int ProfileId { get; set; }
+    11→
+    12→    /// <summary>
+    13→    /// The entity (Restaurant/Store/Venue/Organization) this catalog belongs to
+    14→    /// </summary>
+    15→    public int EntityId { get; set; }
+    16→
+    17→    [Required]
+    18→    [MaxLength(255)]
+    19→    public string Name { get; set; } = null!;
+    20→
+    21→    [MaxLength(2000)]
+    22→    public string? Description { get; set; }
+    23→
+    24→    public DateTime ValidFrom { get; set; }
+    25→    public DateTime ValidTo { get; set; }
+    26→    public bool IsPublic { get; set; }
+    27→
+    28→    // Navigation properties
+    29→    public virtual Profile Profile { get; set; } = null!;
+    30→
+    31→    /// <summary>
+    32→    /// The entity (Restaurant/Store/Venue/Organization) this catalog belongs to
+    33→    /// </summary>
+    34→    public virtual Entity Entity { get; set; } = null!;
+    35→
+    36→    public virtual ICollection<CatalogItem> Items { get; set; } = new List<CatalogItem>();
+    37→    public virtual ICollection<CatalogCategory> Categories { get; set; } = new List<CatalogCategory>();
+    38→    public virtual ICollection<CatalogVersion> Versions { get; set; } = new List<CatalogVersion>();
+    39→    public virtual ICollection<CatalogBundle> Bundles { get; set; } = new List<CatalogBundle>();
+    40→}
+    41→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

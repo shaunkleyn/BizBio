@@ -1,0 +1,580 @@
+     1→using Microsoft.AspNetCore.Authorization;
+     2→using Microsoft.AspNetCore.Mvc;
+     3→using Microsoft.EntityFrameworkCore;
+     4→using BizBio.Core.Entities;
+     5→using BizBio.Infrastructure.Data;
+     6→using System.Security.Claims;
+     7→using System.Text.Json;
+     8→
+     9→namespace BizBio.API.Controllers;
+    10→
+    11→/// <summary>
+    12→/// Controller for managing library items (items owned by user, not tied to a specific catalog/menu)
+    13→/// </summary>
+    14→[Route("api/v1/library/items")]
+    15→[ApiController]
+    16→[Authorize]
+    17→public class LibraryItemsController : ControllerBase
+    18→{
+    19→    private readonly ApplicationDbContext _context;
+    20→
+    21→    public LibraryItemsController(ApplicationDbContext context)
+    22→    {
+    23→        _context = context;
+    24→    }
+    25→
+    26→    private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+    27→
+    28→    /// <summary>
+    29→    /// Get all library items for the current user
+    30→    /// </summary>
+    31→    [HttpGet]
+    32→    public async Task<IActionResult> GetLibraryItems([FromQuery] int? categoryId = null)
+    33→    {
+    34→        var userId = GetUserId();
+    35→
+    36→        var query = _context.CatalogItems
+    37→            .Where(i => i.UserId == userId);
+    38→
+    39→        if (categoryId.HasValue)
+    40→        {
+    41→            query = query.Where(i => i.CategoryId == categoryId.Value);
+    42→        }
+    43→
+    44→        var items = await query
+    45→            .OrderBy(i => i.Id)
+    46→            .Select(i => new
+    47→            {
+    48→                i.Id,
+    49→                i.Name,
+    50→                i.Description,
+    51→                i.Price,
+    52→                i.CategoryId,
+    53→                i.ItemType,
+    54→                i.BundleId,
+    55→                images = ParseJsonArray(i.Images),
+    56→                tags = ParseJsonArray(i.Tags),
+    57→                i.SortOrder,
+    58→                variants = i.Variants
+    59→                    .Where(v => v.IsActive)
+    60→                    .Select(v => new
+    61→                    {
+    62→                        v.Id,
+    63→                        v.Title,
+    64→                        v.Price,
+    65→                        v.SizeValue,
+    66→                        v.SizeUnit,
+    67→                        v.IsDefault
+    68→                    }).ToList(),
+    69→                extraGroups = i.ExtraGroupLinks
+    70→                    .Where(l => l.IsActive)
+    71→                    .OrderBy(l => l.DisplayOrder)
+    72→                    .Select(l => new
+    73→                    {
+    74→                        l.ExtraGroupId,
+    75→                        l.ExtraGroup.Name,
+    76→                        l.ExtraGroup.Description,
+    77→                        l.ExtraGroup.MinRequired,
+    78→                        l.ExtraGroup.MaxAllowed,
+    79→                        l.ExtraGroup.AllowMultipleQuantities,
+    80→                        Extras = l.ExtraGroup.GroupItems
+    81→                            .Where(gi => gi.IsActive)
+    82→                            .OrderBy(gi => gi.DisplayOrder)
+    83→                            .Select(gi => new
+    84→                            {
+    85→                                gi.Extra.Id,
+    86→                                gi.Extra.Name,
+    87→                                gi.Extra.BasePrice,
+    88→                                gi.PriceOverride
+    89→                            }).ToList()
+    90→                    }).ToList()
+    91→            })
+    92→            .ToListAsync();
+    93→
+    94→        return Ok(new { success = true, data = new { items } });
+    95→    }
+    96→
+    97→    /// <summary>
+    98→    /// Get a specific library item by ID
+    99→    /// </summary>
+   100→    [HttpGet("{id}")]
+   101→    public async Task<IActionResult> GetLibraryItem(int id)
+   102→    {
+   103→        var userId = GetUserId();
+   104→
+   105→        var item = await _context.CatalogItems
+   106→            .Include(i => i.Variants.Where(v => v.IsActive))
+   107→            .Include(i => i.ExtraGroupLinks.Where(l => l.IsActive))
+   108→                .ThenInclude(l => l.ExtraGroup)
+   109→                    .ThenInclude(g => g.GroupItems.Where(gi => gi.IsActive))
+   110→                        .ThenInclude(gi => gi.Extra)
+   111→            .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId && i.CatalogId == null);
+   112→
+   113→        if (item == null)
+   114→            return NotFound(new { success = false, error = "Item not found" });
+   115→
+   116→        return Ok(new
+   117→        {
+   118→            success = true,
+   119→            data = new
+   120→            {
+   121→                item = new
+   122→                {
+   123→                    item.Id,
+   124→                    item.Name,
+   125→                    item.Description,
+   126→                    item.Price,
+   127→                    item.CategoryId,
+   128→                    item.ItemType,
+   129→                    item.BundleId,
+   130→                    images = ParseJsonArray(item.Images),
+   131→                    tags = ParseJsonArray(item.Tags),
+   132→                    item.SortOrder,
+   133→                    item.AvailableInEventMode,
+   134→                    item.EventModeOnly,
+   135→                    variants = item.Variants.Select(v => new
+   136→                    {
+   137→                        v.Id,
+   138→                        v.Title,
+   139→                        v.Price,
+   140→                        v.Cost,
+   141→                        v.SizeValue,
+   142→                        v.SizeUnit,
+   143→                        v.UnitOfMeasure,
+   144→                        v.Sku,
+   145→                        v.Barcode,
+   146→                        v.IsDefault,
+   147→                        v.WeightG
+   148→                    }).ToList(),
+   149→                    extraGroups = item.ExtraGroupLinks
+   150→                        .OrderBy(l => l.DisplayOrder)
+   151→                        .Select(l => new
+   152→                        {
+   153→                            l.ExtraGroupId,
+   154→                            l.ExtraGroup.Name,
+   155→                            l.ExtraGroup.Description,
+   156→                            l.ExtraGroup.MinRequired,
+   157→                            l.ExtraGroup.MaxAllowed,
+   158→                            l.ExtraGroup.AllowMultipleQuantities,
+   159→                            Extras = l.ExtraGroup.GroupItems
+   160→                                .OrderBy(gi => gi.DisplayOrder)
+   161→                                .Select(gi => new
+   162→                                {
+   163→                                    gi.Extra.Id,
+   164→                                    gi.Extra.Name,
+   165→                                    gi.Extra.BasePrice,
+   166→                                    gi.PriceOverride
+   167→                                }).ToList()
+   168→                        }).ToList()
+   169→                }
+   170→            }
+   171→        });
+   172→    }
+   173→
+   174→    /// <summary>
+   175→    /// Create a new library item
+   176→    /// </summary>
+   177→    [HttpPost]
+   178→    public async Task<IActionResult> CreateLibraryItem([FromBody] CreateLibraryItemDto dto)
+   179→    {
+   180→        if (!ModelState.IsValid)
+   181→            return BadRequest(ModelState);
+   182→
+   183→        var userId = GetUserId();
+   184→
+   185→        var item = new CatalogItem
+   186→        {
+   187→            UserId = userId,
+   188→            CatalogId = null, // Library item
+   189→            CategoryId = dto.CategoryId,
+   190→            ItemType = dto.ItemType,
+   191→            Name = dto.Name,
+   192→            Description = dto.Description,
+   193→            Price = dto.Price,
+   194→            Images = dto.Images != null && dto.Images.Any()
+   195→                ? JsonSerializer.Serialize(dto.Images)
+   196→                : null,
+   197→            Tags = dto.Tags != null && dto.Tags.Any()
+   198→                ? JsonSerializer.Serialize(dto.Tags)
+   199→                : null,
+   200→            SortOrder = dto.SortOrder,
+   201→            AvailableInEventMode = dto.AvailableInEventMode,
+   202→            EventModeOnly = dto.EventModeOnly,
+   203→            IsActive = true,
+   204→            CreatedAt = DateTime.UtcNow,
+   205→            UpdatedAt = DateTime.UtcNow,
+   206→            CreatedBy = userId.ToString(),
+   207→            UpdatedBy = userId.ToString()
+   208→        };
+   209→
+   210→        _context.CatalogItems.Add(item);
+   211→        await _context.SaveChangesAsync();
+   212→
+   213→        // Add variants if provided
+   214→        if (dto.Variants != null && dto.Variants.Any())
+   215→        {
+   216→            foreach (var variantDto in dto.Variants)
+   217→            {
+   218→                var variant = new CatalogItemVariant
+   219→                {
+   220→                    CatalogItemId = item.Id,
+   221→                    Title = variantDto.Title,
+   222→                    Price = variantDto.Price,
+   223→                    Cost = variantDto.Cost,
+   224→                    SizeValue = variantDto.SizeValue,
+   225→                    SizeUnit = variantDto.SizeUnit,
+   226→                    UnitOfMeasure = variantDto.UnitOfMeasure,
+   227→                    Sku = variantDto.Sku,
+   228→                    Barcode = variantDto.Barcode,
+   229→                    IsDefault = variantDto.IsDefault,
+   230→                    WeightG = variantDto.WeightG,
+   231→                    IsActive = true,
+   232→                    CreatedAt = DateTime.UtcNow,
+   233→                    UpdatedAt = DateTime.UtcNow,
+   234→                    CreatedBy = userId.ToString(),
+   235→                    UpdatedBy = userId.ToString()
+   236→                };
+   237→                _context.CatalogItemVariants.Add(variant);
+   238→            }
+   239→            await _context.SaveChangesAsync();
+   240→        }
+   241→
+   242→        // Link extra groups if provided
+   243→        if (dto.ExtraGroupIds != null && dto.ExtraGroupIds.Any())
+   244→        {
+   245→            var displayOrder = 0;
+   246→            foreach (var extraGroupId in dto.ExtraGroupIds)
+   247→            {
+   248→                // Verify the extra group belongs to the user
+   249→                var extraGroup = await _context.CatalogItemExtraGroups
+   250→                    .FirstOrDefaultAsync(g => g.Id == extraGroupId && g.UserId == userId && g.IsActive);
+   251→
+   252→                if (extraGroup != null)
+   253→                {
+   254→                    var link = new CatalogItemExtraGroupLink
+   255→                    {
+   256→                        CatalogItemId = item.Id,
+   257→                        ExtraGroupId = extraGroupId,
+   258→                        DisplayOrder = displayOrder++,
+   259→                        IsActive = true,
+   260→                        CreatedAt = DateTime.UtcNow,
+   261→                        UpdatedAt = DateTime.UtcNow,
+   262→                        CreatedBy = userId.ToString(),
+   263→                        UpdatedBy = userId.ToString()
+   264→                    };
+   265→                    _context.CatalogItemExtraGroupLinks.Add(link);
+   266→                }
+   267→            }
+   268→            await _context.SaveChangesAsync();
+   269→        }
+   270→
+   271→        return Ok(new { success = true, data = new { item = new { item.Id, item.Name } } });
+   272→    }
+   273→
+   274→    /// <summary>
+   275→    /// Update a library item
+   276→    /// </summary>
+   277→    [HttpPut("{id}")]
+   278→    public async Task<IActionResult> UpdateLibraryItem(int id, [FromBody] UpdateLibraryItemDto dto)
+   279→    {
+   280→        if (!ModelState.IsValid)
+   281→            return BadRequest(ModelState);
+   282→
+   283→        var userId = GetUserId();
+   284→
+   285→        var item = await _context.CatalogItems
+   286→            .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId);
+   287→
+   288→        if (item == null)
+   289→            return NotFound(new { success = false, error = "Item not found" });
+   290→
+   291→        // Update fields
+   292→        if (!string.IsNullOrEmpty(dto.Name)) item.Name = dto.Name;
+   293→        if (dto.Description != null) item.Description = dto.Description;
+   294→        if (dto.Price.HasValue) item.Price = dto.Price.Value;
+   295→        if (dto.CategoryId != null) item.CategoryId = dto.CategoryId;
+   296→        if (dto.Images != null)
+   297→            item.Images = dto.Images.Any() ? JsonSerializer.Serialize(dto.Images) : null;
+   298→        if (dto.Tags != null)
+   299→            item.Tags = dto.Tags.Any() ? JsonSerializer.Serialize(dto.Tags) : null;
+   300→        if (dto.SortOrder.HasValue) item.SortOrder = dto.SortOrder.Value;
+   301→        if (dto.AvailableInEventMode.HasValue) item.AvailableInEventMode = dto.AvailableInEventMode.Value;
+   302→        if (dto.EventModeOnly.HasValue) item.EventModeOnly = dto.EventModeOnly.Value;
+   303→
+   304→        item.UpdatedAt = DateTime.UtcNow;
+   305→        item.UpdatedBy = userId.ToString();
+   306→
+   307→        // Update variants if provided
+   308→        if (dto.Variants != null)
+   309→        {
+   310→            // Remove existing variants - use ExecuteDeleteAsync for better performance
+   311→            await _context.CatalogItemVariants
+   312→                .Where(v => v.CatalogItemId == item.Id)
+   313→                .ExecuteDeleteAsync();
+   314→
+   315→            // Add new variants
+   316→            foreach (var variantDto in dto.Variants)
+   317→            {
+   318→                var variant = new CatalogItemVariant
+   319→                {
+   320→                    CatalogItemId = item.Id,
+   321→                    Title = variantDto.Title,
+   322→                    Price = variantDto.Price,
+   323→                    Cost = variantDto.Cost,
+   324→                    SizeValue = variantDto.SizeValue,
+   325→                    SizeUnit = variantDto.SizeUnit,
+   326→                    UnitOfMeasure = variantDto.UnitOfMeasure,
+   327→                    Sku = variantDto.Sku,
+   328→                    Barcode = variantDto.Barcode,
+   329→                    IsDefault = variantDto.IsDefault,
+   330→                    WeightG = variantDto.WeightG,
+   331→                    SortOrder = variantDto.SortOrder ?? 0,
+   332→                    IsActive = true,
+   333→                    CreatedAt = DateTime.UtcNow,
+   334→                    UpdatedAt = DateTime.UtcNow,
+   335→                    CreatedBy = userId.ToString(),
+   336→                    UpdatedBy = userId.ToString()
+   337→                };
+   338→                _context.CatalogItemVariants.Add(variant);
+   339→            }
+   340→        }
+   341→
+   342→        // Update extra group links if provided
+   343→        if (dto.ExtraGroupIds != null)
+   344→        {
+   345→            // Remove existing links
+   346→            var existingLinks = await _context.CatalogItemExtraGroupLinks
+   347→                .Where(l => l.CatalogItemId == item.Id)
+   348→                .ToListAsync();
+   349→            _context.CatalogItemExtraGroupLinks.RemoveRange(existingLinks);
+   350→
+   351→            // Add new links
+   352→            var displayOrder = 0;
+   353→            foreach (var extraGroupId in dto.ExtraGroupIds)
+   354→            {
+   355→                // Verify the extra group belongs to the user
+   356→                var extraGroup = await _context.CatalogItemExtraGroups
+   357→                    .FirstOrDefaultAsync(g => g.Id == extraGroupId && g.UserId == userId && g.IsActive);
+   358→
+   359→                if (extraGroup != null)
+   360→                {
+   361→                    var link = new CatalogItemExtraGroupLink
+   362→                    {
+   363→                        CatalogItemId = item.Id,
+   364→                        ExtraGroupId = extraGroupId,
+   365→                        DisplayOrder = displayOrder++,
+   366→                        IsActive = true,
+   367→                        CreatedAt = DateTime.UtcNow,
+   368→                        UpdatedAt = DateTime.UtcNow,
+   369→                        CreatedBy = userId.ToString(),
+   370→                        UpdatedBy = userId.ToString()
+   371→                    };
+   372→                    _context.CatalogItemExtraGroupLinks.Add(link);
+   373→                }
+   374→            }
+   375→        }
+   376→
+   377→        await _context.SaveChangesAsync();
+   378→
+   379→        return Ok(new { success = true, data = new { item = new { item.Id, item.Name } } });
+   380→    }
+   381→
+   382→    /// <summary>
+   383→    /// Delete a library item
+   384→    /// </summary>
+   385→    [HttpDelete("{id}")]
+   386→    public async Task<IActionResult> DeleteLibraryItem(int id)
+   387→    {
+   388→        var userId = GetUserId();
+   389→
+   390→        var item = await _context.CatalogItems
+   391→            .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId);
+   392→
+   393→        if (item == null)
+   394→            return NotFound(new { success = false, error = "Item not found" });
+   395→
+   396→        item.IsActive = false;
+   397→        item.UpdatedAt = DateTime.UtcNow;
+   398→        item.UpdatedBy = userId.ToString();
+   399→
+   400→        await _context.SaveChangesAsync();
+   401→
+   402→        return Ok(new { success = true, message = "Item deleted successfully" });
+   403→    }
+   404→
+   405→    /// <summary>
+   406→    /// Add library item to a catalog/menu
+   407→    /// </summary>
+   408→    [HttpPost("{id}/add-to-catalog")]
+   409→    public async Task<IActionResult> AddToCatalog(int id, [FromBody] AddToCatalogDto dto)
+   410→    {
+   411→        var userId = GetUserId();
+   412→
+   413→        var libraryItem = await _context.CatalogItems
+   414→            .Include(i => i.Variants)
+   415→            .Include(i => i.ExtraGroupLinks.Where(l => l.IsActive))
+   416→            .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId);
+   417→
+   418→        if (libraryItem == null)
+   419→            return NotFound(new { success = false, error = "Library item not found" });
+   420→
+   421→        // Verify user owns the catalog
+   422→        var catalog = await _context.Catalogs
+   423→            .Include(c => c.Profile)
+   424→            .FirstOrDefaultAsync(c => c.Id == dto.CatalogId);
+   425→
+   426→        if (catalog == null || catalog.Profile.UserId != userId)
+   427→            return NotFound(new { success = false, error = "Catalog not found" });
+   428→
+   429→        // Create a copy of the item for the catalog
+   430→        var catalogItem = new CatalogItem
+   431→        {
+   432→            CatalogId = dto.CatalogId,
+   433→            CategoryId = dto.CategoryId ?? libraryItem.CategoryId,
+   434→            ItemType = libraryItem.ItemType,
+   435→            BundleId = libraryItem.BundleId,
+   436→            Name = libraryItem.Name,
+   437→            Description = libraryItem.Description,
+   438→            Price = libraryItem.Price,
+   439→            Images = libraryItem.Images,
+   440→            Tags = libraryItem.Tags,
+   441→            AvailableInEventMode = libraryItem.AvailableInEventMode,
+   442→            EventModeOnly = libraryItem.EventModeOnly,
+   443→            SortOrder = dto.SortOrder,
+   444→            SourceLibraryItemId = libraryItem.Id,
+   445→            IsActive = true,
+   446→            CreatedAt = DateTime.UtcNow,
+   447→            UpdatedAt = DateTime.UtcNow,
+   448→            CreatedBy = userId.ToString(),
+   449→            UpdatedBy = userId.ToString()
+   450→        };
+   451→
+   452→        _context.CatalogItems.Add(catalogItem);
+   453→        await _context.SaveChangesAsync();
+   454→
+   455→        // Copy variants
+   456→        if (libraryItem.Variants.Any())
+   457→        {
+   458→            foreach (var sourceVariant in libraryItem.Variants.Where(v => v.IsActive))
+   459→            {
+   460→                var variant = new CatalogItemVariant
+   461→                {
+   462→                    CatalogItemId = catalogItem.Id,
+   463→                    Title = sourceVariant.Title,
+   464→                    Price = sourceVariant.Price,
+   465→                    Cost = sourceVariant.Cost,
+   466→                    SizeValue = sourceVariant.SizeValue,
+   467→                    SizeUnit = sourceVariant.SizeUnit,
+   468→                    UnitOfMeasure = sourceVariant.UnitOfMeasure,
+   469→                    Sku = sourceVariant.Sku,
+   470→                    Barcode = sourceVariant.Barcode,
+   471→                    IsDefault = sourceVariant.IsDefault,
+   472→                    WeightG = sourceVariant.WeightG,
+   473→                    IsActive = true,
+   474→                    CreatedAt = DateTime.UtcNow,
+   475→                    UpdatedAt = DateTime.UtcNow,
+   476→                    CreatedBy = userId.ToString(),
+   477→                    UpdatedBy = userId.ToString()
+   478→                };
+   479→                _context.CatalogItemVariants.Add(variant);
+   480→            }
+   481→            await _context.SaveChangesAsync();
+   482→        }
+   483→
+   484→        // Copy extra group links
+   485→        if (libraryItem.ExtraGroupLinks.Any())
+   486→        {
+   487→            foreach (var sourceLink in libraryItem.ExtraGroupLinks.OrderBy(l => l.DisplayOrder))
+   488→            {
+   489→                var link = new CatalogItemExtraGroupLink
+   490→                {
+   491→                    CatalogItemId = catalogItem.Id,
+   492→                    ExtraGroupId = sourceLink.ExtraGroupId,
+   493→                    DisplayOrder = sourceLink.DisplayOrder,
+   494→                    IsActive = true,
+   495→                    CreatedAt = DateTime.UtcNow,
+   496→                    UpdatedAt = DateTime.UtcNow,
+   497→                    CreatedBy = userId.ToString(),
+   498→                    UpdatedBy = userId.ToString()
+   499→                };
+   500→                _context.CatalogItemExtraGroupLinks.Add(link);
+   501→            }
+   502→            await _context.SaveChangesAsync();
+   503→        }
+   504→
+   505→        return Ok(new { success = true, data = new { catalogItemId = catalogItem.Id } });
+   506→    }
+   507→
+   508→    private static string[] ParseJsonArray(string? json)
+   509→    {
+   510→        if (string.IsNullOrEmpty(json))
+   511→            return Array.Empty<string>();
+   512→
+   513→        try
+   514→        {
+   515→            return JsonSerializer.Deserialize<string[]>(json) ?? Array.Empty<string>();
+   516→        }
+   517→        catch
+   518→        {
+   519→            return Array.Empty<string>();
+   520→        }
+   521→    }
+   522→}
+   523→
+   524→public class CreateLibraryItemDto
+   525→{
+   526→    public int? CategoryId { get; set; }
+   527→    public CatalogItemType ItemType { get; set; } = CatalogItemType.Regular;
+   528→    public string Name { get; set; } = null!;
+   529→    public string? Description { get; set; }
+   530→    public decimal Price { get; set; }
+   531→    public List<string>? Images { get; set; }
+   532→    public List<string>? Tags { get; set; } // Allergens, dietary info
+   533→    public int SortOrder { get; set; } = 0;
+   534→    public bool AvailableInEventMode { get; set; } = true;
+   535→    public bool EventModeOnly { get; set; } = false;
+   536→    public List<CreateVariantDto>? Variants { get; set; }
+   537→    public List<int>? ExtraGroupIds { get; set; }
+   538→}
+   539→
+   540→public class UpdateLibraryItemDto
+   541→{
+   542→    public string? Name { get; set; }
+   543→    public string? Description { get; set; }
+   544→    public decimal? Price { get; set; }
+   545→    public int? CategoryId { get; set; }
+   546→    public List<string>? Images { get; set; }
+   547→    public List<string>? Tags { get; set; }
+   548→    public int? SortOrder { get; set; }
+   549→    public bool? AvailableInEventMode { get; set; }
+   550→    public bool? EventModeOnly { get; set; }
+   551→    public List<CreateVariantDto>? Variants { get; set; }
+   552→    public List<int>? ExtraGroupIds { get; set; }
+   553→}
+   554→
+   555→public class CreateVariantDto
+   556→{
+   557→    public string Title { get; set; } = null!;
+   558→    public decimal Price { get; set; }
+   559→    public decimal? Cost { get; set; }
+   560→    public decimal? SizeValue { get; set; }
+   561→    public string? SizeUnit { get; set; }
+   562→    public string? UnitOfMeasure { get; set; }
+   563→    public string? Sku { get; set; }
+   564→    public string? Barcode { get; set; }
+   565→    public bool IsDefault { get; set; } = false;
+   566→    public int? WeightG { get; set; }
+   567→    public int? SortOrder { get; set; }
+   568→}
+   569→
+   570→public class AddToCatalogDto
+   571→{
+   572→    public int CatalogId { get; set; }
+   573→    public int? CategoryId { get; set; }
+   574→    public int SortOrder { get; set; } = 0;
+   575→}
+   576→
+
+<system-reminder>
+Whenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.
+</system-reminder>

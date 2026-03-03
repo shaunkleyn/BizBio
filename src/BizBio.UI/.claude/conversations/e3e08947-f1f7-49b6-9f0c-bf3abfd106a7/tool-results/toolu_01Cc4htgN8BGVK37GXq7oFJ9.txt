@@ -1,0 +1,17 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\dashboard\library\extras.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   208→const showCreateModal = ref(false)
+   209→const editingExtra = ref<any>(null)
+   210→const saving = ref(false)
+   211→
+   212→const formData = ref({
+   213→  name: '',
+   214→  code: '',
+   215→  basePrice: 0,
+   216→  description: '',
+   217→  imageUrl: '',
+   218→  displayOrder: 0
+   219→})
+   220→
+   221→const fetchExtras = async () => {
+   222→  loading.value = true
+   223→  error.value = ''

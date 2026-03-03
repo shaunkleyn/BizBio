@@ -1,0 +1,146 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\menu\[slug].vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   109→          </div>
+   110→        </div>
+   111→      </div>
+   112→
+   113→      <!-- Category Tabs (Sticky) -->
+   114→      <div v-if="categories.length > 0" class="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
+   115→        <div class="max-w-7xl mx-auto">
+   116→          <div class="overflow-x-auto hide-scrollbar">
+   117→            <div class="flex space-x-1 px-4 sm:px-6 lg:px-8 py-2 min-w-max">
+   118→              <button
+   119→                v-for="category in categories"
+   120→                :key="category.id"
+   121→                :data-category-id="category.id"
+   122→                @click="scrollToCategory(category.id)"
+   123→                :class="[
+   124→                  'px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all relative',
+   125→                  activeCategory === category.id
+   126→                    ? 'text-gray-900 border-b-2 border-gray-900'
+   127→                    : 'text-gray-600 hover:text-gray-900 border-b-2 border-transparent'
+   128→                ]"
+   129→              >
+   130→                {{ category.name }}
+   131→              </button>
+   132→            </div>
+   133→          </div>
+   134→        </div>
+   135→      </div>
+   136→
+   137→      <!-- Highlights Carousel -->
+   138→      <div v-if="highlightedItems.length > 0" class="bg-white py-6 border-b border-gray-200">
+   139→        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   140→          <h2 class="text-2xl font-bold text-gray-900 mb-4">Highlights</h2>
+   141→          <div class="overflow-x-auto hide-scrollbar">
+   142→            <div class="flex gap-4 pb-2">
+   143→              <div
+   144→                v-for="item in highlightedItems"
+   145→                :key="item.id"
+   146→                class="flex-shrink-0 w-72 sm:w-80 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden cursor-pointer"
+   147→                @click="openItemDetail(item)"
+   148→              >
+   149→                <!-- Item Image -->
+   150→                <div class="relative w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden group">
+   151→                  <img
+   152→                    v-if="item.images && item.images.length > 0"
+   153→                    :src="item.images[0]"
+   154→                    :alt="item.name"
+   155→                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+   156→                  />
+   157→                  <div v-else class="w-full h-full flex items-center justify-center">
+   158→                    <i class="fas fa-utensils text-5xl text-gray-300"></i>
+   159→                  </div>
+   160→                  <span
+   161→                    v-if="item.badge"
+   162→                    class="absolute top-3 left-3 px-2.5 py-1 bg-green-500 text-white text-xs font-bold rounded-full shadow-lg"
+   163→                  >
+   164→                    {{ item.badge }}
+   165→                  </span>
+   166→                </div>
+   167→
+   168→                <!-- Item Info -->
+   169→                <div class="p-4">
+   170→                  <h3 class="text-lg font-bold text-gray-900 mb-1">{{ item.name }}</h3>
+   171→                  <p v-if="item.description" class="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">
+   172→                    {{ item.description }}
+   173→                  </p>
+   174→                  <div class="flex items-center justify-between">
+   175→                    <div class="flex flex-col">
+   176→                      <span class="text-xs text-gray-500 font-medium">From</span>
+   177→                      <span class="text-lg font-bold text-gray-900">R{{ item.price.toFixed(2) }}</span>
+   178→                    </div>
+   179→                    <button
+   180→                      @click.stop="openItemDetail(item)"
+   181→                      class="px-6 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors active:scale-95 transform"
+   182→                    >
+   183→                      Add
+   184→                    </button>
+   185→                  </div>
+   186→                </div>
+   187→              </div>
+   188→            </div>
+   189→          </div>
+   190→        </div>
+   191→      </div>
+   192→
+   193→      <!-- Most Ordered Carousel -->
+   194→      <div v-if="mostOrderedItems.length > 0" class="bg-white py-6 border-b border-gray-200">
+   195→        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   196→          <h2 class="text-2xl font-bold text-gray-900 mb-4">Most Ordered 💯</h2>
+   197→          <div class="overflow-x-auto hide-scrollbar">
+   198→            <div class="flex gap-4 pb-2">
+   199→              <div
+   200→                v-for="item in mostOrderedItems"
+   201→                :key="item.id"
+   202→                class="flex-shrink-0 w-72 sm:w-80 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden cursor-pointer"
+   203→                @click="openItemDetail(item)"
+   204→              >
+   205→                <!-- Item Image -->
+   206→                <div class="relative w-full h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden group">
+   207→                  <img
+   208→                    v-if="item.images && item.images.length > 0"
+   209→                    :src="item.images[0]"
+   210→                    :alt="item.name"
+   211→                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+   212→                  />
+   213→                  <div v-else class="w-full h-full flex items-center justify-center">
+   214→                    <i class="fas fa-utensils text-5xl text-gray-300"></i>
+   215→                  </div>
+   216→                  <span
+   217→                    v-if="item.badge"
+   218→                    class="absolute top-3 left-3 px-2.5 py-1 bg-orange-500 text-white text-xs font-bold rounded-full shadow-lg"
+   219→                  >
+   220→                    {{ item.badge }}
+   221→                  </span>
+   222→                </div>
+   223→
+   224→                <!-- Item Info -->
+   225→                <div class="p-4">
+   226→                  <h3 class="text-lg font-bold text-gray-900 mb-1">{{ item.name }}</h3>
+   227→                  <p v-if="item.description" class="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">
+   228→                    {{ item.description }}
+   229→                  </p>
+   230→                  <div class="flex items-center justify-between">
+   231→                    <div class="flex flex-col">
+   232→                      <span class="text-xs text-gray-500 font-medium">From</span>
+   233→                      <span class="text-lg font-bold text-gray-900">R{{ item.price.toFixed(2) }}</span>
+   234→                    </div>
+   235→                    <button
+   236→                      @click.stop="openItemDetail(item)"
+   237→                      class="px-6 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors active:scale-95 transform"
+   238→                    >
+   239→                      Add
+   240→                    </button>
+   241→                  </div>
+   242→                </div>
+   243→              </div>
+   244→            </div>
+   245→          </div>
+   246→        </div>
+   247→      </div>
+   248→
+   249→      <!-- Menu Items by Category -->
+   250→      <div class="max-w-7xl mx-auto pb-24 bg-gray-50">
+   251→        <div
+   252→          v-for="category in categories"
+   253→          :key="category.id"

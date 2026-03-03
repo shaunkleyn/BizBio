@@ -1,0 +1,12 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.Core\Entities\SubscriptionTier.cs has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   162→    //public DateTime CreatedAt { get; set; }
+   163→
+   164→    //public DateTime UpdatedAt { get; set; }
+   165→
+   166→    // Navigation properties
+   167→    public virtual ICollection<UserSubscription> Subscriptions { get; set; } = new List<UserSubscription>();
+   168→    public virtual ICollection<ProductSubscription> ProductSubscriptions { get; set; } = new List<ProductSubscription>();
+   169→    public virtual ICollection<SubscriptionTierAddon> TierAddons { get; set; } = new List<SubscriptionTierAddon>();
+   170→    public virtual ProductLineLookup ProductLine { get; set; } = null!;
+   171→}
+   172→

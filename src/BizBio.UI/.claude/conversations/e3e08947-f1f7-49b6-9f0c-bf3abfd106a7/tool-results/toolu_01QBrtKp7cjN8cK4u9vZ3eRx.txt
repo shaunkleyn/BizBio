@@ -1,0 +1,30 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\dashboard\library\extra-groups.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+    58→            </button>
+    59→          </div>
+    60→        </div>
+    61→
+    62→        <!-- Extras in Group -->
+    63→        <div v-if="group.extras && group.extras.length > 0" class="mt-4">
+    64→          <h4 class="text-sm font-semibold text-gray-700 mb-2">Extras in this group:</h4>
+    65→          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+    66→            <div
+    67→              v-for="item in group.extras"
+    68→              :key="item.id"
+    69→              class="flex justify-between items-center bg-gray-50 rounded-lg p-3"
+    70→            >
+    71→              <div>
+    72→                <span class="text-sm font-medium text-gray-800">{{ item.extra.name }}</span>
+    73→                <span class="text-xs text-gray-500 ml-2">
+    74→                  R{{ (item.priceOverride !== null ? item.priceOverride : item.extra.basePrice).toFixed(2) }}
+    75→                </span>
+    76→              </div>
+    77→            </div>
+    78→          </div>
+    79→        </div>
+    80→        <div v-else class="mt-4 text-sm text-gray-500 italic">
+    81→          No extras in this group yet
+    82→        </div>
+    83→      </div>
+    84→    </div>
+    85→
+    86→    <!-- Empty State -->

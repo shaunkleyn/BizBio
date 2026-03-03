@@ -1,0 +1,38 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\components\ItemFormModal.vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   483→  optionGroupIds: [] as number[],
+   484→  extraGroupIds: [] as number[]
+   485→})
+   486→
+   487→onMounted(async () => {
+   488→  if (props.item) {
+   489→    form.name = props.item.name
+   490→    form.description = props.item.description || ''
+   491→    form.categoryId = props.item.categoryId
+   492→    form.price = props.item.price
+   493→    form.images = props.item.images || []
+   494→    form.tags = props.item.tags || []
+   495→    form.variants = props.item.variants?.map((v: any) => ({ ...v })) || []
+   496→
+   497→    // Load option groups
+   498→    form.optionGroupIds = props.item.optionGroups?.map((g: any) => {
+   499→      const id = g.optionGroupId || g.OptionGroupId
+   500→      return typeof id === 'number' ? id : parseInt(id)
+   501→    }).filter((id: any) => !isNaN(id)) || []
+   502→
+   503→    // Load extra groups
+   504→    form.extraGroupIds = props.item.extraGroups?.map((g: any) => {
+   505→      const id = g.extraGroupId || g.ExtraGroupId
+   506→      return typeof id === 'number' ? id : parseInt(id)
+   507→    }).filter((id: any) => !isNaN(id)) || []
+   508→  }
+   509→
+   510→  // Fetch available groups in parallel
+   511→  await Promise.all([
+   512→    fetchOptionGroups(),
+   513→    fetchExtraGroups()
+   514→  ])
+   515→})
+   516→
+   517→async function fetchExtraGroups() {
+   518→  loadingExtras.value = true
+   519→  try {

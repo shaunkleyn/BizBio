@@ -1,0 +1,64 @@
+The file C:\Development\github\bizbio2\BizBio\src\BizBio.UI\pages\menu\[slug].vue has been updated. Here's the result of running `cat -n` on a snippet of the edited file:
+   189→          </div>
+   190→        </div>
+   191→      </div>
+   192→
+   193→      <!-- Most Ordered Carousel -->
+   194→      <div v-if="mostOrderedItems.length > 0" class="bg-white py-4 sm:py-6 border-b border-gray-200">
+   195→        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+   196→          <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Most Ordered 💯</h2>
+   197→          <div class="overflow-x-auto hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+   198→            <div class="flex gap-3 sm:gap-4 pb-2">
+   199→              <div
+   200→                v-for="item in mostOrderedItems"
+   201→                :key="item.id"
+   202→                class="flex-shrink-0 w-56 sm:w-64 md:w-72 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden cursor-pointer"
+   203→                @click="openItemDetail(item)"
+   204→              >
+   205→                <!-- Item Image -->
+   206→                <div class="relative w-full h-36 sm:h-40 md:h-44 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden group">
+   207→                  <img
+   208→                    v-if="item.images && item.images.length > 0"
+   209→                    :src="item.images[0]"
+   210→                    :alt="item.name"
+   211→                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+   212→                  />
+   213→                  <div v-else class="w-full h-full flex items-center justify-center">
+   214→                    <i class="fas fa-utensils text-4xl sm:text-5xl text-gray-300"></i>
+   215→                  </div>
+   216→                  <span
+   217→                    v-if="item.badge"
+   218→                    class="absolute top-2 left-2 px-2 py-0.5 bg-orange-500 text-white text-xs font-bold rounded-full shadow-lg"
+   219→                  >
+   220→                    {{ item.badge }}
+   221→                  </span>
+   222→                </div>
+   223→
+   224→                <!-- Item Info -->
+   225→                <div class="p-3 sm:p-4">
+   226→                  <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-1 line-clamp-1">{{ item.name }}</h3>
+   227→                  <p v-if="item.description" class="text-xs sm:text-sm text-gray-600 line-clamp-2 mb-2 sm:mb-3 leading-relaxed">
+   228→                    {{ item.description }}
+   229→                  </p>
+   230→                  <div class="flex items-center justify-between">
+   231→                    <div class="flex flex-col">
+   232→                      <span class="text-xs text-gray-500 font-medium">From</span>
+   233→                      <span class="text-base sm:text-lg font-bold text-gray-900">R{{ item.price.toFixed(2) }}</span>
+   234→                    </div>
+   235→                    <button
+   236→                      @click.stop="openItemDetail(item)"
+   237→                      class="px-4 sm:px-6 py-2 sm:py-2.5 bg-gray-900 text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors active:scale-95 transform"
+   238→                    >
+   239→                      Add
+   240→                    </button>
+   241→                  </div>
+   242→                </div>
+   243→              </div>
+   244→            </div>
+   245→          </div>
+   246→        </div>
+   247→      </div>
+   248→
+   249→      <!-- Menu Items by Category -->
+   250→      <div class="max-w-7xl mx-auto pb-24 bg-gray-50">
+   251→        <div
