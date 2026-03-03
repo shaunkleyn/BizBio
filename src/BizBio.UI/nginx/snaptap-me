@@ -6,18 +6,45 @@
 
 # HTTP to HTTPS redirect
 server {
+    if ($host = www.snaptap.me) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = menu.snaptap.me) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = cards.snaptap.me) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = snaptap.me) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
     listen 80;
     server_name snaptap.me www.snaptap.me cards.snaptap.me menu.snaptap.me;
     return 301 https://$host$request_uri;
+
+
+
+
+
+
+
+
 }
 
 # HTTPS server
 server {
     listen 443 ssl;
     server_name snaptap.me www.snaptap.me cards.snaptap.me menu.snaptap.me;
-
-    ssl_certificate /etc/letsencrypt/live/snaptap.me/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/snaptap.me/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/snaptap.me/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/snaptap.me/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 

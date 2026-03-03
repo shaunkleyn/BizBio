@@ -6,8 +6,8 @@ server {
     server_name snaptap.co.za www.snaptap.co.za app.snaptap.co.za cards.snaptap.co.za card.snaptap.co.za menu.snaptap.co.za;
 
     listen 443 ssl;
-    ssl_certificate /etc/letsencrypt/live/snaptap.co.za/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/snaptap.co.za/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/snaptap.me/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/snaptap.me/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
@@ -149,7 +149,7 @@ server {
     # ==========================================
 
     # Everything else is a profile slug - serve from persistent profiles directory
-    location / {
+location / {
         proxy_pass http://127.0.0.1:3001;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -173,6 +173,8 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_cache_bypass $http_upgrade;
     }
+
+
 }
 
 # ==========================================
@@ -180,7 +182,18 @@ server {
 # ==========================================
 
 server {
+    if ($host = www.snaptap.co.za) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = snaptap.co.za) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
     listen 80;
     server_name snaptap.co.za www.snaptap.co.za;
     return 301 https://snaptap.co.za$request_uri;
+
 }
