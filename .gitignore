@@ -368,3 +368,4 @@ src/BizBio.UI/.claude/settings.local.json
 src/nul
 node_modules
 .DS_Store
+**/.DS_Store
