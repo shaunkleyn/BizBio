@@ -12,6 +12,8 @@ trigger:
     - README.md
     - docs/*
     - .github/*
+    include:
+    - src/BizBio.API/**
 
 pr:
   branches:
