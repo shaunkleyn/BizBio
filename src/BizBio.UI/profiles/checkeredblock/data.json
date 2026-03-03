@@ -15,7 +15,7 @@
     "googleReviewUrl": "https://g.page/r/REPLACE_WITH_REAL_PLACE_ID/review",
     "facebookReviewUrl": "https://www.facebook.com/checkeredblock/reviews",
 
-    "photo": "../checkeredblock/logo.png",
+    "photo": "logo.png",
 
     "companyRegistrationNumber": "2020/473006/07",
     "vatNumber": "1234567890",

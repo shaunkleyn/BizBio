@@ -12,6 +12,11 @@
 (function() {
     'use strict';
 
+    // Capture the profile page URL before the <base> tag is inserted by applyTemplate.
+    // window.location.href is unaffected by <base>, so relative image paths must be
+    // resolved against this value rather than the document base.
+    const _profilePageUrl = window.location.href;
+
     const BizBioEngine = {
         config: {
             dataFile: 'data.json',
@@ -291,15 +296,21 @@
             // Bio
             this.setText(this.selectors.bio, data.bio);
 
-            // Photo - handle relative and absolute paths
+            // Photo - resolve relative paths against the profile page URL, not the
+            // document <base> href (which points to /profile-assets/templates/).
             if (data.photo) {
-                const photoSrc = data.photo.startsWith('http') ? data.photo : data.photo;
+                const photoSrc = (data.photo.startsWith('http') || data.photo.startsWith('/'))
+                    ? data.photo
+                    : new URL(data.photo, _profilePageUrl).href;
                 this.setImage(this.selectors.photo, photoSrc);
             }
 
             // Logo
             if (data.logo) {
-                this.setImage(this.selectors.logo, data.logo);
+                const logoSrc = (data.logo.startsWith('http') || data.logo.startsWith('/'))
+                    ? data.logo
+                    : new URL(data.logo, _profilePageUrl).href;
+                this.setImage(this.selectors.logo, logoSrc);
             }
 
             // Email
