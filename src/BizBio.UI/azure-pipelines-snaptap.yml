@@ -96,7 +96,7 @@ stages:
       displayName: 'Copy Nginx Config'
       inputs:
         SourceFolder: '$(workingDirectory)/nginx'
-        Contents: '*.conf'
+        Contents: '**'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/config/nginx'
       continueOnError: true
 

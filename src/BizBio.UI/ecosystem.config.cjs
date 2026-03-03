@@ -18,9 +18,9 @@ module.exports = {
         NUXT_PUBLIC_APP_INSIGHTS_CONNECTION_STRING: 'InstrumentationKey=cf8e0ef0-0844-4cfe-b49c-0838a880835b;IngestionEndpoint=https://southafricanorth-1.in.applicationinsights.azure.com/;LiveEndpoint=https://southafricanorth.livediagnostics.monitor.azure.com/;ApplicationId=12ed36f7-1a54-438d-b149-fac495a0c94d',
         NUXT_PUBLIC_GOOGLE_ANALYTICS_ID: 'G-FSFC9WQ181',
       },
-      error_file: './logs/err.log',
-      out_file: './logs/out.log',
-      log_file: './logs/combined.log',
+      error_file: '/var/www/bizbio/ui/logs/err.log',
+      out_file: '/var/www/bizbio/ui/logs/out.log',
+      log_file: '/var/www/bizbio/ui/logs/combined.log',
       time: true,
       max_memory_restart: '512M', // Adjust based on VPS RAM (512M for 1GB VPS, 1G for 2GB+)
       node_args: '--max-old-space-size=1024', // Adjust based on VPS RAM

@@ -571,7 +571,7 @@
                 title:          data.title       || '',
                 tagline:        data.tagline     || data.title || '',
                 bio:            data.bio         || '',
-                photo:          data.photo       || '',
+                photo:          data.photo ? ((data.photo.startsWith('http') || data.photo.startsWith('/')) ? data.photo : new URL(data.photo, _profilePageUrl).href) : '',
                 initials,
                 email:          data.email       || '',
                 emailHref:      data.email ? 'mailto:' + data.email : '',
