@@ -1,8 +1,9 @@
+#!/bin/bash
+# Usage: 1-deploy-files.sh <TargetDirectory> <BuildId>
+set -e
 
-  set -e
-
-  TARGET_DIR="$(TargetDirectory)"
-  RELEASE_ID="$(Build.BuildId)"
+TARGET_DIR="$1"
+RELEASE_ID="$2"
   RELEASE_DIR="$TARGET_DIR/releases/$RELEASE_ID"
 
   echo "=========================================="
