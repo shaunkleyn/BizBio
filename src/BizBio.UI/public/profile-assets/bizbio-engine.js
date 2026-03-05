@@ -20,9 +20,9 @@
     const BizBioEngine = {
         config: {
             dataFile: 'data.json',
-            templatesPath: '/profile-assets/templates/',
-            vcardGeneratorPath: '/profile-assets/vcard-generator.js',
-            walletIntegrationPath: '/profile-assets/wallet-integration.js'
+            templatesPath: '../templates/',
+            vcardGeneratorPath: '../vcard-generator.js',
+            walletIntegrationPath: '../wallet-integration.js'
         },
 
         // Element selectors for populating data
@@ -428,9 +428,6 @@
 
             // Expose normalised data for Alpine-driven templates
             window.__bizbioData = this.normalizeData(this.data);
-            console.log('[BizBio Debug] _profilePageUrl:', _profilePageUrl);
-            console.log('[BizBio Debug] raw photo:', this.data.photo);
-            console.log('[BizBio Debug] resolved photo:', window.__bizbioData.photo);
         },
 
         /**

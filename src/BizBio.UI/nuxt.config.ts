@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/image',
   ],
-  css: ['~/assets/css/main.css', '~/assets/fonts/css/all.css'],
+  css: ['~/assets/css/main.css'],
   app: {
     head: {
       title: 'BizBio - Digital Business Profiles',
@@ -30,6 +30,10 @@ export default defineNuxtConfig({
         },
       ],
       link: [
+        {
+          rel: 'stylesheet',
+          href: '/fonts/css/all.css',
+        },
         {
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap',
@@ -86,8 +90,8 @@ export default defineNuxtConfig({
     experimental: {
       wasm: false,
     },
-    // profiles/ directory is copied to .output/public/profiles/ by the CI pipeline
-    // (not via publicAssets, to avoid Nitro compressing ~382 MB of font files)
+    // fonts-src/ and profiles/ are copied to .output/public/fonts/ and /profiles/ by the CI pipeline
+    // (not via publicAssets, to avoid Nitro compressing ~571 MB of already-compressed font files)
     // Profile assets (JS, templates) are in public/profile-assets/ and served automatically.
     // User profile HTML files are served directly by Nginx from /var/www/{site}/ui/profiles/
   },

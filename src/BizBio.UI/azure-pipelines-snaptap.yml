@@ -65,10 +65,12 @@ stages:
       env:
         NODE_ENV: production
 
-    # Copy profiles directory without Nitro compression (382 MB of font files)
+    # Copy large asset directories without Nitro compression
+    # profiles/ (~382 MB fonts) and fonts-src/ (~189 MB FontAwesome)
     - script: |
         cp -r $(workingDirectory)/profiles $(workingDirectory)/.output/public/profiles
-      displayName: 'Copy profile assets (uncompressed)'
+        cp -r $(workingDirectory)/fonts-src $(workingDirectory)/.output/public/fonts
+      displayName: 'Copy large assets (uncompressed)'
 
     # Write build-info.json for version display in DevTools
     - script: |
