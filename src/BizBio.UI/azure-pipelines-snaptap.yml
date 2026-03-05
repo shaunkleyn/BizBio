@@ -82,6 +82,13 @@ stages:
         archiveFile: '$(Build.ArtifactStagingDirectory)/fonts.tar.gz'
         replaceExistingArchive: true
 
+    # Remove fonts from build output — Nginx serves /fonts/ from the persistent location,
+    # so including them in ui.zip only bloats the zip and breaks extraction.
+    - script: |
+        rm -rf $(workingDirectory)/.output/public/fonts
+        echo ">>> Fonts removed from build output (served by Nginx from persistent location)"
+      displayName: 'Remove fonts from build output'
+
     # Write build-info.json for version display in DevTools
     - script: |
         echo '{"build":"$(Build.BuildNumber)","release":"pending","attempt":"0","version":"$(Build.BuildNumber)_pending"}' \
