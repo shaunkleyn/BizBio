@@ -4,7 +4,7 @@ import { join } from 'path'
 
 const PROFILES_DIR = process.env.PROFILES_DIR || join(process.cwd(), 'profiles')
 
-const SKIP_PREFIXES = ['/_nuxt', '/api/', '/__nuxt', '/@', '/favicon', '/templates']
+const SKIP_PREFIXES = ['/_nuxt', '/api/', '/__nuxt', '/@', '/favicon', '/profile-assets', '/fonts', '/templates']
 
 // Block the /templates/ directory index so it can't be browsed directly,
 // but individual template files (e.g. /templates/29-blue-dashboard.html) must

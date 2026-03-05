@@ -90,10 +90,10 @@ export default defineNuxtConfig({
     experimental: {
       wasm: false,
     },
-    // fonts-src/ and profiles/ are copied to .output/public/fonts/ and /profiles/ by the CI pipeline
-    // (not via publicAssets, to avoid Nitro compressing ~571 MB of already-compressed font files)
+    // profiles/ is copied to .output/public/profiles/ by the CI pipeline (served by profiles middleware).
+    // fonts-src/ is archived separately and deployed to /var/www/snaptap/ui/fonts/ (persistent).
+    // Nginx serves /fonts/ directly from the filesystem to avoid bloating the release zip.
     // Profile assets (JS, templates) are in public/profile-assets/ and served automatically.
-    // User profile HTML files are served directly by Nginx from /var/www/{site}/ui/profiles/
   },
   image: {
     quality: 80,

@@ -65,12 +65,22 @@ stages:
       env:
         NODE_ENV: production
 
-    # Copy large asset directories without Nitro compression
-    # profiles/ (~382 MB fonts) and fonts-src/ (~189 MB FontAwesome)
+    # Copy profiles into the build output (served by the profiles middleware)
     - script: |
         cp -r $(workingDirectory)/profiles $(workingDirectory)/.output/public/profiles
-        cp -r $(workingDirectory)/fonts-src $(workingDirectory)/.output/public/fonts
-      displayName: 'Copy large assets (uncompressed)'
+      displayName: 'Copy profile assets (uncompressed)'
+
+    # Archive fonts separately so they don't bloat ui.zip and cause incomplete extractions.
+    # Fonts are deployed to /var/www/snaptap/ui/fonts/ (persistent) and served by Nginx directly.
+    - task: ArchiveFiles@2
+      displayName: 'Archive FontAwesome (separate artifact)'
+      inputs:
+        rootFolderOrFile: '$(workingDirectory)/fonts-src'
+        includeRootFolder: false
+        archiveType: 'tar'
+        tarCompression: 'gz'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/fonts.tar.gz'
+        replaceExistingArchive: true
 
     # Write build-info.json for version display in DevTools
     - script: |
@@ -121,7 +131,7 @@ stages:
     - task: CopyFiles@2
       displayName: 'Copy Deployment Scripts'
       inputs:
-        SourceFolder: '$(workingDirectory)/scripts'
+        SourceFolder: '$(workingDirectory)/scripts/deploy'
         Contents: '*.sh'
         TargetFolder: '$(Build.ArtifactStagingDirectory)/scripts'
       continueOnError: true

@@ -36,7 +36,7 @@ const APP_PREFIXES = [
 // Nuxt / system internals — never intercept
 const INTERNAL_PREFIXES = [
   '/_nuxt', '/api/', '/__nuxt', '/@', '/favicon',
-  '/robots', '/sitemap', '/templates', '/404', '/500',
+  '/robots', '/sitemap', '/profile-assets', '/fonts', '/404', '/500',
 ]
 
 async function isStaticCardSlug(slug: string): Promise<boolean> {

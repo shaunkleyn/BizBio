@@ -20,9 +20,9 @@
     const BizBioEngine = {
         config: {
             dataFile: 'data.json',
-            templatesPath: '../templates/',
-            vcardGeneratorPath: '../vcard-generator.js',
-            walletIntegrationPath: '../wallet-integration.js'
+            templatesPath: '/profile-assets/templates/',
+            vcardGeneratorPath: '/profile-assets/vcard-generator.js',
+            walletIntegrationPath: '/profile-assets/wallet-integration.js'
         },
 
         // Element selectors for populating data
@@ -301,7 +301,7 @@
             this.setText(this.selectors.bio, data.bio);
 
             // Photo - resolve relative paths against the profile page URL, not the
-            // document <base> href (which points to /profile-assets/templates/).
+            // document <base> href (which points to /profile-assets/templates/ as configured).
             if (data.photo) {
                 const photoSrc = (data.photo.startsWith('http') || data.photo.startsWith('/'))
                     ? data.photo

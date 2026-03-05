@@ -57,17 +57,9 @@ server {
         add_header Cache-Control "public";
     }
 
-    # Fonts - served by Nuxt
+    # Fonts - served directly from filesystem (not through Nitro) to avoid bloating release zips
     location ^~ /fonts/ {
-        proxy_pass http://127.0.0.1:3001;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-
-        # Cache fonts for a long time
+        root /var/www/snaptap/ui;
         expires 1y;
         add_header Cache-Control "public, immutable";
     }
