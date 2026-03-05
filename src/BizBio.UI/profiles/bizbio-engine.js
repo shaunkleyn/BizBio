@@ -99,6 +99,10 @@
                 this.initWalletIntegration();
 
                 console.log('BizBio Engine initialized successfully');
+                fetch('/build-info.json')
+                    .then(r => r.ok ? r.json() : null)
+                    .then(info => { if (info?.version) console.log('%c[BizBio] ' + info.version, 'color:#7c3aed;font-weight:bold;font-size:11px'); })
+                    .catch(() => {});
             } catch (error) {
                 console.error('BizBio Engine error:', error);
                 this.showError(error.message);

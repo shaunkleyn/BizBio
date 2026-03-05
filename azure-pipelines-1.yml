@@ -3,6 +3,8 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
+name: '$(Date:yyyyMMdd).$(Rev:r)'
+
 trigger:
 - main
 
@@ -24,6 +26,11 @@ steps:
       cd src/BizBio.UI
       npm run build
     displayName: 'Build Nuxt Application'
+
+  - script: |
+      echo '{"build":"$(Build.BuildNumber)","release":"pending","attempt":"0","version":"$(Build.BuildNumber)_pending"}' \
+        > src/BizBio.UI/.output/public/build-info.json
+    displayName: 'Write build info'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifacts'
