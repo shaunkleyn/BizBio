@@ -6,7 +6,7 @@ trigger:
     include:
     - main
     - develop
-    - feature/*
+#    - feature/*
   paths:
     exclude:
     - README.md
