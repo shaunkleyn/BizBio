@@ -1,4 +1,3 @@
-import { fileURLToPath } from "node:url";
 import { defineNuxtConfig } from "nuxt/config";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -87,13 +86,8 @@ export default defineNuxtConfig({
     experimental: {
       wasm: false,
     },
-        publicAssets: [
-      {
-        dir: fileURLToPath(new URL('./profiles', import.meta.url)),
-        baseURL: '/profiles',
-        maxAge: 60 * 60 * 24, // 24 h browser cache
-      }
-    ],
+    // profiles/ directory is copied to .output/public/profiles/ by the CI pipeline
+    // (not via publicAssets, to avoid Nitro compressing ~382 MB of font files)
     // Profile assets (JS, templates) are in public/profile-assets/ and served automatically.
     // User profile HTML files are served directly by Nginx from /var/www/{site}/ui/profiles/
   },

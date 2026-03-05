@@ -17,15 +17,27 @@ steps:
       versionSpec: '20.x'
     displayName: 'Install Node.js'
 
+  - task: Cache@2
+    inputs:
+      key: 'npm | "$(Agent.OS)" | src/BizBio.UI/package-lock.json'
+      restoreKeys: |
+        npm | "$(Agent.OS)"
+      path: $(Pipeline.Workspace)/.npm
+    displayName: 'Cache npm packages'
+
   - script: |
       cd src/BizBio.UI
-      npm install
+      npm ci --cache $(Pipeline.Workspace)/.npm --prefer-offline
     displayName: 'Install Dependencies'
 
   - script: |
       cd src/BizBio.UI
       npm run build
     displayName: 'Build Nuxt Application'
+
+  - script: |
+      cp -r src/BizBio.UI/profiles src/BizBio.UI/.output/public/profiles
+    displayName: 'Copy profile assets (uncompressed)'
 
   - script: |
       echo '{"build":"$(Build.BuildNumber)","release":"pending","attempt":"0","version":"$(Build.BuildNumber)_pending"}' \
@@ -37,4 +49,3 @@ steps:
     inputs:
       PathtoPublish: 'src/BizBio.UI/.output'
       ArtifactName: 'ui-build'
-
