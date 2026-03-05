@@ -20,7 +20,6 @@ RELEASE_ID="$2"
   if [ -f "$RELEASE_DIR/fonts.tar.gz" ]; then
     mkdir -p $TARGET_DIR/fonts
     tar -xzf $RELEASE_DIR/fonts.tar.gz -C $TARGET_DIR/fonts
-    chown -R www-data:www-data $TARGET_DIR/fonts
     echo ">>> Fonts deployed to $TARGET_DIR/fonts"
     rm $RELEASE_DIR/fonts.tar.gz
   else
